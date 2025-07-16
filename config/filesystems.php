@@ -47,6 +47,22 @@ return [
             'report' => false,
         ],
 
+        'livewire_temp' => [
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/livewire-tmp'),
+            'url'        => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw'      => false,
+            'report'     => false,
+        ],
+        
+        'MEDIA_DISK'    => [
+            'driver'     => 'local',
+            'root'       => env('MEDIA_LIBRARY_STORAGE_ROOT_PATH', public_path('media')) ?: public_path('media'),
+            'url'        => env('APP_URL') ? env('APP_URL') . '/media' : '/media',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
