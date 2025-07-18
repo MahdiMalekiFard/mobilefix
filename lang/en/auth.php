@@ -1,20 +1,79 @@
 <?php
 
+declare(strict_types=1);
+
 return [
+    'failed'                                           => 'These credentials do not match our records.',
+    'throttle'                                         => 'Too many login attempts. Please try again in :seconds seconds.',
+    'name'                                             => 'First Name',
+    'family'                                           => 'Last Name',
+    'email'                                            => 'Email',
+    'password'                                         => 'Password',
+    'password_confirmation'                            => 'Confirm Password',
+    'set_password_for_your_account'                    => 'Set a password for your account',
+    'remember_me'                                      => 'Remember me',
+    'login'                                            => 'Login',
+    'confirm'                                          => 'Confirm',
+    'login_for_buy_product'                            => 'Login to make a purchase',
+    'register'                                         => 'Register',
+    'forgot_password'                                  => 'Forgot your password?',
+    'reset_password'                                   => 'Reset Password',
+    'send_password_reset_link'                         => 'Send Password Reset Link',
+    'verify_email'                                     => 'Verify Email Address',
+    'verification_link_sent'                           => 'A new verification link has been sent to your email address.',
+    'check_email'                                      => 'Before proceeding, please check your email for a verification link.',
+    'did_not_receive_email'                            => 'If you did not receive the email',
+    'click_here_to_request_another'                    => 'click here to request another',
+    'logout'                                           => 'Logout',
+    'login_with_google'                                => 'Login with Google',
+    'wrong_code'                                       => 'The entered code is incorrect.',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-    */
+    'login_with'                                       => 'Login with',
+    'or'                                               => 'or',
+    'create_an_account'                                => 'Create an account',
+    'already_have_an_account'                          => 'Already have an account?',
+    'sign_in'                                          => 'Sign in',
+    'sign_up'                                          => 'Sign up',
+    'sign_out'                                         => 'Sign out',
+    'sign_in_with'                                     => 'Sign in with',
+    'sign_up_with'                                     => 'Sign up with',
+    'or_sign_in_with'                                  => 'Or sign in with',
+    'or_sign_up_with'                                  => 'Or sign up with',
+    'sign_in_with_google'                              => 'Sign in with Google',
+    'sign_up_with_google'                              => 'Sign up with Google',
+    'not_a_member_yet'                                 => 'Not a member yet?',
 
-    'failed' => 'These credentials do not match our records.',
-    'password' => 'The provided password is incorrect.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    'minimum_time_to_new_code'                         => 'Minimum time to request a new code is :minutes minutes',
+    'confirmation_code_sent_to_email'                  => 'Verification code has been sent to your email.',
+    'confirmation_code_sent_to_mobile'                 => 'Verification code has been sent to your mobile number.',
+    'confirmation_code_sent_to_mobile_number'          => 'Verification code has been sent to :mobile.',
+    'confirmation_code_sent_to_email_url'              => 'Verification code has been sent to :email.',
+    'the_entered_information_is_not_correct'           => 'The entered information is incorrect.',
+    'you_can_not_enter_the_system_before_set_password' => 'You cannot access the system before setting your password.',
+    'you_can_not_set_password_before_confirmation'     => 'You cannot set a password before confirming your email or mobile number.',
+    'not_allowed_to_login'                             => 'You are not allowed to log in to the system.',
+    'password_registered_successfully'                 => 'Password was registered successfully.',
+    'please_enter_your_mobile_number'                  => 'Please enter your mobile number.',
+    'login_register'                                   => 'Login / Register',
+    'password_save_successfully'                       => 'Password was changed successfully.',
+    'user_not_found'                                   => 'User not found',
+    'user_authenticated_successfully'                  => 'User logged in successfully',
+    'welcome_to_panel_admin'                           => 'Welcome to the admin panel',
+    'code_not_found_or_expired'                        => 'The code was not found or has expired',
+    'your_activation_code_send'                        => 'Your verification code is: :code',
+    'please_enter_validation_code'                     => 'Please enter your verification code',
+    'Failed_to_update_user'                            => 'User not found',
+    'Password_registered_successfully'                 => 'Password registered successfully',
+    'mobile_or_password_not_match'                     => 'The username or password is incorrect',
+    'verification_code_has_been_successfully_sent'     => 'Verification code sent successfully',
+    'You_have_successfully_logged_out'                 => 'You have successfully logged out',
+    'no_authenticated_user_detected'                   => 'No authenticated user detected',
+    'token_creation_failed'                            => 'Failed to create token',
+    'login_with_password'                              => 'Login with password',
+    'login_with_otp'                                   => 'Login with OTP',
+    'please_insert_your_password'                      => 'Please enter your password',
+    'this_number_is_not_registered_you_sure_register'  => 'The number :mobile is not registered. Are you sure it is correct?',
+    'change_number'                                    => 'Change number',
+    'agree_to_terms'                                   => 'I agree to the terms and conditions',
+    'for_login_enter_password'                         => 'Enter your password to log in',
 ];
