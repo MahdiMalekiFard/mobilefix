@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('admin/auth/login', LoginPage::class)->name('admin.auth.login');
 Route::get('admin/auth/logout', function () {
-    auth()->guard('admin')->logout();
+    auth()->logout();
 
     return redirect()->route('admin.auth.login');
 })->name('admin.auth.logout');
@@ -18,7 +18,7 @@ Route::get('admin/auth/logout', function () {
 Route::group(['middleware' => ['admin.panel']], function () {
     Route::get('admin', DashboardIndex::class)->name('admin.dashboard');
 
-    // Route::get('admin/setting', SettingList::class)->name('admin.setting');
+    Route::get('admin/setting', SettingList::class)->name('admin.setting');
 
     Route::get('utilitys/translate/{class}/{id}', DynamicTranslate::class)->name('admin.dynamic-translate');
 
