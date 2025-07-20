@@ -2496,7 +2496,7 @@ label {
 
 .testimonial-area {
   position: relative;
-  background: url(../img/testimonial/bg.jpg);
+  background: url(../images/testimonial/bg.jpg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -2690,7 +2690,7 @@ label {
 .cta-area {
   padding-top: 80px;
   padding-bottom: 180px;
-  background-image: url(../img/cta/01.jpg);
+  background-image: url(../images/cta/01.jpg);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;

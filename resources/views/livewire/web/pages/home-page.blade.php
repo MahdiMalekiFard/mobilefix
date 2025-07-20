@@ -2,7 +2,7 @@
     <!-- hero slider -->
     <div class="hero-section">
             <div class="hero-slider owl-carousel owl-theme">
-                <div class="hero-single" style="background: url(assets/img/slider/slider-1.jpg)">
+                <div class="hero-single" style="background: url(assets/images/slider/slider-1.jpg)">
                     <div class="container">
                         <div class="row align-items-center">
                             <div class="col-md-7 col-lg-7">
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="hero-single" style="background: url(assets/img/slider/slider-2.jpg)">
+                <div class="hero-single" style="background: url(assets/images/slider/slider-2.jpg)">
                     <div class="container">
                         <div class="row align-items-center">
                             <div class="col-md-7 col-lg-7">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="hero-single" style="background: url(assets/img/slider/slider-3.jpg)">
+                <div class="hero-single" style="background: url(assets/images/slider/slider-3.jpg)">
                     <div class="container">
                         <div class="row align-items-center">
                             <div class="col-md-7 col-lg-7">
@@ -139,7 +139,7 @@
                         <div class="feature-item">
                             <span class="count">01</span>
                             <div class="feature-icon">
-                                <img src="assets/img/icon/repair.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/repair.svg') }}" alt="">
                             </div>
                             <div class="feature-content">
                                 <h4>Best Electronics Repair Service</h4>
@@ -151,7 +151,7 @@
                         <div class="feature-item">
                             <span class="count">02</span>
                             <div class="feature-icon">
-                                <img src="assets/img/icon/team.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/team.svg') }}" alt="">
                             </div>
                             <div class="feature-content">
                                 <h4>Repair With Experience Team</h4>
@@ -163,7 +163,7 @@
                         <div class="feature-item">
                             <span class="count">03</span>
                             <div class="feature-icon">
-                                <img src="assets/img/icon/secure.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/secure.svg') }}" alt="">
                             </div>
                             <div class="feature-content">
                                 <h4>100% Secure Repair Service For You</h4>
@@ -185,13 +185,13 @@
                         <div class="about-left wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="about-img">
                                 <div class="about-img-1">
-                                    <img src="assets/img/about/01.jpg" alt="">
+                                    <img src="{{ asset('assets/images/about/01.jpg') }}" alt="">
                                 </div>
                                 <div class="about-img-2">
-                                    <img src="assets/img/about/02.jpg" alt="">
+                                    <img src="{{ asset('assets/images/about/02.jpg') }}" alt="">
                                 </div>
                             </div>
-                            <div class="about-shape"><img src="assets/img/shape/01.png" alt=""></div>
+                            <div class="about-shape"><img src="{{ asset('assets/images/shape/01.png') }}" alt=""></div>
                             <div class="about-experience">
                                 <h1>25+</h1>
                                 <div class="about-experience-text">
@@ -217,7 +217,7 @@
                                 <ul class="about-list list-unstyled">
                                     <li>
                                         <div class="icon">
-                                            <img src="assets/img/icon/money.svg" alt="">
+                                            <img src="{{ asset('assets/images/icon/money.svg') }}" alt="">
                                         </div>
                                         <div class="content">
                                             <h4>Our Affordable Price</h4>
@@ -226,7 +226,7 @@
                                     </li>
                                     <li>
                                         <div class="icon">
-                                            <img src="assets/img/icon/trusted.svg" alt="">
+                                            <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="">
                                         </div>
                                         <div class="content">
                                             <h4>Trusted Repair Service</h4>
@@ -263,7 +263,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="service-icon">
-                                <img src="assets/img/icon/tab.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/tab.svg') }}" alt="">
                             </div>
                             <div class="service-content">
                                 <h3 class="service-title">
@@ -281,7 +281,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                             <div class="service-icon">
-                                <img src="assets/img/icon/phone.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/phone.svg') }}" alt="">
                             </div>
                             <div class="service-content">
                                 <h3 class="service-title">
@@ -299,7 +299,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
                             <div class="service-icon">
-                                <img src="assets/img/icon/gadget.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/gadget.svg') }}" alt="">
                             </div>
                             <div class="service-content">
                                 <h3 class="service-title">
@@ -317,7 +317,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="service-icon">
-                                <img src="assets/img/icon/laptop.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/laptop.svg') }}" alt="">
                             </div>
                             <div class="service-content">
                                 <h3 class="service-title">
@@ -335,7 +335,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                             <div class="service-icon">
-                                <img src="assets/img/icon/recovery.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/recovery.svg') }}" alt="">
                             </div>
                             <div class="service-content">
                                 <h3 class="service-title">
@@ -353,7 +353,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                             <div class="service-icon">
-                                <img src="assets/img/icon/tab.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/tab.svg') }}" alt="">
                             </div>
                             <div class="service-content">
                                 <h3 class="service-title">
@@ -389,7 +389,7 @@
                         </div>
                     </div>
                     <div class="col-lg-8">
-                        <div class="video-content wow fadeInRight" data-wow-delay=".25s" style="background-image: url(assets/img/video/01.jpg);">
+                        <div class="video-content wow fadeInRight" data-wow-delay=".25s" style="background-image: url({{ asset('assets/images/video/01.jpg') }});">
                             <div class="row align-items-center">
                                 <div class="col-lg-12">
                                     <div class="video-wrap">
@@ -509,7 +509,7 @@
                             <div class="choose-wrapper mt-4">
                                 <div class="choose-item">
                                     <div class="choose-icon">
-                                        <img src="assets/img/icon/team-2.svg" alt="">
+                                        <img src="{{ asset('assets/images/icon/team-2.svg') }}" alt="">
                                     </div>
                                     <div class="choose-item-content">
                                         <h4>Skilled Technicians</h4>
@@ -518,7 +518,7 @@
                                 </div>
                                 <div class="choose-item active">
                                     <div class="choose-icon">
-                                        <img src="assets/img/icon/quality.svg" alt="">
+                                        <img src="{{ asset('assets/images/icon/quality.svg') }}" alt="">
                                     </div>
                                     <div class="choose-item-content">
                                         <h4>Quality Guarantee</h4>
@@ -527,7 +527,7 @@
                                 </div>
                                 <div class="choose-item">
                                     <div class="choose-icon">
-                                        <img src="assets/img/icon/trusted.svg" alt="">
+                                        <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="">
                                     </div>
                                     <div class="choose-item-content">
                                         <h4>Your Trusted Partner</h4>
@@ -541,10 +541,10 @@
                         <div class="choose-img wow fadeInRight" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="row g-4">
                                 <div class="col-6">
-                                    <img class="img-1" src="assets/img/choose/01.jpg" alt="">
+                                    <img class="img-1" src="{{ asset('assets/images/choose/01.jpg') }}" alt="">
                                 </div>
                                 <div class="col-6">
-                                    <img class="img-2" src="assets/img/choose/02.jpg" alt="">
+                                    <img class="img-2" src="{{ asset('assets/images/choose/02.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -586,7 +586,7 @@
                         <div class="col-lg-3 col-sm-6">
                             <div class="counter-box">
                                 <div class="icon">
-                                    <img src="assets/img/icon/repair-2.svg" alt="">
+                                    <img src="{{ asset('assets/images/icon/repair-2.svg') }}" alt="">
                                 </div>
                                 <div>
                                     <span class="counter" data-count="+" data-to="1200" data-speed="3000">1200</span>
@@ -597,7 +597,7 @@
                         <div class="col-lg-3 col-sm-6">
                             <div class="counter-box">
                                 <div class="icon">
-                                    <img src="assets/img/icon/happy.svg" alt="">
+                                    <img src="{{ asset('assets/images/icon/happy.svg') }}" alt="">
                                 </div>
                                 <div>
                                     <span class="counter" data-count="+" data-to="1500" data-speed="3000">1500</span>
@@ -608,7 +608,7 @@
                         <div class="col-lg-3 col-sm-6">
                             <div class="counter-box">
                                 <div class="icon">
-                                    <img src="assets/img/icon/team-2.svg" alt="">
+                                    <img src="{{ asset('assets/images/icon/team-2.svg') }}" alt="">
                                 </div>
                                 <div>
                                     <span class="counter" data-count="+" data-to="400" data-speed="3000">400</span>
@@ -619,7 +619,7 @@
                         <div class="col-lg-3 col-sm-6">
                             <div class="counter-box">
                                 <div class="icon">
-                                    <img src="assets/img/icon/award.svg" alt="">
+                                    <img src="{{ asset('assets/images/icon/award.svg') }}" alt="">
                                 </div>
                                 <div>
                                     <span class="counter" data-count="+" data-to="50" data-speed="3000">50</span>
@@ -660,10 +660,10 @@
                     <div class="col-md-4 filter-item cat3 cat4 cat5">
                         <div class="gallery-item">
                             <div class="gallery-img">
-                                <img src="assets/img/gallery/03.jpg" alt="">
+                                <img src="{{ asset('assets/images/gallery/03.jpg') }}" alt="">
                             </div>
                             <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="assets/img/gallery/03.jpg"><i
+                                <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/03.jpg') }}"><i
                                         class="far fa-plus"></i></a>
                             </div>
                         </div>
@@ -671,10 +671,10 @@
                     <div class="col-md-4 filter-item cat1 cat2">
                         <div class="gallery-item">
                             <div class="gallery-img">
-                                <img src="assets/img/gallery/01.jpg" alt="">
+                                <img src="{{ asset('assets/images/gallery/01.jpg') }}" alt="">
                             </div>
                             <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="assets/img/gallery/01.jpg"><i
+                                <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/01.jpg') }}"><i
                                         class="far fa-plus"></i></a>
                             </div>
                         </div>
@@ -682,10 +682,10 @@
                     <div class="col-md-4 filter-item cat2 cat3">
                         <div class="gallery-item">
                             <div class="gallery-img">
-                                <img src="assets/img/gallery/02.jpg" alt="">
+                                <img src="{{ asset('assets/images/gallery/02.jpg') }}" alt="">
                             </div>
                             <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="assets/img/gallery/02.jpg"><i
+                                <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/02.jpg') }}"><i
                                         class="far fa-plus"></i></a>
                             </div>
                         </div>
@@ -693,10 +693,10 @@
                     <div class="col-md-4 filter-item cat2 cat4">
                         <div class="gallery-item">
                             <div class="gallery-img">
-                                <img src="assets/img/gallery/04.jpg" alt="">
+                                <img src="{{ asset('assets/images/gallery/04.jpg') }}" alt="">
                             </div>
                             <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="assets/img/gallery/04.jpg"><i
+                                <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/04.jpg') }}"><i
                                         class="far fa-plus"></i></a>
                             </div>
                         </div>
@@ -704,10 +704,10 @@
                     <div class="col-md-4 filter-item cat1 cat4 cat5">
                         <div class="gallery-item">
                             <div class="gallery-img">
-                                <img src="assets/img/gallery/05.jpg" alt="">
+                                <img src="{{ asset('assets/images/gallery/05.jpg') }}" alt="">
                             </div>
                             <div class="gallery-content">
-                                <a class="popup-img gallery-link" href="assets/img/gallery/05.jpg"><i
+                                <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/05.jpg') }}"><i
                                         class="far fa-plus"></i></a>
                             </div>
                         </div>
@@ -734,7 +734,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="team-img">
-                                <img src="assets/img/team/01.jpg" alt="thumb">
+                                <img src="{{ asset('assets/images/team/01.jpg') }}" alt="thumb">
                             </div>
                             <div class="team-content">
                                 <div class="team-bio">
@@ -753,7 +753,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                             <div class="team-img">
-                                <img src="assets/img/team/02.jpg" alt="thumb">
+                                <img src="{{ asset('assets/images/team/02.jpg') }}" alt="thumb">
                             </div>
                             <div class="team-content">
                                 <div class="team-bio">
@@ -772,7 +772,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
                             <div class="team-img">
-                                <img src="assets/img/team/03.jpg" alt="thumb">
+                                <img src="{{ asset('assets/images/team/03.jpg') }}" alt="thumb">
                             </div>
                             <div class="team-content">
                                 <div class="team-bio">
@@ -791,7 +791,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1s">
                             <div class="team-img">
-                                <img src="assets/img/team/04.jpg" alt="thumb">
+                                <img src="{{ asset('assets/images/team/04.jpg') }}" alt="thumb">
                             </div>
                             <div class="team-content">
                                 <div class="team-bio">
@@ -820,7 +820,7 @@
                     <div class="col-lg-6">
                         <div class="faq-left wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="faq-img">
-                                <img src="assets/img/faq/01.jpg" alt="">
+                                <img src="{{ asset('assets/images/faq/01.jpg') }}" alt="">
                             </div>
                         </div>
                     </div>
@@ -910,7 +910,7 @@
                     <div class="testimonial-single">
                         <div class="testimonial-content">
                             <div class="testimonial-author-img">
-                                <img src="assets/img/testimonial/01.jpg" alt="">
+                                <img src="{{ asset('assets/images/testimonial/01.jpg') }}" alt="">
                             </div>
                             <div class="testimonial-author-info">
                                 <h4>Sylvia H Green</h4>
@@ -922,7 +922,7 @@
                                 There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
                             </p>
                             <div class="testimonial-quote-icon">
-                                <img src="assets/img/icon/quote.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
                             </div>
                         </div>
                         <div class="testimonial-rate">
@@ -936,7 +936,7 @@
                     <div class="testimonial-single">
                         <div class="testimonial-content">
                             <div class="testimonial-author-img">
-                                <img src="assets/img/testimonial/02.jpg" alt="">
+                                <img src="{{ asset('assets/images/testimonial/02.jpg') }}" alt="">
                             </div>
                             <div class="testimonial-author-info">
                                 <h4>Gordo Novak</h4>
@@ -948,7 +948,7 @@
                                 There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
                             </p>
                             <div class="testimonial-quote-icon">
-                                <img src="assets/img/icon/quote.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
                             </div>
                         </div>
                         <div class="testimonial-rate">
@@ -962,7 +962,7 @@
                     <div class="testimonial-single">
                         <div class="testimonial-content">
                             <div class="testimonial-author-img">
-                                <img src="assets/img/testimonial/03.jpg" alt="">
+                                <img src="{{ asset('assets/images/testimonial/03.jpg') }}" alt="">
                             </div>
                             <div class="testimonial-author-info">
                                 <h4>Reid E Butt</h4>
@@ -974,7 +974,7 @@
                                 There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
                             </p>
                             <div class="testimonial-quote-icon">
-                                <img src="assets/img/icon/quote.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
                             </div>
                         </div>
                         <div class="testimonial-rate">
@@ -988,7 +988,7 @@
                     <div class="testimonial-single">
                         <div class="testimonial-content">
                             <div class="testimonial-author-img">
-                                <img src="assets/img/testimonial/04.jpg" alt="">
+                                <img src="{{ asset('assets/images/testimonial/04.jpg') }}" alt="">
                             </div>
                             <div class="testimonial-author-info">
                                 <h4>Parker Jimenez</h4>
@@ -1000,7 +1000,7 @@
                                 There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
                             </p>
                             <div class="testimonial-quote-icon">
-                                <img src="assets/img/icon/quote.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
                             </div>
                         </div>
                         <div class="testimonial-rate">
@@ -1014,7 +1014,7 @@
                     <div class="testimonial-single">
                         <div class="testimonial-content">
                             <div class="testimonial-author-img">
-                                <img src="assets/img/testimonial/05.jpg" alt="">
+                                <img src="{{ asset('assets/images/testimonial/05.jpg') }}" alt="">
                             </div>
                             <div class="testimonial-author-info">
                                 <h4>Heruli Nez</h4>
@@ -1026,7 +1026,7 @@
                                 There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
                             </p>
                             <div class="testimonial-quote-icon">
-                                <img src="assets/img/icon/quote.svg" alt="">
+                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
                             </div>
                         </div>
                         <div class="testimonial-rate">
@@ -1060,7 +1060,7 @@
                         <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 16, 2024</span>
                             <div class="blog-item-img">
-                                <img src="assets/img/blog/01.jpg" alt="Thumb">
+                                <img src="{{ asset('assets/images/blog/01.jpg') }}" alt="Thumb">
                             </div>
                             <div class="blog-item-info">
                                 <h4 class="blog-title">
@@ -1083,7 +1083,7 @@
                         <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                             <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 18, 2024</span>
                             <div class="blog-item-img">
-                                <img src="assets/img/blog/02.jpg" alt="Thumb">
+                                <img src="{{ asset('assets/images/blog/02.jpg') }}" alt="Thumb">
                             </div>
                             <div class="blog-item-info">
                                 <h4 class="blog-title">
@@ -1106,7 +1106,7 @@
                         <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
                             <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 20, 2024</span>
                             <div class="blog-item-img">
-                                <img src="assets/img/blog/03.jpg" alt="Thumb">
+                                <img src="{{ asset('assets/images/blog/03.jpg') }}" alt="Thumb">
                             </div>
                             <div class="blog-item-info">
                                 <h4 class="blog-title">
@@ -1135,13 +1135,13 @@
         <div class="partner-area bg pt-50 pb-50">
             <div class="container">
                 <div class="partner-wrapper partner-slider owl-carousel owl-theme">
-                    <img src="assets/img/partner/01.png" alt="thumb">
-                    <img src="assets/img/partner/02.png" alt="thumb">
-                    <img src="assets/img/partner/03.png" alt="thumb">
-                    <img src="assets/img/partner/04.png" alt="thumb">
-                    <img src="assets/img/partner/05.png" alt="thumb">
-                    <img src="assets/img/partner/06.png" alt="thumb">
-                    <img src="assets/img/partner/03.png" alt="thumb">
+                    <img src="{{ asset('assets/images/partner/01.png') }}" alt="thumb">
+                    <img src="{{ asset('assets/images/partner/02.png') }}" alt="thumb">
+                    <img src="{{ asset('assets/images/partner/03.png') }}" alt="thumb">
+                    <img src="{{ asset('assets/images/partner/04.png') }}" alt="thumb">
+                    <img src="{{ asset('assets/images/partner/05.png') }}" alt="thumb">
+                    <img src="{{ asset('assets/images/partner/06.png') }}" alt="thumb">
+                    <img src="{{ asset('assets/images/partner/03.png') }}" alt="thumb">
                 </div>
             </div>
         </div>
