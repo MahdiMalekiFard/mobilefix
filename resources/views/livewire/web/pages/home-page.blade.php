@@ -810,7 +810,7 @@
                     <div class="mb-20 mt-10">
                         <a href="#" class="cta-border-btn"><i class="fal fa-headset"></i>+2 123 654 7898</a>
                     </div>
-                    <a href="contact.html" class="theme-btn">Contact Now <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ route('contact-us-page') }}" class="theme-btn">Contact Now <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
