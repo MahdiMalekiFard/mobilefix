@@ -81,46 +81,106 @@
 
     <!-- appointment -->
     <div class="appointment">
-        <div class="col-lg-8">
+        <div class="container-fluid">
             <div class="appointment-form">
-                <form action="#">
+                <form action="#" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter Name">
+                                <input type="text" class="form-control" placeholder="Enter Name" required>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Enter Email">
+                                <input type="email" class="form-control" placeholder="Enter Email" required>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter Phone">
+                                <input type="text" class="form-control" placeholder="Enter Phone" required>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <select class="form-select" name="service">
-                                    <option value="">Choose Service</option>
-                                    <option value="1">Tablets & iPad Repair</option>
-                                    <option value="2">Smart Phone Repair</option>
-                                    <option value="3">Gadget Repair</option>
-                                    <option value="4">Laptop & Desktop Repair</option>
-                                    <option value="5">Data Recovery</option>
-                                    <option value="6">Hardware Update</option>
+                                <select class="form-select" name="brand" required>
+                                    <option value="">Choose Brand</option>
+                                    <option value="1">Apple</option>
+                                    <option value="2">Samsung</option>
+                                    <option value="3">Huawei</option>
+                                    <option value="4">Xiaomi</option>
+                                    <option value="5">Oppo</option>
+                                    <option value="6">Vivo</option>
+                                    <option value="7">Realme</option>
+                                    <option value="8">Nokia</option>
+                                    <option value="9">LG</option>
+                                    <option value="10">Motorola</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="date" class="form-control">
+                                <select class="form-select" name="model" required>
+                                    <option value="">Choose Model</option>
+                                    <option value="1">iPhone 15</option>
+                                    <option value="2">iPhone 14</option>
+                                    <option value="3">iPhone 13</option>
+                                    <option value="4">iPhone 12</option>
+                                    <option value="5">iPhone 11</option>
+                                    <option value="6">iPhone 10</option>
+                                    <option value="7">iPhone 9</option>
+                                    <option value="8">iPhone 8</option>
+                                    <option value="9">iPhone 7</option>
+                                    <option value="10">iPhone 6</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <button type="submit" class="theme-btn theme-btn2">Get Service</button>
+                                <select class="form-select" name="problem" required>
+                                    <option value="">Choose Problem</option>
+                                    <option value="screen_crack">Screen Crack/Damage</option>
+                                    <option value="battery_issue">Battery Issue</option>
+                                    <option value="charging_port">Charging Port Problem</option>
+                                    <option value="speaker_issue">Speaker/Audio Issue</option>
+                                    <option value="camera_problem">Camera Problem</option>
+                                    <option value="water_damage">Water Damage</option>
+                                    <option value="software_issue">Software Issue</option>
+                                    <option value="button_malfunction">Button Malfunction</option>
+                                    <option value="overheating">Overheating</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="address" placeholder="Enter Address" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="form-group">
+                                <div class="file-upload-wrapper">
+                                    <input type="file" class="form-control" name="files[]" id="files" multiple accept="image/*,video/*" onchange="displayFileNames('files', 'files-preview')">
+                                    <label for="files" class="file-upload-label">
+                                        <i class="fas fa-file"></i> Upload Files
+                                    </label>
+                                    <div id="files-preview" class="file-preview"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <button type="button" class="theme-btn theme-btn2 w-100" data-bs-toggle="modal" data-bs-target="#descriptionModal">
+                                    <i class="fas fa-edit"></i> Add Description
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <button type="submit" class="theme-btn theme-btn2 w-100">
+                                    <i class="fas fa-tools"></i> Request Repair
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -128,7 +188,270 @@
             </div>
         </div>
     </div>
+
+    <!-- Description Modal -->
+    <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="descriptionModalLabel">
+                        <i class="fas fa-edit"></i> Describe Your Problem
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="problemDescription" class="form-label">Please provide detailed information about the problem:</label>
+                        <textarea class="form-control" id="problemDescription" name="description" rows="6" 
+                                  placeholder="Describe the issue you're experiencing with your device. Include when it started, what might have caused it, and any other relevant details..."></textarea>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> 
+                            The more detailed your description, the better we can assist you with your repair needs.
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="saveDescription()" data-bs-dismiss="modal">
+                        <i class="fas fa-save"></i> Save Description
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- appointment end -->
+
+    <style>
+        
+        .file-upload-wrapper {
+            position: relative;
+        }
+        
+        .file-upload-wrapper input[type="file"] {
+            opacity: 0;
+            position: absolute;
+            z-index: -1;
+            width: 0.1px;
+            height: 0.1px;
+            overflow: hidden;
+        }
+        
+        .file-upload-label {
+            display: block;
+            padding: 12px 20px;
+            background: #fff;
+            border: 2px dashed #00B6B1;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #00B6B1;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .file-upload-label:hover {
+            background: #f8f9fa;
+            border-color: #03466E;
+            color: #03466E;
+        }
+        
+        .file-preview {
+            margin-top: 0;
+            font-size: 12px;
+            color: #666;
+            display: none;
+        }
+        
+        .file-preview .file-count {
+            background: rgba(0, 182, 177, 0.1);
+            color: #00B6B1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin: 2px;
+            display: inline-block;
+            font-weight: 500;
+            border: 1px solid rgba(0, 182, 177, 0.2);
+        }
+        
+        .modal-content {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #00B6B1 0%, #03466E 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 20px;
+        }
+        
+        .modal-footer .btn {
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .modal-footer .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .modal-footer .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-footer .btn-primary {
+            background: linear-gradient(135deg, #00B6B1 0%, #03466E 100%);
+            border: none;
+            color: white;
+        }
+        
+        .modal-footer .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #03466E 0%, #00B6B1 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 182, 177, 0.3);
+        }
+        
+        .modal-footer .btn-primary:disabled {
+            opacity: 0.8;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .theme-btn2.w-100 {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .appointment {
+                padding: 30px 0;
+            }
+            
+            .theme-btn2.w-100 {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+
+    <script>
+        function displayFileNames(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const label = document.querySelector(`label[for="${inputId}"]`);
+            
+            if (input.files.length > 0) {
+                const fileCount = input.files.length;
+                const fileText = fileCount === 1 ? 'file' : 'files';
+                
+                // Update the button label text
+                label.innerHTML = `<i class="fas fa-file"></i> ${fileCount} ${fileText} selected`;
+            } else {
+                // Reset to original text when no files
+                label.innerHTML = `<i class="fas fa-file"></i> Upload Files`;
+            }
+        }
+        
+        function saveDescription() {
+            const description = document.getElementById('problemDescription').value;
+            const saveButton = document.querySelector('#descriptionModal .btn-primary');
+            const originalText = saveButton.innerHTML;
+            
+            if (description.trim()) {
+                // Instantly update the main "Add Description" button
+                const addDescButton = document.querySelector('[data-bs-target="#descriptionModal"]');
+                addDescButton.innerHTML = '<i class="fas fa-check"></i> Description Added';
+                addDescButton.classList.add('btn-success');
+                addDescButton.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                addDescButton.style.borderColor = '#28a745';
+                addDescButton.style.color = 'white';
+                addDescButton.setAttribute('data-description-added', 'true');
+                
+                // Change save button to show saving state
+                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                saveButton.disabled = true;
+                
+                // Simulate save process
+                setTimeout(() => {
+                    saveButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
+                    saveButton.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                    
+                    setTimeout(() => {
+                        // Reset save button for next time
+                        saveButton.innerHTML = originalText;
+                        saveButton.disabled = false;
+                        saveButton.style.background = '';
+                    }, 1000);
+                }, 1500);
+            } else {
+                // Show error state if no description
+                saveButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Add Description First';
+                saveButton.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+                
+                setTimeout(() => {
+                    saveButton.innerHTML = originalText;
+                    saveButton.style.background = '';
+                }, 2000);
+            }
+        }
+        
+        // Auto-resize textarea and form submission handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('problemDescription');
+            if (textarea) {
+                textarea.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                });
+            }
+            
+            // Handle form submission to reset description button
+            const form = document.querySelector('.appointment-form form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    const addDescButton = document.querySelector('[data-bs-target="#descriptionModal"]');
+                    if (addDescButton && addDescButton.getAttribute('data-description-added') === 'true') {
+                        addDescButton.innerHTML = '<i class="fas fa-edit"></i> Add Description';
+                        addDescButton.classList.remove('btn-success');
+                        addDescButton.style.background = '';
+                        addDescButton.style.borderColor = '';
+                        addDescButton.style.color = '';
+                        addDescButton.removeAttribute('data-description-added');
+                    }
+                });
+            }
+        });
+    </script>
 
 
     <!-- feature area -->

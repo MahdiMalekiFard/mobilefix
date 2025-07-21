@@ -1990,7 +1990,7 @@ label {
 .appointment-form{
   background: var(--theme-color);
   padding: 20px 30px;
-  border-radius: 0 20px 20px 0;
+  border-radius: 20px;
   box-shadow: var(--box-shadow);
 }
 
