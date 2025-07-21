@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\View\Composers;
     
+use App\Models\Blog;
 use App\Models\User;
 use App\Services\Permissions\PermissionsService;
 use Illuminate\View\View;
@@ -85,29 +86,29 @@ class NavbarComposer
             //         ],
             //     ],
             // ],
-            // [
-            //     'icon'     => 's-book-open',
-            //     'title'    => 'مدیریت مقاله ها',
-            //     'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Blog::class, 'Store', 'Index')),
-            //     'sub_menu' => [
-            //         [
-            //             'icon'       => 's-list-bullet',
-            //             'route_name' => 'admin.blog.index',
-            //             'exact'      => true,
-            //             'params'     => [],
-            //             'title'      => 'همه',
-            //             'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Blog::class, 'Index')),
-            //         ],
-            //         [
-            //             'icon'       => 's-plus-circle',
-            //             'route_name' => 'admin.blog.create',
-            //             'exact'      => true,
-            //             'params'     => [],
-            //             'title'      => 'ایجاد',
-            //             'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Blog::class, 'Store')),
-            //         ]
-            //     ],
-            // ],
+            [
+                'icon'     => 's-book-open',
+                'title'    => trans('_menu.blog_management'),
+                'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Blog::class, 'Store', 'Index')),
+                'sub_menu' => [
+                    [
+                        'icon'       => 's-list-bullet',
+                        'route_name' => 'admin.blog.index',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.blog.all'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Blog::class, 'Index')),
+                    ],
+                    [
+                        'icon'       => 's-plus-circle',
+                        'route_name' => 'admin.blog.create',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.blog.create'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Blog::class, 'Store')),
+                    ]
+                ],
+            ],
             // [
             //     'icon'     => 's-tag',
             //     'title'    => 'مدیریت تگ ها',

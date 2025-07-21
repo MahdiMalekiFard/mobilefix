@@ -73,34 +73,9 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{{ route('home-page') }}">Home</a>
+                                <a class="nav-link {{ request()->routeIs('home-page') ? 'active' : '' }}" href="{{ route('home-page') }}">Home</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                            <!-- <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
-                                <ul class="dropdown-menu fade-down">
-                                    <li><a class="dropdown-item" href="about.html">About Us</a></li>
-                                    <li><a class="dropdown-item" href="team.html">Our Team</a></li>
-                                    <li><a class="dropdown-item" href="pricing.html">Pricing Plan</a></li>
-                                    <li><a class="dropdown-item" href="faq.html">Faq's</a></li>
-                                    <li><a class="dropdown-item" href="contact.html">Contact Us</a></li>
-                                    <li><a class="dropdown-item" href="testimonial.html">Testimonials</a></li>
-                                    <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle" href="#">Account</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="login.html">Login</a></li>
-                                            <li><a class="dropdown-item" href="register.html">Register</a></li>
-                                            <li><a class="dropdown-item" href="forgot-password.html">Forgot
-                                                    Password</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li><a class="dropdown-item" href="404.html">404 Error</a></li>
-                                    <li><a class="dropdown-item" href="coming-soon.html">Coming Soon</a></li>
-                                    <li><a class="dropdown-item" href="terms.html">Terms Of Service</a></li>
-                                    <li><a class="dropdown-item" href="privacy.html">Privacy Policy</a></li>
-                                </ul>
-                            </li> -->
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('about-us-page') ? 'active' : '' }}" href="{{ route('about-us-page') }}">About</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Services</a>
                                 <ul class="dropdown-menu fade-down">
@@ -109,9 +84,9 @@
                                     <li><a class="dropdown-item" href="service-single.html">Service Single</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
-                            <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('contact-us-page') }}">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('gallery-page') ? 'active' : '' }}" href="gallery.html">Gallery</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog-page') ? 'active' : '' }}" href="{{ route('blog-page') }}">Blog</a></li>    
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact-us-page') ? 'active' : '' }}" href="{{ route('contact-us-page') }}">Contact</a></li>
                         </ul>
                         <!-- nav-right -->
                         <div class="nav-right">

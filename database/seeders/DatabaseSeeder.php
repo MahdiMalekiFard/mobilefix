@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             NecessarySeeder::class,
+            FakeSeeder::class,
         ]);
 
         Artisan::call('optimize:clear');
