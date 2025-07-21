@@ -95,7 +95,7 @@
                                         class="far fa-search"></i></button>
                             </div>
                             <div class="nav-btn">
-                                <a href="{{ route('contact-us-page') }}" class="theme-btn">Let's Talk <i class="fas fa-arrow-right"></i></a>
+                                <a href="#" class="theme-btn">Login <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
