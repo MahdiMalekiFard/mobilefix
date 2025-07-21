@@ -16,11 +16,11 @@
                                     There are many variations of passages orem psum available but the majority have
                                     suffered alteration in some form by injected humour or randomised.
                                 </p>
-                                <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
+                                <!-- <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
                                     <a href="#" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
                                     <a href="#" class="theme-btn theme-btn2">Learn More<i
                                             class="fas fa-arrow-right"></i></a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -40,11 +40,11 @@
                                     There are many variations of passages orem psum available but the majority have
                                     suffered alteration in some form by injected humour or randomised.
                                 </p>
-                                <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
+                                <!-- <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
                                     <a href="#" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
                                     <a href="#" class="theme-btn theme-btn2">Learn More<i
                                             class="fas fa-arrow-right"></i></a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -64,11 +64,11 @@
                                     There are many variations of passages orem psum available but the majority have
                                     suffered alteration in some form by injected humour or randomised.
                                 </p>
-                                <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
+                                <!-- <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
                                     <a href="#" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
                                     <a href="#" class="theme-btn theme-btn2">Learn More<i
                                             class="fas fa-arrow-right"></i></a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -728,89 +728,6 @@
         </div>
     </div>
     <!-- video area end -->
-
-
-    <!-- pricing-area -->
-    <div class="pricing-area bg py-80">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                    <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Pricing</span>
-                        <h2 class="site-title">Our Pricing <span>Plan</span></h2>
-                        <div class="heading-divider"></div>
-                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="pricing-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                        <div class="pricing-header">
-                            <h4>Basic</h4>
-                            <div class="pricing-price">
-                                <h1 class="pricing-amount">$59.66</h1>
-                                <p>One Time Payment</p>
-                            </div>
-                        </div>
-                        <div class="pricing-feature">
-                            <ul>
-                                <li>Unlimited Data Recovery</li>
-                                <li>Data Security And Backup</li>
-                                <li>Operating System Installation</li>
-                                <li>Unlimited Support Tickets</li>
-                                <li>24/7 Customer Support</li>
-                            </ul>
-                            <a href="pricing.html" class="theme-btn">Get Started <i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="pricing-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                        <div class="pricing-header">
-                            <h4>Enterprise</h4>
-                            <div class="pricing-price">
-                                <h1 class="pricing-amount">$120.78</h1>
-                                <p>One Time Payment</p>
-                            </div>
-                        </div>
-                        <div class="pricing-feature">
-                            <ul>
-                                <li>Unlimited Data Recovery</li>
-                                <li>Data Security And Backup</li>
-                                <li>Operating System Installation</li>
-                                <li>Unlimited Support Tickets</li>
-                                <li>24/7 Customer Support</li>
-                            </ul>
-                            <a href="pricing.html" class="theme-btn">Get Started <i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="pricing-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                        <div class="pricing-header">
-                            <h4>Premium</h4>
-                            <div class="pricing-price">
-                                <h1 class="pricing-amount">$150.96</h1>
-                                <p>One Time Payment</p>
-                            </div>
-                        </div>
-                        <div class="pricing-feature">
-                            <ul>
-                                <li>Unlimited Data Recovery</li>
-                                <li>Data Security And Backup</li>
-                                <li>Operating System Installation</li>
-                                <li>Unlimited Support Tickets</li>
-                                <li>24/7 Customer Support</li>
-                            </ul>
-                            <a href="pricing.html" class="theme-btn">Get Started <i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- pricing-area end -->
 
 
     <!-- choose area -->
