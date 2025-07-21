@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\View\Composers;
     
 use App\Models\Blog;
+use App\Models\Category;
 use App\Models\User;
 use App\Services\Permissions\PermissionsService;
 use Illuminate\View\View;
@@ -62,30 +63,30 @@ class NavbarComposer
                     ],
                 ],
             ],
-            // [
-            //     'icon'     => 's-squares-2x2',
-            //     'title'    => trans('_menu.category_management'),
-            //     'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Category::class, 'Store', 'Index')),
-            //     'sub_menu' => [
-            //         [
-            //             'icon'       => 's-list-bullet',
-            //             'route_name' => 'admin.category.index',
-            //             'exact'      => true,
-            //             'params'     => [],
-            //             'title'      => trans('_menu.category.all'),
-            //             'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Category::class, 'Index')),
+            [
+                'icon'     => 's-squares-2x2',
+                'title'    => trans('_menu.category_management'),
+                'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Category::class, 'Store', 'Index')),
+                'sub_menu' => [
+                    [
+                        'icon'       => 's-list-bullet',
+                        'route_name' => 'admin.category.index',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.category.all'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Category::class, 'Index')),
 
-            //         ],
-            //         [
-            //             'icon'       => 's-plus-circle',
-            //             'route_name' => 'admin.category.create',
-            //             'exact'      => true,
-            //             'params'     => [],
-            //             'title'      => trans('_menu.category.create'),
-            //             'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Category::class, 'Store')),
-            //         ],
-            //     ],
-            // ],
+                    ],
+                    [
+                        'icon'       => 's-plus-circle',
+                        'route_name' => 'admin.category.create',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.category.create'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Category::class, 'Store')),
+                    ],
+                ],
+            ],
             [
                 'icon'     => 's-book-open',
                 'title'    => trans('_menu.blog_management'),

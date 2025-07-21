@@ -6,10 +6,10 @@ use App\Enums\SeoRobotsMetaEnum;
 return [
     'blogs'      => [
         [
-            'title'         => 'شروع سریع با لاراول: راهنمای مبتدیان',
-            'description'   => 'مقدمه‌ای عملی بر لاراول برای کسانی که می‌خواهند سریع پروژه‌های خود را با این فریم‌ورک شروع کنند.',
-            'body'          => 'لاراول یکی از فریم‌ورک‌های قدرتمند و در عین حال ساده PHP است که برای توسعه سریع وب‌اپلیکیشن‌ها طراحی شده.در این مقاله قدم‌به‌قدم نحوه نصب لاراول، اجرای اولین پروژه و ساخت صفحات ساده را یاد می‌گیریم.مفاهیم پایه مانند روتینگ، کنترلرها، ویوها و مدل‌ها معرفی می‌شن.هدف اینه که بدون نیاز به دانش عمیق قبلی، خیلی سریع وارد دنیای لاراول بشی.از نصب Composer تا اجرای اولین صفحه با Blade، همه چیز رو پوشش می‌دیم.اگه تازه‌کاری، این مقاله یه نقطه شروع عالی برات خواهد بود.',
-            'slug'          => 'شروع-سریع-با-لاراول:-راهنمای-مبتدیان',
+            'title'         => 'Schnelleinstieg in Laravel: Ein Leitfaden für Anfänger',
+            'description'   => 'Eine praktische Einführung in Laravel für diejenigen, die ihre Projekte schnell mit diesem Framework starten möchten.',
+            'body'          => 'Laravel ist eines der mächtigen und gleichzeitig einfachen PHP-Frameworks, das für die schnelle Entwicklung von Webanwendungen entwickelt wurde. In diesem Artikel lernen wir Schritt für Schritt, wie man Laravel installiert, das erste Projekt ausführt und einfache Seiten erstellt. Grundkonzepte wie Routing, Controller, Views und Models werden vorgestellt. Das Ziel ist es, ohne tiefgreifende Vorkenntnisse sehr schnell in die Laravel-Welt einzusteigen. Von der Composer-Installation bis zur Ausführung der ersten Seite mit Blade decken wir alles ab. Wenn Sie Anfänger sind, wird dieser Artikel ein ausgezeichneter Ausgangspunkt für Sie sein.',
+            'slug'          => 'schnelleinstieg-in-laravel-ein-leitfaden-fuer-anfaenger',
             'published'     => true,
             'published_at'  => now(),
             'user_id'       => 2,
@@ -18,11 +18,11 @@ return [
             'comment_count' => 1,
             'wish_count'    => 2,
             'languages'     => [
-                'fa',
+                'de',
             ],
             'seo_options'   => [
-                'title'       => 'شروع سریع با لاراول: راهنمای مبتدیان',
-                'description' => 'مقدمه‌ای عملی بر لاراول برای کسانی که می‌خواهند سریع پروژه‌های خود را با این فریم‌ورک شروع کنند.',
+                'title'       => 'Schnelleinstieg in Laravel: Ein Leitfaden für Anfänger',
+                'description' => 'Eine praktische Einführung in Laravel für diejenigen, die ihre Projekte schnell mit diesem Framework starten möchten.',
                 'canonical'   => null,
                 'old_url'     => null,
                 'redirect_to' => null,
@@ -31,10 +31,10 @@ return [
             'path'          => public_path('images/test/blogs/laravel.jpg'),
         ],
         [
-            'title'         => 'معماری لاراول: نگاهی عمیق به ساختار داخلی فریم‌ورک',
-            'description'   => 'ساختار MVC، سرویس کانتینرها، فَسادها و سایر مفاهیم کلیدی را بررسی می‌کنیم تا درک عمیق‌تری از لاراول پیدا کنید.',
+            'title'         => 'Laravel-Architektur: Ein tiefer Einblick in die interne Struktur des Frameworks',
+            'description'   => 'Wir untersuchen die MVC-Struktur, Service Container, Facades und andere Schlüsselkonzepte, um ein tieferes Verständnis von Laravel zu erlangen.',
             'body'          => '',
-            'slug'          => 'معماری-لاراول:-نگاهی-عمیق-به-ساختار-داخلی-فریم‌ورک',
+            'slug'          => 'laravel-architektur-ein-tiefer-einblick-in-die-interne-struktur-des-frameworks',
             'published'     => true,
             'published_at'  => now(),
             'user_id'       => 3,
@@ -43,11 +43,11 @@ return [
             'comment_count' => 1,
             'wish_count'    => 2,
             'languages'     => [
-                'fa',
+                'de',
             ],
             'seo_options'   => [
-                'title'       => 'معماری لاراول: نگاهی عمیق به ساختار داخلی فریم‌ورک',
-                'description' => 'ساختار MVC، سرویس کانتینرها، فَسادها و سایر مفاهیم کلیدی را بررسی می‌کنیم تا درک عمیق‌تری از لاراول پیدا کنید.',
+                'title'       => 'Laravel-Architektur: Ein tiefer Einblick in die interne Struktur des Frameworks',
+                'description' => 'Wir untersuchen die MVC-Struktur, Service Container, Facades und andere Schlüsselkonzepte, um ein tieferes Verständnis von Laravel zu erlangen.',
                 'canonical'   => null,
                 'old_url'     => null,
                 'redirect_to' => null,
@@ -59,13 +59,13 @@ return [
 
     'categories' => [
         [
-            'title'       => 'لاراول',
-            'slug'        => 'لاراول',
-            'description' => 'لاراول (Laravel) یک فریم‌ورک محبوب و قدرتمند برای توسعه وب با زبان PHP است که بر پایه معماری MVC (Model-View-Controller) ساخته شده.',
-            'body'        => 'این فریم‌ورک با هدف ساده‌سازی توسعه برنامه‌های تحت وب ایجاد شده و امکاناتی مثل مسیریابی ساده، مدیریت پایگاه‌داده با Eloquent ORM، سیستم صف، احراز هویت، ارسال ایمیل، و قالب Blade رو در اختیار توسعه‌دهنده قرار می‌ده.لاراول با سینتکس زیبا و ابزارهای حرفه‌ای، توسعه پروژه‌های کوچک تا بزرگ رو سریع‌تر و لذت‌بخش‌تر می‌کنه.',
+            'title'       => 'Laravel',
+            'slug'        => 'laravel',
+            'description' => 'Laravel ist ein beliebtes und mächtiges Framework für die Webentwicklung mit der PHP-Sprache, das auf der MVC-Architektur (Model-View-Controller) basiert.',
+            'body'        => 'Dieses Framework wurde mit dem Ziel entwickelt, die Entwicklung von Webanwendungen zu vereinfachen und bietet Funktionen wie einfaches Routing, Datenbankmanagement mit Eloquent ORM, Warteschlangensystem, Authentifizierung, E-Mail-Versand und die Blade-Template-Engine für Entwickler. Laravel macht mit seiner schönen Syntax und professionellen Tools die Entwicklung von kleinen bis großen Projekten schneller und angenehmer.',
             'seo_options' => [
-                'title'       => 'لاراول',
-                'description' => 'لاراول (Laravel) یک فریم‌ورک محبوب و قدرتمند برای توسعه وب با زبان PHP است که بر پایه معماری MVC (Model-View-Controller) ساخته شده.',
+                'title'       => 'Laravel',
+                'description' => 'Laravel ist ein beliebtes und mächtiges Framework für die Webentwicklung mit der PHP-Sprache, das auf der MVC-Architektur (Model-View-Controller) basiert.',
                 'canonical'   => null,
                 'old_url'     => null,
                 'redirect_to' => null,
@@ -77,7 +77,7 @@ return [
             'created_at'  => now(),
             'updated_at'  => now(),
             'languages'   => [
-                'fa',
+                'de',
             ],
             'path'        => public_path('images/test/categories/laravel-cat.png'),
         ],
