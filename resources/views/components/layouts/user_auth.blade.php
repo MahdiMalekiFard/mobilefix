@@ -28,41 +28,11 @@
 
 <body>
 
-    <!-- preloader -->
-    <div class="preloader">
-        <div class="loader-ripple">
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-    <!-- preloader end -->
-
-
-    @include('components.layouts.header')
-
-
-    <!-- popup search -->
-    <div class="search-popup">
-        <button class="close-search"><span class="far fa-times"></span></button>
-        <form action="#">
-            <div class="form-group">
-                <input type="search" name="search-field" placeholder="Search Here..." required>
-                <button type="submit"><i class="far fa-search"></i></button>
-            </div>
-        </form>
-    </div>
-    <!-- popup search end -->
-
-
     <main class="main">
 
         {{ $slot }}
 
     </main>
-
-
-
-    @include('components.layouts.footer')
 
 
     <!-- scroll-top -->

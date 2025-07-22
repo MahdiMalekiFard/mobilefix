@@ -95,7 +95,7 @@
                                         class="far fa-search"></i></button>
                             </div>
                             <div class="nav-btn">
-                                <a href="#" class="theme-btn">Login <i class="fas fa-arrow-right"></i></a>
+                                <a href="{{ route('user.auth.login') }}" class="theme-btn">Login <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
