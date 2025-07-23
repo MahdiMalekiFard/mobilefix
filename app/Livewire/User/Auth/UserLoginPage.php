@@ -17,6 +17,26 @@ class UserLoginPage extends Component
         ];
     }
 
+    // Validate email in real-time while typing
+    public function updatedEmail()
+    {
+        $this->resetErrorBag('email');
+        
+        if (!empty($this->email)) {
+            $this->validateOnly('email');
+        }
+    }
+
+    // Validate password in real-time while typing
+    public function updatedPassword()
+    {
+        $this->resetErrorBag('password');
+        
+        if (!empty($this->password)) {
+            $this->validateOnly('password');
+        }
+    }
+
     public function login()
     {
         $this->validate();

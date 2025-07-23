@@ -24,4 +24,6 @@ Route::get('/about-us', AboutUsPage::class)->name('about-us-page');
 Route::get('/blog', BlogPage::class)->name('blog-page');
 
 // user dashboard
-Route::get('/user/dashboard', UserDashboardIndex::class)->name('user.dashboard');
+Route::group(['middleware' => ['user.dashboard']], function () {
+    Route::get('/user/dashboard', UserDashboardIndex::class)->name('user.dashboard');
+});

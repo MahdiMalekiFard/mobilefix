@@ -22,11 +22,17 @@
                         @csrf
                         <div class="form-group mb-3">
                             <label class="form-label">Email Address</label>
-                            <input type="email" class="form-control" placeholder="Your Email" required wire:model="email">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Your Email" required wire:model.live="email">
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" class="form-control" placeholder="Your Password" required wire:model="password">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Your Password" required wire:model.live="password">
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="d-flex justify-content-between mb-4">
                             <div class="form-check">
