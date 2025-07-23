@@ -558,7 +558,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="about.html" class="theme-btn mt-4">Discover More <i
+                        <a href="{{ route('about-us-page') }}" class="theme-btn mt-4">Discover More <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -1304,7 +1304,7 @@
                         </div>
                         <div class="blog-item-info">
                             <h4 class="blog-title">
-                                <a href="blog-single.html">There are many variation of passage available suffer</a>
+                                <a href="{{ route('blog-detail-page', ['slug' => 'there-are-many-variation-of-passage-available-suffer']) }}">There are many variation of passage available suffer</a>
                             </h4>
                             <div class="blog-item-meta">
                                 <ul>
@@ -1315,7 +1315,7 @@
                             <p>
                                 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
                             </p>
-                            <a class="theme-btn" href="blog-single.html">Read More<i class="fas fa-arrow-right"></i></a>
+                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => 'there-are-many-variation-of-passage-available-suffer']) }}">Read More<i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -1327,7 +1327,7 @@
                         </div>
                         <div class="blog-item-info">
                             <h4 class="blog-title">
-                                <a href="blog-single.html">It is a long established fact that will be distracted</a>
+                                <a href="{{ route('blog-detail-page', ['slug' => 'it-is-a-long-established-fact-that-will-be-distracted']) }}">It is a long established fact that will be distracted</a>
                             </h4>
                             <div class="blog-item-meta">
                                 <ul>
@@ -1338,7 +1338,7 @@
                             <p>
                                 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
                             </p>
-                            <a class="theme-btn" href="blog-single.html">Read More<i class="fas fa-arrow-right"></i></a>
+                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => 'it-is-a-long-established-fact-that-will-be-distracted']) }}">Read More<i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -1350,7 +1350,7 @@
                         </div>
                         <div class="blog-item-info">
                             <h4 class="blog-title">
-                                <a href="blog-single.html">All the generators on the tend to repeat predefined chunks</a>
+                                <a href="{{ route('blog-detail-page', ['slug' => 'all-the-generators-on-the-tend-to-repeat-predefined-chunks']) }}">All the generators on the tend to repeat predefined chunks</a>
                             </h4>
                             <div class="blog-item-meta">
                                 <ul>
@@ -1361,7 +1361,7 @@
                             <p>
                                 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
                             </p>
-                            <a class="theme-btn" href="blog-single.html">Read More<i class="fas fa-arrow-right"></i></a>
+                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => 'all-the-generators-on-the-tend-to-repeat-predefined-chunks']) }}">Read More<i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>

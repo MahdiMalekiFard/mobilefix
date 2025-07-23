@@ -70,8 +70,6 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="about.html" class="theme-btn mt-4">Discover More <i
-                                class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>

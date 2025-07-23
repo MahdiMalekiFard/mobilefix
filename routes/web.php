@@ -4,6 +4,7 @@ use App\Livewire\Web\Pages\HomePage;
 use App\Livewire\Web\Pages\ContactUsPage;
 use App\Livewire\Web\Pages\AboutUsPage;
 use App\Livewire\Web\Pages\BlogPage;
+use App\Livewire\Web\Pages\BlogDetailPage;
 use App\Livewire\User\Auth\UserLoginPage;
 use App\Livewire\User\Pages\Dashboard\UserDashboardIndex;
 use App\Livewire\User\Pages\Setting\UserSettingList;
@@ -23,6 +24,7 @@ Route::get('user/auth/logout', function () {
 Route::get('/contact-us', ContactUsPage::class)->name('contact-us-page');
 Route::get('/about-us', AboutUsPage::class)->name('about-us-page');
 Route::get('/blog', BlogPage::class)->name('blog-page');
+Route::get('/blog/{slug}', BlogDetailPage::class)->name('blog-detail-page');
 
 // user dashboard
 Route::group(['middleware' => ['user.dashboard']], function () {
