@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer(['admin.layouts.navbar', 'admin.layouts.navbar-mobile'], NavbarComposer::class);
-        View::composer(['user.layouts.navbar', 'user.layouts.navbar-mobile'], UserNavbarComposer::class);
+        View::composer(['user.layouts.nav', 'user.layouts.nav-mobile'], UserNavbarComposer::class);
 
         Button::macro('navigate', function () {
             $this->attributes([

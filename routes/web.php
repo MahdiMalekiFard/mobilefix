@@ -6,6 +6,7 @@ use App\Livewire\Web\Pages\AboutUsPage;
 use App\Livewire\Web\Pages\BlogPage;
 use App\Livewire\User\Auth\UserLoginPage;
 use App\Livewire\User\Pages\Dashboard\UserDashboardIndex;
+use App\Livewire\User\Pages\Setting\UserSettingList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomePage::class)->name('home-page');
@@ -26,4 +27,5 @@ Route::get('/blog', BlogPage::class)->name('blog-page');
 // user dashboard
 Route::group(['middleware' => ['user.dashboard']], function () {
     Route::get('/user/dashboard', UserDashboardIndex::class)->name('user.dashboard');
+    Route::get('/user/setting', UserSettingList::class)->name('user.setting');
 });

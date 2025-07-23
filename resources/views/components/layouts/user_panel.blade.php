@@ -21,11 +21,11 @@
      x-init="() => { $refs.contentarea.scrollTop = 99999999 }"
      @keydown.window.escape="open = false" class="flex flex-col min-h-screen">
 
-    @include('user.layouts.navbar-mobile')
+    @include('user.layouts.nav-mobile')
 
 
     <!-- Static sidebar for desktop -->
-    @include('user.layouts.navbar')
+    @include('user.layouts.nav')
 
     <div class="lg:ps-72 flex flex-col flex-1">
         <livewire:user.shared.header />
