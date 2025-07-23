@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Admin\Shared;
+namespace App\Livewire\User\Shared;
 
 use App\Helpers\NotifyHelper;
 use App\Models\User;
@@ -24,7 +24,7 @@ class Header extends Component
 
     public function render(): View
     {
-        return view('livewire.admin.shared.header', [
+        return view('livewire.user.shared.header', [
             'notifications' => DatabaseNotification::where('notifiable_type', User::class)
                 ->where('notifiable_id', auth()->id())
                 ->where('read_at', null)
@@ -33,4 +33,4 @@ class Header extends Component
                 ->get(),
         ]);
     }
-}
+} 

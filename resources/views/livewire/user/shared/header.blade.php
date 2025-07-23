@@ -74,7 +74,7 @@
             class="w-11/12 lg:w-1/3"
             right
     >
-        @forelse($notificaations as $notif)
+        @forelse($notifications as $notif)
             <x-list-item :item="$notif">
                 <x-slot:value>
                     {{App\Helpers\NotifyHelper::title($notif->data)}}
