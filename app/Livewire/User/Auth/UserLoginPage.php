@@ -13,7 +13,7 @@ class UserLoginPage extends Component
     {
         return [
             'email'    => 'required|email|exists:users,email',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string',
         ];
     }
 

@@ -59,7 +59,7 @@
                 <x-slot:trigger>
                     <x-button class="btn-circle"><img class="rounded-full" src="{{ asset('assets/img/avatars/avatar.jpg') }}" alt=""></x-button>
                 </x-slot:trigger>
-                <x-menu-item :title="trans('_menu.setting')" :link="route('admin.setting')"/>
+                <!-- <x-menu-item :title="trans('_menu.setting')" :link="route('admin.setting')"/> -->
                 <x-menu-item title="Logout" :link="route('admin.auth.logout')"/>
             </x-dropdown>
         </div>

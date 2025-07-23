@@ -37,5 +37,14 @@ class UserSeeder extends Seeder
             'name'     => 'admin2',
         ]);
         $admin2->assignRole($adminRole);
+
+        $user = User::find(4);
+        $user->update([
+            'password' => Hash::make('secret'),
+            'email'    => 'mahdi@gmail.com',
+            'mobile'   => '09151234567',
+            'name'     => 'Mahdi',
+            'family'   => 'Akbarzadeh',
+        ]);
     }
 }
