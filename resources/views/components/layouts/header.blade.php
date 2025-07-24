@@ -47,7 +47,7 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container position-relative">
                 <a class="navbar-brand" href="#">
-                    <img src="{{ asset('assets/images/logo/fix-mobil.png') }}" alt="logo">
+                    <img src="{{ asset('assets/images/logo/logo.png') }}" alt="logo">
                 </a>
                 <div class="mobile-menu-right">
                     <div class="mobile-menu-btn">
@@ -65,7 +65,7 @@
                     aria-labelledby="offcanvasNavbarLabel">
                     <div class="offcanvas-header">
                         <a href="index.html" class="offcanvas-brand" id="offcanvasNavbarLabel">
-                            <img src="{{ asset('assets/images/logo/fix-mobil.png') }}" alt="">
+                            <img src="{{ asset('assets/images/logo/logo.png') }}" alt="">
                         </a>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             aria-label="Close"></button>
