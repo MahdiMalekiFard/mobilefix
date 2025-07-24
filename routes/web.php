@@ -14,7 +14,7 @@ Route::get('/', HomePage::class)->name('home-page');
 
 // auth
 Route::get('user/auth/login', UserLoginPage::class)->name('user.auth.login');
-Route::get('user/auth/logout', function () {
+Route::post('user/auth/logout', function () {
     auth()->logout();
 
     return redirect()->route('user.auth.login');

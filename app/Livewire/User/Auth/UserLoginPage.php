@@ -41,7 +41,7 @@ class UserLoginPage extends Component
     {
         $this->validate();
         if (auth()->attempt(['email' => $this->email, 'password' => $this->password])) {
-            return $this->redirect(route('user.dashboard'), true);
+            return $this->redirect(route('user.dashboard'));
         }
         // add error validation for field email
         $this->addError('email', 'ایمیل یا رمز عبور اشتباه است');

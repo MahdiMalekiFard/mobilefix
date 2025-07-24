@@ -60,7 +60,11 @@
                     <x-button class="btn-circle"><img class="rounded-full" src="{{ asset('assets/img/avatars/avatar.jpg') }}" alt=""></x-button>
                 </x-slot:trigger>
                 
-                <x-menu-item title="Logout" :link="route('user.auth.logout')"/>
+                <form method="POST" action="{{ route('user.auth.logout') }}" x-data>
+                    @csrf
+                    <x-button type="submit">Logout</x-button>
+                </form>
+
             </x-dropdown>
         </div>
     </div>
