@@ -7,6 +7,10 @@
                 <img src="{{ asset('assets/images/logo/logo.png') }}" alt="" class="mb-3">
                 <h2 class="mt-4 mb-3">Mobile Repair Service</h2>
                 <p class="lead">Professional mobile device repair and maintenance services</p>
+                <a href="{{ route('home-page') }}" class="btn btn-light mt-4">
+                    <i class="fas fa-home me-2"></i> 
+                    <span class="fw-bold">Back to Website</span>
+                </a>
             </div>
         </div>
         
