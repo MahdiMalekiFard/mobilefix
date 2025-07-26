@@ -13,10 +13,10 @@
                                 in some form by injected humour words believable.
                             </p>
                             <ul class="footer-contact">
-                                <li><a href="tel:+21236547898"><i class="far fa-phone"></i>+2 123 654 7898</a></li>
+                                <li><a href="tel:+21236547898"><i class="far fa-phone"></i>+49 7648 9939</a></li>
                                 <li><i class="far fa-map-marker-alt"></i>25/B Milford Road, New York</li>
                                 <li><a href="mailto:info@example.com"><i
-                                            class="far fa-envelope"></i>info@example.com</a></li>
+                                            class="far fa-envelope"></i>info@Fix-mobil.de</a></li>
                             </ul>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                 <div class="row">
                     <div class="col-md-6 align-self-center">
                         <p class="copyright-text">
-                            &copy; Copyright <span id="date"></span> <a href="#"> Reparo </a> All Rights Reserved.
+                            &copy; Copyright <span id="date"></span> <a href="#"> Fixmobil </a> All Rights Reserved.
                         </p>
                     </div>
                     <div class="col-md-6 align-self-center">

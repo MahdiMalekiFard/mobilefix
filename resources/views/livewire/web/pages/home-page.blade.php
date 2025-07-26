@@ -808,7 +808,7 @@
                         </p>
                     </div>
                     <div class="mb-20 mt-10">
-                        <a href="#" class="cta-border-btn"><i class="fal fa-headset"></i>+2 123 654 7898</a>
+                        <a href="#" class="cta-border-btn"><i class="fal fa-headset"></i>+49 7648 9939</a>
                     </div>
                     <a href="{{ route('contact-us-page') }}" class="theme-btn">Contact Now <i class="fas fa-arrow-right"></i></a>
                 </div>
@@ -888,66 +888,64 @@
                         <ul class="filter-btns">
                             <li class="active" data-filter="*"><i class="far fa-computer-speaker"></i> All</li>
                             <li data-filter=".cat1"><i class="far fa-mobile"></i> Phone</li>
-                            <li data-filter=".cat2"><i class="far fa-laptop"></i> Computer</li>
-                            <li data-filter=".cat3"><i class="far fa-tv"></i> Tv</li>
-                            <li data-filter=".cat4"><i class="far fa-tablet"></i> Tablet</li>
-                            <li data-filter=".cat5"><i class="far fa-microchip"></i> Gadget</li>
+                            <li data-filter=".cat2"><i class="far fa-tablet"></i> IPad</li>
+                            <li data-filter=".cat3"><i class="far fa-tablet"></i> Tablet</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="row mt-3 filter-box popup-gallery wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                <div class="col-md-4 filter-item cat3 cat4 cat5">
+                <div class="col-md-4 filter-item cat2">
                     <div class="gallery-item">
                         <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/03.jpg') }}" alt="">
+                            <img src="{{ asset('assets/images/gallery/i2.jpg') }}" alt="">
                         </div>
                         <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/03.jpg') }}"><i
+                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/i2.jpg') }}"><i
                                     class="far fa-plus"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 filter-item cat1 cat2">
+                <div class="col-md-4 filter-item cat2">
                     <div class="gallery-item">
                         <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/01.jpg') }}" alt="">
+                            <img src="{{ asset('assets/images/gallery/i1.jpg') }}" alt="">
                         </div>
                         <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/01.jpg') }}"><i
+                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/i1.jpg') }}"><i
                                     class="far fa-plus"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 filter-item cat2 cat3">
+                <div class="col-md-4 filter-item cat1">
                     <div class="gallery-item">
                         <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/02.jpg') }}" alt="">
+                            <img src="{{ asset('assets/images/gallery/m1.jpg') }}" alt="">
                         </div>
                         <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/02.jpg') }}"><i
+                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/m1.jpg') }}"><i
                                     class="far fa-plus"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 filter-item cat2 cat4">
+                <div class="col-md-4 filter-item cat1">
                     <div class="gallery-item">
                         <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/04.jpg') }}" alt="">
+                            <img src="{{ asset('assets/images/gallery/m3.jpg') }}" alt="">
                         </div>
                         <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/04.jpg') }}"><i
+                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/m3.jpg') }}"><i
                                     class="far fa-plus"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 filter-item cat1 cat4 cat5">
+                <div class="col-md-4 filter-item cat3">
                     <div class="gallery-item">
                         <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/05.jpg') }}" alt="">
+                            <img src="{{ asset('assets/images/gallery/t1.jpg') }}" alt="">
                         </div>
                         <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/05.jpg') }}"><i
+                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/t1.jpg') }}"><i
                                     class="far fa-plus"></i></a>
                         </div>
                     </div>
@@ -983,10 +981,10 @@
                             </div>
                         </div>
                         <div class="team-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-x-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
+                            <a href="https://www.linkedin.com/#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>
@@ -1002,10 +1000,10 @@
                             </div>
                         </div>
                         <div class="team-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-x-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
+                            <a href="https://www.linkedin.com/#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>
@@ -1021,10 +1019,10 @@
                             </div>
                         </div>
                         <div class="team-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-x-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
+                            <a href="https://www.linkedin.com/#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>
@@ -1040,10 +1038,10 @@
                             </div>
                         </div>
                         <div class="team-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-x-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
+                            <a href="https://www.linkedin.com/#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>

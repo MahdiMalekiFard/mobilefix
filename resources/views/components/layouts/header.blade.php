@@ -8,10 +8,10 @@
                 <div class="header-top-left">
                     <div class="header-top-social">
                         <span>Follow Us:</span>
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-x-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/#"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
                 <div class="header-top-right">
@@ -19,14 +19,13 @@
                         <ul>
                             <li>
                                 <div class="header-top-contact-info">
-                                    <a href="tel:+21236547898"><i class="far fa-phone-volume"></i> +2 123 654
-                                        7898</a>
+                                    <a href="tel:+4976489939"><i class="far fa-phone-volume"></i> +49 7648 9939</a>
                                 </div>
                             </li>
                             <li>
                                 <div class="header-top-contact-info">
-                                    <a href="mailto:info@example.com"><i class="far fa-envelopes"></i>
-                                        info@example.com</a>
+                                    <a href="mailto:info@Fix-mobil.de"><i class="far fa-envelopes"></i>
+                                    info@Fix-mobil.de</a>
                                 </div>
                             </li>
                             <li>

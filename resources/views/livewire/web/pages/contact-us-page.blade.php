@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="contact-info-content">
                                     <h5>Call Us</h5>
-                                    <p>+2 123 4565 789</p>
+                                    <p>+49 7648 9939</p>
                                 </div>
                             </div>
                             <div class="contact-info">
@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="contact-info-content">
                                     <h5>Email Us</h5>
-                                    <p>info@example.com</p>
+                                    <p>info@Fix-mobil.de</p>
                                 </div>
                             </div>
                             <div class="contact-info border-0">
