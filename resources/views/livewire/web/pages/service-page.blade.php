@@ -1,6 +1,6 @@
 <div>
     <!-- breadcrumb -->
-    <div class="site-breadcrumb" style="background: url(assets/img/breadcrumb/01.jpg)">
+    <div class="site-breadcrumb" style="background: url(assets/images/breadcrumb/01.jpg)">
         <div class="container">
             <h2 class="breadcrumb-title">Services</h2>
             <ul class="breadcrumb-menu">
