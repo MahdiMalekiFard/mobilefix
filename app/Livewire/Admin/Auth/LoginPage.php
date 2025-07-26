@@ -31,7 +31,7 @@ class LoginPage extends Component
             return $this->redirect(route('admin.dashboard'), true);
         }
         // add error validation for field email
-        $this->addError('email', 'شما دسترسی لازم برای ورود به پنل را ندارید');
+        $this->addError('email', 'You do not have the necessary access to enter the panel');
     }
 
     public function render(): View

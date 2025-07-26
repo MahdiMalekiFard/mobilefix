@@ -10,7 +10,7 @@
                                 <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Your Trusted
                                     Partner</h6>
                                 <h1 class="hero-title" data-animation="fadeInUp" data-delay=".50s">
-                                    Computer & Mobile <span>Repair</span> Services
+                                    Tablet & Mobile <span>Repair</span> Services
                                 </h1>
                                 <p data-animation="fadeInUp" data-delay=".75s">
                                     There are many variations of passages orem psum available but the majority have
@@ -34,7 +34,7 @@
                                 <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Your Trusted
                                     Partner</h6>
                                 <h1 class="hero-title" data-animation="fadeInUp" data-delay=".50s">
-                                    Computer & Mobile <span>Repair</span> Services
+                                    Tablet & Mobile <span>Repair</span> Services
                                 </h1>
                                 <p data-animation="fadeInUp" data-delay=".75s">
                                     There are many variations of passages orem psum available but the majority have
@@ -58,7 +58,7 @@
                                 <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Your Trusted
                                     Partner</h6>
                                 <h1 class="hero-title" data-animation="fadeInUp" data-delay=".50s">
-                                    Computer & Mobile <span>Repair</span> Services
+                                    Tablet & Mobile <span>Repair</span> Services
                                 </h1>
                                 <p data-animation="fadeInUp" data-delay=".75s">
                                     There are many variations of passages orem psum available but the majority have
@@ -590,13 +590,13 @@
                         </div>
                         <div class="service-content">
                             <h3 class="service-title">
-                                <a href="service-single.html">Tablets & iPad Repair Service</a>
+                                <a href="{{ route('service-single-page', ['slug' => 'tablets-ipad-repair']) }}">Tablets & iPad Repair Service</a>
                             </h3>
                             <p class="service-text">
                                 There are many variations available majority of word have in some form suffered.
                             </p>
                             <div class="service-arrow">
-                                <a href="service-single.html" class="service-btn"><i class="far fa-arrow-right"></i></a>
+                                <a href="{{ route('service-single-page', ['slug' => 'tablets-ipad-repair']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -608,13 +608,13 @@
                         </div>
                         <div class="service-content">
                             <h3 class="service-title">
-                                <a href="service-single.html">Smart Phone Repair Service</a>
+                                <a href="{{ route('service-single-page', ['slug' => 'smart-phone-repair']) }}">Smart Phone Repair Service</a>
                             </h3>
                             <p class="service-text">
                                 There are many variations available majority of word have in some form suffered.
                             </p>
                             <div class="service-arrow">
-                                <a href="service-single.html" class="service-btn"><i class="far fa-arrow-right"></i></a>
+                                <a href="{{ route('service-single-page', ['slug' => 'smart-phone-repair']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -626,13 +626,13 @@
                         </div>
                         <div class="service-content">
                             <h3 class="service-title">
-                                <a href="service-single.html">Gadget Repair Service</a>
+                                <a href="{{ route('service-single-page', ['slug' => 'gadget-repair']) }}">Gadget Repair Service</a>
                             </h3>
                             <p class="service-text">
                                 There are many variations available majority of word have in some form suffered.
                             </p>
                             <div class="service-arrow">
-                                <a href="service-single.html" class="service-btn"><i class="far fa-arrow-right"></i></a>
+                                <a href="{{ route('service-single-page', ['slug' => 'gadget-repair']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -644,13 +644,13 @@
                         </div>
                         <div class="service-content">
                             <h3 class="service-title">
-                                <a href="service-single.html">Laptop & Desktop Repair</a>
+                                <a href="{{ route('service-single-page', ['slug' => 'laptop-desktop-repair']) }}">Laptop & Desktop Repair</a>
                             </h3>
                             <p class="service-text">
                                 There are many variations available majority of word have in some form suffered.
                             </p>
                             <div class="service-arrow">
-                                <a href="service-single.html" class="service-btn"><i class="far fa-arrow-right"></i></a>
+                                <a href="{{ route('service-single-page', ['slug' => 'laptop-desktop-repair']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -662,13 +662,13 @@
                         </div>
                         <div class="service-content">
                             <h3 class="service-title">
-                                <a href="service-single.html">Data Recovery Service</a>
+                                <a href="{{ route('service-single-page', ['slug' => 'data-recovery']) }}">Data Recovery Service</a>
                             </h3>
                             <p class="service-text">
                                 There are many variations available majority of word have in some form suffered.
                             </p>
                             <div class="service-arrow">
-                                <a href="service-single.html" class="service-btn"><i class="far fa-arrow-right"></i></a>
+                                <a href="{{ route('service-single-page', ['slug' => 'data-recovery']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -680,13 +680,13 @@
                         </div>
                         <div class="service-content">
                             <h3 class="service-title">
-                                <a href="service-single.html">Hardware Update Service</a>
+                                <a href="{{ route('service-single-page', ['slug' => 'hardware-update']) }}">Hardware Update Service</a>
                             </h3>
                             <p class="service-text">
                                 There are many variations available majority of word have in some form suffered.
                             </p>
                             <div class="service-arrow">
-                                <a href="service-single.html" class="service-btn"><i class="far fa-arrow-right"></i></a>
+                                <a href="{{ route('service-single-page', ['slug' => 'hardware-update']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -708,7 +708,7 @@
                         <p>
                             There are many variations of passages available but the majority have suffered alteration in some form by injected humour randomised words look even going to use a passage believable.
                         </p>
-                        <a href="contact.html" class="theme-btn mt-20">Learn More <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ route('about-us-page') }}" class="theme-btn mt-20">Learn More <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-8">

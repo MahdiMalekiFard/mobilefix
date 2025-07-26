@@ -44,7 +44,7 @@ class UserLoginPage extends Component
             return $this->redirect(route('user.dashboard'));
         }
         // add error validation for field email
-        $this->addError('email', 'ایمیل یا رمز عبور اشتباه است');
+        $this->addError('email', 'Email or password is incorrect');
     }
 
 

@@ -75,13 +75,8 @@
                                 <a class="nav-link {{ request()->routeIs('home-page') ? 'active' : '' }}" href="{{ route('home-page') }}">Home</a>
                             </li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('about-us-page') ? 'active' : '' }}" href="{{ route('about-us-page') }}">About</a></li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Services</a>
-                                <ul class="dropdown-menu fade-down">
-                                    <li><a class="dropdown-item" href="service.html">Services One</a></li>
-                                    <li><a class="dropdown-item" href="service-2.html">Services Two</a></li>
-                                    <li><a class="dropdown-item" href="service-single.html">Service Single</a></li>
-                                </ul>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('service-page') }}">Services</a>
                             </li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('gallery-page') ? 'active' : '' }}" href="gallery.html">Gallery</a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog-page') ? 'active' : '' }}" href="{{ route('blog-page') }}">Blog</a></li>    

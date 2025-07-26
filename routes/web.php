@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Web\Pages\ServiceSinglePage;
+use App\Livewire\Web\Pages\ServicePage;
 use App\Livewire\Web\Pages\HomePage;
 use App\Livewire\Web\Pages\ContactUsPage;
 use App\Livewire\Web\Pages\AboutUsPage;
@@ -25,6 +27,8 @@ Route::get('/contact-us', ContactUsPage::class)->name('contact-us-page');
 Route::get('/about-us', AboutUsPage::class)->name('about-us-page');
 Route::get('/blog', BlogPage::class)->name('blog-page');
 Route::get('/blog/{slug}', BlogDetailPage::class)->name('blog-detail-page');
+Route::get('/service', ServicePage::class)->name('service-page');
+Route::get('/service/{slug}', ServiceSinglePage::class)->name('service-single-page');
 
 // user dashboard
 Route::group(['middleware' => ['user.dashboard']], function () {

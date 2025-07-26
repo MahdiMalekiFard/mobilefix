@@ -13,9 +13,9 @@
                                 in some form by injected humour words believable.
                             </p>
                             <ul class="footer-contact">
-                                <li><a href="tel:+21236547898"><i class="far fa-phone"></i>+49 7648 9939</a></li>
+                                <li><a href="tel:+4976489939"><i class="far fa-phone"></i>+49 7648 9939</a></li>
                                 <li><i class="far fa-map-marker-alt"></i>25/B Milford Road, New York</li>
-                                <li><a href="mailto:info@example.com"><i
+                                <li><a href="mailto:info@Fix-mobil.de"><i
                                             class="far fa-envelope"></i>info@Fix-mobil.de</a></li>
                             </ul>
                         </div>
@@ -24,12 +24,12 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Quick Links</h4>
                             <ul class="footer-list">
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> About Us</a></li>
+                                <li><a href="{{ route('about-us-page') }}"><i class="fas fa-dot-circle"></i> About Us</a></li>
                                 <li><a href="#"><i class="fas fa-dot-circle"></i> FAQ's</a></li>
                                 <li><a href="#"><i class="fas fa-dot-circle"></i> Terms Of Service</a></li>
                                 <li><a href="#"><i class="fas fa-dot-circle"></i> Privacy policy</a></li>
                                 <li><a href="#"><i class="fas fa-dot-circle"></i> Our Team</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Latest Blog</a></li>
+                                <li><a href="{{ route('blog-page') }}"><i class="fas fa-dot-circle"></i> Latest Blog</a></li>
                             </ul>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Our Services</h4>
                             <ul class="footer-list">
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Tablets & iPad Repair</a></li>
+                                <li><a href=""><i class="fas fa-dot-circle"></i> Tablets & iPad Repair</a></li>
                                 <li><a href="#"><i class="fas fa-dot-circle"></i> Smart Phone Repair</a></li>
                                 <li><a href="#"><i class="fas fa-dot-circle"></i> Gadget Repair</a></li>
                                 <li><a href="#"><i class="fas fa-dot-circle"></i> Laptop & Desktop Repair</a></li>
@@ -75,10 +75,10 @@
                     </div>
                     <div class="col-md-6 align-self-center">
                         <ul class="footer-social">
-                            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a href="#"><i class="fab fa-x-twitter"></i></a></li>
-                            <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                            <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+                            <li><a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a></li>
+                            <li><a href="https://www.linkedin.com/#"><i class="fab fa-linkedin-in"></i></a></li>
+                            <li><a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a></li>
                         </ul>
                     </div>
                 </div>
