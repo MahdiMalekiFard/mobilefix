@@ -25,10 +25,10 @@
                             <h4 class="footer-widget-title">Quick Links</h4>
                             <ul class="footer-list">
                                 <li><a href="{{ route('about-us-page') }}"><i class="fas fa-dot-circle"></i> About Us</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> FAQ's</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Terms Of Service</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Privacy policy</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Our Team</a></li>
+                                <li><a href="{{ route('faq-page') }}"><i class="fas fa-dot-circle"></i> FAQ's</a></li>
+                                <li><a href="{{ route('terms-page') }}"><i class="fas fa-dot-circle"></i> Terms Of Service</a></li>
+                                <li><a href="{{ route('privacy-page') }}"><i class="fas fa-dot-circle"></i> Privacy policy</a></li>
+                                <li><a href="{{ route('team-page') }}"><i class="fas fa-dot-circle"></i> Our Team</a></li>
                                 <li><a href="{{ route('blog-page') }}"><i class="fas fa-dot-circle"></i> Latest Blog</a></li>
                             </ul>
                         </div>
@@ -37,12 +37,12 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Our Services</h4>
                             <ul class="footer-list">
-                                <li><a href=""><i class="fas fa-dot-circle"></i> Tablets & iPad Repair</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Smart Phone Repair</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Gadget Repair</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Laptop & Desktop Repair</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Data Recovery</a></li>
-                                <li><a href="#"><i class="fas fa-dot-circle"></i> Hardware Update</a></li>
+                                <li><a href="{{ route('service-single-page', ['slug' => 'tablets-ipad-repair']) }}"><i class="fas fa-dot-circle"></i> Tablets & iPad Repair</a></li>
+                                <li><a href="{{ route('service-single-page', ['slug' => 'smart-phone-repair']) }}"><i class="fas fa-dot-circle"></i> Smart Phone Repair</a></li>
+                                <li><a href="{{ route('service-single-page', ['slug' => 'gadget-repair']) }}"><i class="fas fa-dot-circle"></i> Gadget Repair</a></li>
+                                <li><a href="{{ route('service-single-page', ['slug' => 'laptop-desktop-repair']) }}"><i class="fas fa-dot-circle"></i> Laptop & Desktop Repair</a></li>
+                                <li><a href="{{ route('service-single-page', ['slug' => 'data-recovery']) }}"><i class="fas fa-dot-circle"></i> Data Recovery</a></li>
+                                <li><a href="{{ route('service-single-page', ['slug' => 'hardware-update']) }}"><i class="fas fa-dot-circle"></i> Hardware Update</a></li>
                             </ul>
                         </div>
                     </div>
