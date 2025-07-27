@@ -712,7 +712,7 @@
                     </div>
                 </div>
                 <div class="col-lg-8">
-                    <div class="video-content wow fadeInRight" data-wow-delay=".25s" style="background-image: url({{ asset('assets/images/video/01.jpg') }});">
+                    <div class="video-content wow fadeInRight" data-wow-delay=".25s" style="background-image: url({{ asset('assets/images/video/02.jpg') }});">
                         <div class="row align-items-center">
                             <div class="col-lg-12">
                                 <div class="video-wrap">
