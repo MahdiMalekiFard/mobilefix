@@ -1373,13 +1373,13 @@
     <div class="partner-area bg pt-50 pb-50">
         <div class="container">
             <div class="partner-wrapper partner-slider owl-carousel owl-theme">
-                <img src="{{ asset('assets/images/partner/01.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/02.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/03.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/04.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/05.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/06.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/03.png') }}" alt="thumb">
+                <img src="{{ asset('assets/images/partner/samsung.png') }}" alt="thumb">
+                <img src="{{ asset('assets/images/partner/nokia.png') }}" alt="thumb">
+                <img src="{{ asset('assets/images/partner/huawei.png') }}" alt="thumb">
+                <img src="{{ asset('assets/images/partner/xiaomi.png') }}" alt="thumb">
+                <img src="{{ asset('assets/images/partner/iphone.png') }}" alt="thumb">
+                <img src="{{ asset('assets/images/partner/oppo.png') }}" alt="thumb">
+                <img src="{{ asset('assets/images/partner/vivo.png') }}" alt="thumb">
             </div>
         </div>
     </div>

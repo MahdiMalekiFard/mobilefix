@@ -88,6 +88,39 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4 filter-item cat1">
+                    <div class="gallery-item">
+                        <div class="gallery-img">
+                            <img src="{{ asset('assets/images/gallery/m2.jpg') }}" alt="">
+                        </div>
+                        <div class="gallery-content">
+                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/m2.jpg') }}"><i
+                                    class="far fa-plus"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 filter-item cat3">
+                    <div class="gallery-item">
+                        <div class="gallery-img">
+                            <img src="{{ asset('assets/images/gallery/t2.jpg') }}" alt="">
+                        </div>
+                        <div class="gallery-content">
+                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/t2.jpg') }}"><i
+                                    class="far fa-plus"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 filter-item cat1">
+                    <div class="gallery-item">
+                        <div class="gallery-img">
+                            <img src="{{ asset('assets/images/gallery/m4.jpg') }}" alt="">
+                        </div>
+                        <div class="gallery-content">
+                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/m4.jpg') }}"><i
+                                    class="far fa-plus"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
