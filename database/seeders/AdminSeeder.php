@@ -18,8 +18,7 @@ class AdminSeeder extends Seeder
         $admin = User::updateOrCreate([
             'email' => 'developer@gmail.com',
         ], [
-            'name'     => 'super',
-            'family'   => 'admin',
+            'name'     => 'super admin',
             'mobile'   => '9100000000',
             'password' => Hash::make('password'),
         ]);

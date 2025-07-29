@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Enums\BooleanEnum;
-use App\Enums\Constants;
+use App\Helpers\Constants;
 use Spatie\Image\Enums\Fit;
 use Spatie\Activitylog\LogOptions;
 
@@ -73,7 +73,6 @@ class User extends Authenticatable implements HasMedia
      */
     protected $fillable = [
         'name',
-        'family',
         'email',
         'mobile',
         'password',
@@ -120,10 +119,5 @@ class User extends Authenticatable implements HasMedia
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
-    }
-
-    public function getFullNameAttribute(): string
-    {
-        return $this->name . ' ' . $this->family;
     }
 }

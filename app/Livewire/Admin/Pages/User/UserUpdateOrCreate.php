@@ -18,7 +18,6 @@ class UserUpdateOrCreate extends Component
     public User   $user;
     public $avatar;
     public ?string $name                  = '';
-    public ?string $family                = '';
     public ?string $email                 = '';
     public ?string $mobile                = '';
     public ?string $password              = '';
@@ -33,7 +32,6 @@ class UserUpdateOrCreate extends Component
         $this->rules = Role::all()->map(fn($item) => ['name' => $item->name, 'id' => $item->id])->toArray();
         if ($this->user->id) {
             $this->name = $this->user->name;
-            $this->family = $this->user->family;
             $this->email = $this->user->email;
             $this->mobile = $this->user->mobile;
             $this->status = $this->user->status->value;
@@ -45,11 +43,10 @@ class UserUpdateOrCreate extends Component
     {
         return [
             'name'             => 'required|string|max:255',
-            'family'           => 'required|string|max:255',
             'email'            => 'required|email|unique:users,email,' . $this->user->id,
             'mobile'           => [
                 'required',
-                'regex:/^(0|\+98|98)9[0-9]{9}$/',  // ✅ Now includes `/` delimiters
+                'regex:/^((\+|00)?(33|34|39|49|44|31|46|41|43|32|45|47|48|351|353|358|372|371|370|386|385|421|420|40|359|30|36|355|376|378|423|377|352|356|373|382|387|389|381))?[0-9]{6,12}$/',
                 'unique:users,mobile,' . $this->user->id,
             ],
             'status'           => 'required',
@@ -64,7 +61,7 @@ class UserUpdateOrCreate extends Component
                 'nullable',
                 'image',
                 'mimes:jpeg,png,jpg,gif,svg',
-                'max:2048', // 2MB Max
+                'max:2048',
             ],
         ];
     }

@@ -8,14 +8,8 @@
             <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <x-input
-                            :label="trans('validation.attributes.first_name')"
+                            :label="trans('validation.attributes.name')"
                             wire:model="name"
-                            required
-                    />
-
-                    <x-input
-                            :label="trans('validation.attributes.last_name')"
-                            wire:model="family"
                             required
                     />
 

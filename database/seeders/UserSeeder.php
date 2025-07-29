@@ -44,7 +44,6 @@ class UserSeeder extends Seeder
             'email'    => 'mahdi@gmail.com',
             'mobile'   => '09151234567',
             'name'     => 'Mahdi',
-            'family'   => 'Akbarzadeh',
         ]);
     }
 }
