@@ -9,12 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use App\Traits\HasSchemalessAttributes;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Order extends Model
+class Order extends Model implements HasMedia
 {
     use HasFactory,
         HasSchemalessAttributes,
-        SoftDeletes;
+        SoftDeletes,
+        InteractsWithMedia;
 
     protected $fillable = [
         'order_number',
@@ -42,10 +45,44 @@ class Order extends Model
      * Model Configuration --------------------------------------------------------------------------
      */
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('images')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+
+        $this->addMediaCollection('videos')
+            ->acceptsMimeTypes(['video/mp4', 'video/avi', 'video/mov', 'video/wmv', 'video/webm']);
+    }
+
 
     /**
      * Model Relations --------------------------------------------------------------------------
      */
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
+    
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+    
+    public function device()
+    {
+        return $this->belongsTo(Device::class);
+    }
+    
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
 
 
     /**
