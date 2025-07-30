@@ -25,6 +25,7 @@ class Device extends Model
         'slug',
         'ordering',
         'config',
+        'brand_id',
     ];
 
     protected $casts = [

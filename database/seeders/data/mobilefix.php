@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\CategoryTypeEnum;
+use App\Enums\PaymentProviderEnum;
 use App\Enums\SeoRobotsMetaEnum;
 
 return [
@@ -82,4 +83,113 @@ return [
             'path'        => public_path('images/test/categories/laravel-cat.png'),
         ],
     ] ,
+
+    'brands' => [
+        [
+            'title' => 'Apple',
+            'description' => 'Apple description',
+            'slug' => 'apple',
+            'ordering' => 1,
+            'published' => true,
+            'languages' => [
+                'en',
+            ],
+            'seo_options' => [
+                'title' => 'Apple',
+                'description' => 'Apple description',
+                'canonical' => null,
+                'old_url' => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::INDEX_FOLLOW,
+            ],
+            'path' => public_path('assets/images/partner/apple.png'),
+        ],
+        [
+            'title' => 'Samsung',
+            'description' => 'Samsung description',
+            'slug' => 'samsung',
+            'ordering' => 2,
+            'published' => true,
+            'languages' => [
+                'en',
+            ],
+            'seo_options' => [
+                'title' => 'Samsung',
+                'description' => 'Samsung description',
+                'canonical' => null,
+                'old_url' => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::INDEX_FOLLOW,
+            ],
+            'path' => public_path('assets/images/partner/samsung.png'),
+        ]
+    ],
+
+    'devices' => [
+        [
+            'title' => 'iPhone 14 Pro',
+            'brand_id' => 1,
+            'description' => 'iPhone 14 Pro description',
+            'slug' => 'iphone-14-pro',
+            'ordering' => 1,
+            'published' => true,
+            'languages' => [
+                'en',
+            ],
+        ],
+        [
+            'title' => 'iPhone 12 Pro',
+            'brand_id' => 1,
+            'description' => 'iPhone 12 Pro description',
+            'slug' => 'iphone-12-pro',
+            'ordering' => 2,
+            'published' => true,
+            'languages' => [
+                'en',
+            ],
+        ],
+        [
+            'title' => 'Samsung Galaxy S23',
+            'brand_id' => 2,
+            'description' => 'Samsung Galaxy S23 description',
+            'slug' => 'samsung-galaxy-s23',
+            'ordering' => 3,
+            'published' => true,
+            'languages' => [
+                'en',
+            ],
+        ],
+        [
+            'title' => 'Samsung Galaxy S22',
+            'brand_id' => 2,
+            'description' => 'Samsung Galaxy S22 description',
+            'slug' => 'samsung-galaxy-s22',
+            'ordering' => 4,
+            'published' => true,
+            'languages' => [
+                'en',
+            ],
+        ]
+    ],
+
+    'payment_methods' => [
+        [
+            'title' => 'PayPal',
+            'description' => 'PayPal description',
+            'published' => true,
+            'provider' => PaymentProviderEnum::PAYPAL->value,
+            'languages' => [
+                'en',
+            ]
+        ],
+        [
+            'title' => 'Stripe',
+            'description' => 'Stripe description',
+            'published' => true,
+            'provider' => PaymentProviderEnum::STRIPE->value,
+            'languages' => [
+                'en',
+            ]
+        ],
+    ]
 ];

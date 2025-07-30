@@ -20,7 +20,17 @@ class StoreDeviceAction
     /**
      * @param array{
      *     title:string,
-     *     description:string
+     *     description:string,
+     *     slug:string,
+     *     ordering:int,
+     *     published:bool,
+     *     languages:array,
+     *     seo_title:string,
+     *     seo_description:string,
+     *     canonical:string,
+     *     old_url:string,
+     *     redirect_to:string,
+     *     robots_meta:string,
      * } $payload
      * @return Device
      * @throws Throwable
@@ -28,7 +38,7 @@ class StoreDeviceAction
     public function handle(array $payload): Device
     {
         return DB::transaction(function () use ($payload) {
-            $model =  Device::create($payload);
+            $model =  Device::create(Arr::only($payload, ['slug', 'published', 'ordering', 'brand_id']));
             $this->syncTranslationAction->handle($model, Arr::only($payload, ['title', 'description']));
 
             return $model->refresh();

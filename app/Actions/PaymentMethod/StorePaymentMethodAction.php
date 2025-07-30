@@ -20,7 +20,9 @@ class StorePaymentMethodAction
     /**
      * @param array{
      *     title:string,
-     *     description:string
+     *     description:string,
+     *     published:bool,
+     *     provider:string,
      * } $payload
      * @return PaymentMethod
      * @throws Throwable
@@ -28,7 +30,7 @@ class StorePaymentMethodAction
     public function handle(array $payload): PaymentMethod
     {
         return DB::transaction(function () use ($payload) {
-            $model =  PaymentMethod::create($payload);
+            $model =  PaymentMethod::create(Arr::only($payload, ['published', 'provider']));
             $this->syncTranslationAction->handle($model, Arr::only($payload, ['title', 'description']));
 
             return $model->refresh();

@@ -20,10 +20,10 @@ class PaymentMethod extends Model
         SoftDeletes;
 
     protected $fillable = [
-        'published',
         'languages',
         'provider',
         'published',
+        'config',
     ];
 
     protected $casts = [
