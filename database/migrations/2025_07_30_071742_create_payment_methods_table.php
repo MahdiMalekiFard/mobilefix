@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\BooleanEnum;
+use App\Enums\PaymentProviderEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,17 +13,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('devices', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
 
             // translations (title - description)
             $table->text('languages')->nullable();
-            $table->string('slug')->unique()->index();
-            $table->foreignId('brand_id')->constrained('brands')->cascadeOnDelete();
+            $table->string('provider')->default(PaymentProviderEnum::STRIPE->value);
             $table->boolean('published')->default(BooleanEnum::ENABLE->value);
-            $table->integer('ordering')->default(0)->comment('1 - 100');
-
             $table->schemalessAttributes('config');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('devices');
+        Schema::dropIfExists('payment_methods');
     }
 };
