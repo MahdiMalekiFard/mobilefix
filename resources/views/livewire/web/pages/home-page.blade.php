@@ -153,15 +153,21 @@
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="address" placeholder="Enter Address" required>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" class="form-control" name="videos[]" id="videos" multiple accept="video/*" onchange="displayFileNames('videos', 'files-preview')">
+                                    <label for="videos" class="file-upload-label">
+                                        <i class="fas fa-file"></i> Upload Videos
+                                    </label>
+                                    <div id="files-preview" class="file-preview"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
                                 <div class="file-upload-wrapper">
-                                    <input type="file" class="form-control" name="files[]" id="files" multiple accept="image/*,video/*" onchange="displayFileNames('files', 'files-preview')">
-                                    <label for="files" class="file-upload-label">
-                                        <i class="fas fa-file"></i> Upload Files
+                                    <input type="file" class="form-control" name="images[]" id="images" multiple accept="image/*" onchange="displayFileNames('images', 'files-preview')">
+                                    <label for="images" class="file-upload-label">
+                                        <i class="fas fa-file"></i> Upload Images
                                     </label>
                                     <div id="files-preview" class="file-preview"></div>
                                 </div>
