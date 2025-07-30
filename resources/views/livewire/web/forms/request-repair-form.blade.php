@@ -153,7 +153,7 @@
                     <div class="row mt-3">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <button type="button" class="theme-btn theme-btn2 w-100" data-bs-toggle="modal" data-bs-target="#descriptionModal">
+                                <button type="button" class="description-btn w-100" data-bs-toggle="modal" data-bs-target="#descriptionModal">
                                     <i class="fas fa-edit"></i> Add Description
                                 </button>
                             </div>
@@ -240,6 +240,27 @@
         .file-upload-label:hover {
             background: #f8f9fa;
             border-color: #03466E;
+            color: #03466E;
+        }
+        
+        .description-btn {
+            display: block;
+            padding: 12px 20px;
+            background: #fff;
+            border: 2px dashed #00B6B1 !important;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #00B6B1;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .description-btn:hover {
+            background: #f8f9fa;
+            border-color: #03466E !important;
             color: #03466E;
         }
         
@@ -335,6 +356,12 @@
             font-weight: 600;
         }
         
+        .description-btn.w-100 {
+            padding: 13px 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
         @media (max-width: 768px) {
             .appointment {
                 padding: 30px 0;
@@ -342,6 +369,11 @@
             
             .theme-btn2.w-100 {
                 padding: 12px;
+                font-size: 14px;
+            }
+            
+            .description-btn.w-100 {
+                padding: 12px 20px;
                 font-size: 14px;
             }
         }
@@ -373,8 +405,7 @@
                 // Instantly update the main "Add Description" button
                 const addDescButton = document.querySelector('[data-bs-target="#descriptionModal"]');
                 addDescButton.innerHTML = '<i class="fas fa-check"></i> Description Added';
-                addDescButton.classList.add('btn-success');
-                addDescButton.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                addDescButton.style.background = '#28a745';
                 addDescButton.style.borderColor = '#28a745';
                 addDescButton.style.color = 'white';
                 addDescButton.setAttribute('data-description-added', 'true');
@@ -424,7 +455,6 @@
                     const addDescButton = document.querySelector('[data-bs-target="#descriptionModal"]');
                     if (addDescButton && addDescButton.getAttribute('data-description-added') === 'true') {
                         addDescButton.innerHTML = '<i class="fas fa-edit"></i> Add Description';
-                        addDescButton.classList.remove('btn-success');
                         addDescButton.style.background = '';
                         addDescButton.style.borderColor = '';
                         addDescButton.style.color = '';
