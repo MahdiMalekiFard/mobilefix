@@ -46,6 +46,11 @@ class Problem extends Model
      * Model Relations --------------------------------------------------------------------------
      */
 
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)->withTimestamps();
+    }
+
 
     /**
      * Model Scope --------------------------------------------------------------------------

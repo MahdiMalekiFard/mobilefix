@@ -83,6 +83,11 @@ class Order extends Model implements HasMedia
     {
         return $this->belongsTo(Brand::class);
     }
+    
+    public function problems()
+    {
+        return $this->belongsToMany(Problem::class)->withTimestamps();
+    }
 
 
     /**

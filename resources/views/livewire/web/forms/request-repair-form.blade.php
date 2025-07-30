@@ -67,7 +67,7 @@
                             <div class="form-group">
                                 <select class="form-select" name="problem" wire:model="problem" required>
                                     <option value="">Choose Problem</option>
-                                    @foreach($problems as $problem)
+                                    @foreach($all_problems as $problem)
                                         <option value="{{ $problem->id }}">{{ $problem->title }}</option>
                                     @endforeach
                                 </select>
