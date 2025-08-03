@@ -99,6 +99,22 @@ class Order extends Model implements HasMedia
      * Model Attributes --------------------------------------------------------------------------
      */
 
+    public function getUserNameAttribute()
+    {
+        return $this->user ? $this->user->name : $this->config()->get('name');
+    }
+
+    public function getUserPhoneAttribute()
+    {
+        return $this->user ? $this->user->mobile : $this->config()->get('phone');
+    }
+
+    public function getUserEmailAttribute()
+    {
+        return $this->user ? $this->user->email : $this->config()->get('email');
+    }
+    
+
 
     /**
      * Model Custom Methods --------------------------------------------------------------------------

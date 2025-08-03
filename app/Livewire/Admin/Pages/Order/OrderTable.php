@@ -16,6 +16,7 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
+use PowerComponents\LivewirePowerGrid\Column;
 
 final class OrderTable extends PowerGridComponent
 {
@@ -59,6 +60,11 @@ final class OrderTable extends PowerGridComponent
         return $setup;
     }
 
+    public function boot(): void
+    {
+        config(['livewire-powergrid.filter' => 'outside']);
+    }
+
 
     public function datasource(): Builder
     {
@@ -68,8 +74,20 @@ final class OrderTable extends PowerGridComponent
     public function relationSearch(): array
     {
         return [
-            'translations' => [
-                'value',
+            'user' => [
+                'name',
+                'mobile',
+                'email',
+            ],
+            'address' => [
+                'address',
+                'city',
+            ],
+            'payment_method' => [
+                'name',
+            ],
+            'brand' => [
+                'name',
             ],
         ];
     }
@@ -78,18 +96,40 @@ final class OrderTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('order_number', fn ($row) => $row->order_number)
+            ->add('status', fn ($row) => $row->status)
+            ->add('total', fn ($row) => $row->total)
+            ->add('user_name', fn ($row) => $row->user_name)
+            ->add('user_phone', fn ($row) => $row->user_phone)
+            ->add('user_email', fn ($row) => $row->user_email)
+            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row))
+            ->add('updated_at_formatted', fn ($row) => PowerGridHelper::fieldUpdatedAtFormated($row));
     }
 
     public function columns(): array
     {
         return [
             PowerGridHelper::columnId(),
-            PowerGridHelper::columnTitle(),
-            PowerGridHelper::columnPublished(),
-            PowerGridHelper::columnCreatedAT(),
+            Column::make('order_number', 'order_number')
+                ->sortable()
+                ->searchable(),
+            Column::make('status', 'status')
+                ->sortable()
+                ->searchable(),
+            Column::make('total', 'total')
+                ->sortable()
+                ->searchable(),
+            Column::make('name', 'user_name')
+                ->sortable()
+                ->searchable(),
+            Column::make('mobile', 'user_phone')
+                ->sortable()
+                ->searchable(),
+            Column::make('email', 'user_email')
+                ->sortable()
+                ->searchable(),
+            PowerGridHelper::columnUpdatedAT()
+                ->searchable(),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -97,10 +137,7 @@ final class OrderTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::enumSelect('published_formated', 'published')
-                  ->datasource(BooleanEnum::cases()),
-
-            Filter::datepicker('created_at_formatted', 'created_at')
+            Filter::datepicker('updated_at_formatted', 'updated_at')
                   ->params([
                       'maxDate' => now(),
                   ])
@@ -110,8 +147,6 @@ final class OrderTable extends PowerGridComponent
     public function actions(Order $row): array
     {
         return [
-            PowerGridHelper::btnTranslate($row),
-            PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
         ];

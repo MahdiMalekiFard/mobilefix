@@ -148,4 +148,10 @@ return [
         'all'    => 'All Pages',
         'create' => 'Create Page',
     ],
+
+    'order_management'         => 'Order management',
+    'order'                    => [
+        'all'    => 'All Orders',
+        'create' => 'Create Order',
+    ],
 ];

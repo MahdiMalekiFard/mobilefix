@@ -110,6 +110,21 @@ class NavbarComposer
                     ]
                 ],
             ],
+            [
+                'icon'     => 's-shopping-cart',
+                'title'    => trans('_menu.order_management'),
+                'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Order::class, 'Store', 'Index')),
+                'sub_menu' => [
+                    [
+                        'icon'       => 's-list-bullet',
+                        'route_name' => 'admin.order.index',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.order.all'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Order::class, 'Index')),
+                    ]
+                ],
+            ],
             // [
             //     'icon'     => 's-tag',
             //     'title'    => 'مدیریت تگ ها',
