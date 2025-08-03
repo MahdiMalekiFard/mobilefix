@@ -9,6 +9,7 @@ enum OrderStatusEnum: string
     use EnumToArray;
 
     case PENDING = 'pending'; // در حال بررسی
+    case RECEIVED = 'received'; // دریافت شده
     case REJECTED = 'rejected'; // رد شده
     case PROCESSING = 'processing'; // در حال تعمیر
     case FAILED = 'failed'; // ناموفق
@@ -20,14 +21,15 @@ enum OrderStatusEnum: string
     public function title(): string
     {
         return match ($this) {
-            self::PENDING => 'در حال بررسی',
-            self::REJECTED => 'رد شده',
-            self::PROCESSING => 'در حال تعمیر',
-            self::FAILED => 'ناموفق',
-            self::CANCELLED_BY_USER => 'لغو شده توسط کاربر',
-            self::COMPLETED => 'در انتظار پرداخت',
-            self::PAID => 'پرداخت شده',
-            self::DELIVERED => 'تحویل داده شده',
+            self::PENDING => trans('order.enum.pending'),
+            self::RECEIVED => trans('order.enum.received'),
+            self::REJECTED => trans('order.enum.rejected'),
+            self::PROCESSING => trans('order.enum.processing'),
+            self::FAILED => trans('order.enum.failed'),
+            self::CANCELLED_BY_USER => trans('order.enum.cancelled_by_user'),
+            self::COMPLETED => trans('order.enum.completed'),
+            self::PAID => trans('order.enum.paid'),
+            self::DELIVERED => trans('order.enum.delivered'),
         };
     }
 
@@ -43,6 +45,7 @@ enum OrderStatusEnum: string
     {
         return match ($this) {
             self::PENDING => 'warning',
+            self::RECEIVED => 'info',
             self::REJECTED => 'danger',
             self::PROCESSING => 'info',
             self::FAILED => 'danger',

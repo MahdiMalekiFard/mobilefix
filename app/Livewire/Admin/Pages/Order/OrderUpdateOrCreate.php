@@ -107,11 +107,16 @@ class OrderUpdateOrCreate extends Component
 
     public function render(): View
     {
-        // Format status options to match template expectations
+        // Format status options with badge information
         $statusOptions = collect(OrderStatusEnum::formatedCases())->map(function ($status) {
+            $statusEnum = OrderStatusEnum::from($status['id']);
             return [
                 'value' => $status['id'],
-                'label' => $status['title']
+                'label' => $status['title'],
+                'badge' => [
+                    'text' => $status['title'],
+                    'color' => $statusEnum->color()
+                ]
             ];
         })->toArray();
 

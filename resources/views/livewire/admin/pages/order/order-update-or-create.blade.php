@@ -3,28 +3,35 @@
     <x-admin.shared.bread-crumbs :breadcrumbs="$breadcrumbs" :breadcrumbs-actions="$breadcrumbsActions"/>
     
     <!-- Basic Order Information -->
-    <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit" class="mb-6">
+    <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit" class="mb-6 pb-8">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <x-input :label="trans('order.order_number')"
-                     wire:model="order_number"
-                     placeholder="{{ trans('order.order_number') }}"
+            <x-admin.shared.form-input 
+                :label="trans('order.order_number')"
+                wire:model="order_number"
+                placeholder="{{ trans('order.order_number') }}"
+                required
             />
-            <x-select :label="trans('order.status')"
-                      wire:model="status"
-                      :options="$statusOptions"
-                      option-label="label"
-                      option-value="value"
+            <x-admin.shared.badge-select
+                :label="trans('order.status')"
+                wire:model="status"
+                :options="$statusOptions"
+                placeholder="{{ trans('order.select_status') }}"
+                searchable
+                required
             />
-            <x-input :label="trans('order.total')"
-                     wire:model="total"
-                     type="number"
-                     step="0.01"
-                     placeholder="0.00"
+            <x-admin.shared.form-input 
+                :label="trans('order.total')"
+                wire:model="total"
+                placeholder="0.00"
+                type="number"
+                required
             />
-            <x-input :label="trans('order.user_email')"
-                     wire:model="user_email"
-                     type="email"
-                     placeholder="{{ trans('order.user_email') }}"
+            <x-admin.shared.form-input 
+                :label="trans('order.user_email')"
+                wire:model="user_email"
+                placeholder="{{ trans('order.user_email') }}"
+                type="email"
+                required
             />
         </div>
     </x-card>

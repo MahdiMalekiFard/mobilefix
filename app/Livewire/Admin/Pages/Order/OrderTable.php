@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Admin\Pages\Order;
 
 use App\Enums\BooleanEnum;
+use App\Enums\OrderStatusEnum;
 use App\Helpers\PowerGridHelper;
 use App\Models\Order;
 use App\Traits\PowerGridHelperTrait;
@@ -98,6 +99,10 @@ final class OrderTable extends PowerGridComponent
             ->add('id')
             ->add('order_number', fn ($row) => $row->order_number)
             ->add('status', fn ($row) => $row->status)
+            ->add('status_badge', function ($row) {
+                $statusEnum = OrderStatusEnum::from($row->status);
+                return view('components.admin.shared.status-badge', ['status' => $statusEnum])->render();
+            })
             ->add('total', fn ($row) => $row->total)
             ->add('user_name', fn ($row) => $row->user_name)
             ->add('user_phone', fn ($row) => $row->user_phone)
@@ -113,9 +118,12 @@ final class OrderTable extends PowerGridComponent
             Column::make('order_number', 'order_number')
                 ->sortable()
                 ->searchable(),
-            Column::make('status', 'status')
+            Column::make('status', 'status_badge')
+                ->title('Status')
+                ->bodyAttribute('class', 'whitespace-nowrap')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->field('status'),
             Column::make('total', 'total')
                 ->sortable()
                 ->searchable(),
