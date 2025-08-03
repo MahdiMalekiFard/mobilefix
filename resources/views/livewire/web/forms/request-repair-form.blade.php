@@ -2,21 +2,45 @@
     <div class="appointment">
         <div class="container-fluid">
             <div class="appointment-form">
-                @if (session()->has('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
+                <!-- Success Modal will be shown when order is submitted -->
+
+                @if (session()->has('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" x-data="{ countdown: 6, show: true }" x-show="show" x-init="
+                        let timer = setInterval(() => {
+                            countdown--;
+                            if (countdown <= 0) {
+                                show = false;
+                                clearInterval(timer);
+                            }
+                        }, 1000);
+                    ">
+                        {{ session('error') }}
+                        <div class="float-end">
+                            <small class="text-muted">Auto-close in <span x-text="countdown"></span>s</small>
+                        </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" x-data="{ countdown: 8, show: true }" x-show="show" x-init="
+                        let timer = setInterval(() => {
+                            countdown--;
+                            if (countdown <= 0) {
+                                show = false;
+                                clearInterval(timer);
+                            }
+                        }, 1000);
+                    ">
                         <strong>Please fix the following errors:</strong>
                         <ul class="mb-0 mt-2">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
+                        <div class="float-end">
+                            <small class="text-muted">Auto-close in <span x-text="countdown"></span>s</small>
+                        </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
@@ -62,15 +86,29 @@
                                 </select>
                             </div>
                         </div>
-                        <!-- Problem select from database -->
+                        <!-- Problems dropdown selection -->
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <select class="form-select" name="problem" wire:model="problem" required>
-                                    <option value="">Choose Problem</option>
-                                    @foreach($all_problems as $problem)
-                                        <option value="{{ $problem->id }}">{{ $problem->title }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="dropdown" style="position: relative;">
+                                    <button class="form-select dropdown-toggle text-start" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" style="background: white; border-color: #ced4da;">
+                                        @if(empty($problems))
+                                            Choose Problems
+                                        @else
+                                            {{ count($problems) }} problem{{ count($problems) == 1 ? '' : 's' }} selected
+                                        @endif
+                                    </button>
+                                    <div class="dropdown-menu" style="width: 100%; max-height: 200px; overflow-y: auto; padding: 10px; z-index: 1050;">
+                                        @foreach($all_problems as $problem)
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" value="{{ $problem->id }}" 
+                                                       id="problem_{{ $problem->id }}" wire:model.live="problems">
+                                                <label class="form-check-label" for="problem_{{ $problem->id }}">
+                                                    {{ $problem->title }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
@@ -207,7 +245,97 @@
     </div>
     <!-- Description Modal End -->
 
+    <!-- Success Modal Start -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" wire:ignore.self>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-success text-white border-0">
+                    <h5 class="modal-title" id="successModalLabel">
+                        <i class="fas fa-check-circle me-2"></i> Order Submitted Successfully!
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="enableForm()"></button>
+                </div>
+                <div class="modal-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-mobile-alt text-primary" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-success mb-4">Thank you for choosing our repair service!</h4>
+                    <p class="lead mb-4">Your repair request has been submitted successfully. Please save your tracking code for future reference.</p>
+                    
+                    <div class="tracking-code-container mb-4">
+                        <div class="card bg-light border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0"><i class="fas fa-barcode me-2"></i>Your Tracking Code</h6>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="text-primary mb-2 fw-bold" id="trackingCode" style="font-family: 'Courier New', monospace; letter-spacing: 2px; user-select: all; cursor: text;">
+                                    {{ $orderNumber ?? '' }}
+                                </h3>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="copyTrackingCode(event)" title="Copy to clipboard">
+                                        <i class="fas fa-copy me-1"></i> Copy Code
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="selectTrackingCode(event)" title="Select text for manual copy">
+                                        <i class="fas fa-mouse-pointer me-1"></i> Select
+                                    </button>
+                                </div>
+                                <small class="text-muted mt-2 d-block">
+                                    <i class="fas fa-info-circle me-1"></i> 
+                                    You can also manually select and copy the code above
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Important:</strong> Please keep this tracking code safe. You'll need it to check your repair status and for pickup.
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <p class="text-muted mb-3">We'll contact you within 24 hours to confirm your repair details.</p>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-primary btn-lg px-4" data-bs-dismiss="modal" onclick="enableForm()">
+                        <i class="fas fa-check me-2"></i> I've Saved My Tracking Code
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Success Modal End -->
+
+    <!-- Overlay for disabled form -->
+    <div id="formOverlay" class="d-none position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 1040;">
+        <div class="d-flex align-items-center justify-content-center h-100">
+            <div class="text-center text-white">
+                <i class="fas fa-lock fa-3x mb-3"></i>
+                <h4>Please close the success modal to continue</h4>
+            </div>
+        </div>
+    </div>
+
     <style>
+        /* Success Modal Styles */
+        .tracking-code-container .card {
+            border-width: 2px !important;
+        }
+        
+        .tracking-code-container h3 {
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        #formOverlay {
+            backdrop-filter: blur(3px);
+        }
+        
+        /* Form disabled state */
+        .appointment-form.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
         
         .file-upload-wrapper {
             position: relative;
@@ -462,6 +590,157 @@
                     }
                 });
             }
+        });
+        
+        // Success modal functions
+        function showSuccessModal(trackingCode) {
+            // Update tracking code in modal
+            document.getElementById('trackingCode').textContent = trackingCode;
+            
+            // Disable form
+            disableForm();
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('successModal'));
+            modal.show();
+        }
+        
+        function copyTrackingCode(event) {
+            const trackingCode = document.getElementById('trackingCode').textContent;
+            const button = event.target.closest('button');
+            const originalText = button.innerHTML;
+            
+            // Function to show success feedback
+            function showSuccess() {
+                button.innerHTML = '<i class="fas fa-check me-1"></i> Copied!';
+                button.classList.remove('btn-outline-primary');
+                button.classList.add('btn-success');
+                
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-outline-primary');
+                }, 2000);
+            }
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(trackingCode).then(function() {
+                    showSuccess();
+                }).catch(function(err) {
+                    console.log('Clipboard API failed, trying fallback method:', err);
+                    fallbackCopyTextToClipboard(trackingCode, showSuccess);
+                });
+            } else {
+                // Fallback for older browsers or non-secure contexts
+                fallbackCopyTextToClipboard(trackingCode, showSuccess);
+            }
+        }
+        
+        function fallbackCopyTextToClipboard(text, successCallback) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            // Avoid scrolling to bottom
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    successCallback();
+                } else {
+                    throw new Error('Copy command was unsuccessful');
+                }
+            } catch (err) {
+                console.error('Fallback: Could not copy text: ', err);
+                // Show manual copy dialog
+                prompt('Copy failed. Please manually copy this tracking code:', text);
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+        
+        function selectTrackingCode(event) {
+            const trackingElement = document.getElementById('trackingCode');
+            
+            // Create a range object
+            const range = document.createRange();
+            range.selectNodeContents(trackingElement);
+            
+            // Clear any existing selections
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            
+            // Add the new range to selection
+            selection.addRange(range);
+            
+            // Optional: Show feedback
+            const button = event.target.closest('button');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check me-1"></i> Selected!';
+            button.classList.remove('btn-outline-secondary');
+            button.classList.add('btn-success');
+            
+            setTimeout(function() {
+                button.innerHTML = originalText;
+                button.classList.remove('btn-success');
+                button.classList.add('btn-outline-secondary');
+            }, 1500);
+        }
+        
+        function disableForm() {
+            // Show overlay
+            document.getElementById('formOverlay').classList.remove('d-none');
+            
+            // Add disabled class to form container
+            const appointmentForm = document.querySelector('.appointment-form');
+            if (appointmentForm) {
+                appointmentForm.classList.add('disabled');
+            }
+            
+            // Disable all form elements
+            const form = document.querySelector('.appointment-form form');
+            if (form) {
+                const inputs = form.querySelectorAll('input, select, textarea, button');
+                inputs.forEach(function(input) {
+                    input.disabled = true;
+                });
+            }
+        }
+        
+        function enableForm() {
+            // Hide overlay
+            document.getElementById('formOverlay').classList.add('d-none');
+            
+            // Remove disabled class from form container
+            const appointmentForm = document.querySelector('.appointment-form');
+            if (appointmentForm) {
+                appointmentForm.classList.remove('disabled');
+            }
+            
+            // Enable all form elements
+            const form = document.querySelector('.appointment-form form');
+            if (form) {
+                const inputs = form.querySelectorAll('input, select, textarea, button');
+                inputs.forEach(function(input) {
+                    input.disabled = false;
+                });
+            }
+            
+            // Notify Livewire that modal was closed
+            @this.call('modalClosed');
+        }
+        
+        // Listen for Livewire events to show success modal
+        window.addEventListener('show-success-modal', event => {
+            showSuccessModal(event.detail.trackingCode);
         });
     </script>
 </div>

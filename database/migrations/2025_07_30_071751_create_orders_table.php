@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('order_number');
             $table->string('total')->default(0);
             $table->string('status')->default(OrderStatusEnum::PENDING->value)->comment('pending - rejected - processing - failed - cancelled_by_user - completed - paid - delivered');
-            $table->foreignId('user_id')->constrained('users')->nullable();
-            $table->foreignId('address_id')->constrained('addresses')->nullable();
-            $table->foreignId('payment_method_id')->constrained('payment_methods')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('address_id')->nullable()->constrained('addresses');
+            $table->foreignId('payment_method_id')->nullable()->constrained('payment_methods');
             $table->foreignId('brand_id')->constrained('brands');
             $table->foreignId('device_id')->constrained('devices');
             $table->text('user_note')->nullable();

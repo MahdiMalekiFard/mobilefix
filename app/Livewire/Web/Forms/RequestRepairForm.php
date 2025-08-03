@@ -20,6 +20,9 @@ class RequestRepairForm extends Component
     public $description;
     public $videos = [];
     public $images = [];
+    
+    // Success modal properties
+    public $orderNumber = null;
 
     public function render()
     {
@@ -80,18 +83,25 @@ class RequestRepairForm extends Component
                 }
             }
 
-            session()->flash('success', 'Repair request submitted successfully! Your order number is: ' . $order->order_number);
+            // Store the order number for the modal
+            $this->orderNumber = $order->order_number;
             
-            // Reset form
-            $this->reset();
+            // Emit event to show success modal
+            $this->dispatch('show-success-modal', trackingCode: $order->order_number);
             
-            // Optionally redirect or emit an event
-            // return redirect()->route('repair-success');
+            // Reset form (but keep orderNumber for modal display)
+            $this->reset(['name', 'email', 'phone', 'brand', 'model', 'problems', 'description', 'videos', 'images']);
             
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to submit repair request. Please try again.');
             // Log the error for debugging
             \Log::error('Order creation failed: ' . $e->getMessage());
         }
+    }
+    
+    public function modalClosed()
+    {
+        // Reset order number when modal is closed
+        $this->orderNumber = null;
     }
 }

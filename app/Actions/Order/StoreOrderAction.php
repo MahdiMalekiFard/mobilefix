@@ -43,6 +43,7 @@ class StoreOrderAction
         return DB::transaction(function () use ($payload) {
             // Set default status to pending if not provided
             $payload['status'] = $payload['status'] ?? OrderStatusEnum::PENDING->value;
+            $payload['user_id'] = auth()->check() ? auth()->user()->id : null;
             
             // Generate order number if not provided
             if (!isset($payload['order_number'])) {
@@ -62,10 +63,7 @@ class StoreOrderAction
             
             // Extract problems for later attachment
             $problems = [];
-            if (isset($payload['problem'])) {
-                $problems = is_array($payload['problem']) ? $payload['problem'] : [$payload['problem']];
-                unset($payload['problem']);
-            }
+            
             if (isset($payload['problems'])) {
                 $problems = is_array($payload['problems']) ? $payload['problems'] : [$payload['problems']];
                 unset($payload['problems']);
@@ -94,7 +92,7 @@ class StoreOrderAction
             if (!empty($customerInfo)) {
                 $payload['config'] = array_merge($payload['config'] ?? [], $customerInfo);
             }
-
+            
             $model = Order::create($payload);
             
             // Attach problems to the order if any
