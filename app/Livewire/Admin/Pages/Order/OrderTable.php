@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Admin\Pages\Order;
 
+use App\Actions\Order\SearchOrderAction;
 use App\Enums\BooleanEnum;
 use App\Enums\OrderStatusEnum;
 use App\Helpers\PowerGridHelper;
@@ -69,7 +70,15 @@ final class OrderTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Order::query();
+        $query = Order::query();
+        
+        // Apply search using the action
+        if ($this->search) {
+            $searchAction = new SearchOrderAction();
+            $query = $searchAction->execute($query, $this->search);
+        }
+        
+        return $query;
     }
 
     public function relationSearch(): array
@@ -81,14 +90,13 @@ final class OrderTable extends PowerGridComponent
                 'email',
             ],
             'address' => [
-                'address',
-                'city',
+                'title',
             ],
-            'payment_method' => [
-                'name',
+            'paymentMethod.translations' => [
+                'value',
             ],
-            'brand' => [
-                'name',
+            'brand.translations' => [
+                'value',
             ],
         ];
     }
