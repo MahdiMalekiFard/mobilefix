@@ -61,13 +61,13 @@ return [
         ],
         'edit'    => [
             'page_title' => 'Edit :model',
-            'title'      => 'Update :model :name',
+            'title'      => 'Update :model',
             'desc'       => 'Please ensure you have content manager approval before editing this item',
         ],
         'show'    => [
             'page_title' => ':model Details',
-            'title'      => 'Details of :model :name',
-            'desc'       => 'All details of :model :name',
+            'title'      => 'Details of :model',
+            'desc'       => 'All details of :model',
         ],
         'public'  => [
             'info'         => 'Information',

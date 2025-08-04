@@ -38,6 +38,10 @@ class OrderUpdateOrCreate extends Component
     public string $admin_note    = '';
     public $images;
     public $videos;
+    public array $existingImages = [];
+    public array $existingVideos = [];
+    public array $removedNewImages = [];
+    public array $removedNewVideos = [];
 
     public function mount(Order $order): void
     {
@@ -57,6 +61,25 @@ class OrderUpdateOrCreate extends Component
             $this->selectedProblems = $this->model->problems->pluck('id')->toArray();
             $this->user_note = $this->model->user_note ?? '';
             $this->admin_note = $this->model->admin_note ?? '';
+            
+            // Load existing media
+            $this->existingImages = $this->model->getMedia('images')->map(function($media) {
+                return [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                    'name' => $media->name,
+                    'file_name' => $media->file_name
+                ];
+            })->toArray();
+            
+            $this->existingVideos = $this->model->getMedia('videos')->map(function($media) {
+                return [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                    'name' => $media->name,
+                    'file_name' => $media->file_name
+                ];
+            })->toArray();
         }
     }
 
@@ -89,19 +112,100 @@ class OrderUpdateOrCreate extends Component
     {
         $payload = $this->validate();
         $payload['problems'] = $payload['selectedProblems'];
+        unset($payload['selectedProblems']);
+        
+        // Add media files to payload
+        if ($this->images) {
+            $payload['images'] = $this->images;
+        }
+        if ($this->videos) {
+            $payload['videos'] = $this->videos;
+        }
         
         if ($this->model->id) {
             UpdateOrderAction::run($this->model, $payload);
+            
             $this->success(
                 title: trans('general.model_has_updated_successfully', ['model' => trans('order.model')]),
                 redirectTo: route('admin.order.index')
             );
         } else {
             StoreOrderAction::run($payload);
+            
             $this->success(
                 title: trans('general.model_has_stored_successfully', ['model' => trans('order.model')]),
                 redirectTo: route('admin.order.index')
             );
+        }
+    }
+
+
+
+    public function deleteImage($mediaId): void
+    {
+        $media = $this->model->getMedia('images')->find($mediaId);
+        if ($media) {
+            $media->delete();
+            
+            // Refresh the model to clear any cached media collections
+            $this->model->refresh();
+            
+            // Update the existing images array
+            $this->existingImages = $this->model->getMedia('images')->map(function($media) {
+                return [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                    'name' => $media->name,
+                    'file_name' => $media->file_name
+                ];
+            })->toArray();
+            
+            $this->success('Image deleted successfully');
+        }
+    }
+
+    public function deleteVideo($mediaId): void
+    {
+        $media = $this->model->getMedia('videos')->find($mediaId);
+        if ($media) {
+            $media->delete();
+            
+            // Refresh the model to clear any cached media collections
+            $this->model->refresh();
+            
+            // Update the existing videos array
+            $this->existingVideos = $this->model->getMedia('videos')->map(function($media) {
+                return [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                    'name' => $media->name,
+                    'file_name' => $media->file_name
+                ];
+            })->toArray();
+            
+            $this->success('Video deleted successfully');
+        }
+    }
+
+    public function removeNewImage($index): void
+    {
+        if (isset($this->images[$index])) {
+            $this->removedNewImages[] = $index;
+            $this->images = collect($this->images)->filter(function($image, $key) {
+                return !in_array($key, $this->removedNewImages);
+            })->values()->toArray();
+            $this->success('New image removed');
+        }
+    }
+
+    public function removeNewVideo($index): void
+    {
+        if (isset($this->videos[$index])) {
+            $this->removedNewVideos[] = $index;
+            $this->videos = collect($this->videos)->filter(function($video, $key) {
+                return !in_array($key, $this->removedNewVideos);
+            })->values()->toArray();
+            $this->success('New video removed');
         }
     }
 
@@ -132,7 +236,7 @@ class OrderUpdateOrCreate extends Component
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
                 ['link' => route('admin.order.index'), 'label' => trans('general.page.index.title', ['model' => trans('order.model')])],
-                ['label' => trans('general.page.create.title', ['model' => trans('order.model')])],
+                ['label' => $this->model->id ? trans('general.page.edit.title', ['model' => trans('order.model')]) : trans('general.page.create.title', ['model' => trans('order.model')])],
             ],
             'breadcrumbsActions' => [
                 ['link' => route('admin.order.index'), 'icon' => 's-arrow-left']

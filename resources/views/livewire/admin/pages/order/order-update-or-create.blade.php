@@ -1,5 +1,6 @@
 @php use App\Enums\BooleanEnum; @endphp
-<form wire:submit="submit">
+<div>
+    <form wire:submit="submit">
     <x-admin.shared.bread-crumbs :breadcrumbs="$breadcrumbs" :breadcrumbs-actions="$breadcrumbsActions"/>
     
     <!-- Basic Order Information -->
@@ -106,7 +107,8 @@
 
     <!-- Media -->
     <x-card :title="trans('order.media')" shadow separator>
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <!-- Images Section -->
             <div>
                 <x-input :label="trans('order.images')"
                          type="file"
@@ -114,14 +116,61 @@
                          multiple
                          accept="image/*"
                 />
+                
+                <!-- Existing Images -->
+                @if(count($existingImages) > 0)
+                    <div class="mt-4">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Existing Images</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($existingImages as $image)
+                                <div class="relative group">
+                                    <img src="{{ $image['url'] }}" 
+                                         alt="{{ $image['name'] }}" 
+                                         class="w-full h-32 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
+                                         onclick="openImageModal('{{ $image['url'] }}', '{{ $image['name'] }}')">
+                                    <button type="button"
+                                            wire:click="deleteImage({{ $image['id'] }})"
+                                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                            title="Delete image">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b">
+                                        <span class="truncate block">{{ $image['name'] }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+                
+                <!-- New Images Preview -->
                 @if($images)
-                    <div class="mt-2 grid grid-cols-3 gap-2">
-                        @foreach($images as $image)
-                            <img src="{{ $image->temporaryUrl() }}" class="w-full h-20 object-cover rounded">
-                        @endforeach
+                    <div class="mt-4">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">New Images</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($images as $index => $image)
+                                <div class="relative group">
+                                    <img src="{{ $image->temporaryUrl() }}" 
+                                         alt="Preview" 
+                                         class="w-full h-32 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
+                                         onclick="openImageModal('{{ $image->temporaryUrl() }}', '{{ $image->getClientOriginalName() }}')">
+                                    <button type="button"
+                                            wire:click="removeNewImage({{ $index }})"
+                                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                            title="Remove image">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b">
+                                        <span class="truncate block">{{ $image->getClientOriginalName() }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 @endif
             </div>
+            
+            <!-- Videos Section -->
             <div>
                 <x-input :label="trans('order.videos')"
                          type="file"
@@ -129,11 +178,50 @@
                          multiple
                          accept="video/*"
                 />
+                
+                <!-- Existing Videos -->
+                @if(count($existingVideos) > 0)
+                    <div class="mt-4">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Existing Videos</h4>
+                        <div class="space-y-2">
+                            @foreach($existingVideos as $video)
+                                <div class="flex items-center justify-between p-2 bg-gray-50 rounded border">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-video text-blue-500"></i>
+                                        <span class="text-sm text-gray-700">{{ $video['name'] }}</span>
+                                    </div>
+                                    <button type="button"
+                                            wire:click="deleteVideo({{ $video['id'] }})"
+                                            class="text-red-500 hover:text-red-700 text-sm"
+                                            title="Delete video">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+                
+                <!-- New Videos Preview -->
                 @if($videos)
-                    <div class="mt-2">
-                        @foreach($videos as $video)
-                            <p class="text-sm text-gray-600">{{ $video->getClientOriginalName() }}</p>
-                        @endforeach
+                    <div class="mt-4">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">New Videos</h4>
+                        <div class="space-y-2">
+                            @foreach($videos as $index => $video)
+                                <div class="flex items-center justify-between p-2 bg-blue-50 rounded border">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-video text-blue-500"></i>
+                                        <span class="text-sm text-gray-700">{{ $video->getClientOriginalName() }}</span>
+                                    </div>
+                                    <button type="button"
+                                            wire:click="removeNewVideo({{ $index }})"
+                                            class="text-red-500 hover:text-red-700 text-sm"
+                                            title="Remove video">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 @endif
             </div>
@@ -142,3 +230,68 @@
 
     <x-admin.shared.form-actions/>
 </form>
+
+<!-- Image Modal (Outside the form to prevent form submission) -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+    <div class="relative max-w-5xl max-h-full w-full h-full flex items-center justify-center">
+        <button type="button" onclick="closeImageModal(event)" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="relative w-full h-full flex items-center justify-center">
+            <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain rounded shadow-2xl">
+            <div class="absolute bottom-4 left-4 text-white text-sm bg-black bg-opacity-70 px-3 py-2 rounded-lg backdrop-blur-sm">
+                <span id="modalImageName" class="font-medium"></span>
+            </div>
+        </div>
+        <div class="absolute bottom-4 right-4 text-white text-xs bg-black bg-opacity-50 px-2 py-1 rounded">
+            Press ESC to close
+        </div>
+    </div>
+</div>
+
+<script>
+    function openImageModal(imageUrl, imageName) {
+        document.getElementById('modalImage').src = imageUrl;
+        document.getElementById('modalImageName').textContent = imageName;
+        document.getElementById('imageModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageModal(event) {
+        // Prevent any form submission
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+        document.getElementById('imageModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside the image
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeImageModal(e);
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeImageModal(e);
+        }
+    });
+
+    // Prevent form submission when clicking modal elements
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Additional safety: prevent any form submission from modal
+    document.getElementById('imageModal').addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
+</script>
+</div>

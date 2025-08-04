@@ -33,7 +33,9 @@ class StoreOrderAction
      *     total?:float,
      *     user_id?:int,
      *     address_id?:int,
-     *     payment_method_id?:int
+     *     payment_method_id?:int,
+     *     images?:array,
+     *     videos?:array
      * } $payload
      * @return Order
      * @throws Throwable
@@ -93,11 +95,33 @@ class StoreOrderAction
                 $payload['config'] = array_merge($payload['config'] ?? [], $customerInfo);
             }
             
+            // Extract media for later handling
+            $images = $payload['images'] ?? null;
+            $videos = $payload['videos'] ?? null;
+            unset($payload['images'], $payload['videos']);
+            
             $model = Order::create($payload);
             
             // Attach problems to the order if any
             if (!empty($problems)) {
                 $model->problems()->attach($problems);
+            }
+            
+            // Handle media uploads
+            if ($images) {
+                foreach ($images as $image) {
+                    $model->addMedia($image->getRealPath())
+                        ->usingName($image->getClientOriginalName())
+                        ->toMediaCollection('images');
+                }
+            }
+            
+            if ($videos) {
+                foreach ($videos as $video) {
+                    $model->addMedia($video->getRealPath())
+                        ->usingName($video->getClientOriginalName())
+                        ->toMediaCollection('videos');
+                }
             }
             
             // Only sync translations if title and description are provided
