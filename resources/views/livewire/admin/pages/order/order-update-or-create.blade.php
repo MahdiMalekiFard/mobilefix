@@ -4,7 +4,7 @@
     <x-admin.shared.bread-crumbs :breadcrumbs="$breadcrumbs" :breadcrumbs-actions="$breadcrumbsActions"/>
     
     <!-- Basic Order Information -->
-    <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit" class="mb-6 pb-8">
+    <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit" class="mb-6">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <x-admin.shared.form-input 
                 :label="trans('order.order_number')"
@@ -40,18 +40,16 @@
     <!-- Device & Brand Information -->
     <x-card :title="trans('order.device_brand_info')" shadow separator class="mb-6">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <x-select :label="trans('order.brand')"
+            <x-admin.shared.select :label="trans('order.brand')"
                       wire:model="brand_id"
-                      :options="$brands"
-                      option-label="title"
-                      option-value="id"
+                      :options="$brands->map(function($brand) { return ['value' => $brand->id, 'label' => $brand->title]; })"
+                      placeholder="{{ trans('order.select_brand') }}"
                       searchable
             />
-            <x-select :label="trans('order.device')"
+            <x-admin.shared.select :label="trans('order.device')"
                       wire:model="device_id"
-                      :options="$devices"
-                      option-label="title"
-                      option-value="id"
+                      :options="$devices->map(function($device) { return ['value' => $device->id, 'label' => $device->title]; })"
+                      placeholder="{{ trans('order.select_device') }}"
                       searchable
             />
         </div>
@@ -60,18 +58,16 @@
     <!-- Address & Payment Information -->
     <x-card :title="trans('order.address_payment_info')" shadow separator class="mb-6">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <x-select :label="trans('order.address')"
+            <x-admin.shared.select :label="trans('order.address')"
                       wire:model="address_id"
-                      :options="$addresses"
-                      option-label="title"
-                      option-value="id"
+                      :options="$addresses->map(function($address) { return ['value' => $address->id, 'label' => $address->title]; })"
+                      placeholder="{{ trans('order.select_address') }}"
                       searchable
             />
-            <x-select :label="trans('order.payment_method')"
+            <x-admin.shared.select :label="trans('order.payment_method')"
                       wire:model="payment_method_id"
-                      :options="$paymentMethods"
-                      option-label="title"
-                      option-value="id"
+                      :options="$paymentMethods->map(function($paymentMethod) { return ['value' => $paymentMethod->id, 'label' => $paymentMethod->title]; })"
+                      placeholder="{{ trans('order.select_payment_method') }}"
                       searchable
             />
         </div>
@@ -79,25 +75,24 @@
 
     <!-- Problems -->
     <x-card :title="trans('order.problems')" shadow separator class="mb-6">
-        <x-select :label="trans('order.problems')"
+        <x-admin.shared.select :label="trans('order.problems')"
                   wire:model="selectedProblems"
-                  :options="$problems"
-                  option-label="title"
-                  option-value="id"
-                  multiselect
+                  :options="$problems->map(function($problem) { return ['value' => $problem->id, 'label' => $problem->title]; })"
+                  placeholder="{{ trans('order.select_problems') }}"
                   searchable
+                  multiselect
         />
     </x-card>
 
     <!-- Notes -->
     <x-card :title="trans('order.notes')" shadow separator class="mb-6">
         <div class="grid grid-cols-1 gap-4">
-            <x-textarea :label="trans('order.user_note')"
+            <x-admin.shared.textarea :label="trans('order.user_note')"
                         wire:model="user_note"
                         rows="3"
                         placeholder="{{ trans('order.user_note_placeholder') }}"
             />
-            <x-textarea :label="trans('order.admin_note')"
+            <x-admin.shared.textarea :label="trans('order.admin_note')"
                         wire:model="admin_note"
                         rows="3"
                         placeholder="{{ trans('order.admin_note_placeholder') }}"
@@ -110,8 +105,7 @@
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <!-- Images Section -->
             <div>
-                <x-input :label="trans('order.images')"
-                         type="file"
+                <x-admin.shared.file-input :label="trans('order.images')"
                          wire:model="images"
                          multiple
                          accept="image/*"
@@ -172,8 +166,7 @@
             
             <!-- Videos Section -->
             <div>
-                <x-input :label="trans('order.videos')"
-                         type="file"
+                <x-admin.shared.file-input :label="trans('order.videos')"
                          wire:model="videos"
                          multiple
                          accept="video/*"
