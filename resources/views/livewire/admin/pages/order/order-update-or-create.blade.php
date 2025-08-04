@@ -176,18 +176,21 @@
                 @if(count($existingVideos) > 0)
                     <div class="mt-4">
                         <h4 class="text-sm font-medium text-gray-700 mb-2">Existing Videos</h4>
-                        <div class="space-y-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @foreach($existingVideos as $video)
-                                <div class="flex items-center justify-between p-2 bg-gray-50 rounded border">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="fas fa-video text-blue-500"></i>
-                                        <span class="text-sm text-gray-700">{{ $video['name'] }}</span>
+                                <div class="relative group">
+                                    <div class="w-full h-32 bg-gray-100 rounded border cursor-pointer hover:bg-gray-200 transition-colors flex items-center justify-center"
+                                         onclick="openVideoModal('{{ $video['url'] }}', '{{ $video['name'] }}')">
+                                        <div class="text-center">
+                                            <i class="fas fa-play-circle text-4xl text-blue-500 mb-2"></i>
+                                            <p class="text-xs text-gray-600">{{ $video['name'] }}</p>
+                                        </div>
                                     </div>
                                     <button type="button"
                                             wire:click="deleteVideo({{ $video['id'] }})"
-                                            class="text-red-500 hover:text-red-700 text-sm"
+                                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
                                             title="Delete video">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="fas fa-times"></i>
                                     </button>
                                 </div>
                             @endforeach
@@ -199,18 +202,21 @@
                 @if($videos)
                     <div class="mt-4">
                         <h4 class="text-sm font-medium text-gray-700 mb-2">New Videos</h4>
-                        <div class="space-y-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @foreach($videos as $index => $video)
-                                <div class="flex items-center justify-between p-2 bg-blue-50 rounded border">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="fas fa-video text-blue-500"></i>
-                                        <span class="text-sm text-gray-700">{{ $video->getClientOriginalName() }}</span>
+                                <div class="relative group">
+                                    <div class="w-full h-32 bg-blue-100 rounded border cursor-pointer hover:bg-blue-200 transition-colors flex items-center justify-center"
+                                         onclick="openVideoModal('{{ $video->temporaryUrl() }}', '{{ $video->getClientOriginalName() }}')">
+                                        <div class="text-center">
+                                            <i class="fas fa-play-circle text-4xl text-blue-500 mb-2"></i>
+                                            <p class="text-xs text-gray-600">{{ $video->getClientOriginalName() }}</p>
+                                        </div>
                                     </div>
                                     <button type="button"
                                             wire:click="removeNewVideo({{ $index }})"
-                                            class="text-red-500 hover:text-red-700 text-sm"
+                                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
                                             title="Remove video">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="fas fa-times"></i>
                                     </button>
                                 </div>
                             @endforeach
@@ -242,6 +248,26 @@
     </div>
 </div>
 
+<!-- Video Modal (Outside the form to prevent form submission) -->
+<div id="videoModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+    <div class="relative max-w-5xl max-h-full w-full h-full flex items-center justify-center">
+        <button type="button" onclick="closeVideoModal(event)" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="relative w-full h-full flex items-center justify-center">
+            <video id="modalVideo" controls class="max-w-full max-h-full object-contain rounded shadow-2xl">
+                Your browser does not support the video tag.
+            </video>
+            <div class="absolute bottom-4 left-4 text-white text-sm bg-black bg-opacity-70 px-3 py-2 rounded-lg backdrop-blur-sm">
+                <span id="modalVideoName" class="font-medium"></span>
+            </div>
+        </div>
+        <div class="absolute bottom-4 right-4 text-white text-xs bg-black bg-opacity-50 px-2 py-1 rounded">
+            Press ESC to close
+        </div>
+    </div>
+</div>
+
 <script>
     function openImageModal(imageUrl, imageName) {
         document.getElementById('modalImage').src = imageUrl;
@@ -261,17 +287,55 @@
         document.body.style.overflow = 'auto';
     }
 
-    // Close modal when clicking outside the image
+    function openVideoModal(videoUrl, videoName) {
+        const videoElement = document.getElementById('modalVideo');
+        videoElement.src = videoUrl;
+        document.getElementById('modalVideoName').textContent = videoName;
+        document.getElementById('videoModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        // Auto-play the video when modal opens
+        videoElement.play().catch(function(error) {
+            console.log('Video autoplay failed:', error);
+        });
+    }
+
+    function closeVideoModal(event) {
+        // Prevent any form submission
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+        
+        // Pause and reset the video
+        const videoElement = document.getElementById('modalVideo');
+        videoElement.pause();
+        videoElement.currentTime = 0;
+        
+        document.getElementById('videoModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close image modal when clicking outside the image
     document.getElementById('imageModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeImageModal(e);
         }
     });
 
-    // Close modal with Escape key
+    // Close video modal when clicking outside the video
+    document.getElementById('videoModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeVideoModal(e);
+        }
+    });
+
+    // Close modals with Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeImageModal(e);
+            closeVideoModal(e);
         }
     });
 
@@ -280,8 +344,18 @@
         e.stopPropagation();
     });
 
-    // Additional safety: prevent any form submission from modal
+    document.getElementById('videoModal').addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Additional safety: prevent any form submission from modals
     document.getElementById('imageModal').addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
+
+    document.getElementById('videoModal').addEventListener('submit', function(e) {
         e.preventDefault();
         e.stopPropagation();
         return false;

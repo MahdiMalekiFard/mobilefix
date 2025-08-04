@@ -127,7 +127,7 @@
                                 <div class="flex items-center h-5 mr-3">
                                     <input type="checkbox" :checked="isSelected(option)"
                                         class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                                        @click.stop>
+                                        @click.stop="selectOption(option)">
                                 </div>
                             </template>
                             <span class="text-gray-900" x-text="option.label"></span>
