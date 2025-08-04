@@ -52,6 +52,9 @@ class StoreOrderAction
                 $payload['order_number'] = 'ORD-' . date('Ymd') . '-' . str_pad(Order::count() + 1, 4, '0', STR_PAD_LEFT);
             }
             
+            // Generate unique tracking code
+            $payload['tracking_code'] = generateUniqueTrackingCode();
+            
             // Map repair form fields to order fields
             if (isset($payload['brand'])) {
                 $payload['brand_id'] = $payload['brand'];

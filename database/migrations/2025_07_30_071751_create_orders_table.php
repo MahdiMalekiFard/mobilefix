@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_number');
+            $table->string('tracking_code')->unique();
             $table->string('total')->default(0);
             $table->string('status')->default(OrderStatusEnum::PENDING->value)->comment('pending - rejected - processing - failed - cancelled_by_user - completed - paid - delivered');
             $table->foreignId('user_id')->nullable()->constrained('users');

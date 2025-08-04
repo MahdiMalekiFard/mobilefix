@@ -88,3 +88,20 @@ if ( ! function_exists('isRtl')) {
         return in_array(app()->getLocale(), ['fa', 'ar'], true);
     }
 }
+
+if ( ! function_exists('generateUniqueTrackingCode')) {
+    function generateUniqueTrackingCode(): string
+    {
+        do {
+            // Generate a unique tracking code with format: TRK-YYYYMMDD-XXXXX
+            $date = date('Ymd');
+            $random = strtoupper(substr(md5(uniqid('', true)), 0, 6));
+            $trackingCode = "TRK-{$date}-{$random}";
+            
+            // Check if this tracking code already exists
+            $exists = \App\Models\Order::where('tracking_code', $trackingCode)->exists();
+        } while ($exists);
+        
+        return $trackingCode;
+    }
+}

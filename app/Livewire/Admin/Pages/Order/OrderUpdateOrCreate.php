@@ -23,6 +23,7 @@ class OrderUpdateOrCreate extends Component
 
     public Order   $model;
     public string $order_number = '';
+    public string $tracking_code = '';
     public string $status       = '';
     public int    $total        = 0;
     public string $user_name    = '';
@@ -48,6 +49,7 @@ class OrderUpdateOrCreate extends Component
         $this->model = $order;
         if ($this->model->id) {
             $this->order_number = $this->model->order_number;
+            $this->tracking_code = $this->model->tracking_code;
             $this->status = $this->model->status;
             $this->total = $this->model->total;
             $this->user_name = $this->model->config()->get('name');
@@ -87,6 +89,7 @@ class OrderUpdateOrCreate extends Component
     {
         return [
             'order_number' => 'required|string|unique:orders,order_number,' . $this->model->id,
+            'tracking_code' => 'required|string|unique:orders,tracking_code,' . $this->model->id,
             'status'       => 'required|string',
             'total'        => 'required|integer',
             'user_name'    => 'required|string|max:255',

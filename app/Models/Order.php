@@ -21,6 +21,7 @@ class Order extends Model implements HasMedia
 
     protected $fillable = [
         'order_number',
+        'tracking_code',
         'status',
         'total',
         'user_id',
