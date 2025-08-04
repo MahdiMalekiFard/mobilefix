@@ -91,7 +91,7 @@ class OrderUpdateOrCreate extends Component
             'order_number' => 'required|string|unique:orders,order_number,' . $this->model->id,
             'tracking_code' => 'required|string|unique:orders,tracking_code,' . $this->model->id,
             'status'       => 'required|string',
-            'total'        => 'required|integer',
+            'total'        => 'required|integer|min:0',
             'user_name'    => 'required|string|max:255',
             'user_phone'   => 'required|string|max:255',
             'user_email'   => 'required|string|max:255',

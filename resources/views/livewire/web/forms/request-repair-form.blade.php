@@ -269,7 +269,7 @@
                             </div>
                             <div class="card-body">
                                 <h3 class="text-primary mb-2 fw-bold" id="trackingCode" style="font-family: 'Courier New', monospace; letter-spacing: 2px; user-select: all; cursor: text;">
-                                    {{ $orderNumber ?? '' }}
+                                    {{ $trackingCode ?? '' }}
                                 </h3>
                                 <div class="d-flex gap-2 justify-content-center">
                                     <button class="btn btn-outline-primary btn-sm" onclick="copyTrackingCode(event)" title="Copy to clipboard">

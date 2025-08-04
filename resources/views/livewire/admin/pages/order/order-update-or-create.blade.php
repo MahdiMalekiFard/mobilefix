@@ -10,7 +10,17 @@
                 :label="trans('order.order_number')"
                 wire:model="order_number"
                 placeholder="{{ trans('order.order_number') }}"
-                required
+                disabled
+                readonly
+                class="bg-gray-50 cursor-not-allowed"
+                :helper="trans('order.order_number_auto_generated')"
+            />
+            <x-admin.shared.form-input 
+                :label="trans('order.tracking_code')"
+                wire:model="tracking_code"
+                placeholder="{{ trans('order.tracking_code') }}"
+                disabled
+                readonly
             />
             <x-admin.shared.badge-select
                 :label="trans('order.status')"
@@ -25,14 +35,32 @@
                 wire:model="total"
                 placeholder="0.00"
                 type="number"
+                min="0"
+                step="0.01"
                 required
+                class="font-mono"
+                x-data
+                x-on:input="$el.value = Math.max(0, parseFloat($el.value) || 0)"
+                :helper="trans('order.total_currency_hint')"
             />
+            
+        </div>
+    </x-card>
+
+    <x-card :title="trans('order.user_info')" shadow separator progress-indicator="submit" class="mb-6">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <x-admin.shared.form-input 
                 :label="trans('order.user_email')"
                 wire:model="user_email"
                 placeholder="{{ trans('order.user_email') }}"
                 type="email"
                 required
+            />
+            <x-admin.shared.form-input 
+                :label="trans('order.user_phone')"
+                wire:model="user_phone"
+                placeholder="{{ trans('order.user_phone') }}"
+                type="tel"
             />
         </div>
     </x-card>

@@ -22,7 +22,7 @@ class RequestRepairForm extends Component
     public $images = [];
     
     // Success modal properties
-    public $orderNumber = null;
+    public $trackingCode = null;
 
     public function render()
     {
@@ -66,28 +66,11 @@ class RequestRepairForm extends Component
             // Create the order with pending status
             $order = app(StoreOrderAction::class)->handle($data);
 
-            // Handle file uploads if any
-            if (!empty($this->videos)) {
-                foreach ($this->videos as $video) {
-                    $order->addMedia($video->getRealPath())
-                        ->usingName($video->getClientOriginalName())
-                        ->toMediaCollection('videos');
-                }
-            }
-
-            if (!empty($this->images)) {
-                foreach ($this->images as $image) {
-                    $order->addMedia($image->getRealPath())
-                        ->usingName($image->getClientOriginalName())
-                        ->toMediaCollection('images');
-                }
-            }
-
             // Store the order number for the modal
-            $this->orderNumber = $order->order_number;
+            $this->trackingCode = $order->tracking_code;
             
             // Emit event to show success modal
-            $this->dispatch('show-success-modal', trackingCode: $order->order_number);
+            $this->dispatch('show-success-modal', trackingCode: $order->tracking_code);
             
             // Reset form (but keep orderNumber for modal display)
             $this->reset(['name', 'email', 'phone', 'brand', 'model', 'problems', 'description', 'videos', 'images']);
@@ -102,6 +85,6 @@ class RequestRepairForm extends Component
     public function modalClosed()
     {
         // Reset order number when modal is closed
-        $this->orderNumber = null;
+        $this->trackingCode = null;
     }
 }

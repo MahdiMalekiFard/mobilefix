@@ -85,7 +85,7 @@ class UpdateOrderAction
             // Handle media uploads
             if ($images) {
                 foreach ($images as $image) {
-                    $order->addMedia($image->getRealPath())
+                    $order->addMedia($image->getRealPath())->preservingOriginal()
                         ->usingName($image->getClientOriginalName())
                         ->toMediaCollection('images');
                 }
@@ -93,7 +93,7 @@ class UpdateOrderAction
             
             if ($videos) {
                 foreach ($videos as $video) {
-                    $order->addMedia($video->getRealPath())
+                    $order->addMedia($video->getRealPath())->preservingOriginal()
                         ->usingName($video->getClientOriginalName())
                         ->toMediaCollection('videos');
                 }

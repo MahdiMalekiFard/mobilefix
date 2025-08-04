@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('order_number');
             $table->string('tracking_code')->unique();
-            $table->string('total')->default(0);
+            $table->decimal('total', 10, 2)->unsigned()->default(0.00);
             $table->string('status')->default(OrderStatusEnum::PENDING->value)->comment('pending - rejected - processing - failed - cancelled_by_user - completed - paid - delivered');
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('address_id')->nullable()->constrained('addresses');

@@ -113,7 +113,7 @@ class StoreOrderAction
             // Handle media uploads
             if ($images) {
                 foreach ($images as $image) {
-                    $model->addMedia($image->getRealPath())
+                    $model->addMedia($image->getRealPath())->preservingOriginal()
                         ->usingName($image->getClientOriginalName())
                         ->toMediaCollection('images');
                 }
@@ -121,7 +121,7 @@ class StoreOrderAction
             
             if ($videos) {
                 foreach ($videos as $video) {
-                    $model->addMedia($video->getRealPath())
+                    $model->addMedia($video->getRealPath())->preservingOriginal()
                         ->usingName($video->getClientOriginalName())
                         ->toMediaCollection('videos');
                 }
