@@ -23,6 +23,8 @@ return [
     ],
     'page'          => [
     ],
+    'user' => 'User',
+    'select_user' => 'Select User',
     'user_name' => 'User Name',
     'user_email' => 'User Email',
     'user_phone' => 'User Phone',
