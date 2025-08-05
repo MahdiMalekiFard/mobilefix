@@ -22,9 +22,14 @@
     } else {
         $selectedOption = collect($options)->firstWhere('value', $value);
     }
+    
+    // Merge remaining attributes (excluding the ones we've already extracted)
+    $mergedAttributes = $attributes->except(['wire:model', 'id'])->merge([
+        'class' => 'space-y-1'
+    ]);
 @endphp
 
-<div class="space-y-1">
+<div {{ $mergedAttributes }}>
     @if($label)
         <label for="{{ $id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
             {{ $label }}
@@ -36,7 +41,7 @@
 
     <div x-data="select({
         options: {{ json_encode($options) }},
-        model: @entangle($wireModel->value()),
+        model: @entangle($wireModel->value()).live,
         searchable: {{ $searchable ? 'true' : 'false' }},
         placeholder: '{{ $placeholder }}',
         disabled: {{ $disabled ? 'true' : 'false' }},

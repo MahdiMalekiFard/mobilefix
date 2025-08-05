@@ -12,7 +12,6 @@ use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Models\Problem;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -23,27 +22,28 @@ class OrderUpdateOrCreate extends Component
     use Toast, WithFileUploads;
 
     public Order   $model;
-    public string $order_number = '';
-    public string $tracking_code = '';
-    public string $status       = '';
+    public ?string $order_number = null;
+    public ?string $tracking_code = null;
+    public ?string $status       = null;
     public int    $total        = 0;
-    public string $user_name    = '';
-    public string $user_phone   = '';
-    public string $user_email   = '';
+    public ?string $user_name    = null;
+    public ?string $user_phone   = null;
+    public ?string $user_email   = null;
     public ?int    $brand_id     = null;
     public ?int    $device_id   = null;
     public ?int    $user_id      = null;
     public ?int    $address_id   = null;
     public ?int    $payment_method_id = null;
     public array  $selectedProblems = [];
-    public string $user_note     = '';
-    public string $admin_note    = '';
+    public ?string $user_note     = null;
+    public ?string $admin_note    = null;
     public $images;
     public $videos;
     public array $existingImages = [];
     public array $existingVideos = [];
     public array $removedNewImages = [];
     public array $removedNewVideos = [];
+    public array $filteredDevices = [];
 
     public function mount(Order $order): void
     {
@@ -53,9 +53,9 @@ class OrderUpdateOrCreate extends Component
             $this->tracking_code = $this->model->tracking_code;
             $this->status = $this->model->status;
             $this->total = $this->model->total;
-            $this->user_name = $this->model->config()->get('name');
-            $this->user_phone = $this->model->config()->get('phone');
-            $this->user_email = $this->model->config()->get('email');
+            $this->user_name = $this->model->config()->get('name') ?? $this->model->user->name;
+            $this->user_phone = $this->model->config()->get('phone') ?? $this->model->user->mobile;
+            $this->user_email = $this->model->config()->get('email') ?? $this->model->user->email;
             $this->brand_id = $this->model->brand_id;
             $this->device_id = $this->model->device_id;
             $this->user_id = $this->model->user_id;
@@ -64,6 +64,16 @@ class OrderUpdateOrCreate extends Component
             $this->selectedProblems = $this->model->problems->pluck('id')->toArray();
             $this->user_note = $this->model->user_note ?? '';
             $this->admin_note = $this->model->admin_note ?? '';
+            
+            // Populate filteredDevices if brand is already selected
+            if ($this->brand_id) {
+                $this->filteredDevices = Device::where('brand_id', $this->brand_id)->get()->map(function($device) {
+                    return [
+                        'value' => $device->id,
+                        'label' => $device->title
+                    ];
+                })->toArray() ?? [];
+            }
             
             // Load existing media
             $this->existingImages = $this->model->getMedia('images')->map(function($media) {
@@ -86,37 +96,43 @@ class OrderUpdateOrCreate extends Component
         }
     }
 
-    public function resetDeviceSelection(): void
+    public function updatedBrandId($value): void
     {
-        Log::info('resetDeviceSelection called');
+        // Clear device selection first
         $this->device_id = null;
-    }
-
-    public function getFilteredDevicesProperty()
-    {
-        if ($this->brand_id) {
-            return Device::where('brand_id', $this->brand_id)->get();
+        
+        // Reset and repopulate filtered devices
+        $this->filteredDevices = [];
+        
+        if ($value) {
+            $this->filteredDevices = Device::where('brand_id', $value)->get()->map(function($device) {
+                return [
+                    'value' => $device->id,
+                    'label' => $device->title
+                ];
+            })->toArray();
         }
         
-        return Device::all();
+        // Force Livewire to detect the change
+        $this->dispatch('brand-changed');
     }
 
     protected function rules(): array
     {
-        return [
-            'order_number' => 'required|string|unique:orders,order_number,' . $this->model->id,
-            'tracking_code' => 'required|string|unique:orders,tracking_code,' . $this->model->id,
+        $rules = [];
+        
+        $rules = array_merge($rules, [
             'status'       => 'required|string',
-            'total'        => 'required|integer|min:0',
-            'user_name'    => 'required|string|max:255',
-            'user_phone'   => 'required|string|max:255',
-            'user_email'   => 'required|string|max:255',
-            'brand_id'     => 'nullable|integer',
-            'device_id'    => 'nullable|integer',
-            'user_id'      => 'nullable|integer',
-            'address_id'   => 'nullable|integer',
-            'payment_method_id' => 'nullable|integer',
-            'selectedProblems' => 'nullable|array',
+            'total'        => 'nullable|integer|min:0',
+            'user_name'    => 'nullable|string|max:255',
+            'user_phone'   => 'nullable|string|max:255',
+            'user_email'   => 'nullable|email',
+            'brand_id'     => 'required|exists:brands,id',
+            'device_id'    => 'required|exists:devices,id',
+            'user_id'      => 'required|exists:users,id',
+            'address_id'   => 'nullable|exists:addresses,id',
+            'payment_method_id' => 'nullable|exists:payment_methods,id',
+            'selectedProblems' => 'required|array',
             'selectedProblems.*' => 'exists:problems,id',
             'user_note'    => 'nullable|string',
             'admin_note'   => 'nullable|string',
@@ -124,7 +140,16 @@ class OrderUpdateOrCreate extends Component
             'images.*'     => 'image|max:2048',
             'videos'       => 'nullable',
             'videos.*'     => 'mimes:mp4,avi,mov,wmv,webm|max:10240',
-        ];
+        ]);
+
+        if($this->model->id) {
+            $rules['order_number'] = 'required|string|unique:orders,order_number,' . $this->model->id;
+            $rules['tracking_code'] = 'required|string|unique:orders,tracking_code,' . $this->model->id;
+            $rules['user_id'] = 'nullable|exists:users,id';
+            $rules['user_email'] = 'required|email';
+        }
+
+        return $rules;
     }
 
     public function submit(): void
@@ -248,7 +273,6 @@ class OrderUpdateOrCreate extends Component
             'statusOptions'      => $statusOptions,
             'users'              => User::all(['id', 'name']),
             'brands'             => Brand::all(),
-            'devices'            => $this->filteredDevices,
             'addresses'          => Address::all(['id', 'title']),
             'paymentMethods'     => PaymentMethod::all(),
             'problems'           => Problem::all(),

@@ -3,6 +3,19 @@
     <form wire:submit="submit">
     <x-admin.shared.bread-crumbs :breadcrumbs="$breadcrumbs" :breadcrumbs-actions="$breadcrumbsActions"/>
     
+    // just for testing
+    {{-- Display Validation Errors --}}
+    @if ($errors->any())
+        <div class="mb-6 bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded relative">
+            <h4 class="font-bold mb-2">Please fix the following errors:</h4>
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
     <!-- Basic Order Information -->
     <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit" class="mb-6">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -31,6 +44,7 @@
                 placeholder="{{ trans('order.select_status') }}"
                 searchable
                 required
+                :error="$errors->first('status')"
             />
             <x-admin.shared.form-input 
                 :label="trans('order.total')"
@@ -44,6 +58,7 @@
                 x-data
                 x-on:input="$el.value = Math.max(0, parseFloat($el.value) || 0)"
                 :helper="trans('order.total_currency_hint')"
+                :error="$errors->first('total')"
             />
             
         </div>
@@ -74,6 +89,7 @@
                         :options="$users->map(function($user) { return ['value' => $user->id, 'label' => $user->name]; })"
                         placeholder="{{ trans('order.select_user') }}"
                         searchable
+                        :error="$errors->first('user_id')"
                 />
             @endif
         </div>
@@ -87,12 +103,15 @@
                       :options="$brands->map(function($brand) { return ['value' => $brand->id, 'label' => $brand->title]; })"
                       placeholder="{{ trans('order.select_brand') }}"
                       searchable
+                      :error="$errors->first('brand_id')"
             />
             <x-admin.shared.select :label="trans('order.device')"
                       wire:model="device_id"
-                      :options="$devices->map(function($device) { return ['value' => $device->id, 'label' => $device->title]; })"
+                      :options="$filteredDevices"
                       placeholder="{{ trans('order.select_device') }}"
                       searchable
+                      wire:key="device-select-{{ $brand_id }}"
+                      :error="$errors->first('device_id')"
             />
         </div>
     </x-card>
@@ -123,6 +142,7 @@
                   placeholder="{{ trans('order.select_problems') }}"
                   searchable
                   multiselect
+                  :error="$errors->first('selectedProblems')"
         />
     </x-card>
 
