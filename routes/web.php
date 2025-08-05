@@ -41,7 +41,7 @@ Route::get('/privacy', PrivacyPage::class)->name('privacy-page');
 Route::get('/gallery', GalleryPage::class)->name('gallery-page');
 
 // user dashboard
-Route::group(['middleware' => ['user.dashboard']], function () {
+Route::group(['middleware' => ['user.dashboard', 'cors']], function () {
     Route::get('/user/dashboard', UserDashboardIndex::class)->name('user.dashboard');
     Route::get('/user/setting', UserSettingList::class)->name('user.setting');
 });

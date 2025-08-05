@@ -15,7 +15,7 @@ Route::get('admin/auth/logout', function () {
     return redirect()->route('admin.auth.login');
 })->name('admin.auth.logout');
 
-Route::group(['middleware' => ['admin.panel']], function () {
+Route::group(['middleware' => ['admin.panel', 'cors']], function () {
     Route::get('admin', DashboardIndex::class)->name('admin.dashboard');
 
     Route::get('admin/setting', SettingList::class)->name('admin.setting');
