@@ -6,22 +6,24 @@
     <!-- Basic Order Information -->
     <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit" class="mb-6">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <x-admin.shared.form-input 
-                :label="trans('order.order_number')"
-                wire:model="order_number"
-                placeholder="{{ trans('order.order_number') }}"
-                disabled
-                readonly
-                class="bg-gray-50 cursor-not-allowed"
-                :helper="trans('order.order_number_auto_generated')"
-            />
-            <x-admin.shared.form-input 
-                :label="trans('order.tracking_code')"
-                wire:model="tracking_code"
-                placeholder="{{ trans('order.tracking_code') }}"
-                disabled
-                readonly
-            />
+            @if($edit_mode) 
+                <x-admin.shared.form-input 
+                    :label="trans('order.order_number')"
+                    wire:model="order_number"
+                    placeholder="{{ trans('order.order_number') }}"
+                    disabled
+                    readonly
+                    class="bg-gray-50 cursor-not-allowed"
+                    :helper="trans('order.order_number_auto_generated')"
+                />
+                <x-admin.shared.form-input 
+                    :label="trans('order.tracking_code')"
+                    wire:model="tracking_code"
+                    placeholder="{{ trans('order.tracking_code') }}"
+                    disabled
+                    readonly
+                />
+            @endif
             <x-admin.shared.badge-select
                 :label="trans('order.status')"
                 wire:model="status"
@@ -49,19 +51,31 @@
 
     <x-card :title="trans('order.user_info')" shadow separator progress-indicator="submit" class="mb-6">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <x-admin.shared.form-input 
-                :label="trans('order.user_email')"
-                wire:model="user_email"
-                placeholder="{{ trans('order.user_email') }}"
-                type="email"
-                required
-            />
-            <x-admin.shared.form-input 
-                :label="trans('order.user_phone')"
-                wire:model="user_phone"
-                placeholder="{{ trans('order.user_phone') }}"
-                type="tel"
-            />
+            @if($edit_mode)
+                <x-admin.shared.form-input 
+                    :label="trans('order.user_email')"
+                    wire:model="user_email"
+                    placeholder="{{ trans('order.user_email') }}"
+                    type="email"
+                    disabled
+                    readonly
+                />
+                <x-admin.shared.form-input 
+                    :label="trans('order.user_phone')"
+                    wire:model="user_phone"
+                    placeholder="{{ trans('order.user_phone') }}"
+                    type="tel"
+                    disabled
+                    readonly
+                />
+            @else
+                <x-admin.shared.select :label="trans('order.user')"
+                        wire:model="user_id"
+                        :options="$users->map(function($user) { return ['value' => $user->id, 'label' => $user->name]; })"
+                        placeholder="{{ trans('order.select_user') }}"
+                        searchable
+                />
+            @endif
         </div>
     </x-card>
 
@@ -115,11 +129,14 @@
     <!-- Notes -->
     <x-card :title="trans('order.notes')" shadow separator class="mb-6">
         <div class="grid grid-cols-1 gap-4">
-            <x-admin.shared.textarea :label="trans('order.user_note')"
-                        wire:model="user_note"
-                        rows="3"
-                        placeholder="{{ trans('order.user_note_placeholder') }}"
-            />
+            @if($edit_mode)
+                <x-admin.shared.textarea :label="trans('order.user_note')"
+                            wire:model="user_note"
+                            rows="3"
+                            placeholder="{{ trans('order.user_note_placeholder') }}"
+                            disabled
+                />
+            @endif
             <x-admin.shared.textarea :label="trans('order.admin_note')"
                         wire:model="admin_note"
                         rows="3"
