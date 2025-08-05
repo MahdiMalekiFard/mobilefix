@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Models\Problem;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -83,6 +84,21 @@ class OrderUpdateOrCreate extends Component
                 ];
             })->toArray();
         }
+    }
+
+    public function resetDeviceSelection(): void
+    {
+        Log::info('resetDeviceSelection called');
+        $this->device_id = null;
+    }
+
+    public function getFilteredDevicesProperty()
+    {
+        if ($this->brand_id) {
+            return Device::where('brand_id', $this->brand_id)->get();
+        }
+        
+        return Device::all();
     }
 
     protected function rules(): array
@@ -232,7 +248,7 @@ class OrderUpdateOrCreate extends Component
             'statusOptions'      => $statusOptions,
             'users'              => User::all(['id', 'name']),
             'brands'             => Brand::all(),
-            'devices'            => Device::all(),
+            'devices'            => $this->filteredDevices,
             'addresses'          => Address::all(['id', 'title']),
             'paymentMethods'     => PaymentMethod::all(),
             'problems'           => Problem::all(),
