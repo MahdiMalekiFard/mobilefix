@@ -251,27 +251,88 @@
     <div class="mb-8">
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
             <div class="px-6 py-4 border-b border-gray-200">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                            <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
-                            </svg>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                                </svg>
+                            </div>
                         </div>
+                        <h3 class="ml-3 text-lg font-medium text-gray-900">Services & Repairs</h3>
                     </div>
-                    <h3 class="ml-3 text-lg font-medium text-gray-900">Services & Repairs</h3>
+                    <span class="text-sm text-gray-500">({{ $model->problems->count() }} services)</span>
                 </div>
             </div>
             <div class="p-6">
-                <div class="flex flex-wrap gap-2">
+                <div class="space-y-4">
                     @foreach($model->problems as $problem)
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
-                        </svg>
-                        {{ $problem->title }}
-                    </span>
+                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                                        <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-sm font-medium text-gray-900">{{ $problem->title }}</h4>
+                                    @if($problem->description)
+                                    <p class="text-xs text-gray-600 mt-1">{{ $problem->description }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                @if($problem->min_price || $problem->max_price)
+                                <div class="text-sm font-medium text-gray-900">
+                                    @if($problem->min_price && $problem->max_price)
+                                        @if($problem->min_price == $problem->max_price)
+                                            {{ number_format((int)$problem->min_price, 0) }} Toman
+                                        @else
+                                            {{ number_format((int)$problem->min_price, 0) }} - {{ number_format((int)$problem->max_price, 0) }} Toman
+                                        @endif
+                                    @elseif($problem->min_price)
+                                        From {{ number_format((int)$problem->min_price, 0) }} Toman
+                                    @elseif($problem->max_price)
+                                        Up to {{ number_format((int)$problem->max_price, 0) }} Toman
+                                    @endif
+                                </div>
+                                @else
+                                <span class="text-xs text-gray-500">Price on request</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     @endforeach
+                </div>
+                
+                <!-- Summary -->
+                <div class="mt-6 pt-4 border-t border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-700">Total Services:</span>
+                        <span class="text-sm font-medium text-gray-900">{{ $model->problems->count() }} items</span>
+                    </div>
+                    @php
+                        $totalMinPrice = $model->problems->whereNotNull('min_price')->sum('min_price');
+                        $totalMaxPrice = $model->problems->whereNotNull('max_price')->sum('max_price');
+                    @endphp
+                    @if($totalMinPrice > 0 || $totalMaxPrice > 0)
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-sm font-medium text-gray-700">Estimated Price Range:</span>
+                        <span class="text-sm font-semibold text-green-600">
+                            @if($totalMinPrice > 0 && $totalMaxPrice > 0)
+                                {{ number_format((int)$totalMinPrice, 0) }} - {{ number_format((int)$totalMaxPrice, 0) }} Toman
+                            @elseif($totalMinPrice > 0)
+                                From {{ number_format((int)$totalMinPrice, 0) }} Toman
+                            @elseif($totalMaxPrice > 0)
+                                Up to {{ number_format((int)$totalMaxPrice, 0) }} Toman
+                            @endif
+                        </span>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>

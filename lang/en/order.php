@@ -49,7 +49,7 @@ return [
     'notes' => 'Notes',
     'user_note' => 'User Note',
     'admin_note' => 'Admin Note',
-    'user_note_placeholder' => 'Enter your notes here...',
+    'user_note_placeholder' => 'User has not added any notes yet',
     'admin_note_placeholder' => 'Put your notes here...',
     'device_brand_info' => 'Device & Brand Information',
     'user_info' => 'User Information',
