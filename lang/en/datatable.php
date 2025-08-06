@@ -75,6 +75,7 @@ return [
     ],
     'empty_table_title'       => 'No Records Found',
     'empty_table_description' => 'Create a new record to get started',
+    'empty_table_description_user' => 'You don\'t have any orders yet. Create a new order to get started',
     'empty_table_btn'         => 'New Record',
     'favorite'                => 'Favorite',
     'company'                 => 'Company Name',

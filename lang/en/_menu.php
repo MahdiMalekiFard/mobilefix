@@ -21,6 +21,7 @@ return [
     'categories'               => 'Categories',
     'tag'                      => 'Tag',
     'area'                     => 'Area',
+    'orders'                   => 'Orders',
 
 
     'category_management'   => 'Category management',

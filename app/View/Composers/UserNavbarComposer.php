@@ -16,6 +16,13 @@ class UserNavbarComposer
                 'title'      => trans('_menu.dashboard'),
                 'route_name' => 'user.dashboard',
             ],
+            [
+                'icon'       => 's-shopping-cart',
+                'params'     => [],
+                'exact'      => false,
+                'title'      => trans('_menu.orders'),
+                'route_name' => 'user.order.index',
+            ],
         ]);
     }
 }

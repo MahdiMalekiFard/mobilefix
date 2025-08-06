@@ -15,6 +15,7 @@ use App\Livewire\Web\Pages\GalleryPage;
 use App\Livewire\User\Auth\UserLoginPage;
 use App\Livewire\User\Pages\Dashboard\UserDashboardIndex;
 use App\Livewire\User\Pages\Setting\UserSettingList;
+use App\Livewire\User\Pages\Order\UserOrderList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomePage::class)->name('home-page');
@@ -41,7 +42,8 @@ Route::get('/privacy', PrivacyPage::class)->name('privacy-page');
 Route::get('/gallery', GalleryPage::class)->name('gallery-page');
 
 // user dashboard
-Route::group(['middleware' => ['user.dashboard', 'cors']], function () {
-    Route::get('/user/dashboard', UserDashboardIndex::class)->name('user.dashboard');
-    Route::get('/user/setting', UserSettingList::class)->name('user.setting');
+Route::group(['middleware' => ['user.dashboard', 'cors'], 'prefix' => 'user', 'as' => 'user.'], function () {
+    Route::get('/dashboard', UserDashboardIndex::class)->name('dashboard');
+    Route::get('/setting', UserSettingList::class)->name('setting');
+    Route::get('/order', UserOrderList::class)->name('order.index');
 });
