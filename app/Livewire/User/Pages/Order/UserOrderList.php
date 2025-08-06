@@ -3,11 +3,9 @@
 namespace App\Livewire\User\Pages\Order;
 
 use App\Actions\Order\SearchOrderAction;
-use App\Enums\BooleanEnum;
 use App\Enums\OrderStatusEnum;
 use App\Helpers\PowerGridUserHelper;
 use App\Models\Order;
-use App\Traits\PowerGridHelperTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
@@ -20,8 +18,6 @@ use PowerComponents\LivewirePowerGrid\Column;
 
 final class UserOrderList extends PowerGridComponent
 {
-    use PowerGridHelperTrait;
-
     public string $tableName = 'index_user_order_datatable';
     public string $sortDirection = 'desc';
 

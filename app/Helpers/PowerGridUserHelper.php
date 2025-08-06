@@ -12,7 +12,7 @@ use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\Filters\Builders\Boolean;
 
-class PowerGridHelper
+class PowerGridUserHelper
 {
     public static function published(BooleanEnum $status): string
     {
@@ -28,11 +28,6 @@ class PowerGridHelper
     public static function iconEdit(string $class = 'text-primary'): string
     {
         return "<i class='fa fa-pencil {$class}'></i>";
-    }
-
-    public static function iconTranslate(string $class = 'text-primary'): string
-    {
-        return "<i class='fa fa-language {$class}'></i>";
     }
 
     public static function iconDelete(string $class = 'text-rose-600'): string
@@ -62,7 +57,7 @@ class PowerGridHelper
                      ->attributes([
                          'class' => 'btn btn-square md:btn-sm btn-xs',
                      ])
-                     ->route("admin.{$param}.show", [Str::camel(StringHelper::basename($row::class)) => $row->id], '_self')
+                     ->route("user.{$param}.show", [Str::camel(StringHelper::basename($row::class)) => $row->id], '_self')
                      ->tooltip(trans('datatable.buttons.show'));
     }
 
@@ -76,24 +71,9 @@ class PowerGridHelper
                          'class' => 'btn btn-square md:btn-sm btn-xs',
                      ])
                      ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Update')))
-                     ->route("admin.{$param}.edit", [Str::camel(StringHelper::basename($row::class)) => $row->id], '_self')
+                     ->route("user.{$param}.edit", [Str::camel(StringHelper::basename($row::class)) => $row->id], '_self')
                      ->navigate()
                      ->tooltip(trans('datatable.buttons.edit'));
-    }
-
-    public static function btnTranslate(mixed $row)
-    {
-        $param = Str::kebab(StringHelper::basename($row::class));
-
-        return Button::add('translate')
-                     ->slot(self::iconTranslate())
-                     ->attributes([
-                         'class' => 'btn btn-square md:btn-sm btn-xs',
-                     ])
-                     ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Update')))
-                     ->route('admin.dynamic-translate', ['class' => Str::camel(StringHelper::basename($row::class)), 'id' => $row->id], '_self')
-                     ->navigate()
-                     ->tooltip(trans('datatable.buttons.translate'));
     }
 
     public static function btnToggle(mixed $row, string $toggleField = 'published')
