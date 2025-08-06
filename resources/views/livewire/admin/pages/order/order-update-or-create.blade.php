@@ -3,7 +3,7 @@
     <form wire:submit="submit">
     <x-admin.shared.bread-crumbs :breadcrumbs="$breadcrumbs" :breadcrumbs-actions="$breadcrumbsActions"/>
     
-    // just for testing
+    {{-- just for testing --}}
     {{-- Display Validation Errors --}}
     @if ($errors->any())
         <div class="mb-6 bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded relative">

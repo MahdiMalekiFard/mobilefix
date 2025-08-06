@@ -106,17 +106,23 @@ final class OrderTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('order_number', fn ($row) => $row->order_number)
-            ->add('status', fn ($row) => $row->status)
-            ->add('status_badge', function ($row) {
+            ->add('status', function ($row) {
                 $statusEnum = OrderStatusEnum::from($row->status);
-                return view('components.admin.shared.status-badge', ['status' => $statusEnum])->render();
+                $colorClass = match ($statusEnum->color()) {
+                    'warning' => 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                    'info' => 'bg-blue-100 text-blue-800 border-blue-200',
+                    'danger' => 'bg-red-100 text-red-800 border-red-200',
+                    'success' => 'bg-green-100 text-green-800 border-green-200',
+                    default => 'bg-gray-100 text-gray-800 border-gray-200'
+                };
+                return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' . $colorClass . '">' . $statusEnum->title() . '</span>';
             })
-            ->add('total', fn ($row) => $row->total)
+            ->add('total', fn ($row) => number_format((int)$row->total, 0))
             ->add('user_name', fn ($row) => $row->user_name)
             ->add('user_phone', fn ($row) => $row->user_phone)
             ->add('user_email', fn ($row) => $row->user_email)
             ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row))
-            ->add('updated_at_formatted', fn ($row) => PowerGridHelper::fieldUpdatedAtFormated($row));
+            ->add('updated_at_formatted', fn ($row) => $row->updated_at);
     }
 
     public function columns(): array
@@ -126,12 +132,11 @@ final class OrderTable extends PowerGridComponent
             Column::make('order_number', 'order_number')
                 ->sortable()
                 ->searchable(),
-            Column::make('status', 'status_badge')
+            Column::make('status', 'status')
                 ->title('Status')
                 ->bodyAttribute('class', 'whitespace-nowrap')
                 ->sortable()
-                ->searchable()
-                ->field('status'),
+                ->searchable(),
             Column::make('total', 'total')
                 ->sortable()
                 ->searchable(),
@@ -165,6 +170,7 @@ final class OrderTable extends PowerGridComponent
         return [
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
+            PowerGridHelper::btnShow($row),
         ];
     }
 
