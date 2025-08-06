@@ -40,6 +40,11 @@ class PowerGridUserHelper
         return "<i class='fa fa-eye {$class}'></i>";
     }
 
+    public static function iconPay(string $class = 'text-white'): string
+    {
+        return "<i class='fa fa-credit-card {$class}'></i>";
+    }
+
     public static function iconToggle(bool|int $status, ?string $class = null): string
     {
         $on = $status ? 'fa-toggle-on text-success' : 'fa-toggle-off text-gray-400';
@@ -108,6 +113,21 @@ class PowerGridUserHelper
                      ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Delete')))
                      ->dispatch('force-delete', ['rowId' => $row->id])
                      ->tooltip(trans('datatable.buttons.delete'));
+    }
+
+    public static function btnPay(mixed $row)
+    {
+        $param = Str::kebab(StringHelper::basename($row::class));
+
+        return Button::add('pay')
+            ->slot(self::iconPay())
+            ->attributes([
+                'class' => 'btn btn-success btn-xs md:btn-sm',
+            ])
+            ->route("user.{$param}.pay", [
+                Str::camel(StringHelper::basename($row::class)) => $row->id,
+            ], '_self')
+            ->tooltip(trans('order.actions.pay'));
     }
 
     /** Public Powergrid Fields -------------------------------------------------------------------------- */

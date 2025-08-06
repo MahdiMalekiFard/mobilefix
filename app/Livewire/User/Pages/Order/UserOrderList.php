@@ -134,17 +134,7 @@ final class UserOrderList extends PowerGridComponent
             Column::make('total', 'total')
                 ->sortable()
                 ->searchable(),
-            Column::make('name', 'user_name')
-                ->sortable()
-                ->searchable(),
-            Column::make('mobile', 'user_phone')
-                ->sortable()
-                ->searchable(),
-            Column::make('email', 'user_email')
-                ->sortable()
-                ->searchable(),
-            PowerGridUserHelper::columnUpdatedAT()
-                ->searchable(),
+            PowerGridUserHelper::columnUpdatedAT(),
             PowerGridUserHelper::columnAction(),
         ];
     }
@@ -161,9 +151,15 @@ final class UserOrderList extends PowerGridComponent
 
     public function actions(Order $row): array
     {
-        return [
+        $buttons = [
             PowerGridUserHelper::btnShow($row),
         ];
+    
+        if ($row->status === OrderStatusEnum::COMPLETED->value) {
+            $buttons[] = PowerGridUserHelper::btnPay($row);
+        }
+    
+        return $buttons;
     }
 
     public function noDataLabel(): string|View
