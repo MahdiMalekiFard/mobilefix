@@ -51,7 +51,7 @@ final class UserOrderList extends PowerGridComponent
         ];
 
         if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'actions');
         }
 
         return $setup;

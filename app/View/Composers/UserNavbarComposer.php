@@ -18,10 +18,11 @@ class UserNavbarComposer
             ],
             [
                 'icon'       => 's-shopping-cart',
-                'params'     => [],
-                'exact'      => false,
                 'title'      => trans('_menu.orders'),
                 'route_name' => 'user.order.index',
+                'access'     => true,
+                'params'     => [],
+                'exact'      => true,
             ],
         ]);
     }

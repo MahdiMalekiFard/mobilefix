@@ -45,5 +45,9 @@ Route::get('/gallery', GalleryPage::class)->name('gallery-page');
 Route::group(['middleware' => ['user.dashboard', 'cors'], 'prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/dashboard', UserDashboardIndex::class)->name('dashboard');
     Route::get('/setting', UserSettingList::class)->name('setting');
-    Route::get('/order', UserOrderList::class)->name('order.index');
+
+    $files = array_diff(scandir(__DIR__ . '/user', SCANDIR_SORT_ASCENDING), ['.', '..']);
+    foreach ($files as $file_name) {
+        require_once sprintf('user/%s', $file_name);
+    }
 });
