@@ -14,6 +14,7 @@
     <script src="/assets/js/tinymce/tinymce.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    @stack('styles')
 </head>
 <body class="">
 
@@ -49,6 +50,7 @@
 <x-toast position="toast-button toast-end"/>
 
 @livewireScripts
+@stack('scripts')
 
 </body>
 </html>

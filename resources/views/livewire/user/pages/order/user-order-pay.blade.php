@@ -141,7 +141,7 @@
         <div class="text-center py-5">
             <h3>Order Not Found</h3>
             <p class="text-muted">The requested order could not be found or you don't have permission to access it.</p>
-            <a href="{{ route('user.orders.index') }}" class="btn btn-primary">
+            <a href="{{ route('user.order.index') }}" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back to Orders
             </a>
         </div>

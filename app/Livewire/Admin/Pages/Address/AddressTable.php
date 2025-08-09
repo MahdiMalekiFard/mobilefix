@@ -138,11 +138,14 @@ final class AddressTable extends PowerGridComponent
     public function makeDefault($rowId): void
     {
         try {
-            // First, set all addresses to not default
-            Address::query()->update(['is_default' => BooleanEnum::DISABLE->value]);
-            
-            // Then set the selected one as default
             $address = Address::findOrFail($rowId);
+            $user = $address->user;
+
+            // First, set all addresses to not default for the user
+            if($user) {
+                Address::where('user_id', $user->id)->update(['is_default' => BooleanEnum::DISABLE->value]);
+            }
+            
             $address->update(['is_default' => BooleanEnum::ENABLE->value]);
             
             $this->dispatch('pg:eventRefresh-' . $this->tableName);

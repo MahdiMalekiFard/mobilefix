@@ -27,10 +27,10 @@ class UserOrderPay extends Component
         'order' => 'required|exists:orders,id',
     ];
 
-    public function mount($orderId = null)
+    public function mount($order = null)
     {
-        if ($orderId) {
-            $this->loadOrder($orderId);
+        if ($order) {
+            $this->loadOrder($order->id);
             $this->initializePaymentProviders();
             $this->checkExistingTransaction();
         }
@@ -51,7 +51,7 @@ class UserOrderPay extends Component
         }
 
         // Check if order is in a payable state
-        if (!in_array($this->order->status, [OrderStatusEnum::PENDING->value, OrderStatusEnum::COMPLETED->value, OrderStatusEnum::FAILED->value])) {
+        if (!in_array($this->order->status, [OrderStatusEnum::COMPLETED->value])) {
             $this->errorMessage = 'This order cannot be paid at this time.';
             return;
         }
@@ -154,7 +154,19 @@ class UserOrderPay extends Component
     #[On('payment-succeeded')]
     public function handlePaymentSuccess($externalId, $provider = null)
     {
+        // Prevent duplicate processing
+        if ($this->isProcessing || $this->paymentStatus === 'completed') {
+            return;
+        }
+        
         $this->isProcessing = true;
+        
+        Log::info('Processing payment success', [
+            'order_id' => $this->order?->id,
+            'external_id' => $externalId,
+            'provider' => $provider,
+            'transaction_id' => $this->currentTransaction?->transaction_id
+        ]);
         
         try {
             if (!$this->currentTransaction) {
@@ -183,8 +195,13 @@ class UserOrderPay extends Component
                 
                 session()->flash('success', 'Payment completed successfully!');
                 
-                // Redirect to order details or success page
-                $this->redirect(route('user.order.show', $this->order->id));
+                Log::info('Payment completed successfully, redirecting to order page', [
+                    'order_id' => $this->order->id,
+                    'transaction_id' => $this->currentTransaction->transaction_id
+                ]);
+                
+                // Use redirectRoute to avoid Livewire routing conflicts
+                $this->redirectRoute('user.order.show', ['order' => $this->order->id], navigate: true);
             } else {
                 $this->errorMessage = 'Payment verification failed.';
             }

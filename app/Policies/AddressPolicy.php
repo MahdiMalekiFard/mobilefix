@@ -23,7 +23,7 @@ class AddressPolicy
 
     public function create(User $user): bool
     {
-        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Store')) || $user->id === $address->user_id;
+        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Store'));
     }
 
     public function update(User $user, Address $address): bool

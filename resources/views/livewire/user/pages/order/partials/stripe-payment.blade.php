@@ -80,23 +80,39 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔵 Stripe payment initialization started');
+    
     if (typeof Stripe === 'undefined') {
-        console.error('Stripe.js not loaded');
+        console.error('❌ Stripe.js not loaded');
         return;
     }
+    console.log('✅ Stripe.js loaded successfully');
 
     const stripeConfig = @json($paymentConfigs['stripe'] ?? []);
     const paymentData = @json($paymentData);
     
-    if (!stripeConfig.publishable_key || !paymentData.client_secret) {
-        console.error('Missing Stripe configuration');
+    console.log('🔍 Stripe Config:', stripeConfig);
+    console.log('🔍 Payment Data:', paymentData);
+    
+    if (!stripeConfig.publishable_key) {
+        console.error('❌ Missing Stripe publishable key');
+        document.getElementById('stripe-card-errors').textContent = 'Payment configuration error: Missing publishable key';
+        return;
+    }
+    
+    if (!paymentData.client_secret) {
+        console.error('❌ Missing Stripe client secret');
+        document.getElementById('stripe-card-errors').textContent = 'Payment configuration error: Missing client secret';
         return;
     }
 
+    console.log('🔵 Initializing Stripe with publishable key:', stripeConfig.publishable_key.substring(0, 12) + '...');
+    
     const stripe = Stripe(stripeConfig.publishable_key);
     const elements = stripe.elements();
 
     // Create card element
+    console.log('🔵 Creating card element...');
     const cardElement = elements.create('card', {
         style: {
             base: {
@@ -112,12 +128,27 @@ document.addEventListener('DOMContentLoaded', function() {
         },
     });
 
-    cardElement.mount('#stripe-card-element');
+    console.log('🔵 Mounting card element to #stripe-card-element...');
+    const cardContainer = document.getElementById('stripe-card-element');
+    if (!cardContainer) {
+        console.error('❌ Card element container not found');
+        return;
+    }
+    
+    try {
+        cardElement.mount('#stripe-card-element');
+        console.log('✅ Card element mounted successfully');
+    } catch (error) {
+        console.error('❌ Failed to mount card element:', error);
+        document.getElementById('stripe-card-errors').textContent = 'Failed to initialize payment form';
+    }
 
     // Handle real-time validation errors from the card Element
     cardElement.on('change', function(event) {
+        console.log('🔵 Card element change event:', event);
         const displayError = document.getElementById('stripe-card-errors');
         if (event.error) {
+            console.log('❌ Card validation error:', event.error);
             displayError.textContent = event.error.message;
         } else {
             displayError.textContent = '';
@@ -128,29 +159,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('stripe-payment-form');
     const submitButton = document.getElementById('stripe-submit-payment');
 
-    if (form && submitButton) {
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            document.body.classList.add('loading');
+    if (!form) {
+        console.error('❌ Payment form not found');
+        return;
+    }
+    
+    if (!submitButton) {
+        console.error('❌ Submit button not found');
+        return;
+    }
+    
+    console.log('✅ Form and submit button found, attaching event listener');
 
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        console.log('🔵 Payment form submitted');
+        
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        document.body.classList.add('loading');
+
+        console.log('🔵 Confirming card payment with client secret:', paymentData.client_secret.substring(0, 20) + '...');
+
+        try {
             const {error, paymentIntent} = await stripe.confirmCardPayment(paymentData.client_secret, {
                 payment_method: {
                     card: cardElement,
                     billing_details: {
-                        name: '{{ $order->user_name }}',
-                        email: '{{ $order->user_email }}',
+                        name: @json($order->user_name),
+                        email: @json($order->user_email),
                     },
                 }
             });
 
+            console.log('🔍 Stripe response:', { error, paymentIntent });
+
             if (error) {
+                console.error('❌ Payment failed:', error);
                 // Show error to customer
                 document.getElementById('stripe-card-errors').textContent = error.message;
                 submitButton.disabled = false;
-                submitButton.innerHTML = '<i class="fas fa-credit-card"></i> Pay ${{ number_format($order->total, 2) }}';
+                submitButton.innerHTML = '<i class="fas fa-credit-card"></i> Pay $' + @json(number_format($order->total, 2));
                 document.body.classList.remove('loading');
                 
                 // Emit failure event to Livewire
@@ -160,11 +209,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     code: error.code
                 }, 'stripe');
             } else {
-                // Payment succeeded
+                console.log('✅ Payment succeeded:', paymentIntent);
+                // Payment succeeded - show success state and dispatch event
+                submitButton.innerHTML = '<i class="fas fa-check"></i> Payment Successful!';
+                submitButton.classList.remove('btn-primary');
+                submitButton.classList.add('btn-success');
+                
+                // Dispatch success event to Livewire
                 @this.dispatch('payment-succeeded', paymentIntent.id, 'stripe');
+                
+                // Don't remove loading class here - let Livewire handle the redirect
+                return; // Prevent further execution
             }
-        });
-    }
+        } catch (err) {
+            console.error('❌ Unexpected error during payment:', err);
+            document.getElementById('stripe-card-errors').textContent = 'An unexpected error occurred. Please try again.';
+            submitButton.disabled = false;
+            submitButton.innerHTML = '<i class="fas fa-credit-card"></i> Pay $' + @json(number_format($order->total, 2));
+            document.body.classList.remove('loading');
+        }
+    });
 });
 </script>
 @endpush

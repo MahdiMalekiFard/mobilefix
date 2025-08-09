@@ -140,7 +140,6 @@ class PowerGridUserHelper
                      ->attributes([
                          'class' => 'btn btn-square md:btn-sm btn-xs',
                      ])
-                     ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Update')))
                      ->dispatch('make-default', ['rowId' => $row->id])
                      ->tooltip(trans('datatable.buttons.set_default'));
     }

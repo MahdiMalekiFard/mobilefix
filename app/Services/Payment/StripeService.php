@@ -212,15 +212,26 @@ class StripeService implements PaymentServiceInterface
         try {
             $paymentIntent = $this->stripe->paymentIntents->retrieve($transaction->external_id);
             
-            return [
+            $result = [
                 'success' => true,
                 'client_secret' => $paymentIntent->client_secret,
                 'payment_intent_id' => $paymentIntent->id,
                 'status' => $paymentIntent->status,
             ];
+
+            Log::info('Stripe payment processing result', [
+                'transaction_id' => $transaction->transaction_id,
+                'payment_intent_id' => $paymentIntent->id,
+                'status' => $paymentIntent->status,
+                'amount' => $paymentIntent->amount,
+                'currency' => $paymentIntent->currency,
+            ]);
+            
+            return $result;
         } catch (ApiErrorException $e) {
             Log::error('Failed to process Stripe payment', [
                 'transaction_id' => $transaction->transaction_id,
+                'external_id' => $transaction->external_id,
                 'error' => $e->getMessage()
             ]);
             
@@ -398,11 +409,21 @@ class StripeService implements PaymentServiceInterface
      */
     public function getFrontendConfig(): array
     {
-        return [
+        $config = [
             'provider' => $this->getProviderName(),
             'publishable_key' => $this->getPublishableKey(),
             'currency' => strtoupper($this->currency),
         ];
+
+        // Log configuration for debugging
+        Log::info('Stripe frontend configuration', [
+            'provider' => $config['provider'],
+            'has_publishable_key' => !empty($config['publishable_key']),
+            'publishable_key_prefix' => substr($config['publishable_key'], 0, 12),
+            'currency' => $config['currency'],
+        ]);
+
+        return $config;
     }
 
     /**
