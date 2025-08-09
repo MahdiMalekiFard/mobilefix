@@ -6,19 +6,22 @@ namespace App\Livewire\Admin\Pages\Address;
 
 use App\Helpers\PowerGridHelper;
 use App\Models\Address;
+use App\Enums\BooleanEnum;
 use App\Traits\PowerGridHelperTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Jenssegers\Agent\Agent;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
+use Mary\Traits\Toast;
 
 final class AddressTable extends PowerGridComponent
 {
-    use PowerGridHelperTrait;
+    use PowerGridHelperTrait, Toast;
     public string $tableName = 'index_address_datatable';
     public string $sortDirection = 'desc';
 
@@ -112,10 +115,16 @@ final class AddressTable extends PowerGridComponent
 
     public function actions(Address $row): array
     {
-        return [
+        $actions = [
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
         ];
+
+        if (!$row->is_default->value) {
+            $actions[] = PowerGridHelper::btnMakeDefault($row);
+        }
+
+        return $actions;
     }
 
     public function noDataLabel(): string|View
@@ -123,6 +132,25 @@ final class AddressTable extends PowerGridComponent
         return view('admin.datatable-shared.empty-table',[
             'link'=>route('admin.address.create')
         ]);
+    }
+
+    #[On('make-default')]
+    public function makeDefault($rowId): void
+    {
+        try {
+            // First, set all addresses to not default
+            Address::query()->update(['is_default' => BooleanEnum::DISABLE->value]);
+            
+            // Then set the selected one as default
+            $address = Address::findOrFail($rowId);
+            $address->update(['is_default' => BooleanEnum::ENABLE->value]);
+            
+            $this->dispatch('pg:eventRefresh-' . $this->tableName);
+            
+            $this->success(trans('general.model_has_set_default_successfully', ['model' => trans('address.model')]));
+        } catch (\Exception $e) {
+            $this->error(trans('general.model_has_set_default_failed', ['model' => trans('address.model')]));
+        }
     }
 
 }
