@@ -20,6 +20,8 @@ return [
     ],
     'disable'                 => 'Disable',
     'enable'                  => 'Enable',
+    'yes'                     => 'Yes',
+    'no'                      => 'No',
     'number' => [
         'num_0' => 'none',
         'num_1' => '1',

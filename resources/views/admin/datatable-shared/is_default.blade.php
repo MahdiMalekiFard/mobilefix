@@ -7,6 +7,6 @@
             class="h-3.5 w-3.5 stroke-[1.7]"
     />
     <div class="ms-1.5 whitespace-nowrap">
-        {{ $row->is_default->title() }}
+        {{ $row->is_default->title2() }}
     </div>
 </div>

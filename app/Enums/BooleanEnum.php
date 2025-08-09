@@ -32,6 +32,14 @@ enum BooleanEnum: int
         };
     }
 
+    public function title2(): string
+    {
+        return match ($this) {
+            self::DISABLE => __('core.no'),
+            self::ENABLE  => __('core.yes'),
+        };
+    }
+
     public function toArray(): array
     {
         return [
