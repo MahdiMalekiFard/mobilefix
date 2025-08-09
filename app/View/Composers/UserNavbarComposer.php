@@ -24,6 +24,14 @@ class UserNavbarComposer
                 'params'     => [],
                 'exact'      => true,
             ],
+            [
+                'icon'       => 's-map-pin',
+                'title'      => trans('_menu.my_address'),
+                'route_name' => 'user.address.index',
+                'access'     => true,
+                'params'     => [],
+                'exact'      => true,
+            ],
         ]);
     }
 }

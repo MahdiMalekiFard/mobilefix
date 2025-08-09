@@ -15,16 +15,16 @@ class AddressUpdateOrCreate extends Component
 
     public Address   $model;
     public string $title       = '';
-    public string $description = '';
-    public bool   $published   = false;
+    public string $address     = '';
+    public bool   $is_default  = false;
 
     public function mount(Address $address): void
     {
         $this->model = $address;
         if ($this->model->id) {
             $this->title = $this->model->title;
-            $this->description = $this->model->description;
-            $this->published = $this->model->published->value;
+            $this->address = $this->model->address;
+            $this->is_default = $this->model->is_default->value;
         }
     }
 
@@ -32,8 +32,8 @@ class AddressUpdateOrCreate extends Component
     {
         return [
             'title'       => 'required|string',
-            'description' => 'required|string',
-            'published'   => 'required'
+            'address'     => 'required|string',
+            'is_default'  => 'required'
         ];
     }
 

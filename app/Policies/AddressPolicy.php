@@ -18,22 +18,22 @@ class AddressPolicy
 
     public function view(User $user, Address $address): bool
     {
-        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Show'));
+        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Show')) || $user->id === $address->user_id;
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Store'));
+        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Store')) || $user->id === $address->user_id;
     }
 
     public function update(User $user, Address $address): bool
     {
-        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Update'));
+        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Update')) || $user->id === $address->user_id;
     }
 
     public function delete(User $user, Address $address): bool
     {
-        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Delete'));
+        return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Delete')) || $user->id === $address->user_id;
     }
 
     public function restore(User $user, Address $address): bool

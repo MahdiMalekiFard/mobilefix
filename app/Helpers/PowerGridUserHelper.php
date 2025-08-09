@@ -52,6 +52,11 @@ class PowerGridUserHelper
         return "<i class='fa {$on} {$class}'></i>";
     }
 
+    public static function iconMakeDefault(string $class = 'text-warning'): string
+    {
+        return "<i class='fa fa-star {$class}'></i>";
+    }
+
     /** Public Powergrid Buttons -------------------------------------------------------------------------- */
     public static function btnShow(mixed $row)
     {
@@ -75,7 +80,6 @@ class PowerGridUserHelper
                      ->attributes([
                          'class' => 'btn btn-square md:btn-sm btn-xs',
                      ])
-                     ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Update')))
                      ->route("user.{$param}.edit", [Str::camel(StringHelper::basename($row::class)) => $row->id], '_self')
                      ->navigate()
                      ->tooltip(trans('datatable.buttons.edit'));
@@ -110,7 +114,6 @@ class PowerGridUserHelper
                          'wire:confirm' => trans('general.are_you_shure_to_delete_record'),
                          'class'        => 'btn btn-square md:btn-sm btn-xs',
                      ])
-                     ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Delete')))
                      ->dispatch('force-delete', ['rowId' => $row->id])
                      ->tooltip(trans('datatable.buttons.delete'));
     }
@@ -130,11 +133,30 @@ class PowerGridUserHelper
             ->tooltip(trans('order.actions.pay'));
     }
 
+    public static function btnMakeDefault(mixed $row)
+    {
+        return Button::add('make-default')
+                     ->slot(self::iconMakeDefault())
+                     ->attributes([
+                         'class' => 'btn btn-square md:btn-sm btn-xs',
+                     ])
+                     ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Update')))
+                     ->dispatch('make-default', ['rowId' => $row->id])
+                     ->tooltip(trans('datatable.buttons.set_default'));
+    }
+
     /** Public Powergrid Fields -------------------------------------------------------------------------- */
     public static function fieldPublishedAtFormated($row): View
     {
         //        return $row->published->title();
         return view('admin.datatable-shared.published', [
+            'row' => $row,
+        ]);
+    }
+
+    public static function fieldIsDefaultFormated($row): View
+    {
+        return view('admin.datatable-shared.is_default', [
             'row' => $row,
         ]);
     }
@@ -279,6 +301,16 @@ class PowerGridUserHelper
     public static function columnCommentCount(string $field = 'comment_count', string $dataField = 'comment_count'): Column
     {
         return Column::make(trans('datatable.comment_count'), $field, $dataField);
+    }
+
+    public static function columnIsDefault(string $field = 'is_default_formated', string $dataField = 'is_default'): Column
+    {
+        return Column::make(trans('datatable.is_default'), $field, $dataField)
+                     ->sortable()
+                     ->headerAttribute(
+                         '',
+                         'width:0!important'
+                     );
     }
 
     public static function columnAction(): Column
