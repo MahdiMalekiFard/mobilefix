@@ -28,6 +28,9 @@ return [
     'model_has_retrieved_successfully' => ':model was successfully retrieved',
     'model_has_Failed_to_store'        => ':model failed to store',
     'model_has_not_set'                => 'Model is not defined.',
+    'model_has_updated_failed'         => ':model update failed. Please report the issue',
+    'model_has_set_default_successfully' => ':model was successfully set as default',
+    'model_has_set_default_failed' => ':model set default failed. Please report the issue',
 
     'store_success'                    => ':model was successfully created',
     'store_failed'                     => ':model creation failed. Please report the issue',

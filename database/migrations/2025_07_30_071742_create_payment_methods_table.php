@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('languages')->nullable();
             $table->string('provider')->default(PaymentProviderEnum::STRIPE->value);
             $table->boolean('published')->default(BooleanEnum::ENABLE->value);
+            $table->boolean('is_default')->default(BooleanEnum::DISABLE->value);
             $table->schemalessAttributes('config');
 
             $table->softDeletes();

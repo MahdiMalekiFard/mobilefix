@@ -23,11 +23,13 @@ class PaymentMethod extends Model
         'languages',
         'provider',
         'published',
+        'is_default',
         'config',
     ];
 
     protected $casts = [
         'published' => BooleanEnum::class,
+        'is_default' => BooleanEnum::class,
         'languages' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

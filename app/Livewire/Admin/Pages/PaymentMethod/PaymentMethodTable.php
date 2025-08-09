@@ -11,6 +11,8 @@ use App\Traits\PowerGridHelperTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Mary\Traits\Toast;
 use Jenssegers\Agent\Agent;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
@@ -19,7 +21,7 @@ use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class PaymentMethodTable extends PowerGridComponent
 {
-    use PowerGridHelperTrait;
+    use PowerGridHelperTrait, Toast;
     public string $tableName = 'index_paymentMethod_datatable';
     public string $sortDirection = 'desc';
 
@@ -36,7 +38,7 @@ final class PaymentMethodTable extends PowerGridComponent
     public function breadcrumbsActions(): array
     {
         return [
-            ['link' => route('admin.payment-method.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('paymentMethod.model')])],
+            // Payment method page doesn't need a create action
         ];
     }
 
@@ -85,6 +87,7 @@ final class PaymentMethodTable extends PowerGridComponent
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
             ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
+            ->add('is_default_formated', fn ($row) => PowerGridHelper::fieldIsDefaultFormated($row))
             ->add('created_at_formatted', fn ($row) => $row->created_at->format('Y-m-d H:i:s'));
     }
 
@@ -94,6 +97,7 @@ final class PaymentMethodTable extends PowerGridComponent
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle(),
             PowerGridHelper::columnPublished(),
+            PowerGridHelper::columnIsDefault(),
             PowerGridHelper::columnCreatedAT(),
             PowerGridHelper::columnAction(),
         ];
@@ -114,18 +118,44 @@ final class PaymentMethodTable extends PowerGridComponent
 
     public function actions(PaymentMethod $row): array
     {
-        return [
+        $actions = [
             PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
         ];
+
+        // Only show make default button if this payment method is not already default
+        if (!$row->is_default->value) {
+            $actions[] = PowerGridHelper::btnMakeDefault($row);
+        }
+
+        return $actions;
     }
 
     public function noDataLabel(): string|View
     {
         return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.payment-method.create')
+            'link'=>null
         ]);
+    }
+
+    #[On('make-default')]
+    public function makeDefault($rowId): void
+    {
+        try {
+            // First, set all payment methods to not default
+            PaymentMethod::query()->update(['is_default' => BooleanEnum::DISABLE->value]);
+            
+            // Then set the selected one as default
+            $paymentMethod = PaymentMethod::findOrFail($rowId);
+            $paymentMethod->update(['is_default' => BooleanEnum::ENABLE->value]);
+            
+            $this->dispatch('pg:eventRefresh-' . $this->tableName);
+            
+            $this->success(trans('general.model_has_set_default_successfully', ['model' => trans('paymentMethod.model')]));
+        } catch (\Exception $e) {
+            $this->error(trans('general.model_has_set_default_failed', ['model' => trans('paymentMethod.model')]));
+        }
     }
 
 }

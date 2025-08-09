@@ -40,6 +40,11 @@ class PowerGridHelper
         return "<i class='fa fa-trash {$class}'></i>";
     }
 
+    public static function iconMakeDefault(string $class = 'text-warning'): string
+    {
+        return "<i class='fa fa-star {$class}'></i>";
+    }
+
     public static function iconShow(string $class = 'text-info'): string
     {
         return "<i class='fa fa-eye {$class}'></i>";
@@ -129,6 +134,20 @@ class PowerGridHelper
                      ->dispatch('force-delete', ['rowId' => $row->id])
                      ->tooltip(trans('datatable.buttons.delete'));
     }
+
+    public static function btnMakeDefault(mixed $row)
+    {
+        return Button::add('make-default')
+                     ->slot(self::iconMakeDefault())
+                     ->attributes([
+                         'class' => 'btn btn-square md:btn-sm btn-xs',
+                     ])
+                     ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Update')))
+                     ->dispatch('make-default', ['rowId' => $row->id])
+                     ->tooltip(trans('datatable.buttons.set_default'));
+    }
+
+    
 
     /** Public Powergrid Fields -------------------------------------------------------------------------- */
     public static function fieldPublishedAtFormated($row): View
