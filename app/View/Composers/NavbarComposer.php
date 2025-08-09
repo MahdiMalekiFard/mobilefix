@@ -6,6 +6,9 @@ namespace App\View\Composers;
     
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\Address;
+use App\Models\PaymentMethod;
+use App\Models\Order;
 use App\Models\User;
 use App\Services\Permissions\PermissionsService;
 use Illuminate\View\View;
@@ -124,6 +127,18 @@ class NavbarComposer
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Order::class, 'Index')),
                     ]
                 ],
+            ],
+            [
+                'icon'       => 's-credit-card',
+                'title'      => trans('_menu.payment_method_management'),
+                'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(PaymentMethod::class, 'Store', 'Index')),
+                'route_name' => 'admin.payment-method.index',
+            ],
+            [
+                'icon'       => 's-map-pin',
+                'title'      => trans('_menu.address_management'),
+                'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Store', 'Index')),
+                'route_name' => 'admin.address.index',
             ],
             // [
             //     'icon'     => 's-tag',

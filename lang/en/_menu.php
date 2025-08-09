@@ -155,4 +155,16 @@ return [
         'all'    => 'All Orders',
         'create' => 'Create Order',
     ],
+
+    'payment_method_management' => 'Payment Methods',
+    'payment_method'            => [
+        'all'    => 'All Payment Methods',
+        'create' => 'Create Payment Method',
+    ],
+
+    'address_management'       => 'Address management',
+    'address'                  => [
+        'all'    => 'All Addresses',
+        'create' => 'Create Address',
+    ],
 ];

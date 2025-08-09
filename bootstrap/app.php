@@ -22,5 +22,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'user.dashboard' => UserDashboardMiddleware::class,
             'cors' => Cors::class,
         ]);
+        
+        // Exclude payment webhooks from CSRF protection
+        $middleware->validateCsrfTokens(except: [
+            'stripe/webhook',
+            'paypal/webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {})->create();

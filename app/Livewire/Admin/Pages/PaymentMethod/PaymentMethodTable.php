@@ -36,8 +36,13 @@ final class PaymentMethodTable extends PowerGridComponent
     public function breadcrumbsActions(): array
     {
         return [
-            ['link' => route('admin.paymentMethod.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('paymentMethod.model')])],
+            ['link' => route('admin.payment-method.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('paymentMethod.model')])],
         ];
+    }
+
+    public function boot(): void
+    {
+        config(['livewire-powergrid.filter' => 'outside']);
     }
 
     public function setUp(): array
@@ -80,7 +85,7 @@ final class PaymentMethodTable extends PowerGridComponent
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
             ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('created_at_formatted', fn ($row) => $row->created_at->format('Y-m-d H:i:s'));
     }
 
     public function columns(): array
@@ -110,7 +115,6 @@ final class PaymentMethodTable extends PowerGridComponent
     public function actions(PaymentMethod $row): array
     {
         return [
-            PowerGridHelper::btnTranslate($row),
             PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
@@ -120,7 +124,7 @@ final class PaymentMethodTable extends PowerGridComponent
     public function noDataLabel(): string|View
     {
         return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.paymentMethod.create')
+            'link'=>route('admin.payment-method.create')
         ]);
     }
 

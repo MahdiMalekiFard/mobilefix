@@ -89,6 +89,26 @@ class Order extends Model implements HasMedia
     {
         return $this->belongsToMany(Problem::class)->withTimestamps();
     }
+    
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+    
+    public function successfulTransactions()
+    {
+        return $this->hasMany(Transaction::class)->successful();
+    }
+    
+    public function pendingTransactions()
+    {
+        return $this->hasMany(Transaction::class)->pending();
+    }
+    
+    public function latestTransaction()
+    {
+        return $this->hasOne(Transaction::class)->latest();
+    }
 
 
     /**

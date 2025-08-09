@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Admin\Pages\Address;
+namespace App\Livewire\Admin\Pages\Transaction;
 
+use App\Enums\BooleanEnum;
 use App\Helpers\PowerGridHelper;
-use App\Models\Address;
+use App\Models\Transaction;
 use App\Traits\PowerGridHelperTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
@@ -16,10 +17,10 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
-final class AddressTable extends PowerGridComponent
+final class TransactionTable extends PowerGridComponent
 {
     use PowerGridHelperTrait;
-    public string $tableName = 'index_address_datatable';
+    public string $tableName = 'index_transaction_datatable';
     public string $sortDirection = 'desc';
 
     #[Computed(persist: true)]
@@ -27,7 +28,7 @@ final class AddressTable extends PowerGridComponent
     {
         return [
             ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-            ['label' => trans('general.page.index.title', ['model' => trans('address.model')])],
+            ['label' => trans('general.page.index.title', ['model' => trans('transaction.model')])],
         ];
     }
 
@@ -35,13 +36,8 @@ final class AddressTable extends PowerGridComponent
     public function breadcrumbsActions(): array
     {
         return [
-            ['link' => route('admin.address.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('address.model')])],
+            ['link' => route('admin.transaction.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('transaction.model')])],
         ];
-    }
-
-    public function boot(): void
-    {
-        config(['livewire-powergrid.filter' => 'outside']);
     }
 
     public function setUp(): array
@@ -66,7 +62,7 @@ final class AddressTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Address::query();
+        return Transaction::query();
     }
 
     public function relationSearch(): array
@@ -83,19 +79,17 @@ final class AddressTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('is_default_formated', fn ($row) => PowerGridHelper::fieldIsDefaultFormated($row))
-            ->add('user_name', fn ($row) => PowerGridHelper::fieldUserName($row))
-            ->add('created_at_formatted', fn ($row) => $row->created_at->format('Y-m-d H:i:s'));
+            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
+            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
     }
 
     public function columns(): array
     {
         return [
             PowerGridHelper::columnId(),
-            PowerGridHelper::columnUserName(),
             PowerGridHelper::columnTitle(),
+            PowerGridHelper::columnPublished(),
             PowerGridHelper::columnCreatedAT(),
-            PowerGridHelper::columnIsDefault(),  
             PowerGridHelper::columnAction(),
         ];
     }
@@ -103,6 +97,9 @@ final class AddressTable extends PowerGridComponent
     public function filters(): array
     {
         return [
+            Filter::enumSelect('published_formated', 'published')
+                  ->datasource(BooleanEnum::cases()),
+
             Filter::datepicker('created_at_formatted', 'created_at')
                   ->params([
                       'maxDate' => now(),
@@ -110,9 +107,11 @@ final class AddressTable extends PowerGridComponent
         ];
     }
 
-    public function actions(Address $row): array
+    public function actions(Transaction $row): array
     {
         return [
+            PowerGridHelper::btnTranslate($row),
+            PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
         ];
@@ -121,7 +120,7 @@ final class AddressTable extends PowerGridComponent
     public function noDataLabel(): string|View
     {
         return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.address.create')
+            'link'=>route('admin.transaction.create')
         ]);
     }
 

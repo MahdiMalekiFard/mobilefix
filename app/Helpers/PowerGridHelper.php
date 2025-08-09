@@ -139,6 +139,13 @@ class PowerGridHelper
         ]);
     }
 
+    public static function fieldIsDefaultFormated($row): View
+    {
+        return view('admin.datatable-shared.is_default', [
+            'row' => $row,
+        ]);
+    }
+
     public static function fieldFormated($row, $field = 'default', $icon = ['yes' => '', 'no' => '']): View
     {
         return view('admin.datatable-shared.field-formated', [
@@ -237,6 +244,16 @@ class PowerGridHelper
     public static function columnPublished(string $field = 'published_formated', string $dataField = 'published'): Column
     {
         return Column::make(trans('datatable.status'), $field, $dataField)
+                     ->sortable()
+                     ->headerAttribute(
+                         '',
+                         'width:0!important'
+                     );
+    }
+
+    public static function columnIsDefault(string $field = 'is_default_formated', string $dataField = 'is_default'): Column
+    {
+        return Column::make(trans('datatable.is_default'), $field, $dataField)
                      ->sortable()
                      ->headerAttribute(
                          '',

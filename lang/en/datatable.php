@@ -81,4 +81,5 @@ return [
     'company'                 => 'Company Name',
     'full_name'               => 'Full Name',
     'follow_up'               => 'Followed Up',
+    'is_default'              => 'Is Default',
 ];

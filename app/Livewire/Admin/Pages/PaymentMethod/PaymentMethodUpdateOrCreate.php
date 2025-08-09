@@ -44,13 +44,13 @@ class PaymentMethodUpdateOrCreate extends Component
             UpdatePaymentMethodAction::run($this->model, $payload);
             $this->success(
                 title: trans('general.model_has_updated_successfully', ['model' => trans('paymentMethod.model')]),
-                redirectTo: route('admin.paymentMethod.index')
+                redirectTo: route('admin.payment-method.index')
             );
         } else {
             StorePaymentMethodAction::run($payload);
             $this->success(
                 title: trans('general.model_has_stored_successfully', ['model' => trans('paymentMethod.model')]),
-                redirectTo: route('admin.paymentMethod.index')
+                redirectTo: route('admin.payment-method.index')
             );
         }
     }
@@ -61,11 +61,11 @@ class PaymentMethodUpdateOrCreate extends Component
             'edit_mode'          => $this->model->id,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.paymentMethod.index'), 'label' => trans('general.page.index.title', ['model' => trans('paymentMethod.model')])],
+                ['link' => route('admin.payment-method.index'), 'label' => trans('general.page.index.title', ['model' => trans('paymentMethod.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('paymentMethod.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.paymentMethod.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.payment-method.index'), 'icon' => 's-arrow-left']
             ],
         ]);
     }

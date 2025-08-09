@@ -16,9 +16,23 @@ use App\Livewire\User\Auth\UserLoginPage;
 use App\Livewire\User\Pages\Dashboard\UserDashboardIndex;
 use App\Livewire\User\Pages\Setting\UserSettingList;
 use App\Livewire\User\Pages\Order\UserOrderList;
+use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomePage::class)->name('home-page');
+
+// Payment webhooks and callbacks (must be before auth middleware)
+Route::post('/stripe/webhook', [WebhookController::class, 'handleStripe'])->name('stripe.webhook');
+Route::post('/paypal/webhook', [WebhookController::class, 'handlePayPal'])->name('paypal.webhook');
+
+// PayPal return URLs
+Route::get('/payment/paypal/success', function () {
+    return redirect()->route('user.dashboard')->with('success', 'Payment completed successfully!');
+})->name('payment.paypal.success');
+
+Route::get('/payment/paypal/cancel', function () {
+    return redirect()->route('user.dashboard')->with('error', 'Payment was cancelled.');
+})->name('payment.paypal.cancel');
 
 // auth
 Route::get('user/auth/login', UserLoginPage::class)->name('user.auth.login');

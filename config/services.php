@@ -38,6 +38,16 @@ return [
     'stripe' => [
         'secret' => env('STRIPE_SECRET'),
         'public' => env('STRIPE_PUBLIC'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'currency' => env('STRIPE_CURRENCY', 'usd'),
+    ],
+
+    'paypal' => [
+        'client_id' => env('PAYPAL_CLIENT_ID'),
+        'client_secret' => env('PAYPAL_CLIENT_SECRET'),
+        'webhook_id' => env('PAYPAL_WEBHOOK_ID'),
+        'currency' => env('PAYPAL_CURRENCY', 'USD'),
+        'sandbox' => env('PAYPAL_SANDBOX', true),
     ],
 
 ];

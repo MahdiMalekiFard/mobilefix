@@ -18,6 +18,7 @@ class FakeSeeder extends Seeder
             BrandSeeder::class,
             PaymentMethodSeeder::class,
             ProblemSeeder::class,
+            AddressSeeder::class,
         ]);
     }
 }
