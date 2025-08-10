@@ -219,13 +219,7 @@ class StripeService implements PaymentServiceInterface
                 'status' => $paymentIntent->status,
             ];
 
-            Log::info('Stripe payment processing result', [
-                'transaction_id' => $transaction->transaction_id,
-                'payment_intent_id' => $paymentIntent->id,
-                'status' => $paymentIntent->status,
-                'amount' => $paymentIntent->amount,
-                'currency' => $paymentIntent->currency,
-            ]);
+
             
             return $result;
         } catch (ApiErrorException $e) {
@@ -306,11 +300,7 @@ class StripeService implements PaymentServiceInterface
                 'status' => \App\Enums\OrderStatusEnum::PAID->value,
             ]);
 
-            Log::info('Order payment completed via transaction', [
-                'order_id' => $order->id,
-                'transaction_id' => $transaction->transaction_id,
-                'payment_intent_id' => $gatewayResponse['id'] ?? null
-            ]);
+
         }
     }
 
@@ -415,13 +405,7 @@ class StripeService implements PaymentServiceInterface
             'currency' => strtoupper($this->currency),
         ];
 
-        // Log configuration for debugging
-        Log::info('Stripe frontend configuration', [
-            'provider' => $config['provider'],
-            'has_publishable_key' => !empty($config['publishable_key']),
-            'publishable_key_prefix' => substr($config['publishable_key'], 0, 12),
-            'currency' => $config['currency'],
-        ]);
+
 
         return $config;
     }

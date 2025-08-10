@@ -9,7 +9,6 @@ use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentProviderEnum;
 use App\Enums\TransactionStatusEnum;
 use Livewire\Component;
-use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Log;
 
 class UserOrderPay extends Component
@@ -151,7 +150,6 @@ class UserOrderPay extends Component
         }
     }
 
-    #[On('payment-succeeded')]
     public function handlePaymentSuccess($externalId, $provider = null)
     {
         // Prevent duplicate processing
@@ -160,13 +158,6 @@ class UserOrderPay extends Component
         }
         
         $this->isProcessing = true;
-        
-        Log::info('Processing payment success', [
-            'order_id' => $this->order?->id,
-            'external_id' => $externalId,
-            'provider' => $provider,
-            'transaction_id' => $this->currentTransaction?->transaction_id
-        ]);
         
         try {
             if (!$this->currentTransaction) {
@@ -195,10 +186,7 @@ class UserOrderPay extends Component
                 
                 session()->flash('success', 'Payment completed successfully!');
                 
-                Log::info('Payment completed successfully, redirecting to order page', [
-                    'order_id' => $this->order->id,
-                    'transaction_id' => $this->currentTransaction->transaction_id
-                ]);
+
                 
                 // Use redirectRoute to avoid Livewire routing conflicts
                 $this->redirectRoute('user.order.show', ['order' => $this->order->id], navigate: true);
@@ -218,17 +206,20 @@ class UserOrderPay extends Component
         $this->isProcessing = false;
     }
 
-    #[On('payment-failed')]
-    public function handlePaymentFailure($error, $provider = null)
+    public function handlePaymentFailure($message, $type = null, $code = null, $provider = null)
     {
         $this->isProcessing = false;
         $this->paymentStatus = 'failed';
-        $this->errorMessage = $error['message'] ?? 'Payment failed. Please try again.';
+        $this->errorMessage = $message;
         
         if ($this->currentTransaction) {
             try {
                 $paymentService = PaymentServiceFactory::create($this->currentTransaction->payment_provider);
-                $paymentService->handleFailedPayment($this->currentTransaction, $error);
+                $paymentService->handleFailedPayment($this->currentTransaction, [
+                    'message' => $message,
+                    'type' => $type,
+                    'code' => $code
+                ]);
             } catch (\Exception $e) {
                 Log::error('Error handling payment failure', [
                     'transaction_id' => $this->currentTransaction->transaction_id,
@@ -240,7 +231,11 @@ class UserOrderPay extends Component
         Log::warning('Payment failed on frontend', [
             'order_id' => $this->order->id,
             'transaction_id' => $this->currentTransaction?->transaction_id,
-            'error' => $error
+            'error' => [
+                'message' => $message,
+                'type' => $type,
+                'code' => $code
+            ]
         ]);
     }
 
@@ -250,6 +245,15 @@ class UserOrderPay extends Component
         $this->paymentStatus = 'pending';
         $this->currentTransaction = null;
         $this->createPaymentTransaction();
+    }
+
+    public function processPayment()
+    {
+        // This method can be called via wire:click for simple payment processing
+        // For now, it just ensures the transaction is ready
+        if (!$this->currentTransaction) {
+            $this->createPaymentTransaction();
+        }
     }
 
     public function getPaymentData()
