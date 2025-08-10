@@ -4,6 +4,7 @@ namespace App\Livewire\User\Pages\Order;
 
 use App\Models\Order;
 use App\Models\Transaction;
+use App\Models\Address;
 use App\Services\Payment\PaymentServiceFactory;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentProviderEnum;
@@ -21,6 +22,17 @@ class UserOrderPay extends Component
     public string $paymentStatus = 'pending';
     public string $errorMessage = '';
     public bool $isProcessing = false;
+    
+    // Multi-step checkout properties
+    public int $currentStep = 1;
+    public array $steps = [
+        1 => 'address',
+        2 => 'payment',
+        3 => 'confirm'
+    ];
+    public ?Address $selectedAddress = null;
+    public array $userAddresses = [];
+    public bool $showPaymentModal = false;
 
     protected $rules = [
         'order' => 'required|exists:orders,id',
@@ -30,8 +42,10 @@ class UserOrderPay extends Component
     {
         if ($order) {
             $this->loadOrder($order->id);
+            $this->loadUserAddresses();
             $this->initializePaymentProviders();
             $this->checkExistingTransaction();
+            $this->determineInitialStep();
         }
     }
 
@@ -61,6 +75,45 @@ class UserOrderPay extends Component
             $this->errorMessage = 'This order has already been paid.';
             return;
         }
+    }
+
+    public function loadUserAddresses()
+    {
+        $this->userAddresses = Address::where('user_id', auth()->id())
+            ->orderBy('is_default', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->toArray();
+            
+        // Auto-select the default address if available
+        $defaultAddress = collect($this->userAddresses)->where('is_default', 1)->first();
+        if ($defaultAddress) {
+            $this->selectedAddress = Address::find($defaultAddress['id']);
+        }
+    }
+    
+    public function determineInitialStep()
+    {
+        // If user has no addresses, start at step 1 (address)
+        if (empty($this->userAddresses)) {
+            $this->currentStep = 1;
+            return;
+        }
+        
+        // If no address is selected, start at step 1
+        if (!$this->selectedAddress) {
+            $this->currentStep = 1;
+            return;
+        }
+        
+        // If address is selected but no payment provider, go to step 2
+        if (!$this->selectedProvider) {
+            $this->currentStep = 2;
+            return;
+        }
+        
+        // If everything is ready, go to step 3
+        $this->currentStep = 3;
     }
 
     public function initializePaymentProviders()
@@ -254,6 +307,116 @@ class UserOrderPay extends Component
         if (!$this->currentTransaction) {
             $this->createPaymentTransaction();
         }
+    }
+    
+    // Multi-step checkout methods
+    public function selectAddress($addressId)
+    {
+        $this->selectedAddress = Address::where('user_id', auth()->id())
+            ->where('id', $addressId)
+            ->first();
+            
+        if (!$this->selectedAddress) {
+            $this->errorMessage = 'Address not found or access denied.';
+            return;
+        }
+        
+        $this->errorMessage = '';
+    }
+    
+    public function continueToPayment()
+    {
+        if (!$this->selectedAddress) {
+            $this->errorMessage = 'Please select an address to continue.';
+            return;
+        }
+        
+        $this->currentStep = 2;
+        $this->errorMessage = '';
+    }
+    
+    public function selectPaymentProvider($provider)
+    {
+        $this->selectProvider($provider);
+        if (!$this->errorMessage) {
+            $this->currentStep = 3;
+        }
+    }
+    
+    public function openPaymentModal()
+    {
+        if (!$this->selectedAddress) {
+            $this->errorMessage = 'Please select an address first.';
+            return;
+        }
+        
+        if (!$this->selectedProvider) {
+            $this->errorMessage = 'Please select a payment method first.';
+            return;
+        }
+        
+        if (!$this->currentTransaction) {
+            $this->createPaymentTransaction();
+        }
+        
+        $this->showPaymentModal = true;
+        $this->errorMessage = '';
+    }
+    
+    public function closePaymentModal()
+    {
+        $this->showPaymentModal = false;
+    }
+    
+    public function goToStep($step)
+    {
+        if ($step < 1 || $step > 3) {
+            return;
+        }
+        
+        // Validate previous steps before allowing navigation
+        if ($step >= 2 && !$this->selectedAddress) {
+            $this->errorMessage = 'Please select an address first.';
+            return;
+        }
+        
+        if ($step >= 3 && !$this->selectedProvider) {
+            $this->errorMessage = 'Please select a payment method first.';
+            return;
+        }
+        
+        $this->currentStep = $step;
+        $this->errorMessage = '';
+    }
+    
+    public function getStepTitle($step)
+    {
+        return match($step) {
+            1 => 'Select Address',
+            2 => 'Choose Payment Method', 
+            3 => 'Review & Pay',
+            default => 'Step ' . $step
+        };
+    }
+    
+    public function isStepCompleted($step)
+    {
+        return match($step) {
+            1 => !is_null($this->selectedAddress),
+            2 => !is_null($this->selectedProvider),
+            3 => $this->paymentStatus === 'completed',
+            default => false
+        };
+    }
+    
+    public function isStepAccessible($step)
+    {
+        return match($step) {
+            1 => true,
+            2 => !is_null($this->selectedAddress),
+            3 => !is_null($this->selectedAddress) && !is_null($this->selectedProvider),
+            default => false
+        };
     }
 
     public function getPaymentData()

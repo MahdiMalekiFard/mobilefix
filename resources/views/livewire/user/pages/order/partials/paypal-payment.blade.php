@@ -1,13 +1,11 @@
-<div class="card">
+<div class="paypal-payment-modal-content">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">
             <i class="fab fa-paypal me-2"></i> PayPal Payment
         </h5>
-        @if(count($availableProviders) > 1)
-            <button type="button" class="btn btn-sm btn-outline-secondary" wire:click="$set('selectedProvider', '')">
-                <i class="fas fa-arrow-left"></i> Change Method
-            </button>
-        @endif
+        <button type="button" class="btn btn-sm btn-outline-secondary" wire:click="closePaymentModal">
+            <i class="fas fa-times"></i> Close
+        </button>
     </div>
     <div class="card-body">
         @if($paymentData && $paymentData['success'])

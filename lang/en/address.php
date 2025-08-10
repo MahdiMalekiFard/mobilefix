@@ -14,4 +14,7 @@ return [
     ],
     'page'          => [
     ],
+    'title'         => 'Address Title',
+    'address'       => 'Address',
+    'is_default'    => 'Default Address',
 ];

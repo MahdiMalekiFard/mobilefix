@@ -8,6 +8,9 @@ return [
     ],
     'validations'   => [
     ],
+    'actions'       => [
+        'pay' => 'پرداخت',
+    ],
     'enum'          => [
     ],
     'notifications' => [

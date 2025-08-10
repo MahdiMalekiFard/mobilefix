@@ -47,7 +47,7 @@ class UserAddressUpdateOrCreate extends Component
                 redirectTo: route('user.address.index')
             );
         } else {
-            StoreAddressAction::run($payload);
+            StoreAddressAction::run(array_merge($payload, ['user_id' => auth()->id()]));
             $this->success(
                 title: trans('general.model_has_stored_successfully', ['model' => trans('address.model')]),
                 redirectTo: route('user.address.index')

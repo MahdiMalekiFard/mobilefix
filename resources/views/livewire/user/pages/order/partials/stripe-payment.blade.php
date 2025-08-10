@@ -1,4 +1,4 @@
-<div class="card stripe-payment-card shadow-lg border-0">
+<div class="stripe-payment-modal-content">
     <div class="card-header stripe-payment-header">
         <div class="header-background"></div>
         <div class="header-content">
@@ -17,12 +17,10 @@
                         </div>
                     </div>
                 </div>
-                @if(count($availableProviders) > 1)
-                    <button type="button" class="btn btn-sm btn-outline-light change-method-btn" wire:click="$set('selectedProvider', '')">
-                        <i class="fas fa-arrow-left me-1"></i> 
-                        <span>Change Method</span>
-                    </button>
-                @endif
+                <button type="button" class="btn btn-sm btn-outline-light change-method-btn" wire:click="closePaymentModal">
+                    <i class="fas fa-times me-1"></i> 
+                    <span>Close</span>
+                </button>
             </div>
         </div>
     </div>

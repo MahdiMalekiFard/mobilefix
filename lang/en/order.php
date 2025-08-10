@@ -8,6 +8,9 @@ return [
     ],
     'validations'   => [
     ],
+    'actions'       => [
+        'pay' => 'Pay Now',
+    ],
     'enum'          => [
         'pending' => 'Under Review',
         'rejected' => 'Rejected',
