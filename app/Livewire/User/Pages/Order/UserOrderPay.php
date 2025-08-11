@@ -32,7 +32,7 @@ class UserOrderPay extends Component
     ];
     public ?Address $selectedAddress = null;
     public array $userAddresses = [];
-    public bool $showPaymentModal = false;
+
 
     protected $rules = [
         'order' => 'required|exists:orders,id',
@@ -343,30 +343,7 @@ class UserOrderPay extends Component
         }
     }
     
-    public function openPaymentModal()
-    {
-        if (!$this->selectedAddress) {
-            $this->errorMessage = 'Please select an address first.';
-            return;
-        }
-        
-        if (!$this->selectedProvider) {
-            $this->errorMessage = 'Please select a payment method first.';
-            return;
-        }
-        
-        if (!$this->currentTransaction) {
-            $this->createPaymentTransaction();
-        }
-        
-        $this->showPaymentModal = true;
-        $this->errorMessage = '';
-    }
-    
-    public function closePaymentModal()
-    {
-        $this->showPaymentModal = false;
-    }
+
     
     public function goToStep($step)
     {

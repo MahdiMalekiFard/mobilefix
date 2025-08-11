@@ -1,55 +1,8 @@
 <div class="stripe-payment-modal-content">
-    <div class="card-header stripe-payment-header">
-        <div class="header-background"></div>
-        <div class="header-content">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                    <div class="payment-brand-wrapper me-3">
-                        <div class="stripe-logo">
-                            <i class="fab fa-stripe"></i>
-                        </div>
-                    </div>
-                    <div class="payment-title">
-                        <h5 class="mb-0 fw-bold text-white">Secure Payment</h5>
-                        <div class="payment-subtitle">
-                            <i class="fas fa-shield-alt me-1"></i>
-                            <span>Powered by Stripe</span>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-sm btn-outline-light change-method-btn" wire:click="closePaymentModal">
-                    <i class="fas fa-times me-1"></i> 
-                    <span>Close</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    
     <div class="card-body p-4">
         @if($paymentData && $paymentData['success'])
             <!-- Payment Amount Display -->
-            <div class="payment-amount-display mb-4">
-                <div class="amount-card">
-                    <div class="amount-card-background"></div>
-                    <div class="amount-card-content">
-                        <div class="amount-icon">
-                            <i class="fas fa-credit-card"></i>
-                        </div>
-                        <div class="amount-details">
-                            <div class="amount-label">
-                                <i class="fas fa-tag me-1"></i>
-                                Total Payment
-                            </div>
-                            <div class="amount-value">
-                                ${{ number_format($order->total, 2) }}
-                            </div>
-                        </div>
-                        <div class="amount-badge">
-                            <span>Secure</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             <form id="stripe-payment-form">
                 <!-- Card Information Section -->
@@ -126,51 +79,6 @@
                     </button>
                 </div>
             </form>
-
-            <!-- Security Information -->
-            <div class="security-info-container">
-                <div class="security-header">
-                    <h6 class="security-title">
-                        <i class="fas fa-shield-check me-2"></i>
-                        Your Payment is Protected
-                    </h6>
-                </div>
-                <div class="security-features">
-                    <div class="security-feature">
-                        <div class="feature-icon ssl">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <div class="feature-content">
-                            <div class="feature-title">SSL Encrypted</div>
-                            <div class="feature-description">256-bit encryption</div>
-                        </div>
-                    </div>
-                    <div class="security-feature">
-                        <div class="feature-icon pci">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="feature-content">
-                            <div class="feature-title">PCI Compliant</div>
-                            <div class="feature-description">Industry standard</div>
-                        </div>
-                    </div>
-                    <div class="security-feature">
-                        <div class="feature-icon privacy">
-                            <i class="fas fa-user-shield"></i>
-                        </div>
-                        <div class="feature-content">
-                            <div class="feature-title">Data Protected</div>
-                            <div class="feature-description">Never stored locally</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="security-footer">
-                    <div class="security-badge">
-                        <i class="fas fa-check-circle me-2"></i>
-                        <span>Your payment information is secure and encrypted. We never store your card details.</span>
-                    </div>
-                </div>
-            </div>
         @else
             <div class="alert alert-danger border-0 rounded-3">
                 <div class="d-flex align-items-center">
