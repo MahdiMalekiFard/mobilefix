@@ -39,6 +39,10 @@ class UserOrderPay extends Component
         'order' => 'required|exists:orders,id',
     ];
 
+    protected $listeners = [
+        'addressAdded' => 'refreshAddresses'
+    ];
+
     public function mount($order = null)
     {
         if ($order) {
@@ -337,6 +341,21 @@ class UserOrderPay extends Component
         
         $this->currentStep = 2;
         $this->errorMessage = '';
+    }
+    
+    public function openAddressModal()
+    {
+        $this->dispatch('openAddressModal');
+    }
+    
+    public function refreshAddresses()
+    {
+        $this->loadUserAddresses();
+        
+        // If this was the first address added, auto-select it
+        if (count($this->userAddresses) === 1) {
+            $this->selectedAddress = Address::find($this->userAddresses[0]['id']);
+        }
     }
     
     public function selectPaymentProvider($provider)
