@@ -1,14 +1,14 @@
-<div class="container py-5">
+<div class="container mx-auto px-4 py-8">
     <!-- Error Messages -->
     @if($errorMessage)
-        <div class="alert alert-danger mb-4" role="alert">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-exclamation-triangle me-2"></i>
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6" role="alert">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-triangle text-red-400 mr-3"></i>
                 <div>
-                    <strong>Error:</strong> {{ $errorMessage }}
+                    <strong class="text-red-800">Error:</strong> <span class="text-red-700">{{ $errorMessage }}</span>
                     @if($paymentStatus === 'failed')
                         <div class="mt-2">
-                            <button wire:click="retryPayment" class="btn btn-sm btn-outline-primary">
+                            <button wire:click="retryPayment" class="inline-flex items-center gap-2 px-3 py-2 border border-blue-300 rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                                 <i class="fas fa-redo"></i> Retry Payment
                             </button>
                         </div>
@@ -36,12 +36,12 @@
         @if($paymentStatus === 'completed')
 
             <!-- Success State -->
-            <div class="card border-success">
-                <div class="card-body text-center py-5">
-                    <i class="fas fa-check-circle text-success fa-4x mb-3"></i>
-                    <h3 class="text-success">Payment Successful!</h3>
-                    <p class="text-muted">Your payment has been processed successfully.</p>
-                    <a href="{{ route('user.order.show', $order->id) }}" class="btn btn-success">
+            <div class="bg-white border border-green-200 rounded-lg shadow-lg">
+                <div class="p-8 text-center">
+                    <i class="fas fa-check-circle text-green-500 text-6xl mb-4"></i>
+                    <h3 class="text-green-700 text-2xl font-bold mb-2">Payment Successful!</h3>
+                    <p class="text-gray-600 mb-6">Your payment has been processed successfully.</p>
+                    <a href="{{ route('user.order.show', $order->id) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                         <i class="fas fa-eye"></i> View Order Details
                     </a>
                 </div>
@@ -65,157 +65,15 @@
 
     @else
         <!-- No Order State -->
-        <div class="card border-danger">
-            <div class="card-body text-center py-5">
-                <i class="fas fa-exclamation-triangle text-danger fa-3x mb-3"></i>
-                <h4>Order Not Found</h4>
-                <p class="text-muted">The order you're looking for doesn't exist or you don't have permission to view it.</p>
-                <a href="{{ route('user.order.index') }}" class="btn btn-primary">
+        <div class="bg-white border border-red-200 rounded-lg shadow-lg">
+            <div class="p-8 text-center">
+                <i class="fas fa-exclamation-triangle text-red-500 text-5xl mb-4"></i>
+                <h4 class="text-red-700 text-xl font-bold mb-2">Order Not Found</h4>
+                <p class="text-gray-600 mb-6">The order you're looking for doesn't exist or you don't have permission to view it.</p>
+                <a href="{{ route('user.order.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                     <i class="fas fa-arrow-left"></i> Back to Orders
                 </a>
             </div>
         </div>
     @endif
 </div>
-
-@push('styles')
-<style>
-.order-summary-card {
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.order-summary-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    padding: 1rem;
-}
-
-.summary-icon-wrapper {
-    width: 35px;
-    height: 35px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1rem;
-}
-
-.order-summary-body {
-    padding: 1rem;
-}
-
-.order-detail-item {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.order-detail-item:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.detail-icon {
-    width: 28px;
-    height: 28px;
-    background: #f8f9fa;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 0.75rem;
-    color: #6c757d;
-    flex-shrink: 0;
-    font-size: 0.9rem;
-}
-
-.detail-content {
-    flex: 1;
-}
-
-.detail-label {
-    color: #6c757d;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
-}
-
-.detail-value {
-    color: #333;
-    font-weight: 500;
-    margin-top: 0.15rem;
-    font-size: 0.9rem;
-}
-
-.problems-list {
-    margin-top: 0.25rem;
-}
-
-.problem-item {
-    color: #666;
-    margin-bottom: 0.15rem;
-    font-size: 0.85rem;
-}
-
-.problem-item:last-child {
-    margin-bottom: 0;
-}
-
-.order-total {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 2px solid #e9ecef;
-}
-
-.total-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.total-label {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.total-amount {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #28a745;
-}
-
-.step-card {
-    border-radius: 12px;
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-}
-
-.step-card:hover {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.step-header {
-    background: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
-    padding: 1.5rem;
-    border-radius: 12px 12px 0 0;
-}
-
-.step-title {
-    margin: 0;
-    color: #333;
-    font-weight: 600;
-}
-
-.step-body {
-    padding: 1.5rem;
-}
-</style>
-@endpush
