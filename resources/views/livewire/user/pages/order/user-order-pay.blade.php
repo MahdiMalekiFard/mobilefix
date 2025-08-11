@@ -29,7 +29,7 @@
             :stepTitles="[
                 1 => 'Select Address',
                 2 => 'Choose Payment',
-                3 => 'Review & Pay'
+                3 => 'Pay'
             ]"
         />
 
