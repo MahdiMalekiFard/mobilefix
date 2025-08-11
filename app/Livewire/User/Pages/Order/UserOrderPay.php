@@ -5,6 +5,7 @@ namespace App\Livewire\User\Pages\Order;
 use App\Models\Order;
 use App\Models\Transaction;
 use App\Models\Address;
+use App\Models\PaymentMethod;
 use App\Services\Payment\PaymentServiceFactory;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentProviderEnum;
@@ -234,6 +235,9 @@ class UserOrderPay extends Component
                     }
                 }
                 
+                // Update order with selected address and payment method
+                $this->updateOrderDetails();
+                
                 $this->paymentStatus = 'completed';
                 $this->order->refresh();
                 
@@ -340,6 +344,7 @@ class UserOrderPay extends Component
         $this->selectProvider($provider);
         if (!$this->errorMessage) {
             $this->currentStep = 3;
+            $this->dispatch('step-3-entered');
         }
     }
     
@@ -364,6 +369,24 @@ class UserOrderPay extends Component
         
         $this->currentStep = $step;
         $this->errorMessage = '';
+        
+        // Dispatch event for step 3 to reinitialize payment forms
+        if ($step === 3) {
+            $this->dispatch('step-3-entered');
+        }
+    }
+    
+    public function goBack()
+    {
+        if ($this->currentStep > 1) {
+            $this->currentStep--;
+            $this->errorMessage = '';
+            
+            // Dispatch event for step 3 to reinitialize payment forms
+            if ($this->currentStep === 3) {
+                $this->dispatch('step-3-entered');
+            }
+        }
     }
     
     public function getStepTitle($step)
@@ -411,6 +434,47 @@ class UserOrderPay extends Component
                 'error' => $e->getMessage()
             ]);
             return null;
+        }
+    }
+
+    protected function updateOrderDetails()
+    {
+        try {
+            $updateData = [];
+            
+            // Update address if selected
+            if ($this->selectedAddress) {
+                $updateData['address_id'] = $this->selectedAddress->id;
+            }
+            
+            // Find and update payment method based on the current transaction's provider
+            if ($this->currentTransaction && $this->currentTransaction->payment_provider) {
+                $paymentMethod = PaymentMethod::where('provider', $this->currentTransaction->payment_provider->value)
+                    ->where('published', true)
+                    ->first();
+                
+                if ($paymentMethod) {
+                    $updateData['payment_method_id'] = $paymentMethod->id;
+                }
+            }
+            
+            // Update the order if we have data to update
+            if (!empty($updateData)) {
+                $this->order->update($updateData);
+                
+                Log::info('Order updated with payment details', [
+                    'order_id' => $this->order->id,
+                    'updates' => $updateData,
+                    'transaction_id' => $this->currentTransaction?->transaction_id
+                ]);
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Failed to update order details', [
+                'order_id' => $this->order->id,
+                'error' => $e->getMessage(),
+                'transaction_id' => $this->currentTransaction?->transaction_id
+            ]);
         }
     }
 
