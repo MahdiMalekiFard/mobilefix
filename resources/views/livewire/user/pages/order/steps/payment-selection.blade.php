@@ -1,7 +1,7 @@
 <!-- Payment Selection Container -->
-<div class="min-h-screen bg-slate-50 flex flex-col">
+<div class="bg-slate-50 flex flex-col">
     <!-- Header Section -->
-    <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 rounded-3xl p-6 md:p-8 mb-6 text-white shadow-2xl mx-4 mt-4">
+    <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800  rounded-3xl p-6 md:p-8 mb-6 text-white shadow-xl mx-4 mt-4">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
             <div class="flex items-center gap-4 md:gap-6 text-center md:text-left">
                 <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
@@ -40,7 +40,7 @@
     <div class="px-4 flex flex-col">
         @if(empty($availableProviders))
             <!-- Empty State -->
-            <div class="bg-white rounded-3xl p-8 md:p-12 text-center shadow-xl flex-1 flex flex-col items-center justify-center">
+            <div class="bg-white rounded-3xl p-8 md:p-12 text-center shadow-xl flex flex-col items-center justify-center">
                 <div class="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-yellow-100 to-orange-200 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
                     <i class="fas fa-exclamation-triangle text-2xl md:text-3xl text-orange-600"></i>
                 </div>
@@ -54,9 +54,9 @@
             </div>
         @else
             <!-- Payment Methods Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 mb-6 flex-1">
                 @foreach($availableProviders as $provider)
-                    <div class="group max-w-sm mx-auto">
+                    <div class="group">
                         <div class="bg-white rounded-2xl border-2 {{ $selectedProvider === $provider->value ? 'border-emerald-400 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg shadow-emerald-200/50' : 'border-slate-200 hover:border-indigo-300' }} p-4 md:p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden text-center h-48 md:h-52 flex flex-col justify-center">
                             
                             <!-- Selection Indicator -->

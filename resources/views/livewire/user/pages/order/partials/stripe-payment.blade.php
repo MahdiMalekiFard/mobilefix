@@ -1,7 +1,7 @@
 <!-- Stripe Payment Container -->
 <div class="bg-slate-50 flex flex-col">
     <!-- Payment Header -->
-    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 md:p-6 text-white mt-4 mx-4 rounded-3xl shadow-xl">
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 md:p-8 text-white mt-4 mx-4 rounded-3xl shadow-xl mx-4 mt-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3 md:gap-4">
                 <div class="w-10 h-10 md:w-12 md:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
@@ -58,7 +58,7 @@
                 <div class="flex flex-col md:flex-row gap-3 md:gap-4">
                     <!-- Back Button -->
                     <button type="button" wire:click="goBack" 
-                            class="group inline-flex items-center justify-center gap-2 md:gap-3 bg-white text-gray-700 border-2 border-slate-300 px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-slate-400 transition-all duration-300 order-2 md:order-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="cursor-pointer group inline-flex items-center justify-center gap-2 md:gap-3 bg-white text-gray-700 border-2 border-slate-300 px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-slate-400 transition-all duration-300 order-2 md:order-1 disabled:opacity-50 disabled:cursor-not-allowed"
                             {{ $isProcessing ? 'disabled' : '' }}>
                         <div class="w-5 h-5 md:w-6 md:h-6 bg-slate-100 rounded-full flex items-center justify-center group-hover:bg-slate-200 group-hover:-translate-x-1 transition-all duration-300">
                             <i class="fas fa-arrow-left text-xs md:text-sm"></i>
@@ -68,7 +68,7 @@
                     
                     <!-- Payment Button -->
                     <button type="submit" id="stripe-submit-payment" 
-                            class="group relative flex-1 inline-flex items-center justify-center gap-3 md:gap-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden order-1 md:order-2 disabled:opacity-75 disabled:cursor-not-allowed"
+                            class="cursor-pointer group relative flex-1 inline-flex items-center justify-center gap-3 md:gap-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden order-1 md:order-2 disabled:opacity-75 disabled:cursor-not-allowed"
                             {{ $isProcessing ? 'disabled' : '' }}>
                         
                         <span id="stripe-button-text" class="relative z-10 flex items-center gap-3 md:gap-4">

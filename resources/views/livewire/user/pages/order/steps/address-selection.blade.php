@@ -1,15 +1,30 @@
 <!-- Address Selection Container -->
-<div class="min-h-screen bg-slate-50 flex flex-col">
+<div class="bg-slate-50 flex flex-col">
     <!-- Header Section -->
-    <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 rounded-3xl p-6 md:p-8 mb-6 text-white shadow-2xl mx-4 mt-4">
-        <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6 text-center md:text-left">
-            <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                <i class="fas fa-map-marker-alt text-2xl"></i>
+    <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800  rounded-3xl p-6 md:p-8 mb-6 text-white shadow-xl mx-4 mt-4">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+            <div class="flex items-center gap-4 md:gap-6 text-center md:text-left">
+                <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <i class="fas fa-map-marker-alt text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-2">Select Delivery Address</h3>
+                    <p class="text-indigo-100 text-base md:text-lg">Choose where you want your device to be delivered</p>
+                </div>
             </div>
-            <div>
-                <h3 class="text-2xl md:text-3xl font-bold mb-2">Select Delivery Address</h3>
-                <p class="text-indigo-100 text-base md:text-lg">Choose where you want your device to be delivered</p>
-            </div>
+
+            @if($selectedAddress)
+                <!-- Navigation Buttons in Header -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button wire:click="continueToPayment" 
+                            class="group relative inline-flex items-center gap-3 bg-white text-indigo-600 px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold text-sm md:text-base shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer">
+                        <span class="relative z-10">Continue to Payment</span>
+                        <div class="relative z-10 w-4 h-4 md:w-5 md:h-5 bg-indigo-100 rounded-full flex items-center justify-center group-hover:bg-indigo-200 group-hover:translate-x-1 transition-all duration-300">
+                            <i class="fas fa-arrow-right text-xs md:text-sm"></i>
+                        </div>
+                    </button>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -97,23 +112,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Continue Button -->
-            @if($selectedAddress)
-                <div class="text-center pt-4 md:pt-6 border-t border-slate-200 mt-auto">
-                    <button wire:click="continueToPayment" 
-                            class="group relative inline-flex items-center gap-3 md:gap-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 md:px-10 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-                        <span class="relative z-10">Continue to Payment</span>
-                        <div class="relative z-10 w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 group-hover:translate-x-1 transition-all duration-300">
-                            <i class="fas fa-arrow-right text-xs md:text-sm"></i>
-                        </div>
-                        <!-- Hover Background -->
-                        <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </button>
-                </div>
-            @endif
         @endif
     </div>
 </div>
-
-

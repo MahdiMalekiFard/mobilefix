@@ -1,4 +1,4 @@
-<div class="p-8">
+<div class="">
     @if($selectedProvider === 'stripe')
         <!-- Load Stripe Payment Partial -->
         @include('livewire.user.pages.order.partials.stripe-payment')
