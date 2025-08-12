@@ -28,7 +28,7 @@ class UserOrderPay extends Component
     public array $newAddress = [
         'title'       => '',
         'address'     => '',
-        'is_default'  => false,
+        'is_default'  => true,
     ];
     
     // Multi-step checkout properties
@@ -53,7 +53,6 @@ class UserOrderPay extends Component
     public function openAddressModal(): void
     {
         $this->resetValidation();
-        $this->newAddress = ['title' => '', 'address' => '', 'is_default' => false];
         $this->showAddressModal = true;
     }
 
@@ -383,6 +382,13 @@ class UserOrderPay extends Component
     public function selectAddress($addressId)
     {
         $address = Address::find($addressId);
+        $address->update(['is_default' => true]);
+
+        Address::where('user_id', auth()->id())
+            ->where('id', '!=', $address->id)
+            ->update(['is_default' => false]);
+
+        $this->loadUserAddresses();
 
         if (!$address) {
             $this->errorMessage = 'Address not found or access denied.';

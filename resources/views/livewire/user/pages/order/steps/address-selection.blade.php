@@ -150,11 +150,6 @@
                     @error('newAddress.address') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <label class="flex items-center gap-2">
-                    <input type="checkbox" wire:model.defer="newAddress.is_default" class="rounded border-slate-300">
-                    <span class="text-sm text-slate-700">Set as default</span>
-                </label>
-
                 <div class="flex items-center justify-end gap-3 pt-2">
                     <button type="button" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50" @click="open = false">Cancel</button>
                     <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-60" wire:loading.attr="disabled">
