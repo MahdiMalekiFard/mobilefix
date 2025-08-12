@@ -38,15 +38,21 @@
     })" class="relative">
         
         <!-- Select Button -->
-        <button 
-            type="button" 
+        <button
+            type="button"
             @click="!disabled && (open = !open)"
             :disabled="disabled"
-            class="relative w-full cursor-default rounded-lg bg-white h-10 px-3 pr-10 text-left shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm border border-gray-300"
+            :aria-disabled="disabled"
+            :tabindex="disabled ? -1 : 0"
+            :aria-expanded="open && !disabled"
+            aria-haspopup="listbox"
+            class="relative w-full cursor-default rounded-lg h-10 px-3 pr-10 text-left shadow-sm sm:text-sm border
+                bg-white text-gray-900 ring-1 ring-inset ring-gray-300 border-gray-300
+                disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed
+                disabled:ring-gray-200 disabled:border-gray-200"
             :class="{
-                'bg-gray-50 text-gray-500 cursor-not-allowed': disabled,
                 'hover:ring-gray-400': !disabled && !open,
-                'ring-indigo-500': open
+                'ring-indigo-500': open && !disabled
             }"
             @click.away="open = false"
         >
@@ -55,23 +61,24 @@
                     <span class="text-gray-500" x-text="placeholder"></span>
                 </template>
                 <template x-if="selectedOption">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
-                          :class="getBadgeClasses(selectedOption.badge?.color)">
+                    <span
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
+                        :class="(disabled ? 'opacity-60' : '') + ' ' + getBadgeClasses(selectedOption.badge?.color)"
+                    >
                         <span x-text="selectedOption.badge?.text || selectedOption.label"></span>
                     </span>
                 </template>
             </div>
-            
-            <!-- Dropdown Icon -->
+
             <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                 </svg>
             </span>
         </button>
 
         <!-- Dropdown -->
-        <div x-show="open" 
+        <div x-show="open && !disabled" 
              x-transition:enter="transition ease-out duration-100"
              x-transition:enter-start="opacity-0 scale-95"
              x-transition:enter-end="opacity-100 scale-100"

@@ -45,6 +45,7 @@
                 searchable
                 required
                 :error="$errors->first('status')"
+                :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
             />
             <x-admin.shared.form-input 
                 :label="trans('order.total')"
@@ -59,6 +60,7 @@
                 x-on:input="$el.value = Math.max(0, parseFloat($el.value) || 0)"
                 :helper="trans('order.total_currency_hint')"
                 :error="$errors->first('total')"
+                :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
             />
             
         </div>
@@ -104,6 +106,7 @@
                       placeholder="{{ trans('order.select_brand') }}"
                       searchable
                       :error="$errors->first('brand_id')"
+                      :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
             />
             <x-admin.shared.select :label="trans('order.device')"
                       wire:model="device_id"
@@ -112,6 +115,7 @@
                       searchable
                       wire:key="device-select-{{ $brand_id }}"
                       :error="$errors->first('device_id')"
+                      :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
             />
         </div>
     </x-card>
@@ -130,6 +134,7 @@
                       :options="$paymentMethods->map(function($paymentMethod) { return ['value' => $paymentMethod->id, 'label' => $paymentMethod->title]; })"
                       placeholder="{{ trans('order.select_payment_method') }}"
                       searchable
+                      :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
             />
         </div>
     </x-card>
@@ -143,6 +148,7 @@
                   searchable
                   multiselect
                   :error="$errors->first('selectedProblems')"
+                  :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
         />
     </x-card>
 

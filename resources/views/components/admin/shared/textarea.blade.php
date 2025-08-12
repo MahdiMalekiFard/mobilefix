@@ -26,26 +26,30 @@
     @endif
 
     <div x-data="{ focused: false }" class="relative">
-        <textarea 
-            id="{{ $id }}"
-            {{ $wireModel }}
-            placeholder="{{ $placeholder }}"
-            rows="{{ $rows }}"
-            @if($disabled) disabled @endif
-            @if($readonly) readonly @endif
-            @if($required) required @endif
-            @focus="focused = true"
-            @blur="focused = false"
-            class="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none resize-none dark:bg-gray-900 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-            :class="{
-                'bg-gray-50 text-gray-500 cursor-not-allowed dark:bg-gray-800': {{ $disabled || $readonly ? 'true' : 'false' }},
-                'border-red-300 ring-red-300': {{ $error ? 'true' : 'false' }},
-                'hover:ring-gray-400': !{{ $disabled || $readonly ? 'true' : 'false' }} && !focused && !{{ $error ? 'true' : 'false' }},
-                'ring-indigo-500 border-indigo-500': focused && !{{ $error ? 'true' : 'false' }},
-                'ring-red-500 border-red-500': focused && {{ $error ? 'true' : 'false' }}
-            }"
-            {{ $attributes->except(['class', 'wire:model']) }}
-        >{{ $value }}</textarea>
+    <textarea
+        id="{{ $id }}"
+        {{ $wireModel }}
+        placeholder="{{ $placeholder }}"
+        rows="{{ $rows }}"
+        @if($disabled) disabled @endif
+        @if($readonly) readonly @endif
+        @if($required) required @endif
+        aria-invalid="{{ $error ? 'true' : 'false' }}"
+        class="block w-full px-3 py-2 text-sm rounded-lg shadow-sm resize-none
+            bg-white text-gray-900 placeholder:text-gray-400
+            border border-gray-300 ring-1 ring-inset ring-gray-300
+            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+
+            disabled:bg-gray-100 disabled:text-gray-500 disabled:placeholder:text-gray-400
+            disabled:cursor-not-allowed disabled:ring-gray-200 disabled:border-gray-200
+
+            read-only:bg-gray-50 read-only:text-gray-500 read-only:cursor-not-allowed
+
+            dark:bg-gray-900 dark:text-white dark:placeholder-gray-400 dark:border-gray-600
+            dark:disabled:bg-gray-800 dark:read-only:bg-gray-800
+            @if($error) border-red-300 ring-red-300 focus:ring-red-500 focus:border-red-500 @endif"
+        {{ $attributes->except(['class', 'wire:model']) }}
+    >{{ $value }}</textarea>
     </div>
 
     @if($hint)

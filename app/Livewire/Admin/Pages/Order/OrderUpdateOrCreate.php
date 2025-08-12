@@ -270,10 +270,11 @@ class OrderUpdateOrCreate extends Component
 
         return view('livewire.admin.pages.order.order-update-or-create', [
             'edit_mode'          => $this->model->id,
+            'currentStatus'      => $this->status,
             'statusOptions'      => $statusOptions,
             'users'              => User::all(['id', 'name']),
             'brands'             => Brand::all(),
-            'addresses'          => Address::all(['id', 'title']),
+            'addresses'          => Address::where('user_id', $this->user_id)->select('id', 'title')->get(),
             'paymentMethods'     => PaymentMethod::all(),
             'problems'           => Problem::all(),
             'breadcrumbs'        => [

@@ -53,11 +53,14 @@
             type="button" 
             @click="!disabled && (open = !open)"
             :disabled="disabled"
-            class="relative w-full cursor-default rounded-lg bg-white h-10 px-3 pr-10 text-left shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm border border-gray-300"
+            :aria-disabled="disabled"
+            :tabindex="disabled ? -1 : 0"
+            class="relative w-full cursor-default rounded-lg h-10 px-3 pr-10 text-left shadow-sm ring-1 ring-inset sm:text-sm border
+                bg-white text-gray-900 ring-gray-300 border-gray-300
+                disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed disabled:ring-gray-200 disabled:border-gray-200"
             :class="{
-                'bg-gray-50 text-gray-500 cursor-not-allowed': disabled,
                 'hover:ring-gray-400': !disabled && !open,
-                'ring-indigo-500': open
+                'ring-indigo-500': open && !disabled
             }"
             @click.away="open = false"
         >
