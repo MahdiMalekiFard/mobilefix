@@ -76,7 +76,4 @@
             </div>
         </div>
     @endif
-
-    <!-- Address Modal Component -->
-    @livewire('user.shared.user-address-modal')
 </div>

@@ -38,11 +38,11 @@
                 </div>
                 <h4 class="text-xl md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">No Addresses Found</h4>
                 <p class="text-gray-700 text-base md:text-lg mb-6 md:mb-8 max-w-md mx-auto">You need to add a delivery address before proceeding with your order.</p>
-                <button wire:click="openAddressModal" 
-                        class="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <a href="{{ route('user.address.create') }}" 
+                   class="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <i class="fas fa-plus"></i>
                     Add Your First Address
-                </button>
+                </a>
             </div>
         @else
             <!-- Address Grid -->
@@ -101,7 +101,7 @@
                 <!-- Add New Address Card -->
                 <div class="group">
                     <div class="bg-white border-2 border-dashed border-slate-300 rounded-2xl p-4 md:p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-indigo-400 hover:bg-gradient-to-br hover:from-slate-50 hover:to-indigo-50 h-full flex items-center justify-center"
-                         wire:click="openAddressModal">
+                        onclick="window.location.href='{{ route('user.address.create') }}'">
                         <div class="text-center">
                             <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300">
                                 <i class="fas fa-plus text-white text-lg md:text-xl"></i>
