@@ -111,7 +111,11 @@ final class UserOrderList extends PowerGridComponent
                 };
                 return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' . $colorClass . '">' . $statusEnum->title() . '</span>';
             })
-            ->add('total', fn ($row) => number_format((int)$row->total, 0))
+            ->add('total', fn ($row) =>
+                    (float) $row->total > 0
+                        ? number_format((float) $row->total, 0)
+                        : '<span class="text-red-400">not specified</span>'
+            )
             ->add('user_name', fn ($row) => $row->user_name)
             ->add('user_phone', fn ($row) => $row->user_phone)
             ->add('user_email', fn ($row) => $row->user_email)

@@ -24,6 +24,13 @@ class RequestRepairForm extends Component
     // Success modal properties
     public $trackingCode = null;
 
+    public function mount()
+    {
+        $this->name = auth()->user()?->name ?? '';
+        $this->email = auth()->user()?->email ?? '';
+        $this->phone = auth()->user()?->mobile ?? '';
+    }
+
     public function render()
     {
         // Fetch only published brands with their published devices, and published problems
@@ -73,7 +80,7 @@ class RequestRepairForm extends Component
             $this->dispatch('show-success-modal', trackingCode: $order->tracking_code);
             
             // Reset form (but keep orderNumber for modal display)
-            $this->reset(['name', 'email', 'phone', 'brand', 'model', 'problems', 'description', 'videos', 'images']);
+            $this->reset(['brand', 'model', 'problems', 'description', 'videos', 'images']);
             
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to submit repair request. Please try again.');

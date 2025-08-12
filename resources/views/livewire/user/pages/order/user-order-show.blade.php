@@ -80,7 +80,16 @@
                             </div>
                             <div class="ml-3 w-0 flex-1">
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Amount</dt>
-                                <dd class="text-lg font-bold text-green-600 dark:text-green-400">{{ number_format((int)$model->total, 0) }} Toman</dd>
+
+                                @php $hasTotal = (float) ($model->total ?? 0) > 0; @endphp
+
+                                <dd class="text-lg font-bold @if($hasTotal) text-green-600 dark:text-green-400 @else text-gray-400 italic @endif">
+                                    @if ($hasTotal)
+                                        {{ number_format((float) $model->total, 0) }} <span class="font-normal">Toman</span>
+                                    @else
+                                        not specified
+                                    @endif
+                                </dd>
                             </div>
                         </div>
                     </div>

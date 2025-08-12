@@ -26,7 +26,7 @@
     <div class="p-4 md:p-8 flex flex-col">
         @if($paymentData && $paymentData['success'])
             <form id="stripe-payment-form" wire:key="stripe-form-{{ $currentTransaction->id ?? 'new' }}" wire:ignore.self 
-                  x-data="{ mounted: false }" 
+                  x-data="{ mounted: false }" x-on:submit.prevent
                   x-init="
                       $nextTick(() => {
                           document.dispatchEvent(new CustomEvent('step-3-entered'));
@@ -145,7 +145,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     let stripeInstance = null;
     let cardElement = null;
-    let formHandlerAttached = false;
+    // Note: do not rely on a global flag for handler attachment as Livewire re-renders DOM nodes
     
     // Make the function globally available
     window.initStripePayment = function initStripe() {
@@ -244,7 +244,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setupFormHandler() {
         const form = document.getElementById('stripe-payment-form');
-        if (!form || formHandlerAttached) {
+        if (!form) {
+            return;
+        }
+
+        // Prevent multiple handlers after Livewire/Alpine re-renders by marking the current form
+        if (form.dataset.stripeHandlerAttached === '1') {
             return;
         }
 
@@ -295,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        formHandlerAttached = true;
+        form.dataset.stripeHandlerAttached = '1';
         console.log('✅ Form handler attached');
     }
 
