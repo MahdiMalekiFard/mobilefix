@@ -23,6 +23,13 @@ class UserOrderPay extends Component
     public string $paymentStatus = 'pending';
     public string $errorMessage = '';
     public bool $isProcessing = false;
+    public bool $showAddressModal = false;
+
+    public array $newAddress = [
+        'title'       => '',
+        'address'     => '',
+        'is_default'  => false,
+    ];
     
     // Multi-step checkout properties
     public int $currentStep = 1;
@@ -33,6 +40,61 @@ class UserOrderPay extends Component
     ];
     public ?Address $selectedAddress = null;
     public array $userAddresses = [];
+
+    protected function addressRules(): array
+    {
+        return [
+            'newAddress.title'      => 'required|string|min:2|max:100',
+            'newAddress.address'    => 'required|string|min:5|max:1000',
+            'newAddress.is_default' => 'boolean',
+        ];
+    }
+
+    public function openAddressModal(): void
+    {
+        $this->resetValidation();
+        $this->newAddress = ['title' => '', 'address' => '', 'is_default' => false];
+        $this->showAddressModal = true;
+    }
+
+    public function closeAddressModal(): void
+    {
+        $this->showAddressModal = false;
+    }
+
+    /** Create address without leaving step 1 */
+    public function createAddress(): void
+    {
+        $this->validate($this->addressRules());
+
+        try {
+            $address = new Address([
+                'user_id'     => auth()->id(),
+                'title'       => $this->newAddress['title'],
+                'address'     => $this->newAddress['address'],
+                'is_default'  => (bool) $this->newAddress['is_default'],
+            ]);
+            $address->save();
+
+            // if set default, clear others for this user
+            if ($address->is_default) {
+                Address::where('user_id', auth()->id())
+                    ->where('id', '!=', $address->id)
+                    ->update(['is_default' => false]);
+            }
+
+            // Refresh list and keep user on this view
+            $this->loadUserAddresses();
+            $this->selectedAddress = $address->fresh();
+
+            $this->closeAddressModal();
+            $this->dispatch('address-created'); // optional toast hook
+
+        } catch (\Throwable $e) {
+            Log::error('Create address failed', ['user_id' => auth()->id(), 'error' => $e->getMessage()]);
+            $this->addError('newAddress.address', 'Could not save the address. Please try again.');
+        }
+    }
 
 
     protected $rules = [
@@ -86,10 +148,9 @@ class UserOrderPay extends Component
             ->get()
             ->toArray();
             
-        // Auto-select the default address if available
-        $defaultAddress = collect($this->userAddresses)->where('is_default', 1)->first();
-        if ($defaultAddress) {
-            $this->selectedAddress = Address::find($defaultAddress['id']);
+        if (!$this->selectedAddress) {
+            $default = collect($this->userAddresses)->firstWhere('is_default', 1);
+            if ($default) $this->selectedAddress = Address::find($default['id']);
         }
     }
     
@@ -180,6 +241,11 @@ class UserOrderPay extends Component
         }
 
         try {
+            if ($this->selectedAddress && $this->order->address_id !== $this->selectedAddress->id) {
+                $this->order->update(['address_id' => $this->selectedAddress->id]);
+                $this->order->refresh();
+            }
+
             $provider = PaymentProviderEnum::from($this->selectedProvider);
             $paymentService = PaymentServiceFactory::create($provider);
             
@@ -316,16 +382,21 @@ class UserOrderPay extends Component
     // Multi-step checkout methods
     public function selectAddress($addressId)
     {
-        $this->selectedAddress = Address::where('user_id', auth()->id())
-            ->where('id', $addressId)
-            ->first();
-            
-        if (!$this->selectedAddress) {
+        $address = Address::find($addressId);
+
+        if (!$address) {
             $this->errorMessage = 'Address not found or access denied.';
             return;
         }
-        
+
+        $this->selectedAddress = $address;
         $this->errorMessage = '';
+
+        // Persist immediately so backend & gateway see the correct address
+        if ($this->order && $this->order->address_id !== $address->id) {
+            $this->order->update(['address_id' => $address->id]);
+            $this->order->refresh();
+        }
     }
     
     public function continueToPayment()
@@ -333,6 +404,11 @@ class UserOrderPay extends Component
         if (!$this->selectedAddress) {
             $this->errorMessage = 'Please select an address to continue.';
             return;
+        }
+
+        if ($this->order && $this->order->address_id !== $this->selectedAddress->id) {
+            $this->order->update(['address_id' => $this->selectedAddress->id]);
+            $this->order->refresh();
         }
         
         $this->currentStep = 2;

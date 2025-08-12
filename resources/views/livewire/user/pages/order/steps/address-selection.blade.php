@@ -38,11 +38,11 @@
                 </div>
                 <h4 class="text-xl md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">No Addresses Found</h4>
                 <p class="text-gray-700 text-base md:text-lg mb-6 md:mb-8 max-w-md mx-auto">You need to add a delivery address before proceeding with your order.</p>
-                <a href="{{ route('user.address.create') }}" 
-                   class="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <button wire:click="openAddressModal" 
+                        class="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <i class="fas fa-plus"></i>
                     Add Your First Address
-                </a>
+                </button>
             </div>
         @else
             <!-- Address Grid -->
@@ -101,7 +101,7 @@
                 <!-- Add New Address Card -->
                 <div class="group">
                     <div class="bg-white border-2 border-dashed border-slate-300 rounded-2xl p-4 md:p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-indigo-400 hover:bg-gradient-to-br hover:from-slate-50 hover:to-indigo-50 h-full flex items-center justify-center"
-                        onclick="window.location.href='{{ route('user.address.create') }}'">
+                        wire:click="openAddressModal">
                         <div class="text-center">
                             <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300">
                                 <i class="fas fa-plus text-white text-lg md:text-xl"></i>
@@ -114,4 +114,56 @@
             </div>
         @endif
     </div>
+
+    <!-- Create Address Modal -->
+    <div
+        x-data="{ open: @entangle('showAddressModal') }"
+        x-show="open"
+        x-cloak
+        x-trap.noscroll="open"
+        @keydown.escape.window="open = false"
+        class="fixed inset-0 z-[100] flex items-center justify-center"
+        aria-modal="true" role="dialog"
+    >
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/40" @click="open = false"></div>
+
+        <!-- Panel -->
+        <div class="relative bg-white w-full max-w-lg mx-4 rounded-2xl shadow-2xl border border-slate-200" x-transition>
+            <div class="p-6 border-b border-slate-200 flex items-center justify-between">
+                <h3 class="text-lg font-semibold">Add New Address</h3>
+                <button class="p-2 rounded-full hover:bg-slate-100" @click="open = false" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form wire:submit.prevent="createAddress" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
+                    <input type="text" wire:model.defer="newAddress.title" class="w-full rounded-lg border-slate-300" placeholder="Home / Office" />
+                    @error('newAddress.title') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Address</label>
+                    <textarea wire:model.defer="newAddress.address" rows="3" class="w-full rounded-lg border-slate-300" placeholder="Street, building, ..."></textarea>
+                    @error('newAddress.address') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" wire:model.defer="newAddress.is_default" class="rounded border-slate-300">
+                    <span class="text-sm text-slate-700">Set as default</span>
+                </label>
+
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50" @click="open = false">Cancel</button>
+                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-60" wire:loading.attr="disabled">
+                    <span wire:loading.remove>Create</span>
+                    <span wire:loading>Saving...</span>
+                    </button>
+                </div>  
+            </form>
+        </div>
+    </div>
+    
 </div>
