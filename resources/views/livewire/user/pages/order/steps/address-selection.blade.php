@@ -115,50 +115,135 @@
         @endif
     </div>
 
-    <!-- Create Address Modal -->
+    <!-- Create Address Modal (Tailwind v4-ready) -->
     <div
         x-data="{ open: @entangle('showAddressModal') }"
         x-show="open"
         x-cloak
         x-trap.noscroll="open"
         @keydown.escape.window="open = false"
-        class="fixed inset-0 z-[100] flex items-center justify-center"
-        aria-modal="true" role="dialog"
+        x-id="['address-modal-title','address-modal-desc']"
+        role="dialog"
+        aria-modal="true"
+        :aria-labelledby="$id('address-modal-title')"
+        class="fixed inset-0 z-[100] overflow-y-auto"
     >
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/40" @click="open = false"></div>
+        <div
+            x-show="open"
+            x-transition.opacity
+            @click="open = false"
+            class="fixed inset-0 bg-black/50 supports-[backdrop-filter]:backdrop-blur-sm"
+        ></div>
 
-        <!-- Panel -->
-        <div class="relative bg-white w-full max-w-lg mx-4 rounded-2xl shadow-2xl border border-slate-200" x-transition>
-            <div class="p-6 border-b border-slate-200 flex items-center justify-between">
-                <h3 class="text-lg font-semibold">Add New Address</h3>
-                <button class="p-2 rounded-full hover:bg-slate-100" @click="open = false" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+        <!-- Centering wrapper -->
+        <div class="min-h-full flex items-end sm:items-center justify-center p-4">
+            <!-- Panel -->
+            <div
+                x-show="open"
+                @click.stop
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 sm:scale-100"
+                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                class="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl ring-1 ring-black/5 border border-slate-100 dark:border-slate-800"
+            >
+                <!-- Header -->
+                <div class="px-6 py-4 border-b border-slate-200/70 dark:border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
+                        <i class="fas fa-map-marker-alt text-indigo-600 dark:text-indigo-400"></i>
+                    </span>
+                        <div>
+                            <h3 :id="$id('address-modal-title')" class="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">
+                                Add New Address
+                            </h3>
+                            <p :id="$id('address-modal-desc')" class="text-sm text-slate-500 dark:text-slate-400">
+                                Save it to your profile for faster checkout.
+                            </p>
+                        </div>
+                    </div>
 
-            <form wire:submit.prevent="createAddress" class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
-                    <input type="text" wire:model.defer="newAddress.title" class="w-full rounded-lg border-slate-300" placeholder="Home / Office" />
-                    @error('newAddress.title') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Address</label>
-                    <textarea wire:model.defer="newAddress.address" rows="3" class="w-full rounded-lg border-slate-300" placeholder="Street, building, ..."></textarea>
-                    @error('newAddress.address') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div class="flex items-center justify-end gap-3 pt-2">
-                    <button type="button" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50" @click="open = false">Cancel</button>
-                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-60" wire:loading.attr="disabled">
-                    <span wire:loading.remove>Create</span>
-                    <span wire:loading>Saving...</span>
+                    <button
+                        type="button"
+                        @click="open = false"
+                        aria-label="Close"
+                        class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                    >
+                        <i class="fas fa-times"></i>
                     </button>
-                </div>  
-            </form>
+                </div>
+
+                <!-- Form -->
+                <form
+                    wire:submit.prevent="createAddress"
+                    class="px-6 py-5 space-y-5"
+                    x-ref="form"
+                    x-effect="open && $nextTick(() => $refs.title?.focus())"
+                >
+                    <!-- Title -->
+                    <div>
+                        <label for="addr-title" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                            Title
+                        </label>
+                        <input
+                            id="addr-title"
+                            x-ref="title"
+                            type="text"
+                            wire:model.defer="newAddress.title"
+                            placeholder="Home / Office"
+                            autocomplete="section-address nickname"
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 px-4 py-2.5 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        @error('newAddress.title') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Address -->
+                    <div>
+                        <label for="addr-lines" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                            Address
+                        </label>
+                        <textarea
+                            id="addr-lines"
+                            rows="3"
+                            wire:model.defer="newAddress.address"
+                            placeholder="Street, building, apartment..."
+                            autocomplete="section-address street-address"
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 px-4 py-3 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus:border-indigo-500"
+                        ></textarea>
+                        @error('newAddress.address') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end gap-3 pt-2">
+                        <button
+                            type="button"
+                            @click="open = false"
+                            class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            wire:loading.attr="disabled"
+                            wire:target="createAddress"
+                            class="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 disabled:opacity-60"
+                        >
+                            <span wire:loading.remove wire:target="createAddress">Save Address</span>
+                            <span wire:loading wire:target="createAddress" class="inline-flex items-center gap-2">
+                            <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity=".25" stroke-width="4" />
+                                <path d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+                            </svg>
+                                Saving...
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-    
 </div>
