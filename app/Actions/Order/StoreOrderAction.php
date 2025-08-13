@@ -3,10 +3,13 @@
 namespace App\Actions\Order;
 
 use App\Actions\Translation\SyncTranslationAction;
+use App\Mail\RepairRequestSubmitted;
 use App\Models\Order;
+use App\Services\MagicLinkService;
 use App\Enums\OrderStatusEnum;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Throwable;
 
@@ -16,6 +19,7 @@ class StoreOrderAction
 
     public function __construct(
         private readonly SyncTranslationAction $syncTranslationAction,
+        private readonly MagicLinkService $magicLinkService,
     ) {}
 
     /**
@@ -131,6 +135,38 @@ class StoreOrderAction
             $translationFields = Arr::only($payload, ['title', 'description']);
             if (!empty($translationFields)) {
                 $this->syncTranslationAction->handle($model, $translationFields);
+            }
+
+            // Send email notification
+            try {
+                // Only send email if we have a valid email address
+                if (!empty($customerInfo['email'])) {
+                    // Load relationships for email data
+                    $model->load(['brand', 'device', 'problems']);
+                    
+                    // Generate magic link for easy access
+                    $magicLink = $this->magicLinkService->generateMagicLink($customerInfo['email']);
+                    
+                    $emailData = [
+                        'name' => $customerInfo['name'] ?? '',
+                        'email' => $customerInfo['email'] ?? '',
+                        'phone' => $customerInfo['phone'] ?? '',
+                        'brand' => $model->brand?->title ?? 'Unknown Brand',
+                        'model' => $model->device?->title ?? 'Unknown Device',
+                        'problems' => $model->problems->pluck('title')->toArray(),
+                        'description' => $model->user_note ?? '',
+                        'tracking_code' => $model->tracking_code,
+                        'order_id' => $model->id,
+                        'is_authenticated' => auth()->check(),
+                        'user_id' => auth()->id(),
+                        'magic_link' => $magicLink,
+                    ];
+
+                    Mail::to($customerInfo['email'])->send(new RepairRequestSubmitted($emailData));
+                }
+            } catch (\Exception $e) {
+                // Log email sending error but don't fail the order creation
+                \Log::error('Failed to send repair request email: ' . $e->getMessage());
             }
 
             return $model->refresh();
