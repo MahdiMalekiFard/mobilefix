@@ -48,16 +48,18 @@
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <div class="footer-widget-box list">
-                            <h4 class="footer-widget-title">Newsletter</h4>
+                            <h4 class="footer-widget-title">Payment Methods</h4>
                             <div class="footer-newsletter">
-                                <p>Subscribe Our Newsletter To Get Latest Update And News</p>
-                                <div class="subscribe-form">
-                                    <form action="#">
-                                        <input type="email" class="form-control" placeholder="Your Email">
-                                        <button class="theme-btn" type="submit">
-                                            Subscribe Now <i class="far fa-paper-plane"></i>
-                                        </button>
-                                    </form>
+                                <p>We accept the following payment methods</p>
+                                <div class="d-flex align-items-center gap-3 flex-wrap">
+                                    <img src="{{ asset('assets/images/payments/stripe.png') }}" 
+                                        alt="Stripe" 
+                                        class="img-fluid" 
+                                        style="max-height: 40px; width: auto;">
+                                    <img src="{{ asset('assets/images/payments/paypal.png') }}" 
+                                        alt="PayPal" 
+                                        class="img-fluid" 
+                                        style="max-height: 40px; width: auto;">
                                 </div>
                             </div>
                         </div>
