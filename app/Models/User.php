@@ -76,6 +76,7 @@ class User extends Authenticatable implements HasMedia
         'email',
         'mobile',
         'password',
+        'password_set_at',
         'status',
     ];
 
@@ -98,6 +99,7 @@ class User extends Authenticatable implements HasMedia
         return [
             'email_verified_at' => 'datetime',
             'mobile_verified_at' => 'datetime',
+            'password_set_at'   => 'datetime',
             'status'             => BooleanEnum::class,
         ];
     }
@@ -134,5 +136,13 @@ class User extends Authenticatable implements HasMedia
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Check if the user has set a password
+     */
+    public function hasPasswordSet(): bool
+    {
+        return !is_null($this->password_set_at) && !is_null($this->password);
     }
 }

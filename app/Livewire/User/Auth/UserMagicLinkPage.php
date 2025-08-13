@@ -4,9 +4,9 @@ namespace App\Livewire\User\Auth;
 
 use App\Models\User;
 use App\Services\MagicLinkService;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+
 use Livewire\Component;
+use Carbon\Carbon;
 
 class UserMagicLinkPage extends Component
 {
@@ -86,16 +86,15 @@ class UserMagicLinkPage extends Component
         $magicLinkService = app(MagicLinkService::class);
         $orderInfo = $magicLinkService->getOrderInfoForEmail($this->email);
 
-        // Generate a random password
-        $password = Str::random(12);
-
         try {
-            // Create the user with actual order data
+            // Create the user with actual order data (without password)
             $user = User::create([
                 'name' => $orderInfo['name'] ?? 'User',
                 'email' => $this->email,
                 'mobile' => $orderInfo['mobile'] ?? null,
-                'password' => Hash::make($password),
+                'password' => null,
+                'password_set_at' => null,
+                'email_verified_at' => Carbon::now(),
                 'status' => true,
             ]);
 

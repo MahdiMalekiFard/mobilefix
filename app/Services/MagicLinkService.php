@@ -77,7 +77,6 @@ class MagicLinkService
         $magicLink = DB::table('magic_links')
             ->where('token', $token)
             ->where('expires_at', '>', Carbon::now())
-            ->where('used', false)
             ->first();
 
         if (!$magicLink) {

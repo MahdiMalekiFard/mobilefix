@@ -1,4 +1,7 @@
 <div class="py-6">
+    <!-- Password Setup Component -->
+    <livewire:user.shared.password-setup-component />
+    
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         <x-card shadow>
             <div class="flex items-center justify-between">

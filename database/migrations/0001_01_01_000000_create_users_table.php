@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('mobile')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('mobile_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
+            $table->timestamp('password_set_at')->nullable();
             $table->boolean('status')->default(BooleanEnum::ENABLE->value);
             $table->rememberToken();
             $table->timestamps();
