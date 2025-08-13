@@ -48,6 +48,28 @@
                                     @endif
                                 </div>
 
+                                <div class="card bg-light mb-4">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-user me-2"></i>
+                                            Account Details
+                                        </h6>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <strong>Name:</strong> {{ $orderInfo['name'] ?? 'User' }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <strong>Email:</strong> {{ $email }}
+                                            </div>
+                                            @if($orderInfo['mobile'] ?? null)
+                                            <div class="col-md-6">
+                                                <strong>Phone:</strong> {{ $orderInfo['mobile'] }}
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="d-grid gap-3">
                                     <button wire:click="createAccount" class="btn btn-primary btn-lg">
                                         <i class="fas fa-user-plus me-2"></i>

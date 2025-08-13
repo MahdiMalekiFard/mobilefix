@@ -146,4 +146,32 @@ class MagicLinkService
             ->whereNull('user_id')
             ->count();
     }
+
+    /**
+     * Get order information for a given email
+     *
+     * @param string $email
+     * @return array|null
+     */
+    public function getOrderInfoForEmail(string $email): ?array
+    {
+        $order = DB::table('orders')
+            ->where('config->email', $email)
+            ->whereNull('user_id')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if (!$order) {
+            return null;
+        }
+
+        $config = json_decode($order->config, true);
+        
+        return [
+            'name' => $config['name'] ?? 'User',
+            'email' => $config['email'] ?? $email,
+            'phone' => $config['phone'] ?? null,
+            'mobile' => $config['phone'] ?? null, // Use phone as mobile
+        ];
+    }
 }

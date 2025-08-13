@@ -18,6 +18,7 @@ class UserMagicLinkPage extends Component
     public $autoLogin = false;
     public $existingOrdersCount = 0;
     public $linkedOrdersCount = 0;
+    public $orderInfo = [];
 
     public function mount($token = null)
     {
@@ -47,6 +48,9 @@ class UserMagicLinkPage extends Component
 
             // Get count of existing orders for this email
             $this->existingOrdersCount = $magicLinkService->getExistingOrdersCount($this->email);
+
+            // Get order information for display
+            $this->orderInfo = $magicLinkService->getOrderInfoForEmail($this->email) ?? [];
 
             // Auto-login if user exists
             if ($this->user) {
@@ -78,15 +82,19 @@ class UserMagicLinkPage extends Component
             return;
         }
 
+        // Get order information to use actual name and phone
+        $magicLinkService = app(MagicLinkService::class);
+        $orderInfo = $magicLinkService->getOrderInfoForEmail($this->email);
+
         // Generate a random password
         $password = Str::random(12);
 
         try {
-            // Create the user
+            // Create the user with actual order data
             $user = User::create([
-                'name' => 'User', // Default name, user can update later
+                'name' => $orderInfo['name'] ?? 'User',
                 'email' => $this->email,
-                'mobile' => null, // Can be updated later
+                'mobile' => $orderInfo['mobile'] ?? null,
                 'password' => Hash::make($password),
                 'status' => true,
             ]);
@@ -98,7 +106,6 @@ class UserMagicLinkPage extends Component
             }
 
             // Link existing orders to this user account
-            $magicLinkService = app(MagicLinkService::class);
             $this->linkedOrdersCount = $magicLinkService->linkOrdersToUser($this->email, $user->id);
 
             // Login the user

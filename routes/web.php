@@ -42,6 +42,9 @@ Route::post('user/auth/logout', function () {
     return redirect()->route('user.auth.login');
 })->name('user.auth.logout');
 
+// Magic link route (must be before user dashboard routes)
+Route::get('magic-link/{token}', \App\Livewire\User\Auth\UserMagicLinkPage::class)->name('user.magic-link');
+
 // pages
 Route::get('/contact-us', ContactUsPage::class)->name('contact-us-page');
 Route::get('/about-us', AboutUsPage::class)->name('about-us-page');
