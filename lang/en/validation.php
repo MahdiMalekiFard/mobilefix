@@ -251,6 +251,8 @@ return [
     'birthday'              => 'Birthday',
     'image'                 => 'Image',
     'category_id'           => 'Category',
+    'min_price'             => 'Min Price',
+    'max_price'             => 'Max Price',
 ],
 
 ];

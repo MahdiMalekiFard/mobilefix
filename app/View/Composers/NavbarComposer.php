@@ -11,6 +11,7 @@ use App\Models\Address;
 use App\Models\PaymentMethod;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Problem;
 use App\Services\Permissions\PermissionsService;
 use Illuminate\View\View;
 
@@ -115,7 +116,7 @@ class NavbarComposer
                 ],
             ],
             [
-                'icon'     => 's-book-open',
+                'icon'     => 's-star',
                 'title'    => trans('_menu.service_management'),
                 'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Service::class, 'Store', 'Index')),
                 'sub_menu' => [
@@ -159,8 +160,14 @@ class NavbarComposer
                 'route_name' => 'admin.payment-method.index',
             ],
             [
+                'icon'       => 's-question-mark-circle',
+                'title'      => trans('_menu.problems'),
+                'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Problem::class, 'Store', 'Index')),
+                'route_name' => 'admin.problem.index',
+            ],
+            [
                 'icon'       => 's-map-pin',
-                'title'      => trans('_menu.address_management'),
+                'title'      => trans('_menu.addresses'),
                 'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Store', 'Index')),
                 'route_name' => 'admin.address.index',
             ],

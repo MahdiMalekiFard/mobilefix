@@ -53,7 +53,7 @@ final class ProblemTable extends PowerGridComponent
         ];
 
         if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'price_range', 'actions');
         }
 
         return $setup;
@@ -71,6 +71,8 @@ final class ProblemTable extends PowerGridComponent
             'translations' => [
                 'value',
             ],
+            'min_price',
+            'max_price',
         ];
     }
 
@@ -80,7 +82,7 @@ final class ProblemTable extends PowerGridComponent
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
             ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('price_range', fn ($row) => PowerGridHelper::fieldPriceRange($row));
     }
 
     public function columns(): array
@@ -88,8 +90,9 @@ final class ProblemTable extends PowerGridComponent
         return [
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle(),
+            PowerGridHelper::columnPriceRange(),
             PowerGridHelper::columnPublished(),
-            PowerGridHelper::columnCreatedAT(),
+            PowerGridHelper::columnUpdatedAT('updated_at'),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -100,7 +103,12 @@ final class ProblemTable extends PowerGridComponent
             Filter::enumSelect('published_formated', 'published')
                   ->datasource(BooleanEnum::cases()),
 
-            Filter::datepicker('created_at_formatted', 'created_at')
+            Filter::inputText('min_price', 'min_price')
+                  ->placeholder('Min price...'),
+            Filter::inputText('max_price', 'max_price')
+                  ->placeholder('Max price...'),
+
+            Filter::datepicker('updated_at', 'updated_at')
                   ->params([
                       'maxDate' => now(),
                   ])
@@ -110,7 +118,6 @@ final class ProblemTable extends PowerGridComponent
     public function actions(Problem $row): array
     {
         return [
-            PowerGridHelper::btnTranslate($row),
             PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),

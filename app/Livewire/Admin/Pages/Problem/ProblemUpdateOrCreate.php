@@ -16,6 +16,9 @@ class ProblemUpdateOrCreate extends Component
     public Problem   $model;
     public string $title       = '';
     public string $description = '';
+    public float $min_price = 0;
+    public float $max_price = 0;
+    public int $ordering = 1;
     public bool   $published   = false;
 
     public function mount(Problem $problem): void
@@ -25,6 +28,9 @@ class ProblemUpdateOrCreate extends Component
             $this->title = $this->model->title;
             $this->description = $this->model->description;
             $this->published = $this->model->published->value;
+            $this->min_price = $this->model->min_price;
+            $this->max_price = $this->model->max_price;
+            $this->ordering = $this->model->ordering;
         }
     }
 
@@ -33,7 +39,10 @@ class ProblemUpdateOrCreate extends Component
         return [
             'title'       => 'required|string',
             'description' => 'required|string',
-            'published'   => 'required'
+            'published'   => 'required|boolean',
+            'min_price'   => 'required|numeric|min:0|lte:max_price',
+            'max_price'   => 'required|numeric|min:0|gte:min_price',
+            'ordering'    => 'required|integer|min:1|max:100',
         ];
     }
 

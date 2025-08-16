@@ -23,6 +23,8 @@ return [
     'area'                     => 'Area',
     'orders'                   => 'My Orders',
     'my_address'               => 'My Addresses',
+    'problems'                 => 'Problems',
+    'addresses'                => 'Addresses',
 
     'category_management'   => 'Category management',
     'category'              => [
@@ -166,5 +168,11 @@ return [
     'address'                  => [
         'all'    => 'All Addresses',
         'create' => 'Create Address',
+    ],
+
+    'problem_management'       => 'Problem management',
+    'problem'                  => [
+        'all'    => 'All Problems',
+        'create' => 'Create Problem',
     ],
 ];

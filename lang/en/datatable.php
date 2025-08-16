@@ -82,4 +82,5 @@ return [
     'full_name'               => 'Full Name',
     'follow_up'               => 'Followed Up',
     'is_default'              => 'Is Default',
+    'price_range'             => 'Price Range',
 ];

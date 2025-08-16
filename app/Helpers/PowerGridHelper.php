@@ -234,6 +234,25 @@ class PowerGridHelper
         return $row->comment_count;
     }
 
+    public static function fieldPriceRange($row): string
+    {
+        $minPrice = (float) $row->min_price;
+        $maxPrice = (float) $row->max_price;
+        
+        if ($minPrice && $maxPrice) {
+            if ($minPrice == $maxPrice) {
+                return '<span class="badge badge-success">' . number_format($minPrice, 0) . ' ' . __('general.currency') . '</span>';
+            }
+            return '<span class="badge badge-info">' . number_format($minPrice, 0) . ' - ' . number_format($maxPrice, 0) . ' ' . __('general.currency') . '</span>';
+        } elseif ($minPrice) {
+            return '<span class="badge badge-warning">' . number_format($minPrice, 0) . ' ' . __('general.currency') . ' +</span>';
+        } elseif ($maxPrice) {
+            return '<span class="badge badge-secondary">' . __('general.price_up_to') . ' ' . number_format($maxPrice, 0) . ' ' . __('general.currency') . '</span>';
+        }
+        
+        return '<span class="badge badge-light">' . __('general.not_set') . '</span>';
+    }
+
     /** Public Powergrid Columns -------------------------------------------------------------------------- */
     public static function columnId(string $field = 'id', string $dataField = 'id'): Column
     {
@@ -315,6 +334,12 @@ class PowerGridHelper
     public static function columnCommentCount(string $field = 'comment_count', string $dataField = 'comment_count'): Column
     {
         return Column::make(trans('datatable.comment_count'), $field, $dataField);
+    }
+
+    public static function columnPriceRange(string $field = 'price_range', string $dataField = 'min_price'): Column
+    {
+        return Column::make(trans('datatable.price_range'), $field, $dataField)
+                     ->sortable();
     }
 
     public static function columnAction(): Column

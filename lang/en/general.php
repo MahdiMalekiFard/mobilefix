@@ -96,6 +96,7 @@ return [
         'seo_options'          => 'SEO Settings',
         'upload_image'         => 'Upload Image',
         'publish_config'       => 'Publish Settings',
+        'status'               => 'Status',
         'end_of_work_settings' => 'End-of-Work Settings',
     ],
 
@@ -112,6 +113,10 @@ return [
     'transactions'                     => 'Transactions',
     'activities'                       => 'Activities',
     'views'                            => 'Views',
+    'currency'                         => 'USD',
+    'not_set'                          => 'Not Set',
+    'price_from'                       => 'From',
+    'price_up_to'                      => 'Up to',
 
     'calendar'                         => [
         'persian'   => 'Persian Calendar',
