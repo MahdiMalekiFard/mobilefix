@@ -175,4 +175,11 @@ return [
         'all'    => 'All Problems',
         'create' => 'Create Problem',
     ],
+
+    'contact_us_management'    => 'Contact Us',
+    'contact_us'               => [
+        'all'    => 'All Messages',
+        'unread' => 'Unread Messages',
+        'create' => 'Create Message',
+    ],
 ];

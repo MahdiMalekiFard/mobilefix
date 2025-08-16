@@ -63,34 +63,67 @@
                                 <p>It is a long established fact that a reader will be distracted by the readable
                                     content of a page randomised words which don't look even slightly when looking at its layout. </p>
                             </div>
-                            <form method="post" action="/reparo/assets/php/contact.php" id="contact-form">
+                            
+                            @if (session()->has('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
+                            @if (session()->has('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
+                            <form wire:submit="submitForm">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" name="name"
-                                                placeholder="Your Name" required>
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                                                wire:model="name" placeholder="Your Name" required>
+                                            @error('name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="email" class="form-control" name="email"
-                                                placeholder="Your Email" required>
+                                            <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                                                wire:model="email" placeholder="Your Email" required>
+                                            @error('email')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="subject"
-                                        placeholder="Your Subject" required>
+                                    <input type="text" class="form-control @error('subject') is-invalid @enderror" 
+                                        wire:model="subject" placeholder="Your Subject">
+                                    @error('subject')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="form-group">
-                                    <textarea name="message" cols="30" rows="5" class="form-control"
+                                    <input type="text" class="form-control @error('phone') is-invalid @enderror" 
+                                        wire:model="phone" placeholder="Your Phone Number">
+                                    @error('phone')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <textarea wire:model="message" cols="30" rows="5" class="form-control @error('message') is-invalid @enderror"
                                         placeholder="Write Your Message" required></textarea>
+                                    @error('message')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <button type="submit" class="theme-btn">Send
-                                    Message <i class="far fa-paper-plane"></i></button>
-                                <div class="col-md-12 mt-3">
-                                    <div class="form-messege text-success"></div>
-                                </div>
+                                <button type="submit" class="theme-btn" wire:loading.attr="disabled">
+                                    <span wire:loading.remove>Send Message <i class="far fa-paper-plane"></i></span>
+                                    <span wire:loading>Sending... <i class="fas fa-spinner fa-spin"></i></span>
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -106,3 +139,4 @@
             style="border:0;" allowfullscreen="" loading="lazy"></iframe>
     </div>
 </div>
+

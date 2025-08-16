@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $phone
  * @property string $message
  * @property boolean $is_read
- * @property boolean $is_replied
  */
 class ContactUs extends Model
 {
@@ -26,14 +25,13 @@ class ContactUs extends Model
         'name',
         'email',
         'phone',
+        'subject',
         'message',
         'is_read',
-        'is_replied',
     ];
 
     protected $casts = [
         'is_read' => YesNoEnum::class,
-        'is_replied' => YesNoEnum::class,
     ];
 
     /**
@@ -50,6 +48,16 @@ class ContactUs extends Model
      * Model Scope --------------------------------------------------------------------------
      */
 
+     public function scopeUnread($query)
+    {
+        return $query->where('is_read', false);
+    }
+
+    public function scopeRead($query)
+    {
+        return $query->where('is_read', true);
+    }
+
 
     /**
      * Model Attributes --------------------------------------------------------------------------
@@ -60,4 +68,8 @@ class ContactUs extends Model
      * Model Custom Methods --------------------------------------------------------------------------
      */
 
+    public function markAsRead(): void
+    {
+        $this->update(['is_read' => true]);
+    }
 }

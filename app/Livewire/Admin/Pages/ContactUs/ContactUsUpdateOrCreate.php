@@ -13,27 +13,36 @@ class ContactUsUpdateOrCreate extends Component
 {
     use Toast;
 
-    public ContactUs   $model;
-    public string $title       = '';
-    public string $description = '';
-    public bool   $published   = false;
+    public ContactUs $model;
+    public string $name = '';
+    public string $email = '';
+    public ?string $phone = null;
+    public ?string $subject = null;
+    public string $message = '';
+    public bool $is_read = false;
 
     public function mount(ContactUs $contactUs): void
     {
         $this->model = $contactUs;
         if ($this->model->id) {
-            $this->title = $this->model->title;
-            $this->description = $this->model->description;
-            $this->published = $this->model->published->value;
+            $this->name = $this->model->name;
+            $this->email = $this->model->email;
+            $this->phone = $this->model->phone;
+            $this->subject = $this->model->subject;
+            $this->message = $this->model->message;
+            $this->is_read = $this->model->is_read->value;
         }
     }
 
     protected function rules(): array
     {
         return [
-            'title'       => 'required|string',
-            'description' => 'required|string',
-            'published'   => 'required'
+            'name'        => 'required|string|min:2|max:255',
+            'email'       => 'required|email|max:255',
+            'phone'       => 'nullable|string|max:20',
+            'subject'     => 'nullable|string|max:255',
+            'message'     => 'required|string|min:10|max:1000',
+            'is_read'     => 'boolean',
         ];
     }
 
@@ -44,28 +53,30 @@ class ContactUsUpdateOrCreate extends Component
             UpdateContactUsAction::run($this->model, $payload);
             $this->success(
                 title: trans('general.model_has_updated_successfully', ['model' => trans('contactUs.model')]),
-                redirectTo: route('admin.contactUs.index')
+                redirectTo: route('admin.contact-us.index')
             );
         } else {
             StoreContactUsAction::run($payload);
             $this->success(
                 title: trans('general.model_has_stored_successfully', ['model' => trans('contactUs.model')]),
-                redirectTo: route('admin.contactUs.index')
+                redirectTo: route('admin.contact-us.index')
             );
         }
     }
 
     public function render(): View
     {
+        $isEdit = $this->model->id;
+        
         return view('livewire.admin.pages.contactUs.contactUs-update-or-create', [
-            'edit_mode'          => $this->model->id,
+            'edit_mode'          => $isEdit,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.contactUs.index'), 'label' => trans('general.page.index.title', ['model' => trans('contactUs.model')])],
-                ['label' => trans('general.page.create.title', ['model' => trans('contactUs.model')])],
+                ['link' => route('admin.contact-us.index'), 'label' => trans('general.page.index.title', ['model' => trans('contactUs.model')])],
+                ['label' => $isEdit ? 'Edit Contact Message' : 'Create Contact Message'],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.contactUs.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.contact-us.index'), 'icon' => 's-arrow-left']
             ],
         ]);
     }

@@ -9,6 +9,7 @@ use App\Helpers\PowerGridHelper;
 use App\Models\ContactUs;
 use App\Traits\PowerGridHelperTrait;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Jenssegers\Agent\Agent;
@@ -16,6 +17,7 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
+use PowerComponents\LivewirePowerGrid\Column;
 
 final class ContactUsTable extends PowerGridComponent
 {
@@ -36,7 +38,7 @@ final class ContactUsTable extends PowerGridComponent
     public function breadcrumbsActions(): array
     {
         return [
-            ['link' => route('admin.contactUs.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('contactUs.model')])],
+            ['link' => route('admin.contact-us.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('contactUs.model')])],
         ];
     }
 
@@ -53,7 +55,7 @@ final class ContactUsTable extends PowerGridComponent
         ];
 
         if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'name', 'actions');
         }
 
         return $setup;
@@ -62,34 +64,47 @@ final class ContactUsTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return ContactUs::query();
+        $query = ContactUs::query();
+
+        // Apply filters
+        if (!empty($this->filters['is_read'])) {
+            $query->where('is_read', $this->filters['is_read']);
+        }
+        
+        if (!empty($this->filters['created_at'])) {
+            $query->whereDate('created_at', $this->filters['created_at']);
+        }
+        
+        return $query;
     }
 
     public function relationSearch(): array
     {
-        return [
-            'translations' => [
-                'value',
-            ],
-        ];
+        return [];
     }
 
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('name')
+            ->add('email')
+            ->add('phone')
+            ->add('subject', fn ($row) => Str::limit($row->subject, 20))
+            ->add('is_read_formatted', fn ($row) => $row->is_read->value ? 'Read' : 'Unread')
+            ->add('created_at_formatted', fn ($row) => $row->created_at->format('M d, Y H:i'));
     }
 
     public function columns(): array
     {
         return [
             PowerGridHelper::columnId(),
-            PowerGridHelper::columnTitle(),
-            PowerGridHelper::columnPublished(),
-            PowerGridHelper::columnCreatedAT(),
+            Column::make('Name', 'name'),
+            Column::make('Email', 'email'),
+            Column::make('Phone', 'phone'),
+            Column::make('Subject', 'subject'),
+            Column::make('Status', 'is_read_formatted'),
+            Column::make('Created At', 'created_at_formatted'),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -97,10 +112,10 @@ final class ContactUsTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::enumSelect('published_formated', 'published')
+            Filter::enumSelect('is_read', 'is_read')
                   ->datasource(BooleanEnum::cases()),
 
-            Filter::datepicker('created_at_formatted', 'created_at')
+            Filter::datepicker('created_at', 'created_at')
                   ->params([
                       'maxDate' => now(),
                   ])
@@ -110,8 +125,7 @@ final class ContactUsTable extends PowerGridComponent
     public function actions(ContactUs $row): array
     {
         return [
-            PowerGridHelper::btnTranslate($row),
-            PowerGridHelper::btnToggle($row),
+            PowerGridHelper::btnShow($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
         ];
@@ -120,8 +134,18 @@ final class ContactUsTable extends PowerGridComponent
     public function noDataLabel(): string|View
     {
         return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.contactUs.create')
+            'link'=>route('admin.contact-us.create')
         ]);
+    }
+
+    // Helper method to debug filter values
+    public function getFilterValues(): array
+    {
+        return [
+            'is_read' => $this->filters['is_read'] ?? null,
+            'created_at' => $this->filters['created_at'] ?? null,
+            'all_filters' => $this->filters ?? [],
+        ];
     }
 
 }
