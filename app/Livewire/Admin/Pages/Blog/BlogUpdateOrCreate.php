@@ -4,42 +4,97 @@ namespace App\Livewire\Admin\Pages\Blog;
 
 use App\Actions\Blog\StoreBlogAction;
 use App\Actions\Blog\UpdateBlogAction;
+use App\Enums\CategoryTypeEnum;
 use App\Models\Blog;
+use App\Models\Category;
+use Carbon\Carbon;
 use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
+use App\Livewire\Traits\SeoOptionTrait;
+use App\Traits\CrudHelperTrait;
 
 class BlogUpdateOrCreate extends Component
 {
-    use Toast;
+    use Toast, SeoOptionTrait, WithFileUploads, CrudHelperTrait;
 
     public Blog   $model;
-    public string $title       = '';
-    public string $description = '';
+    public ?string $title       = '';
+    public ?string $description = '';
+    public ?string $body = '';
     public bool   $published   = false;
+    public ?string $published_at = '';
+    public array  $tags        = [];
+    public array   $categories   = [];
+    public int     $category_id  = 1;
+    public         $image;
+
 
     public function mount(Blog $blog): void
     {
         $this->model = $blog;
+        $this->categories = Category::where('type', CategoryTypeEnum::BLOG->value)->get()->map(fn($item) => ['name' => $item->title, 'id' => $item->id])->toArray();
         if ($this->model->id) {
+            $this->mountStaticFields();
             $this->title = $this->model->title;
             $this->description = $this->model->description;
+            $this->body = $this->model->body;
             $this->published = $this->model->published->value;
+            $this->published_at = $this->setPublishedAt($this->model->published_at);
+            $this->tags = $this->model->tags->pluck('name')->toArray();
+            $this->category_id = $this->model->category_id;
         }
     }
 
     protected function rules(): array
     {
-        return [
-            'title'       => 'required|string',
-            'description' => 'required|string',
-            'published'   => 'required'
-        ];
+        return array_merge($this->seoOptionRules(), [
+            'slug'         => 'required|string|unique:blogs,slug,' . $this->model->id,
+            'title'        => 'required|string|max:255|min:2',
+            'description'  => 'required|string|max:255',
+            'body'         => 'nullable|string',
+            'published'    => 'required|boolean',
+            'published_at' => [
+                $this->published ? 'nullable' : 'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    if ($value && Carbon::parse($value)->addMinutes(2)->isBefore(now())) {
+                        $fail(trans('blog.exceptions.published_at_after_now'));
+                    }
+                },
+            ],
+            'category_id'  => 'required|exists:categories,id,type,blog',
+            'image'        => 'nullable|file|mimes:png,jpg,jpeg|max:4096',
+            'tags'         => 'nullable|array',
+        ]);
+    }
+
+    public function updatedPublished($value)
+    {
+        if ($value) {
+            // When published is true, set published_at to now and hide the field
+            $this->published_at = now()->format('Y-m-d H:i:s');
+        } else {
+            // When published is false, clear published_at so admin can set it
+            $this->published_at = null;
+        }
+        
+        // Force component to re-render to show/hide the published_at field
+        $this->dispatch('$refresh');
     }
 
     public function submit(): void
     {
         $payload = $this->validate();
+        
+        // If published is true, automatically set published_at to now
+        if ($this->published) {
+            $payload['published_at'] = now();
+        }
+        
+        $payload = $this->normalizePublishedAt($payload);
+        
         if ($this->model->id) {
             UpdateBlogAction::run($this->model, $payload);
             $this->success(

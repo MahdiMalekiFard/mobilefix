@@ -89,7 +89,11 @@
                                         class="far fa-search"></i></button>
                             </div>
                             <div class="nav-btn">
-                                <a href="{{ route('user.auth.login') }}" class="theme-btn">Login <i class="fas fa-arrow-right"></i></a>
+                                @if (auth()->check())
+                                    <a href="{{ route('user.dashboard') }}" target="_blank" class="theme-btn">Dashboard <i class="fas fa-arrow-right"></i></a>
+                                @else
+                                    <a href="{{ route('user.auth.login') }}" target="_blank" class="theme-btn">Login <i class="fas fa-arrow-right"></i></a>
+                                @endif
                             </div>
                         </div>
                     </div>

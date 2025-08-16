@@ -35,6 +35,7 @@ class StoreUserAction
     {
         return DB::transaction(function () use ($payload) {
             $payload['password'] = Hash::make($payload['password']);
+            $payload['password_set_at'] = now();
             
             $user =  User::create($payload);
             $user->syncRoles(Arr::get($payload, 'rules', []));

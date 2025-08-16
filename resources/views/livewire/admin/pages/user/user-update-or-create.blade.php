@@ -31,7 +31,7 @@
                 </div>
             </x-card>
             @if(!$edit_mode)
-                <x-card :title="trans('user.page.password_section')" shadow separator progress-indicator="submit">
+                <x-card :title="trans('user.page.password_info')" shadow separator progress-indicator="submit">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <x-password
                                 :label="trans('validation.attributes.password')"

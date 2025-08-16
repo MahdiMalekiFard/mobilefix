@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
         $admin1 = User::find(2);
         $admin1->update([
             'password' => Hash::make('password'),
+            'password_set_at' => now(),
             'email'    => 'admin1@example.com',
             'mobile'   => '9100000001',
             'name'     => 'admin1',
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
         $admin2 = User::find(3);
         $admin2->update([
             'password' => Hash::make('password'),
+            'password_set_at' => now(),
             'email'    => 'admin2@example.com',
             'mobile'   => '9100000002',
             'name'     => 'admin2',
@@ -41,6 +43,7 @@ class UserSeeder extends Seeder
         $user = User::find(4);
         $user->update([
             'password' => Hash::make('secret'),
+            'password_set_at' => now(),
             'email'    => 'mahdi@gmail.com',
             'mobile'   => '09151234567',
             'name'     => 'Mahdi',

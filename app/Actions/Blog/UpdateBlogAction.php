@@ -48,7 +48,7 @@ class UpdateBlogAction
     public function handle(Blog $blog, array $payload): Blog
     {
         return DB::transaction(function () use ($blog, $payload) {
-            $blog->update(Arr::only($payload, ['slug', 'published', 'published_at', 'category_id']));
+            $blog->update(Arr::only($payload, ['slug', 'published', 'published_at', 'category_id', 'user_id', 'view_count', 'comment_count', 'wish_count']));
             $this->syncTranslationAction->handle($blog, Arr::only($payload, ['title', 'description', 'body']));
             $this->fileService->addMedia($blog, Arr::get($payload, 'image'));
             $this->seoOptionService->update($blog, Arr::only($payload, ['seo_title', 'seo_description', 'canonical', 'old_url', 'redirect_to', 'robots_meta']));

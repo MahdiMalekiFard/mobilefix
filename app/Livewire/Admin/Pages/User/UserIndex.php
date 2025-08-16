@@ -80,8 +80,7 @@ final class UserIndex extends PowerGridComponent
                         ->add('id')
                         ->add('name')
                         ->add('email')
-                        ->add('mobile')
-                        ->add('created_at_formatted', fn($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+                        ->add('mobile');
     }
 
     public function columns(): array
@@ -100,7 +99,7 @@ final class UserIndex extends PowerGridComponent
                   ->sortable()
                   ->searchable(),
 
-            PowerGridHelper::columnCreatedAT(),
+            PowerGridHelper::columnCreatedAT('created_at'),
 
             PowerGridHelper::columnAction(),
         ];

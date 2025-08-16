@@ -59,12 +59,6 @@ final class BlogTable extends PowerGridComponent
         return $setup;
     }
 
-    public function boot(): void
-    {
-        config(['livewire-powergrid.filter' => 'outside']);
-    }
-
-
     public function datasource(): Builder
     {
         return Blog::query();
@@ -84,8 +78,8 @@ final class BlogTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('user_name', fn ($row) => PowerGridHelper::fieldUserName($row))
+            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row));
     }
 
     public function columns(): array
@@ -93,8 +87,9 @@ final class BlogTable extends PowerGridComponent
         return [
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle(),
+            PowerGridHelper::columnUserName(),
             PowerGridHelper::columnPublished(),
-            PowerGridHelper::columnCreatedAT(),
+            PowerGridHelper::columnUpdatedAT('updated_at'),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -105,7 +100,7 @@ final class BlogTable extends PowerGridComponent
             Filter::enumSelect('published_formated', 'published')
                   ->datasource(BooleanEnum::cases()),
 
-            Filter::datepicker('created_at_formatted', 'created_at')
+            Filter::datepicker('updated_at', 'updated_at')
                   ->params([
                       'maxDate' => now(),
                   ])
@@ -115,7 +110,6 @@ final class BlogTable extends PowerGridComponent
     public function actions(Blog $row): array
     {
         return [
-            PowerGridHelper::btnTranslate($row),
             PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),

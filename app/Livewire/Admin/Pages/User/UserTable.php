@@ -41,11 +41,6 @@ final class UserTable extends PowerGridComponent
         ];
     }
 
-    public function boot(): void
-    {
-        config(['livewire-powergrid.filter' => 'outside']);
-    }
-
     public function setUp(): array
     {
         $setup = [
@@ -64,7 +59,6 @@ final class UserTable extends PowerGridComponent
 
         return $setup;
     }
-
 
     public function datasource(): Builder
     {
@@ -85,8 +79,7 @@ final class UserTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('name', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('status_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('status_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row));
     }
 
     public function columns(): array
@@ -95,7 +88,8 @@ final class UserTable extends PowerGridComponent
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle('name', 'name'),
             PowerGridHelper::columnPublished('status_formated', 'status'),
-            PowerGridHelper::columnCreatedAT(),
+            PowerGridHelper::columnCreatedAT('created_at'),
+            PowerGridHelper::columnUpdatedAT('updated_at'),
             PowerGridHelper::columnAction(),
         ];
     }

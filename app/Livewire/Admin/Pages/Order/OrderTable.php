@@ -62,12 +62,6 @@ final class OrderTable extends PowerGridComponent
         return $setup;
     }
 
-    public function boot(): void
-    {
-        config(['livewire-powergrid.filter' => 'outside']);
-    }
-
-
     public function datasource(): Builder
     {
         $query = Order::query();

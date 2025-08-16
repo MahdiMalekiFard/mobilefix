@@ -59,7 +59,6 @@ final class CategoryTable extends PowerGridComponent
         return $setup;
     }
 
-
     public function datasource(): Builder
     {
         return Category::query();

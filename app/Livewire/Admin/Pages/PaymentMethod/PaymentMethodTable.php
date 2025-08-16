@@ -42,11 +42,6 @@ final class PaymentMethodTable extends PowerGridComponent
         ];
     }
 
-    public function boot(): void
-    {
-        config(['livewire-powergrid.filter' => 'outside']);
-    }
-
     public function setUp(): array
     {
         $setup = [
