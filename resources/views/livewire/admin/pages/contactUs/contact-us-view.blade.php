@@ -2,14 +2,28 @@
     @if (session()->has('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
     @if (session()->has('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if ($wasUnread)
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            This message has been marked as read successfully.
+            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @elseif (!$contactUs->is_read->value)
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            This message is currently unread. It will be marked as read automatically.
+            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
@@ -87,11 +101,18 @@
                     <div class="mb-3">
                         <strong>Status:</strong>
                         <div class="mt-2">
-                            @if($contactUs->is_read)
+                            @if($contactUs->is_read->value)
                                 <span class="badge bg-success">Read</span>
                             @else
                                 <span class="badge bg-warning">Unread</span>
                             @endif
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Received:</strong>
+                        <div class="mt-2">
+                            <small class="text-muted">{{ $contactUs->created_at->format('M d, Y H:i') }}</small>
                         </div>
                     </div>
                 </div>
@@ -99,3 +120,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Auto-refresh the parent table when returning from this view
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if we're coming from the table view
+        if (document.referrer && document.referrer.includes('admin/contact-us')) {
+            // Dispatch a custom event that the table can listen to
+            window.dispatchEvent(new CustomEvent('contactUsViewed'));
+        }
+    });
+</script>

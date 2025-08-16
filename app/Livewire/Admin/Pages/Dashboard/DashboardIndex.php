@@ -12,7 +12,6 @@ class DashboardIndex extends Component
         $contactStats = [
             'total' => ContactUs::count(),
             'unread' => ContactUs::unread()->count(),
-            'unreplied' => ContactUs::unreplied()->count(),
             'today' => ContactUs::whereDate('created_at', today())->count(),
         ];
 

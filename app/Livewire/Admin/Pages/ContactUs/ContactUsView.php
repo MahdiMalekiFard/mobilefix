@@ -11,14 +11,21 @@ use Livewire\Component;
 final class ContactUsView extends Component
 {
     public ContactUs $contactUs;
+    public bool $wasUnread = false;
 
     public function mount(ContactUs $contactUs)
     {
         $this->contactUs = $contactUs;
         
-        // Mark as read when viewing
-        if (!$this->contactUs->is_read) {
+        // Check if message was unread before marking as read
+        if (!$this->contactUs->is_read->value) {
+            $this->wasUnread = true;
             $this->contactUs->markAsRead();
+            // Refresh the model to get the updated data
+            $this->contactUs->refresh();
+            
+            // Show success message
+            session()->flash('success', 'Message has been marked as read.');
         }
     }
 

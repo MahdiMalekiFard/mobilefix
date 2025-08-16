@@ -168,16 +168,6 @@ class NavbarComposer
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(ContactUs::class, 'Index')),
                     ],
                     [
-                        'icon'       => 's-eye-slash',
-                        'route_name' => 'admin.contact-us.index',
-                        'exact'      => false,
-                        'params'     => ['filter' => ['is_read_formatted' => 0]],
-                        'title'      => trans('_menu.contact_us.unread'),
-                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(ContactUs::class, 'Index')),
-                        'badge'      => ContactUs::unread()->count() > 0 ? ContactUs::unread()->count() : null,
-                        'badge_classes' => 'bg-red-500 text-white text-xs px-2 py-1 rounded-full',
-                    ],
-                    [
                         'icon'       => 's-plus-circle',
                         'route_name' => 'admin.contact-us.create',
                         'exact'      => true,

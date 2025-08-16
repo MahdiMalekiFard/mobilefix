@@ -18,6 +18,8 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Button;
+
 
 final class ContactUsTable extends PowerGridComponent
 {
@@ -47,6 +49,8 @@ final class ContactUsTable extends PowerGridComponent
         $setup = [
             PowerGrid::header()
                 ->includeViewOnTop("components.admin.shared.bread-crumbs")
+                ->includeViewOnTop("components.admin.shared.success-message")
+                ->includeViewOnTop("components.admin.pages.contactUs.mark-all-read-button")
                 ->showSearchInput(),
 
             PowerGrid::footer()
@@ -59,6 +63,19 @@ final class ContactUsTable extends PowerGridComponent
         }
 
         return $setup;
+    }
+
+    public function addScripts(): string
+    {
+        return <<<HTML
+        <script>
+            // Listen for the custom event when returning from viewing a contact us message
+            window.addEventListener('contactUsViewed', function() {
+                // Refresh the PowerGrid table
+                window.Livewire.dispatch('$refresh');
+            });
+        </script>
+        HTML;
     }
 
 
@@ -124,11 +141,25 @@ final class ContactUsTable extends PowerGridComponent
 
     public function actions(ContactUs $row): array
     {
-        return [
+        $actions = [
             PowerGridHelper::btnShow($row),
-            PowerGridHelper::btnEdit($row),
-            PowerGridHelper::btnDelete($row),
         ];
+
+        // Add mark as read button if message is unread
+        if (!$row->is_read->value) {
+            $actions[] = Button::add('mark-as-read')
+                ->slot('<i class="fas fa-check text-success"></i>')
+                ->attributes([
+                    'class' => 'btn btn-square md:btn-sm btn-xs',
+                    'title' => 'Mark as Read',
+                    'wire:click' => "markAsRead({$row->id})",
+                ]);
+        }
+
+        $actions[] = PowerGridHelper::btnEdit($row);
+        $actions[] = PowerGridHelper::btnDelete($row);
+
+        return $actions;
     }
 
     public function noDataLabel(): string|View
@@ -146,6 +177,57 @@ final class ContactUsTable extends PowerGridComponent
             'created_at' => $this->filters['created_at'] ?? null,
             'all_filters' => $this->filters ?? [],
         ];
+    }
+
+    /**
+     * Refresh the table data
+     * This is useful when returning from viewing a message to show updated read status
+     */
+    public function refreshTable(): void
+    {
+        $this->dispatch('$refresh');
+    }
+
+    /**
+     * Mark a contact us message as read
+     */
+    public function markAsRead(int $contactUsId): void
+    {
+        $contactUs = ContactUs::find($contactUsId);
+        
+        if ($contactUs && !$contactUs->is_read->value) {
+            $contactUs->markAsRead();
+            $this->dispatch('$refresh');
+            
+            // Show success message
+            session()->flash('success', 'Message marked as read successfully.');
+        }
+    }
+
+    /**
+     * Mark all unread messages as read
+     */
+    public function markAllAsRead(): void
+    {
+        $unreadCount = ContactUs::where('is_read', false)->count();
+        
+        if ($unreadCount > 0) {
+            ContactUs::where('is_read', false)->update(['is_read' => true]);
+            $this->dispatch('$refresh');
+            
+            // Show success message
+            session()->flash('success', "All {$unreadCount} unread messages have been marked as read.");
+        } else {
+            session()->flash('info', 'No unread messages to mark as read.');
+        }
+    }
+
+    /**
+     * Get the count of unread messages
+     */
+    public function getUnreadCount(): int
+    {
+        return ContactUs::where('is_read', false)->count();
     }
 
 }
