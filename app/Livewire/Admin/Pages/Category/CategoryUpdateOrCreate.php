@@ -4,37 +4,51 @@ namespace App\Livewire\Admin\Pages\Category;
 
 use App\Actions\Category\StoreCategoryAction;
 use App\Actions\Category\UpdateCategoryAction;
+use App\Enums\CategoryTypeEnum;
 use App\Models\Category;
 use Illuminate\View\View;
 use Livewire\Component;
 use Mary\Traits\Toast;
+use App\Livewire\Traits\SeoOptionTrait;
+use App\Traits\CrudHelperTrait;
+use Livewire\WithFileUploads;
 
 class CategoryUpdateOrCreate extends Component
 {
-    use Toast;
+    use Toast, SeoOptionTrait, WithFileUploads, CrudHelperTrait;
 
     public Category   $model;
     public string $title       = '';
     public string $description = '';
     public bool   $published   = false;
+    public ?string  $type        = CategoryTypeEnum::BLOG->value;
+    public ?int     $ordering    = 1;
+    public          $image;
 
     public function mount(Category $category): void
     {
         $this->model = $category;
         if ($this->model->id) {
+            $this->mountStaticFields();
             $this->title = $this->model->title;
             $this->description = $this->model->description;
             $this->published = $this->model->published->value;
+            $this->type = $this->model->type->value;
+            $this->ordering = $this->model->ordering;
         }
     }
 
     protected function rules(): array
     {
-        return [
+        return array_merge($this->seoOptionRules(), [
             'title'       => 'required|string',
             'description' => 'required|string',
-            'published'   => 'required'
-        ];
+            'slug'        => 'required|string|unique:categories,slug,' . $this->model->id,
+            'published'   => 'required|boolean',
+            'type'        => 'required|string|in:' . implode(',', CategoryTypeEnum::values()),
+            'image'       => 'nullable|image|max:2048',
+            'ordering'    => 'nullable|integer',
+        ]);
     }
 
     public function submit(): void

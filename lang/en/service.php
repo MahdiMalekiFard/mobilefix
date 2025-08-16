@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'model'         => 'Model',
+    'model'         => 'Service',
     'permissions'   => [
     ],
     'exceptions'    => [

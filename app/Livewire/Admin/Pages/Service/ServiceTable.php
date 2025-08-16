@@ -79,8 +79,7 @@ final class ServiceTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row));
     }
 
     public function columns(): array
@@ -89,7 +88,7 @@ final class ServiceTable extends PowerGridComponent
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle(),
             PowerGridHelper::columnPublished(),
-            PowerGridHelper::columnCreatedAT(),
+            PowerGridHelper::columnUpdatedAT('updated_at'),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -110,7 +109,6 @@ final class ServiceTable extends PowerGridComponent
     public function actions(Service $row): array
     {
         return [
-            PowerGridHelper::btnTranslate($row),
             PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),

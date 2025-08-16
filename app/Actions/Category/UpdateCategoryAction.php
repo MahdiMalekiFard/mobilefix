@@ -27,6 +27,7 @@ class UpdateCategoryAction
      * @param array{
      *     title:string,
      *     description:string,
+     *     ordering:int,
      *     published:bool,
      *     type:string,
      *     image:string,
@@ -42,7 +43,7 @@ class UpdateCategoryAction
     public function handle(Category $category, array $payload): Category
     {
         return DB::transaction(function () use ($category, $payload) {
-            $category->update(Arr::only($payload, ['slug', 'published', 'parent_id', 'type', 'ordering']));
+            $category->update(Arr::only($payload, ['slug', 'published', 'parent_id', 'type', 'ordering', 'view_count']));
 
             $this->syncTranslationAction->handle($category, Arr::only($payload, ['title', 'description', 'body']));
 

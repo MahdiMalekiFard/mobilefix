@@ -57,7 +57,7 @@ class Category extends Model implements HasMedia
     ];
 
     public array $translatable = [
-        'title','description', 'body'
+        'title','description'
     ];
 
     /**

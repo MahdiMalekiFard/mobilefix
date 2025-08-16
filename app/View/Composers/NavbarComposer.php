@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\View\Composers;
     
+use App\Models\Service;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Address;
@@ -110,6 +111,29 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.blog.create'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Blog::class, 'Store')),
+                    ]
+                ],
+            ],
+            [
+                'icon'     => 's-book-open',
+                'title'    => trans('_menu.service_management'),
+                'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Service::class, 'Store', 'Index')),
+                'sub_menu' => [
+                    [
+                        'icon'       => 's-list-bullet',
+                        'route_name' => 'admin.service.index',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.service.all'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Service::class, 'Index')),
+                    ],
+                    [
+                        'icon'       => 's-plus-circle',
+                        'route_name' => 'admin.service.create',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.service.create'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Service::class, 'Store')),
                     ]
                 ],
             ],

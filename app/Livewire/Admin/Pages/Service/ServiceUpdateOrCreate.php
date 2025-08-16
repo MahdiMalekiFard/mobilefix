@@ -8,33 +8,43 @@ use App\Models\Service;
 use Illuminate\View\View;
 use Livewire\Component;
 use Mary\Traits\Toast;
+use App\Livewire\Traits\SeoOptionTrait;
+use App\Traits\CrudHelperTrait;
+use Livewire\WithFileUploads;
 
 class ServiceUpdateOrCreate extends Component
 {
-    use Toast;
+    use Toast, SeoOptionTrait, WithFileUploads, CrudHelperTrait;
 
     public Service   $model;
-    public string $title       = '';
-    public string $description = '';
+    public ?string $title       = '';
+    public ?string $description = '';
+    public ?string $body = '';
     public bool   $published   = false;
+    public $image;
 
     public function mount(Service $service): void
     {
         $this->model = $service;
         if ($this->model->id) {
+            $this->mountStaticFields();
             $this->title = $this->model->title;
             $this->description = $this->model->description;
+            $this->body = $this->model->body;
             $this->published = $this->model->published->value;
         }
     }
 
     protected function rules(): array
     {
-        return [
+        return array_merge($this->seoOptionRules(), [
+            'slug'        => 'required|string|unique:services,slug,' . $this->model->id,
             'title'       => 'required|string',
             'description' => 'required|string',
-            'published'   => 'required'
-        ];
+            'body'        => 'required|string',
+            'published'   => 'required|boolean',
+            'image'       => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        ]);
     }
 
     public function submit(): void
