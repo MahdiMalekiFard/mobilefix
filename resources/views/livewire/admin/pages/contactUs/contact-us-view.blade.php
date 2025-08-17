@@ -10,10 +10,6 @@
             </p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('admin.contact-us.edit', $contactUs) }}"
-               class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">
-                ✏️ Edit
-            </a>
             <a href="{{ route('admin.contact-us.index') }}"
                class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700">
                 ← Back
