@@ -24,25 +24,25 @@
                 @foreach ($blogs as $blog)
                 <div class="col-md-6 col-lg-4">
                     <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                        <span class="blog-date"><i class="far fa-calendar-alt"></i> {{ $blog->published_at->format('M d, Y') }}</span>
+                        <span class="blog-date"><i class="far fa-calendar-alt"></i> {{ $blog?->published_at->format('M d, Y') }}</span>
                         <div class="blog-item-img">
-                            <img src="{{ $blog->getFirstMediaUrl('image', Constants::RESOLUTION_854_480) }}" alt="Thumb">
+                            <img src="{{ $blog?->getFirstMediaUrl('image', Constants::RESOLUTION_854_480) }}" alt="Thumb">
                         </div>
                         <div class="blog-item-info">
                             <h4 class="blog-title">
-                                <a href="{{ route('blog-detail-page', ['slug' => $blog->slug]) }}">{{ Str::limit($blog->title, 50) }}</a>
+                                <a href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">{{ Str::limit($blog?->title, 50) }}</a>
                             </h4>
                             <div class="blog-item-meta">
                                 <ul>
                                     <span>
-                                        <li><i class="far fa-user-circle"></i> By {{ $blog->user->name }}</li>
+                                        <li><i class="far fa-user-circle"></i> By {{ $blog?->user->name }}</li>
                                     </span>
                                 </ul>
                             </div>
                             <p>
-                                {{ Str::limit($blog->description, 100) }}
+                                {{ Str::limit($blog?->description, 100) }}
                             </p>
-                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => $blog->slug]) }}">Read More<i class="fas fa-arrow-right"></i></a>
+                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">Read More<i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                 </div>
             </div>
             <!-- pagination end-->
-            
+
         </div>
     </div>
     <!-- blog-area end -->

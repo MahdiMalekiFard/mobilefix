@@ -1,22 +1,23 @@
 <?php
 
-use App\Livewire\Web\Pages\ServiceSinglePage;
-use App\Livewire\Web\Pages\ServicePage;
-use App\Livewire\Web\Pages\HomePage;
-use App\Livewire\Web\Pages\ContactUsPage;
-use App\Livewire\Web\Pages\AboutUsPage;
-use App\Livewire\Web\Pages\BlogPage;
-use App\Livewire\Web\Pages\BlogDetailPage;
-use App\Livewire\Web\Pages\FaqPage;
-use App\Livewire\Web\Pages\TeamPage;
-use App\Livewire\Web\Pages\TermsPage;
-use App\Livewire\Web\Pages\PrivacyPage;
-use App\Livewire\Web\Pages\GalleryPage;
+declare(strict_types=1);
+
+use App\Http\Controllers\WebhookController;
 use App\Livewire\User\Auth\UserLoginPage;
 use App\Livewire\User\Pages\Dashboard\UserDashboardIndex;
 use App\Livewire\User\Pages\Setting\UserSettingList;
-use App\Livewire\User\Pages\Order\UserOrderList;
-use App\Http\Controllers\WebhookController;
+use App\Livewire\Web\Pages\AboutUsPage;
+use App\Livewire\Web\Pages\BlogDetailPage;
+use App\Livewire\Web\Pages\BlogPage;
+use App\Livewire\Web\Pages\ContactUsPage;
+use App\Livewire\Web\Pages\FaqPage;
+use App\Livewire\Web\Pages\GalleryPage;
+use App\Livewire\Web\Pages\HomePage;
+use App\Livewire\Web\Pages\PrivacyPage;
+use App\Livewire\Web\Pages\ServicePage;
+use App\Livewire\Web\Pages\ServiceSinglePage;
+use App\Livewire\Web\Pages\TeamPage;
+use App\Livewire\Web\Pages\TermsPage;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomePage::class)->name('home-page');
@@ -43,7 +44,7 @@ Route::post('user/auth/logout', function () {
 })->name('user.auth.logout');
 
 // Magic link route (must be before user dashboard routes)
-Route::get('magic-link/{token}', \App\Livewire\User\Auth\UserMagicLinkPage::class)->name('user.magic-link');
+Route::get('magic-link/{token}', App\Livewire\User\Auth\UserMagicLinkPage::class)->name('user.magic-link');
 
 // pages
 Route::get('/contact-us', ContactUsPage::class)->name('contact-us-page');

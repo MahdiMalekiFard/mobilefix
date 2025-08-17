@@ -5,45 +5,46 @@ namespace App\Livewire\Admin\Pages\Blog;
 use App\Actions\Blog\StoreBlogAction;
 use App\Actions\Blog\UpdateBlogAction;
 use App\Enums\CategoryTypeEnum;
+use App\Livewire\Traits\SeoOptionTrait;
 use App\Models\Blog;
 use App\Models\Category;
+use App\Traits\CrudHelperTrait;
 use Carbon\Carbon;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
-use App\Livewire\Traits\SeoOptionTrait;
-use App\Traits\CrudHelperTrait;
 
 class BlogUpdateOrCreate extends Component
 {
-    use Toast, SeoOptionTrait, WithFileUploads, CrudHelperTrait;
+    use CrudHelperTrait, SeoOptionTrait, Toast, WithFileUploads;
 
-    public Blog   $model;
-    public ?string $title       = '';
-    public ?string $description = '';
-    public ?string $body = '';
-    public bool   $published   = false;
-    public ?string $published_at = '';
-    public array  $tags        = [];
-    public array   $categories   = [];
-    public int     $category_id  = 1;
-    public         $image;
-
+    public Blog $model;
+    public ?string $title           = '';
+    public ?string $description     = '';
+    public ?string $body            = '';
+    public bool $published          = false;
+    public ?string $published_at    = '';
+    public array $tags              = [];
+    public array $allTags           = [];
+    public array $categories        = [];
+    public int $category_id         = 1;
+    public $image;
 
     public function mount(Blog $blog): void
     {
-        $this->model = $blog;
-        $this->categories = Category::where('type', CategoryTypeEnum::BLOG->value)->get()->map(fn($item) => ['name' => $item->title, 'id' => $item->id])->toArray();
+        $this->model      = $blog;
+        $this->categories = Category::where('type', CategoryTypeEnum::BLOG->value)->get()->map(fn ($item) => ['name' => $item->title, 'id' => $item->id])->toArray();
+
         if ($this->model->id) {
             $this->mountStaticFields();
-            $this->title = $this->model->title;
-            $this->description = $this->model->description;
-            $this->body = $this->model->body;
-            $this->published = $this->model->published->value;
+            $this->title        = $this->model->title;
+            $this->description  = $this->model->description;
+            $this->body         = $this->model->body;
+            $this->published    = $this->model->published->value;
             $this->published_at = $this->setPublishedAt($this->model->published_at);
-            $this->tags = $this->model->tags->pluck('name')->toArray();
-            $this->category_id = $this->model->category_id;
+            $this->tags         = $this->model->tags->pluck('name')->map(fn ($n) => (string) $n)->toArray();
+            $this->category_id  = $this->model->category_id;
         }
     }
 
@@ -59,7 +60,7 @@ class BlogUpdateOrCreate extends Component
                 $this->published ? 'nullable' : 'required',
                 'date',
                 function ($attribute, $value, $fail) {
-                    if ($value && Carbon::parse($value)->addMinutes(2)->isBefore(now())) {
+                    if ( ! $this->published && $value && Carbon::parse($value)->addMinutes(2)->isBefore(now())) {
                         $fail(trans('blog.exceptions.published_at_after_now'));
                     }
                 },
@@ -70,7 +71,7 @@ class BlogUpdateOrCreate extends Component
         ]);
     }
 
-    public function updatedPublished($value)
+    public function updatedPublished($value): void
     {
         if ($value) {
             // When published is true, set published_at to now and hide the field
@@ -79,7 +80,7 @@ class BlogUpdateOrCreate extends Component
             // When published is false, clear published_at so admin can set it
             $this->published_at = null;
         }
-        
+
         // Force component to re-render to show/hide the published_at field
         $this->dispatch('$refresh');
     }
@@ -87,14 +88,14 @@ class BlogUpdateOrCreate extends Component
     public function submit(): void
     {
         $payload = $this->validate();
-        
+
         // If published is true, automatically set published_at to now
         if ($this->published) {
             $payload['published_at'] = now();
         }
-        
+
         $payload = $this->normalizePublishedAt($payload);
-        
+
         if ($this->model->id) {
             UpdateBlogAction::run($this->model, $payload);
             $this->success(
@@ -116,11 +117,11 @@ class BlogUpdateOrCreate extends Component
             'edit_mode'          => $this->model->id,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.blog.index'), 'label' => trans('general.page.index.title', ['model' => trans('blog.model')])],
+                ['link'  => route('admin.blog.index'), 'label' => trans('general.page.index.title', ['model' => trans('blog.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('blog.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.blog.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.blog.index'), 'icon' => 's-arrow-left'],
             ],
         ]);
     }

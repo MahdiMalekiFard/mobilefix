@@ -32,7 +32,13 @@
                         :options="$categories"
                         required
                     />
-                    <x-tags :label="trans('validation.attributes.tags')" wire:model="tags" icon="o-tag" clearable/>
+                    <x-mary.tag-select
+                        wire:model="tags"
+                        :selected="$tags"
+                        :key="'tag-select-'.$model->id"
+                        label="Tags"
+                        clearable
+                    />
                 </div>
             </x-card>
 

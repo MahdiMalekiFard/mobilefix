@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Blog;
 
 use App\Actions\Translation\SyncTranslationAction;
@@ -19,12 +21,9 @@ class UpdateBlogAction
         private readonly SyncTranslationAction $syncTranslationAction,
         private readonly SeoOptionService $seoOptionService,
         private readonly FileService $fileService,
-    )
-    {
-    }
+    ) {}
 
     /**
-     * @param Blog $blog
      * @param array{
      *     title:string,
      *     description:string,
@@ -42,7 +41,6 @@ class UpdateBlogAction
      *     tags:array<string>,
      *     image:string,
      * }    $payload
-     * @return Blog
      * @throws Throwable
      */
     public function handle(Blog $blog, array $payload): Blog
@@ -55,6 +53,7 @@ class UpdateBlogAction
             if ($tags = Arr::get($payload, 'tags')) {
                 $blog->syncTags($tags);
             }
+
             return $blog->refresh();
         });
     }
