@@ -152,7 +152,6 @@ final class ContactUsTable extends PowerGridComponent
                 ]);
         }
 
-        $actions[] = PowerGridHelper::btnEdit($row);
         $actions[] = PowerGridHelper::btnDelete($row);
 
         return $actions;
