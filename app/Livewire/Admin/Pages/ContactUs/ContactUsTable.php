@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Admin\Pages\ContactUs;
 
-use App\Enums\BooleanEnum;
+use App\Enums\ReadStatusEnum;
 use App\Helpers\PowerGridHelper;
 use App\Models\ContactUs;
 use App\Traits\PowerGridHelperTrait;
@@ -125,8 +125,8 @@ final class ContactUsTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::enumSelect('is_read', 'is_read')
-                  ->datasource(BooleanEnum::cases()),
+            Filter::enumSelect('is_read_badge', 'is_read')
+                  ->datasource(ReadStatusEnum::cases()),
 
             Filter::datepicker('created_at', 'created_at')
                   ->params([

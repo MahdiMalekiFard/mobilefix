@@ -83,7 +83,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                                wire:model="name" placeholder="Your Name" required>
+                                                wire:model.live="name" placeholder="Your Name">
                                             @error('name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -92,7 +92,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                                wire:model="email" placeholder="Your Email" required>
+                                                wire:model.live="email" placeholder="Your Email">
                                             @error('email')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -101,21 +101,21 @@
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control @error('subject') is-invalid @enderror" 
-                                        wire:model="subject" placeholder="Your Subject">
+                                        wire:model.live="subject" placeholder="Your Subject">
                                     @error('subject')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control @error('phone') is-invalid @enderror" 
-                                        wire:model="phone" placeholder="Your Phone Number">
+                                        wire:model.live="phone" placeholder="Your Phone Number">
                                     @error('phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <textarea wire:model="message" cols="30" rows="5" class="form-control @error('message') is-invalid @enderror"
-                                        placeholder="Write Your Message" required></textarea>
+                                    <textarea wire:model.live="message" cols="30" rows="5" class="form-control @error('message') is-invalid @enderror"
+                                        placeholder="Write Your Message"></textarea>
                                     @error('message')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

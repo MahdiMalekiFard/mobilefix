@@ -14,7 +14,7 @@ class ContactUsPage extends Component
     #[Rule('required|email|max:255')]
     public string $email = '';
 
-    #[Rule('nullable|string|max:20')]
+    #[Rule('nullable|numeric|digits_between:6,20')]
     public ?string $phone = null;
 
     #[Rule('nullable|string|max:255')]
