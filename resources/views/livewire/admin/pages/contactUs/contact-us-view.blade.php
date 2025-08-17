@@ -1,133 +1,84 @@
-<div>
-    @if (session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="mx-auto max-w-5xl p-4 md:p-6" 
+     x-data="{ copy(t){navigator.clipboard.writeText(t)} }">
+
+    {{-- Header --}}
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">Contact Message</h1>
+            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                Focused view with essentials only.
+            </p>
         </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if ($wasUnread)
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            This message has been marked as read successfully.
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @elseif (!$contactUs->is_read->value)
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <i class="fas fa-info-circle me-2"></i>
-            This message is currently unread. It will be marked as read automatically.
-            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Contact Message</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <strong>Name:</strong>
-                            <p>{{ $contactUs->name }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Email:</strong>
-                            <p>{{ $contactUs->email }}</p>
-                        </div>
-                    </div>
-                    
-                    @if($contactUs->phone)
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <strong>Phone:</strong>
-                            <p>{{ $contactUs->phone }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Subject:</strong>
-                            <p>{{ $contactUs->subject ?? 'No subject' }}</p>
-                        </div>
-                    </div>
-                    @else
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <strong>Subject:</strong>
-                            <p>{{ $contactUs->subject ?? 'No subject' }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Date:</strong>
-                            <p>{{ $contactUs->created_at->format('M d, Y H:i') }}</p>
-                        </div>
-                    </div>
-                    @endif
-
-                    <div class="mb-3">
-                        <strong>Message:</strong>
-                        <div class="border rounded p-3 bg-light">
-                            {{ $contactUs->message }}
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Quick Actions</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('admin.contact-us.edit', $contactUs) }}" class="btn btn-primary">
-                            <i class="fas fa-edit me-2"></i>Edit
-                        </a>
-                        
-                        <a href="{{ route('admin.contact-us.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-2"></i>Back to List
-                        </a>
-                    </div>
-
-                    <hr>
-
-                    <div class="mb-3">
-                        <strong>Status:</strong>
-                        <div class="mt-2">
-                            @if($contactUs->is_read->value)
-                                <span class="badge bg-success">Read</span>
-                            @else
-                                <span class="badge bg-warning">Unread</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <strong>Received:</strong>
-                        <div class="mt-2">
-                            <small class="text-muted">{{ $contactUs->created_at->format('M d, Y H:i') }}</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="flex gap-2">
+            <a href="{{ route('admin.contact-us.edit', $contactUs) }}"
+               class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">
+                ✏️ Edit
+            </a>
+            <a href="{{ route('admin.contact-us.index') }}"
+               class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700">
+                ← Back
+            </a>
         </div>
     </div>
-</div>
 
-<script>
-    // Auto-refresh the parent table when returning from this view
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check if we're coming from the table view
-        if (document.referrer && document.referrer.includes('admin/contact-us')) {
-            // Dispatch a custom event that the table can listen to
-            window.dispatchEvent(new CustomEvent('contactUsViewed'));
-        }
-    });
-</script>
+    {{-- Card --}}
+    <section class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
+        {{-- Meta --}}
+        <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                @if($contactUs->is_read->value)
+                    <span class="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+                        <span class="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                        Read
+                    </span>
+                @else
+                    <span class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-800 dark:bg-amber-500/10 dark:text-amber-300">
+                        <span class="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                        Unread
+                    </span>
+                @endif
+            </div>
+            <div class="text-xs text-zinc-500 dark:text-zinc-400">
+                Received: <span class="font-medium text-zinc-900 dark:text-zinc-100">{{ $contactUs->created_at->format('M d, Y H:i') }}</span>
+            </div>
+        </div>
+
+        {{-- Details --}}
+        <dl class="grid gap-6 sm:grid-cols-2">
+            <div>
+                <dt class="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Name</dt>
+                <dd class="mt-1 text-zinc-900 dark:text-zinc-100">{{ $contactUs->name }}</dd>
+            </div>
+            <div>
+                <dt class="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Email</dt>
+                <dd class="mt-1 flex items-center gap-2">
+                    <a href="mailto:{{ $contactUs->email }}" class="text-zinc-900 hover:underline dark:text-zinc-100">{{ $contactUs->email }}</a>
+                    <button @click="copy('{{ $contactUs->email }}')" class="rounded p-1 text-xs text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-zinc-200">📋</button>
+                </dd>
+            </div>
+            @if($contactUs->phone)
+                <div>
+                    <dt class="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Phone</dt>
+                    <dd class="mt-1 flex items-center gap-2">
+                        <a href="tel:{{ $contactUs->phone }}" class="text-zinc-900 dark:text-zinc-100">{{ $contactUs->phone }}</a>
+                        <button @click="copy('{{ $contactUs->phone }}')" class="rounded p-1 text-xs text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-zinc-200">📋</button>
+                    </dd>
+                </div>
+            @endif
+            @if(!empty($contactUs->subject))
+                <div>
+                    <dt class="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Subject</dt>
+                    <dd class="mt-1 text-zinc-900 dark:text-zinc-100">{{ $contactUs->subject }}</dd>
+                </div>
+            @endif
+        </dl>
+
+        {{-- Message --}}
+        <div class="mt-6">
+            <h3 class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300">Message</h3>
+            <div class="whitespace-pre-wrap rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-zinc-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200">
+                {{ $contactUs->message }}
+            </div>
+        </div>
+    </section>
+</div>

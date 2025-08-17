@@ -65,33 +65,17 @@ final class ContactUsTable extends PowerGridComponent
         return $setup;
     }
 
-    public function addScripts(): string
-    {
-        return <<<HTML
-        <script>
-            // Listen for the custom event when returning from viewing a contact us message
-            window.addEventListener('contactUsViewed', function() {
-                // Refresh the PowerGrid table
-                window.Livewire.dispatch('$refresh');
-            });
-        </script>
-        HTML;
-    }
-
-
     public function datasource(): Builder
     {
         $query = ContactUs::query();
 
-        // Apply filters
-        if (!empty($this->filters['is_read'])) {
-            $query->where('is_read', $this->filters['is_read']);
+        $urlFilters = request()->get('filters', []);
+
+        if ($urlFilters && array_key_exists('is_read', $urlFilters)) {
+            $isRead = $urlFilters['is_read'];
+            $query->where('is_read', $isRead);
         }
-        
-        if (!empty($this->filters['created_at'])) {
-            $query->whereDate('created_at', $this->filters['created_at']);
-        }
-        
+
         return $query;
     }
 
@@ -108,7 +92,19 @@ final class ContactUsTable extends PowerGridComponent
             ->add('email')
             ->add('phone')
             ->add('subject', fn ($row) => Str::limit($row->subject, 20))
-            ->add('is_read_formatted', fn ($row) => $row->is_read->value ? 'Read' : 'Unread')
+            ->add('is_read_badge', function ($row) {
+                if ($row->is_read->value) {
+                    return '<span class="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                                <span class="mr-1 h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                Read
+                            </span>';
+                }
+    
+                return '<span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+                            <span class="mr-1 h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                            Unread
+                        </span>';
+            })
             ->add('created_at_formatted', fn ($row) => $row->created_at->format('M d, Y H:i'));
     }
 
@@ -120,7 +116,7 @@ final class ContactUsTable extends PowerGridComponent
             Column::make('Email', 'email'),
             Column::make('Phone', 'phone'),
             Column::make('Subject', 'subject'),
-            Column::make('Status', 'is_read_formatted'),
+            Column::make('Status', 'is_read_badge'),
             Column::make('Created At', 'created_at_formatted'),
             PowerGridHelper::columnAction(),
         ];
@@ -165,27 +161,8 @@ final class ContactUsTable extends PowerGridComponent
     public function noDataLabel(): string|View
     {
         return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.contact-us.create')
+            'link'=>null
         ]);
-    }
-
-    // Helper method to debug filter values
-    public function getFilterValues(): array
-    {
-        return [
-            'is_read' => $this->filters['is_read'] ?? null,
-            'created_at' => $this->filters['created_at'] ?? null,
-            'all_filters' => $this->filters ?? [],
-        ];
-    }
-
-    /**
-     * Refresh the table data
-     * This is useful when returning from viewing a message to show updated read status
-     */
-    public function refreshTable(): void
-    {
-        $this->dispatch('$refresh');
     }
 
     /**
@@ -197,10 +174,12 @@ final class ContactUsTable extends PowerGridComponent
         
         if ($contactUs && !$contactUs->is_read->value) {
             $contactUs->markAsRead();
-            $this->dispatch('$refresh');
-            
+
             // Show success message
             session()->flash('success', 'Message marked as read successfully.');
+
+            // hard refresh so non-Livewire parts update
+            $this->js('window.location.reload()');
         }
     }
 
@@ -213,10 +192,12 @@ final class ContactUsTable extends PowerGridComponent
         
         if ($unreadCount > 0) {
             ContactUs::where('is_read', false)->update(['is_read' => true]);
-            $this->dispatch('$refresh');
-            
+
             // Show success message
             session()->flash('success', "All {$unreadCount} unread messages have been marked as read.");
+
+            // hard refresh
+            $this->js('window.location.reload()');
         } else {
             session()->flash('info', 'No unread messages to mark as read.');
         }
