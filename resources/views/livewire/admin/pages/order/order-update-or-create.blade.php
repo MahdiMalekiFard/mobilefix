@@ -2,7 +2,7 @@
 <div>
     <form wire:submit="submit">
     <x-admin.shared.bread-crumbs :breadcrumbs="$breadcrumbs" :breadcrumbs-actions="$breadcrumbsActions"/>
-    
+
     {{-- just for testing --}}
     {{-- Display Validation Errors --}}
     @if ($errors->any())
@@ -15,12 +15,12 @@
             </ul>
         </div>
     @endif
-    
+
     <!-- Basic Order Information -->
     <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit" class="mb-6">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            @if($edit_mode) 
-                <x-admin.shared.form-input 
+            @if($edit_mode)
+                <x-admin.shared.form-input
                     :label="trans('order.order_number')"
                     wire:model="order_number"
                     placeholder="{{ trans('order.order_number') }}"
@@ -29,7 +29,7 @@
                     class="bg-gray-50 cursor-not-allowed"
                     :helper="trans('order.order_number_auto_generated')"
                 />
-                <x-admin.shared.form-input 
+                <x-admin.shared.form-input
                     :label="trans('order.tracking_code')"
                     wire:model="tracking_code"
                     placeholder="{{ trans('order.tracking_code') }}"
@@ -47,7 +47,7 @@
                 :error="$errors->first('status')"
                 :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
             />
-            <x-admin.shared.form-input 
+            <x-admin.shared.form-input
                 :label="trans('order.total')"
                 wire:model="total"
                 placeholder="0.00"
@@ -62,14 +62,14 @@
                 :error="$errors->first('total')"
                 :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
             />
-            
+
         </div>
     </x-card>
 
     <x-card :title="trans('order.user_info')" shadow separator progress-indicator="submit" class="mb-6">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
             @if($edit_mode)
-                <x-admin.shared.form-input 
+                <x-admin.shared.form-input
                     :label="trans('order.user_email')"
                     wire:model="user_email"
                     placeholder="{{ trans('order.user_email') }}"
@@ -77,7 +77,7 @@
                     disabled
                     readonly
                 />
-                <x-admin.shared.form-input 
+                <x-admin.shared.form-input
                     :label="trans('order.user_phone')"
                     wire:model="user_phone"
                     placeholder="{{ trans('order.user_phone') }}"
@@ -181,7 +181,7 @@
                          multiple
                          accept="image/*"
                 />
-                
+
                 <!-- Existing Images -->
                 @if(count($existingImages) > 0)
                     <div class="mt-4">
@@ -189,8 +189,8 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @foreach($existingImages as $image)
                                 <div class="relative group">
-                                    <img src="{{ $image['url'] }}" 
-                                         alt="{{ $image['name'] }}" 
+                                    <img src="{{ $image['url'] }}"
+                                         alt="{{ $image['name'] }}"
                                          class="w-full h-32 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
                                          onclick="openImageModal('{{ $image['url'] }}', '{{ $image['name'] }}')">
                                     <button type="button"
@@ -207,7 +207,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <!-- New Images Preview -->
                 @if($images)
                     <div class="mt-4">
@@ -215,8 +215,8 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @foreach($images as $index => $image)
                                 <div class="relative group">
-                                    <img src="{{ $image->temporaryUrl() }}" 
-                                         alt="Preview" 
+                                    <img src="{{ $image->temporaryUrl() }}"
+                                         alt="Preview"
                                          class="w-full h-32 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
                                          onclick="openImageModal('{{ $image->temporaryUrl() }}', '{{ $image->getClientOriginalName() }}')">
                                     <button type="button"
@@ -234,7 +234,7 @@
                     </div>
                 @endif
             </div>
-            
+
             <!-- Videos Section -->
             <div>
                 <x-admin.shared.file-input :label="trans('order.videos')"
@@ -242,7 +242,7 @@
                          multiple
                          accept="video/*"
                 />
-                
+
                 <!-- Existing Videos -->
                 @if(count($existingVideos) > 0)
                     <div class="mt-4">
@@ -268,7 +268,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <!-- New Videos Preview -->
                 @if($videos)
                     <div class="mt-4">
@@ -364,8 +364,8 @@
         document.getElementById('modalVideoName').textContent = videoName;
         document.getElementById('videoModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
-        
-        // Auto-play the video when modal opens
+
+        // Autoplay the video when modal opens
         videoElement.play().catch(function(error) {
             console.log('Video autoplay failed:', error);
         });
@@ -378,12 +378,12 @@
             event.stopPropagation();
             event.stopImmediatePropagation();
         }
-        
+
         // Pause and reset the video
         const videoElement = document.getElementById('modalVideo');
         videoElement.pause();
         videoElement.currentTime = 0;
-        
+
         document.getElementById('videoModal').classList.add('hidden');
         document.body.style.overflow = 'auto';
     }

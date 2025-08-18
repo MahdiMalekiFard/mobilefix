@@ -152,7 +152,7 @@ return [
         'create' => 'Create Portfolio',
     ],
 
-    'page_management'           => 'page management',
+    'page_management'           => 'Page management',
     'page'                      => [
         'all'    => 'All Pages',
         'create' => 'Create Page',

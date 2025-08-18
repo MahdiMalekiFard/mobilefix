@@ -22,28 +22,28 @@ class OrderUpdateOrCreate extends Component
     use Toast, WithFileUploads;
 
     public Order   $model;
-    public ?string $order_number = null;
-    public ?string $tracking_code = null;
-    public ?string $status       = null;
-    public int    $total        = 0;
-    public ?string $user_name    = null;
-    public ?string $user_phone   = null;
-    public ?string $user_email   = null;
-    public ?int    $brand_id     = null;
-    public ?int    $device_id   = null;
-    public ?int    $user_id      = null;
-    public ?int    $address_id   = null;
+    public ?string $order_number      = null;
+    public ?string $tracking_code     = null;
+    public ?string $status            = null;
+    public int     $total             = 0;
+    public ?string $user_name         = null;
+    public ?string $user_phone        = null;
+    public ?string $user_email        = null;
+    public ?int    $brand_id          = null;
+    public ?int    $device_id         = null;
+    public ?int    $user_id           = null;
+    public ?int    $address_id        = null;
     public ?int    $payment_method_id = null;
-    public array  $selectedProblems = [];
-    public ?string $user_note     = null;
-    public ?string $admin_note    = null;
-    public $images;
-    public $videos;
-    public array $existingImages = [];
-    public array $existingVideos = [];
-    public array $removedNewImages = [];
-    public array $removedNewVideos = [];
-    public array $filteredDevices = [];
+    public array   $selectedProblems  = [];
+    public ?string $user_note         = null;
+    public ?string $admin_note        = null;
+    public         $images;
+    public         $videos;
+    public array   $existingImages    = [];
+    public array   $existingVideos    = [];
+    public array   $removedNewImages  = [];
+    public array   $removedNewVideos  = [];
+    public array   $filteredDevices   = [];
 
     public function mount(Order $order): void
     {
@@ -64,32 +64,32 @@ class OrderUpdateOrCreate extends Component
             $this->selectedProblems = $this->model->problems->pluck('id')->toArray();
             $this->user_note = $this->model->user_note ?? '';
             $this->admin_note = $this->model->admin_note ?? '';
-            
+
             // Populate filteredDevices if brand is already selected
             if ($this->brand_id) {
-                $this->filteredDevices = Device::where('brand_id', $this->brand_id)->get()->map(function($device) {
+                $this->filteredDevices = Device::where('brand_id', $this->brand_id)->get()->map(function ($device) {
                     return [
                         'value' => $device->id,
                         'label' => $device->title
                     ];
                 })->toArray() ?? [];
             }
-            
+
             // Load existing media
-            $this->existingImages = $this->model->getMedia('images')->map(function($media) {
+            $this->existingImages = $this->model->getMedia('images')->map(function ($media) {
                 return [
-                    'id' => $media->id,
-                    'url' => $media->getUrl(),
-                    'name' => $media->name,
+                    'id'        => $media->id,
+                    'url'       => $media->getUrl(),
+                    'name'      => $media->name,
                     'file_name' => $media->file_name
                 ];
             })->toArray();
-            
-            $this->existingVideos = $this->model->getMedia('videos')->map(function($media) {
+
+            $this->existingVideos = $this->model->getMedia('videos')->map(function ($media) {
                 return [
-                    'id' => $media->id,
-                    'url' => $media->getUrl(),
-                    'name' => $media->name,
+                    'id'        => $media->id,
+                    'url'       => $media->getUrl(),
+                    'name'      => $media->name,
                     'file_name' => $media->file_name
                 ];
             })->toArray();
@@ -100,19 +100,19 @@ class OrderUpdateOrCreate extends Component
     {
         // Clear device selection first
         $this->device_id = null;
-        
+
         // Reset and repopulate filtered devices
         $this->filteredDevices = [];
-        
+
         if ($value) {
-            $this->filteredDevices = Device::where('brand_id', $value)->get()->map(function($device) {
+            $this->filteredDevices = Device::where('brand_id', $value)->get()->map(function ($device) {
                 return [
                     'value' => $device->id,
                     'label' => $device->title
                 ];
             })->toArray();
         }
-        
+
         // Force Livewire to detect the change
         $this->dispatch('brand-changed');
     }
@@ -120,29 +120,29 @@ class OrderUpdateOrCreate extends Component
     protected function rules(): array
     {
         $rules = [];
-        
+
         $rules = array_merge($rules, [
-            'status'       => 'required|string',
-            'total'        => 'nullable|integer|min:0',
-            'user_name'    => 'nullable|string|max:255',
-            'user_phone'   => 'nullable|string|max:255',
-            'user_email'   => 'nullable|email',
-            'brand_id'     => 'required|exists:brands,id',
-            'device_id'    => 'required|exists:devices,id',
-            'user_id'      => 'required|exists:users,id',
-            'address_id'   => 'nullable|exists:addresses,id',
-            'payment_method_id' => 'nullable|exists:payment_methods,id',
-            'selectedProblems' => 'required|array',
+            'status'             => 'required|string',
+            'total'              => 'nullable|integer|min:0',
+            'user_name'          => 'nullable|string|max:255',
+            'user_phone'         => 'nullable|string|max:255',
+            'user_email'         => 'nullable|email',
+            'brand_id'           => 'required|exists:brands,id',
+            'device_id'          => 'required|exists:devices,id',
+            'user_id'            => 'required|exists:users,id',
+            'address_id'         => 'nullable|exists:addresses,id',
+            'payment_method_id'  => 'nullable|exists:payment_methods,id',
+            'selectedProblems'   => 'required|array',
             'selectedProblems.*' => 'exists:problems,id',
-            'user_note'    => 'nullable|string',
-            'admin_note'   => 'nullable|string',
-            'images'       => 'nullable',
-            'images.*'     => 'image|max:2048',
-            'videos'       => 'nullable',
-            'videos.*'     => 'mimes:mp4,avi,mov,wmv,webm|max:10240',
+            'user_note'          => 'nullable|string',
+            'admin_note'         => 'nullable|string',
+            'images'             => 'nullable',
+            'images.*'           => 'image|max:2048',
+            'videos'             => 'nullable',
+            'videos.*'           => 'mimes:mp4,avi,mov,wmv,webm|max:10240',
         ]);
 
-        if($this->model->id) {
+        if ($this->model->id) {
             $rules['order_number'] = 'required|string|unique:orders,order_number,' . $this->model->id;
             $rules['tracking_code'] = 'required|string|unique:orders,tracking_code,' . $this->model->id;
             $rules['user_id'] = 'nullable|exists:users,id';
@@ -157,7 +157,7 @@ class OrderUpdateOrCreate extends Component
         $payload = $this->validate();
         $payload['problems'] = $payload['selectedProblems'];
         unset($payload['selectedProblems']);
-        
+
         // Add media files to payload
         if ($this->images) {
             $payload['images'] = $this->images;
@@ -165,17 +165,17 @@ class OrderUpdateOrCreate extends Component
         if ($this->videos) {
             $payload['videos'] = $this->videos;
         }
-        
+
         if ($this->model->id) {
             UpdateOrderAction::run($this->model, $payload);
-            
+
             $this->success(
                 title: trans('general.model_has_updated_successfully', ['model' => trans('order.model')]),
                 redirectTo: route('admin.order.index')
             );
         } else {
             StoreOrderAction::run($payload);
-            
+
             $this->success(
                 title: trans('general.model_has_stored_successfully', ['model' => trans('order.model')]),
                 redirectTo: route('admin.order.index')
@@ -184,26 +184,25 @@ class OrderUpdateOrCreate extends Component
     }
 
 
-
     public function deleteImage($mediaId): void
     {
         $media = $this->model->getMedia('images')->find($mediaId);
         if ($media) {
             $media->delete();
-            
+
             // Refresh the model to clear any cached media collections
             $this->model->refresh();
-            
+
             // Update the existing images array
-            $this->existingImages = $this->model->getMedia('images')->map(function($media) {
+            $this->existingImages = $this->model->getMedia('images')->map(function ($media) {
                 return [
-                    'id' => $media->id,
-                    'url' => $media->getUrl(),
-                    'name' => $media->name,
+                    'id'        => $media->id,
+                    'url'       => $media->getUrl(),
+                    'name'      => $media->name,
                     'file_name' => $media->file_name
                 ];
             })->toArray();
-            
+
             $this->success('Image deleted successfully');
         }
     }
@@ -213,20 +212,20 @@ class OrderUpdateOrCreate extends Component
         $media = $this->model->getMedia('videos')->find($mediaId);
         if ($media) {
             $media->delete();
-            
+
             // Refresh the model to clear any cached media collections
             $this->model->refresh();
-            
+
             // Update the existing videos array
-            $this->existingVideos = $this->model->getMedia('videos')->map(function($media) {
+            $this->existingVideos = $this->model->getMedia('videos')->map(function ($media) {
                 return [
-                    'id' => $media->id,
-                    'url' => $media->getUrl(),
-                    'name' => $media->name,
+                    'id'        => $media->id,
+                    'url'       => $media->getUrl(),
+                    'name'      => $media->name,
                     'file_name' => $media->file_name
                 ];
             })->toArray();
-            
+
             $this->success('Video deleted successfully');
         }
     }
@@ -235,7 +234,7 @@ class OrderUpdateOrCreate extends Component
     {
         if (isset($this->images[$index])) {
             $this->removedNewImages[] = $index;
-            $this->images = collect($this->images)->filter(function($image, $key) {
+            $this->images = collect($this->images)->filter(function ($image, $key) {
                 return !in_array($key, $this->removedNewImages);
             })->values()->toArray();
             $this->success('New image removed');
@@ -246,7 +245,7 @@ class OrderUpdateOrCreate extends Component
     {
         if (isset($this->videos[$index])) {
             $this->removedNewVideos[] = $index;
-            $this->videos = collect($this->videos)->filter(function($video, $key) {
+            $this->videos = collect($this->videos)->filter(function ($video, $key) {
                 return !in_array($key, $this->removedNewVideos);
             })->values()->toArray();
             $this->success('New video removed');
@@ -262,7 +261,7 @@ class OrderUpdateOrCreate extends Component
                 'value' => $status['id'],
                 'label' => $status['title'],
                 'badge' => [
-                    'text' => $status['title'],
+                    'text'  => $status['title'],
                     'color' => $statusEnum->color()
                 ]
             ];

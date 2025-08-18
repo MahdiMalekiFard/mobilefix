@@ -11,6 +11,7 @@ use App\Models\ContactUs;
 use App\Models\Faq;
 use App\Models\Opinion;
 use App\Models\Order;
+use App\Models\Page;
 use App\Models\PaymentMethod;
 use App\Models\Problem;
 use App\Models\Service;
@@ -219,6 +220,29 @@ class NavbarComposer
                         'title'         => trans('_menu.contact_us.unread'),
                         'badge'         => ContactUs::unread()->count() > 0 ? ContactUs::unread()->count() : null,
                         'badge_classes' => 'bg-red-500 text-white text-xs px-2 py-1 rounded-full',
+                    ],
+                ],
+            ],
+            [
+                'icon'     => 'lucide.layers',
+                'title'    => trans('_menu.page_management'),
+                'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Page::class, 'Store', 'Index')),
+                'sub_menu' => [
+                    [
+                        'icon'       => 's-list-bullet',
+                        'route_name' => 'admin.page.index',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.page.all'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Page::class, 'Index')),
+                    ],
+                    [
+                        'icon'       => 's-plus-circle',
+                        'route_name' => 'admin.page.create',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.page.create'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Page::class, 'Store')),
                     ],
                 ],
             ],

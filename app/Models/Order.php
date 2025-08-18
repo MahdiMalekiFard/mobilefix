@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\HasSchemalessAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
-use App\Traits\HasSchemalessAttributes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class Order extends Model implements HasMedia
 {
     use HasFactory,
         HasSchemalessAttributes,
-        SoftDeletes,
-        InteractsWithMedia;
+        InteractsWithMedia,
+        SoftDeletes;
 
     protected $fillable = [
         'order_number',
@@ -35,17 +37,13 @@ class Order extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'config' => 'array',
+        'config'     => 'array',
         'deleted_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-
-    /**
-     * Model Configuration --------------------------------------------------------------------------
-     */
-
+    /** Model Configuration -------------------------------------------------------------------------- */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images')
@@ -55,71 +53,62 @@ class Order extends Model implements HasMedia
             ->acceptsMimeTypes(['video/mp4', 'video/avi', 'video/mov', 'video/wmv', 'video/webm']);
     }
 
-
-    /**
-     * Model Relations --------------------------------------------------------------------------
-     */
-
-    public function user()
+    /** Model Relations -------------------------------------------------------------------------- */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-    
-    public function address()
+
+    public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class);
     }
-    
-    public function paymentMethod()
+
+    public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
     }
-    
-    public function device()
+
+    public function device(): BelongsTo
     {
         return $this->belongsTo(Device::class);
     }
-    
-    public function brand()
+
+    public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }
-    
-    public function problems()
+
+    public function problems(): BelongsToMany
     {
         return $this->belongsToMany(Problem::class)->withTimestamps();
     }
-    
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
     }
-    
+
     public function successfulTransactions()
     {
         return $this->hasMany(Transaction::class)->successful();
     }
-    
+
     public function pendingTransactions()
     {
         return $this->hasMany(Transaction::class)->pending();
     }
-    
+
     public function latestTransaction()
     {
         return $this->hasOne(Transaction::class)->latest();
     }
 
-
     /**
      * Model Scope --------------------------------------------------------------------------
      */
 
-
-    /**
-     * Model Attributes --------------------------------------------------------------------------
-     */
-
+    /** Model Attributes -------------------------------------------------------------------------- */
     public function getUserNameAttribute()
     {
         return $this->user ? $this->user->name : $this->config()->get('name');
@@ -134,14 +123,9 @@ class Order extends Model implements HasMedia
     {
         return $this->user ? $this->user->email : $this->config()->get('email');
     }
-    
 
-
-    /**
-     * Model Custom Methods --------------------------------------------------------------------------
-     */
-
-    public function config()
+    /** Model Custom Methods -------------------------------------------------------------------------- */
+    public function config(): SchemalessAttributes
     {
         return SchemalessAttributes::createForModel($this, 'config');
     }
