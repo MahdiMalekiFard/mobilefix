@@ -57,7 +57,7 @@
 
                 <x-card :title="trans('general.page_sections.publish_config')" shadow separator progress-indicator="submit" class="mt-5">
                     <div class="grid grid-cols-1 gap-4">
-                        <x-admin.shared.published-config :published="$published"/>
+                        <x-admin.shared.published-config/>
                     </div>
                 </x-card>
             </div>

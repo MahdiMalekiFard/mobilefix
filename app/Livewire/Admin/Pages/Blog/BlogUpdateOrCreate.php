@@ -10,6 +10,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Traits\CrudHelperTrait;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -57,7 +58,7 @@ class BlogUpdateOrCreate extends Component
             'body'         => 'nullable|string',
             'published'    => 'required|boolean',
             'published_at' => [
-                $this->published ? 'nullable' : 'required',
+                Rule::requiredIf( ! $this->published),
                 'date',
                 function ($attribute, $value, $fail) {
                     if ( ! $this->published && $value && Carbon::parse($value)->addMinutes(2)->isBefore(now())) {
@@ -65,7 +66,7 @@ class BlogUpdateOrCreate extends Component
                     }
                 },
             ],
-            'category_id'  => 'required|exists:categories,id,type,blog',
+            'category_id'  => 'required|exists:categories,id,type,' . CategoryTypeEnum::BLOG->value,
             'image'        => 'nullable|file|mimes:png,jpg,jpeg|max:4096',
             'tags'         => 'nullable|array',
         ]);
@@ -80,9 +81,6 @@ class BlogUpdateOrCreate extends Component
             // When published is false, clear published_at so admin can set it
             $this->published_at = null;
         }
-
-        // Force component to re-render to show/hide the published_at field
-        $this->dispatch('$refresh');
     }
 
     public function submit(): void
