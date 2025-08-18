@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\ContactUs;
+use App\Models\Faq;
 use App\Models\Opinion;
 use App\Models\Order;
 use App\Models\PaymentMethod;
@@ -115,7 +116,7 @@ class NavbarComposer
                 ],
             ],
             [
-                'icon'     => 's-star',
+                'icon'     => 's-wrench-screwdriver',
                 'title'    => trans('_menu.service_management'),
                 'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Service::class, 'Store', 'Index')),
                 'sub_menu' => [
@@ -157,6 +158,29 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.opinion.create'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Opinion::class, 'Store')),
+                    ],
+                ],
+            ],
+            [
+                'icon'     => 's-question-mark-circle',
+                'title'    => trans('_menu.faq_management'),
+                'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Faq::class, 'Store', 'Index')),
+                'sub_menu' => [
+                    [
+                        'icon'       => 's-list-bullet',
+                        'route_name' => 'admin.faq.index',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.faq.all'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Faq::class, 'Index')),
+                    ],
+                    [
+                        'icon'       => 's-plus-circle',
+                        'route_name' => 'admin.faq.create',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.faq.create'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Faq::class, 'Store')),
                     ],
                 ],
             ],
@@ -205,7 +229,7 @@ class NavbarComposer
                 'route_name' => 'admin.payment-method.index',
             ],
             [
-                'icon'       => 's-question-mark-circle',
+                'icon'       => 's-wrench',
                 'title'      => trans('_menu.problems'),
                 'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Problem::class, 'Store', 'Index')),
                 'route_name' => 'admin.problem.index',

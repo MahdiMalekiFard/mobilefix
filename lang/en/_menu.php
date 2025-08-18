@@ -103,9 +103,9 @@ return [
         'create' => 'Create City',
     ],
 
-    'faq_management'            => 'faq management',
-    'Faq'                       => [
-        'all'    => 'All FAQ',
+    'faq_management'            => 'FAQ management',
+    'faq'                       => [
+        'all'    => 'All FAQs',
         'create' => 'Create FAQ',
     ],
 

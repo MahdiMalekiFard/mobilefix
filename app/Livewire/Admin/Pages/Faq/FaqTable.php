@@ -1,17 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Livewire\Admin\Pages\Faq;
 
 use App\Enums\BooleanEnum;
+use App\Enums\YesNoEnum;
 use App\Helpers\PowerGridHelper;
 use App\Models\Faq;
 use App\Traits\PowerGridHelperTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
-use Livewire\Attributes\Computed;
 use Jenssegers\Agent\Agent;
+use Livewire\Attributes\Computed;
+use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -20,8 +20,28 @@ use PowerComponents\LivewirePowerGrid\PowerGridFields;
 final class FaqTable extends PowerGridComponent
 {
     use PowerGridHelperTrait;
-    public string $tableName = 'index_faq_datatable';
+    public string $tableName     = 'index_faq_datatable';
     public string $sortDirection = 'desc';
+
+    public function setUp(): array
+    {
+        $setup = [
+            PowerGrid::header()
+                ->includeViewOnTop('components.admin.shared.bread-crumbs')
+                ->showToggleColumns()
+                ->showSearchInput(),
+
+            PowerGrid::footer()
+                ->showPerPage()
+                ->showRecordCount(),
+        ];
+
+        if ((new Agent)->isMobile()) {
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
+        }
+
+        return $setup;
+    }
 
     #[Computed(persist: true)]
     public function breadcrumbs(): array
@@ -39,26 +59,6 @@ final class FaqTable extends PowerGridComponent
             ['link' => route('admin.faq.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('faq.model')])],
         ];
     }
-
-    public function setUp(): array
-    {
-        $setup = [
-            PowerGrid::header()
-                ->includeViewOnTop("components.admin.shared.bread-crumbs")
-                ->showSearchInput(),
-
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
-
-        if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
-        }
-
-        return $setup;
-    }
-
 
     public function datasource(): Builder
     {
@@ -79,8 +79,8 @@ final class FaqTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('favorite_formated', fn ($row) => $row->favorite->title())
+            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row));
     }
 
     public function columns(): array
@@ -88,8 +88,9 @@ final class FaqTable extends PowerGridComponent
         return [
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle(),
+            Column::make(trans('datatable.favorite'), 'favorite_formated'),
             PowerGridHelper::columnPublished(),
-            PowerGridHelper::columnCreatedAT(),
+            PowerGridHelper::columnCreatedAT('created_at'),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -98,19 +99,21 @@ final class FaqTable extends PowerGridComponent
     {
         return [
             Filter::enumSelect('published_formated', 'published')
-                  ->datasource(BooleanEnum::cases()),
+                ->datasource(BooleanEnum::cases()),
+
+            Filter::enumSelect('favorite_formated', 'favorite')
+                ->datasource(YesNoEnum::cases()),
 
             Filter::datepicker('created_at_formatted', 'created_at')
-                  ->params([
-                      'maxDate' => now(),
-                  ])
+                ->params([
+                    'maxDate' => now(),
+                ]),
         ];
     }
 
     public function actions(Faq $row): array
     {
         return [
-            PowerGridHelper::btnTranslate($row),
             PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
@@ -119,9 +122,8 @@ final class FaqTable extends PowerGridComponent
 
     public function noDataLabel(): string|View
     {
-        return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.faq.create')
+        return view('admin.datatable-shared.empty-table', [
+            'link' => route('admin.faq.create'),
         ]);
     }
-
 }

@@ -23,6 +23,9 @@ trait PowerGridHelperTrait
     {
         $model = $this->datasource()->getModel()::where('id', $rowId)->first();
         $model->update(['published' => ! $model->published->value]);
+        if ($model->published_at) {
+            $model->update(['published_at' => now()->format('Y-m-d')]);
+        }
     }
 
     #[On('force-delete')]
