@@ -5,7 +5,7 @@ return [
     'permissions'   => [
     ],
     'exceptions'    => [
-        'published_at_after_now' => 'The published at date must be at least 2 minutes in the future.',
+        'published_at_after_now' => 'The date must be after now',
     ],
     'validations'   => [
     ],
