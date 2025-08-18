@@ -75,11 +75,7 @@ class BlogUpdateOrCreate extends Component
     public function updatedPublished($value): void
     {
         if ($value) {
-            // When published is true, set published_at to now and hide the field
-            $this->published_at = now()->format('Y-m-d H:i:s');
-        } else {
-            // When published is false, clear published_at so admin can set it
-            $this->published_at = null;
+            $this->published_at = now()->format('Y-m-d');
         }
     }
 

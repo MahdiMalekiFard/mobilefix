@@ -2,16 +2,13 @@
     'label'      => null,
     'hint'       => null,
     'id'         => $attributes->get('id') ?? Str::uuid()->toString(),
-
-    // Only date
-    'dateFormat' => 'Y-m-d',   // format stored/sent to Livewire
-    'altFormat'  => 'F j, Y',  // nice display (e.g., August 18, 2025)
+    'dateFormat' => 'Y-m-d',
+    'altFormat'  => 'F j, Y',
     'allowInput' => true,
 ])
 
 @php
     $boundProp = $attributes->wire('model')->value();
-
     if (!$boundProp) {
         throw new \RuntimeException('<x-admin.shared.datetime-flat> requires wire:model / wire:model.live.');
     }
@@ -25,12 +22,17 @@
     @endif
 
     <div
+        wire:ignore
+        wire:key="datepicker-{{ $id }}"  {{-- keep instance stable across renders --}}
         x-data="{
             fp: null,
+            current: null,                 // local mirror to avoid over-clear
             get modelName() { return '{{ $boundProp }}' },
 
             seedFromWire() {
                 const val = this.$wire.get(this.modelName);
+                if (val === this.current) return;     // no-op if unchanged
+
                 if (this.fp) {
                     if (!val) {
                         this.fp.clear();
@@ -38,22 +40,24 @@
                         this.fp.setDate(val, false, '{{ $dateFormat }}');
                     }
                 }
+                this.current = val ?? null;
             },
 
             initPicker() {
                 const input = this.$refs.input;
                 this.fp = flatpickr(input, {
-                    enableTime: false,          // 🚫 no time
+                    enableTime: false,
                     dateFormat: '{{ $dateFormat }}',
                     altInput: true,
                     altFormat: '{{ $altFormat }}',
                     allowInput: {{ $allowInput ? 'true' : 'false' }},
-
                     onChange: (selectedDates, value) => {
-                        this.$wire.set(this.modelName, value || null);
+                        this.current = value || null;               // update local first
+                        this.$wire.set(this.modelName, this.current);
                     },
                     onClose: (selectedDates, value) => {
-                        this.$wire.set(this.modelName, value || null);
+                        this.current = value || null;
+                        this.$wire.set(this.modelName, this.current);
                     },
                 });
 
@@ -66,7 +70,6 @@
             }
         }"
         x-init="initPicker()"
-        wire:ignore
     >
         <input
             x-ref="input"

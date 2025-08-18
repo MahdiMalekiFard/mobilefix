@@ -7,6 +7,7 @@ use App\Actions\Opinion\UpdateOpinionAction;
 use App\Models\Opinion;
 use App\Traits\CrudHelperTrait;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -48,7 +49,7 @@ class OpinionUpdateOrCreate extends Component
             'published'    => ['required', 'boolean'],
             'ordering'     => ['required', 'numeric'],
             'published_at' => [
-                $this->published ? 'nullable' : 'required',
+                Rule::requiredIf( ! $this->published),
                 'date',
                 function ($attribute, $value, $fail) {
                     if ( ! $this->published && $value && Carbon::parse($value)->addMinutes(2)->isBefore(now())) {
@@ -63,15 +64,8 @@ class OpinionUpdateOrCreate extends Component
     public function updatedPublished($value): void
     {
         if ($value) {
-            // When published is true, set published_at to now and hide the field
-            $this->published_at = now()->format('Y-m-d H:i:s');
-        } else {
-            // When published is false, clear published_at so admin can set it
-            $this->published_at = null;
+            $this->published_at = now()->format('Y-m-d');
         }
-
-        // Force component to re-render to show/hide the published_at field
-        $this->dispatch('$refresh');
     }
 
     public function submit(): void
