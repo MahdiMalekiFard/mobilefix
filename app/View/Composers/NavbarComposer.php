@@ -3,16 +3,17 @@
 declare(strict_types=1);
 
 namespace App\View\Composers;
-    
-use App\Models\Service;
+
+use App\Models\Address;
 use App\Models\Blog;
 use App\Models\Category;
-use App\Models\Address;
-use App\Models\PaymentMethod;
-use App\Models\Order;
-use App\Models\User;
-use App\Models\Problem;
 use App\Models\ContactUs;
+use App\Models\Opinion;
+use App\Models\Order;
+use App\Models\PaymentMethod;
+use App\Models\Problem;
+use App\Models\Service;
+use App\Models\User;
 use App\Services\Permissions\PermissionsService;
 use Illuminate\View\View;
 
@@ -57,7 +58,6 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.user.all'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class, 'Index')),
-
                     ],
                     [
                         'icon'       => 's-user-plus',
@@ -65,7 +65,6 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.user.create'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class, 'Store')),
-
                     ],
                 ],
             ],
@@ -81,7 +80,6 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.category.all'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Category::class, 'Index')),
-
                     ],
                     [
                         'icon'       => 's-plus-circle',
@@ -113,7 +111,7 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.blog.create'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Blog::class, 'Store')),
-                    ]
+                    ],
                 ],
             ],
             [
@@ -136,7 +134,30 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.service.create'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Service::class, 'Store')),
-                    ]
+                    ],
+                ],
+            ],
+            [
+                'icon'     => 's-sparkles',
+                'title'    => trans('_menu.opinion_management'),
+                'access'   => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Opinion::class, 'Store', 'Index')),
+                'sub_menu' => [
+                    [
+                        'icon'       => 's-list-bullet',
+                        'route_name' => 'admin.opinion.index',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.opinion.all'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Opinion::class, 'Index')),
+                    ],
+                    [
+                        'icon'       => 's-plus-circle',
+                        'route_name' => 'admin.opinion.create',
+                        'exact'      => true,
+                        'params'     => [],
+                        'title'      => trans('_menu.opinion.create'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Opinion::class, 'Store')),
+                    ],
                 ],
             ],
             [
@@ -151,7 +172,7 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.order.all'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Order::class, 'Index')),
-                    ]
+                    ],
                 ],
             ],
             [
@@ -167,12 +188,12 @@ class NavbarComposer
                         'title'      => trans('_menu.contact_us.all'),
                     ],
                     [
-                        'icon'       => 's-eye-slash',
-                        'route_name' => 'admin.contact-us.index',
-                        'exact'      => false,
-                        'params'     => ['filters' => ['is_read' => 0]],
-                        'title'      => trans('_menu.contact_us.unread'),
-                        'badge'      => ContactUs::unread()->count() > 0 ? ContactUs::unread()->count() : null,
+                        'icon'          => 's-eye-slash',
+                        'route_name'    => 'admin.contact-us.index',
+                        'exact'         => false,
+                        'params'        => ['filters' => ['is_read' => 0]],
+                        'title'         => trans('_menu.contact_us.unread'),
+                        'badge'         => ContactUs::unread()->count() > 0 ? ContactUs::unread()->count() : null,
                         'badge_classes' => 'bg-red-500 text-white text-xs px-2 py-1 rounded-full',
                     ],
                 ],

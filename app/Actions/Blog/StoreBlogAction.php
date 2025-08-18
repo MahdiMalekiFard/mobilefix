@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Blog;
 
 use App\Actions\Translation\SyncTranslationAction;
@@ -39,20 +41,20 @@ class StoreBlogAction
      *     tags:array<string>,
      *     image:string
      * } $payload
-     * @return Blog
      * @throws Throwable
      */
     public function handle(array $payload): Blog
     {
         return DB::transaction(function () use ($payload) {
             $payload['user_id'] = auth()->user()?->id ?? 2;
-            $model = Blog::create(Arr::only($payload, ['slug', 'published', 'published_at', 'category_id', 'user_id', 'view_count', 'comment_count', 'wish_count']));
+            $model              = Blog::create(Arr::only($payload, ['slug', 'published', 'published_at', 'category_id', 'user_id', 'view_count', 'comment_count', 'wish_count']));
             $this->syncTranslationAction->handle($model, Arr::only($payload, ['title', 'description', 'body']));
             $this->seoOptionService->create($model, Arr::only($payload, ['seo_title', 'seo_description', 'canonical', 'old_url', 'redirect_to', 'robots_meta']));
             $this->fileService->addMedia($model, Arr::get($payload, 'image'));
             if ($tags = Arr::get($payload, 'tags')) {
                 $model->syncTags($tags);
             }
+
             return $model->refresh();
         });
     }
