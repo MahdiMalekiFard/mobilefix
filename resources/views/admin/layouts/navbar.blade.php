@@ -20,6 +20,7 @@
                                     :icon="Arr::get($subMenu,'icon')"
                                     :badge="Arr::get($subMenu,'badge')"
                                     :badge-classes="Arr::get($subMenu,'badge_classes','float-left')"
+                                    :noWireNavigate="Arr::get($subMenu,'noWireNavigate', false)"
                                     :link="route(Arr::get($subMenu,'route_name'),Arr::get($subMenu,'params',[]))"/>
                             @endforeach
                         </x-menu-sub>
