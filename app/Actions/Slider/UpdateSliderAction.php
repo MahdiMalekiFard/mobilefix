@@ -4,6 +4,7 @@ namespace App\Actions\Slider;
 
 use App\Actions\Translation\SyncTranslationAction;
 use App\Models\Slider;
+use App\Services\File\FileService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -15,6 +16,7 @@ class UpdateSliderAction
 
     public function __construct(
         private readonly SyncTranslationAction $syncTranslationAction,
+        private readonly FileService $fileService,
     ) {}
 
 
@@ -22,7 +24,9 @@ class UpdateSliderAction
      * @param Slider $slider
      * @param array{
      *     title:string,
-     *     description:string
+     *     description:string,
+     *     published:boolean,
+     *     image:string,
      * }               $payload
      * @return Slider
      * @throws Throwable
@@ -30,8 +34,9 @@ class UpdateSliderAction
     public function handle(Slider $slider, array $payload): Slider
     {
         return DB::transaction(function () use ($slider, $payload) {
-            $slider->update($payload);
+            $slider->update(Arr::only($payload, ['published']));
             $this->syncTranslationAction->handle($slider, Arr::only($payload, ['title', 'description']));
+            $this->fileService->addMedia($model, Arr::get($payload, 'image'));
 
             return $slider->refresh();
         });

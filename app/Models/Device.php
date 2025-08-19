@@ -5,19 +5,24 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\BooleanEnum;
+use App\Traits\HasSchemalessAttributes;
+use App\Traits\HasSlugFromTranslation;
+use App\Traits\HasTranslationAuto;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasTranslationAuto;
-use App\Traits\HasSlugFromTranslation;
-use App\Traits\HasSchemalessAttributes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class Device extends Model
 {
     use HasFactory,
-        HasTranslationAuto,
+        HasSchemalessAttributes,
         HasSlugFromTranslation,
-        HasSchemalessAttributes;
+        HasTranslationAuto;
+
+    public array $translatable = [
+        'title', 'description',
+    ];
 
     protected $fillable = [
         'published',
@@ -29,48 +34,34 @@ class Device extends Model
     ];
 
     protected $casts = [
-        'published' => BooleanEnum::class,
-        'languages' => 'array',
+        'published'  => BooleanEnum::class,
+        'languages'  => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'config' => 'array',
-    ];
-
-    public array $translatable = [
-        'title','description'
+        'config'     => 'array',
     ];
 
     /**
      * Model Configuration --------------------------------------------------------------------------
      */
 
-
-    /**
-     * Model Relations --------------------------------------------------------------------------
-     */
-    public function brand()
+    /** Model Relations -------------------------------------------------------------------------- */
+    public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_id');
     }
-
 
     /**
      * Model Scope --------------------------------------------------------------------------
      */
 
-
     /**
      * Model Attributes --------------------------------------------------------------------------
      */
 
-
-    /**
-     * Model Custom Methods --------------------------------------------------------------------------
-     */
-
-    public function config()
+    /** Model Custom Methods -------------------------------------------------------------------------- */
+    public function config(): SchemalessAttributes
     {
         return SchemalessAttributes::createForModel($this, 'config');
     }
-
 }

@@ -7,16 +7,18 @@ use App\Actions\Slider\UpdateSliderAction;
 use App\Models\Slider;
 use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
 class SliderUpdateOrCreate extends Component
 {
-    use Toast;
+    use Toast, WithFileUploads;
 
-    public Slider   $model;
+    public Slider $model;
     public string $title       = '';
     public string $description = '';
     public bool   $published   = false;
+    public $image;
 
     public function mount(Slider $slider): void
     {
@@ -33,7 +35,8 @@ class SliderUpdateOrCreate extends Component
         return [
             'title'       => 'required|string',
             'description' => 'required|string',
-            'published'   => 'required'
+            'published'   => 'required|boolean',
+            'image'       => 'nullable|file|mimes:png,jpg,jpeg|max:4096',
         ];
     }
 

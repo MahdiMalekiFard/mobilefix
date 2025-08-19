@@ -10,8 +10,8 @@ use App\Models\Device;
 use App\Traits\PowerGridHelperTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
-use Livewire\Attributes\Computed;
 use Jenssegers\Agent\Agent;
+use Livewire\Attributes\Computed;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -20,8 +20,27 @@ use PowerComponents\LivewirePowerGrid\PowerGridFields;
 final class DeviceTable extends PowerGridComponent
 {
     use PowerGridHelperTrait;
-    public string $tableName = 'index_device_datatable';
+    public string $tableName     = 'index_device_datatable';
     public string $sortDirection = 'desc';
+
+    public function setUp(): array
+    {
+        $setup = [
+            PowerGrid::header()
+                ->includeViewOnTop('components.admin.shared.bread-crumbs')
+                ->showSearchInput(),
+
+            PowerGrid::footer()
+                ->showPerPage()
+                ->showRecordCount(),
+        ];
+
+        if ((new Agent)->isMobile()) {
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
+        }
+
+        return $setup;
+    }
 
     #[Computed(persist: true)]
     public function breadcrumbs(): array
@@ -39,26 +58,6 @@ final class DeviceTable extends PowerGridComponent
             ['link' => route('admin.device.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('device.model')])],
         ];
     }
-
-    public function setUp(): array
-    {
-        $setup = [
-            PowerGrid::header()
-                ->includeViewOnTop("components.admin.shared.bread-crumbs")
-                ->showSearchInput(),
-
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
-
-        if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
-        }
-
-        return $setup;
-    }
-
 
     public function datasource(): Builder
     {
@@ -79,8 +78,7 @@ final class DeviceTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row))
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row));
     }
 
     public function columns(): array
@@ -89,7 +87,7 @@ final class DeviceTable extends PowerGridComponent
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle(),
             PowerGridHelper::columnPublished(),
-            PowerGridHelper::columnCreatedAT(),
+            PowerGridHelper::columnCreatedAT('created_at'),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -98,19 +96,18 @@ final class DeviceTable extends PowerGridComponent
     {
         return [
             Filter::enumSelect('published_formated', 'published')
-                  ->datasource(BooleanEnum::cases()),
+                ->datasource(BooleanEnum::cases()),
 
-            Filter::datepicker('created_at_formatted', 'created_at')
-                  ->params([
-                      'maxDate' => now(),
-                  ])
+            Filter::datepicker('created_at', 'created_at')
+                ->params([
+                    'maxDate' => now(),
+                ]),
         ];
     }
 
     public function actions(Device $row): array
     {
         return [
-            PowerGridHelper::btnTranslate($row),
             PowerGridHelper::btnToggle($row),
             PowerGridHelper::btnEdit($row),
             PowerGridHelper::btnDelete($row),
@@ -119,9 +116,8 @@ final class DeviceTable extends PowerGridComponent
 
     public function noDataLabel(): string|View
     {
-        return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.device.create')
+        return view('admin.datatable-shared.empty-table', [
+            'link' => route('admin.device.create'),
         ]);
     }
-
 }

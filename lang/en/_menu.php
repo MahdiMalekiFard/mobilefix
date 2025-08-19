@@ -25,6 +25,10 @@ return [
     'my_address'                => 'My Addresses',
     'problems'                  => 'Problems',
     'addresses'                 => 'Addresses',
+    'sliders'                   => 'Sliders',
+    'brands'                    => 'Brands',
+    'models'                    => 'Models',
+    'devices'                   => 'Devices',
 
     'category_management'       => 'Category management',
     'category'                  => [

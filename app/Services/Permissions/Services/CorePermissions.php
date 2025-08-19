@@ -6,6 +6,11 @@ namespace App\Services\Permissions\Services;
 
 use App\Services\Permissions\Models\BlogPermissions;
 use App\Services\Permissions\Models\CategoryPermissions;
+use App\Services\Permissions\Models\ContactUsPermissions;
+use App\Services\Permissions\Models\FaqPermissions;
+use App\Services\Permissions\Models\OpinionPermissions;
+use App\Services\Permissions\Models\PagePermissions;
+use App\Services\Permissions\Models\SliderPermissions;
 use App\Services\Permissions\Models\UserPermissions;
 use App\Services\Permissions\Models\OrderPermissions;
 use App\Services\Permissions\Models\PaymentMethodPermissions;
@@ -26,6 +31,11 @@ class CorePermissions
             resolve(AddressPermissions::class)->all(),
             resolve(ProblemPermissions::class)->all(),
             resolve(ServicePermissions::class)->all(),
+            resolve(SliderPermissions::class)->all(),
+            resolve(PagePermissions::class)->all(),
+            resolve(FaqPermissions::class)->all(),
+            resolve(OpinionPermissions::class)->all(),
+            resolve(ContactUsPermissions::class)->all(),
         ];
     }
 }

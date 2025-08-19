@@ -16,6 +16,7 @@ use App\Models\Page;
 use App\Models\PaymentMethod;
 use App\Models\Problem;
 use App\Models\Service;
+use App\Models\Slider;
 use App\Models\User;
 use App\Services\Permissions\PermissionsService;
 use Illuminate\View\View;
@@ -273,6 +274,24 @@ class NavbarComposer
                 'title'      => trans('_menu.addresses'),
                 'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Address::class, 'Store', 'Index')),
                 'route_name' => 'admin.address.index',
+            ],
+            [
+                'icon'       => 's-banknotes',
+                'title'      => trans('_menu.sliders'),
+                'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Slider::class, 'Store', 'Index')),
+                'route_name' => 'admin.slider.index',
+            ],
+            [
+                'icon'       => 's-check-badge',
+                'title'      => trans('_menu.brands'),
+                'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Slider::class, 'Store', 'Index')),
+                'route_name' => 'admin.brand.index',
+            ],
+            [
+                'icon'       => 's-device-phone-mobile',
+                'title'      => trans('_menu.devices'),
+                'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Slider::class, 'Store', 'Index')),
+                'route_name' => 'admin.device.index',
             ],
             // [
             //     'icon'     => 's-tag',
