@@ -12,8 +12,8 @@
                 <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit">
                     <div class="grid grid-cols-1 gap-4"
                          x-data="pageEditor({
-                            type: $wire.entangle('type').live,
-                            body: $wire.entangle('body').defer,
+                            type: @entangle('type').live,
+                            body: @entangle('body').defer,
                             config: {
                                 plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount autoresize',
                                 menubar: 'file edit view insert format tools table help',
@@ -157,18 +157,13 @@
                     this.$nextTick(() => this._toggle());
                     this.$watch('type', () => this._toggle());
 
-                    // If body is populated later (update mode), push it into the editor
-                    this.$watch('body', (val) => {
-                        console.log('body content loaded')
-                        if (this.editor && typeof tinymce !== 'undefined') {
-                            const ed = tinymce.get(this.editor?.id);
-                            if (ed && ed.getContent() !== (val || '')) {
-                                ed.setContent(val || '');
-                            }
-                        }
-                    });
+                    // If body shows up later (update mode), push it into the editor
+                    this.$watch('body', (val) => this._loadIntoEditor(val));
 
-                    document.addEventListener('livewire:navigated', () => this._toggle());
+                    // After any Livewire patch, try again (covers hydration race)
+                    if (window.Livewire) {
+                        Livewire.hook('message.processed', () => this._loadIntoEditor(this.body));
+                    }
                 },
 
                 _toggle() {
@@ -197,8 +192,10 @@
                             this.editor = ed;
 
                             ed.on('init', () => {
-                                // Load current (HTML) body
-                                ed.setContent(this.body || '');
+                                // set whatever we currently have; may be empty first
+                                this._loadIntoEditor(this.body);
+                                // try again on next tick (in case hydration lands right after)
+                                setTimeout(() => this._loadIntoEditor(this.body), 0);
                             });
 
                             // Throttle pushes to Livewire to prevent rerender churn
@@ -240,6 +237,14 @@
                 },
 
                 // ---- helpers ----
+                _loadIntoEditor(val) {
+                    if (!this.editor || !window.tinymce) return;
+                    const ed = tinymce.get(this.editor.id);
+                    if (!ed) return;
+                    const target = val || '';
+                    if (ed.getContent() !== target) ed.setContent(target);
+                },
+
                 isPlainText(val) { return val && stripTags(val) === val; },
 
                 htmlToText(html) {
