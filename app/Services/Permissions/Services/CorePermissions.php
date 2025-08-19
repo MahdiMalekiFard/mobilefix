@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Services\Permissions\Services;
 
 use App\Services\Permissions\Models\BlogPermissions;
+use App\Services\Permissions\Models\BrandPermissions;
 use App\Services\Permissions\Models\CategoryPermissions;
 use App\Services\Permissions\Models\ContactUsPermissions;
+use App\Services\Permissions\Models\DevicePermissions;
 use App\Services\Permissions\Models\FaqPermissions;
 use App\Services\Permissions\Models\OpinionPermissions;
 use App\Services\Permissions\Models\PagePermissions;
@@ -36,6 +38,8 @@ class CorePermissions
             resolve(FaqPermissions::class)->all(),
             resolve(OpinionPermissions::class)->all(),
             resolve(ContactUsPermissions::class)->all(),
+            resolve(BrandPermissions::class)->all(),
+            resolve(DevicePermissions::class)->all(),
         ];
     }
 }

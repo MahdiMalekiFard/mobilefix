@@ -35,6 +35,7 @@ class StoreBrandAction
      *     old_url:string,
      *     redirect_to:string,
      *     robots_meta:string,
+     *     image:string,
      * } $payload
      * @return Brand
      * @throws Throwable

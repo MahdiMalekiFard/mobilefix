@@ -4,24 +4,28 @@ namespace App\Livewire\Admin\Pages\Brand;
 
 use App\Actions\Brand\StoreBrandAction;
 use App\Actions\Brand\UpdateBrandAction;
+use App\Livewire\Traits\SeoOptionTrait;
 use App\Models\Brand;
 use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
 class BrandUpdateOrCreate extends Component
 {
-    use Toast;
+    use Toast, SeoOptionTrait, WithFileUploads;
 
     public Brand   $model;
-    public string $title       = '';
-    public string $description = '';
-    public bool   $published   = false;
+    public ?string $title       = '';
+    public ?string $description = '';
+    public bool    $published   = false;
+    public         $image;
 
     public function mount(Brand $brand): void
     {
         $this->model = $brand;
         if ($this->model->id) {
+            $this->mountStaticFields();
             $this->title = $this->model->title;
             $this->description = $this->model->description;
             $this->published = $this->model->published->value;
@@ -30,11 +34,13 @@ class BrandUpdateOrCreate extends Component
 
     protected function rules(): array
     {
-        return [
+        return array_merge($this->seoOptionRules(), [
+            'slug'        => 'required|string|unique:brands,slug,' . $this->model->id,
             'title'       => 'required|string',
             'description' => 'required|string',
-            'published'   => 'required'
-        ];
+            'published'   => 'required|boolean',
+            'image'       => 'nullable|file|mimes:png,jpg,jpeg|max:4096',
+        ]);
     }
 
     public function submit(): void
