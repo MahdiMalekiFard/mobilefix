@@ -19,6 +19,7 @@ use PowerComponents\LivewirePowerGrid\PowerGridFields;
 final class PageTable extends PowerGridComponent
 {
     use PowerGridHelperTrait;
+
     public string $tableName     = 'index_page_datatable';
     public string $sortDirection = 'desc';
 
@@ -54,7 +55,12 @@ final class PageTable extends PowerGridComponent
     public function breadcrumbsActions(): array
     {
         return [
-            ['link' => route('admin.page.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('page.model')])],
+            [
+                'link'     => route('admin.page.create'),
+                'icon'     => 's-plus',
+                'label'    => trans('general.page.create.title', ['model' => trans('page.model')]),
+                'navigate' => false, // 👈 force hard reload
+            ],
         ];
     }
 
@@ -115,7 +121,8 @@ final class PageTable extends PowerGridComponent
     public function noDataLabel(): string|View
     {
         return view('admin.datatable-shared.empty-table', [
-            'link' => route('admin.page.create'),
+            'link'     => route('admin.page.create'),
+            'navigate' => false,
         ]);
     }
 }

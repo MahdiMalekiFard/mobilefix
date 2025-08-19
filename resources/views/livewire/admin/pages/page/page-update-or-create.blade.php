@@ -14,6 +14,11 @@
                          x-data="pageEditor({
                             type: @entangle('type').live,
                             body: @entangle('body').defer,
+
+                            // pass the initial server values explicitly (prevents empty init)
+                            initialBody: @js($body ?? ''),
+                            aboutValue: @js(\App\Enums\PageTypeEnum::ABOUT_US->value),
+
                             config: {
                                 plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount autoresize',
                                 menubar: 'file edit view insert format tools table help',
@@ -38,21 +43,26 @@
                             option-label="label"
                             required
                         />
-                        {{-- Textarea for About Us --}}
-                        <div x-show="isAbout" x-cloak>
-                            <x-textarea
-                                :label="trans('validation.attributes.body')"
-                                x-model="body"
-                                wire:model.defer="body"   {{-- ensure initial value shows on update --}}
-                                @input.debounce.300ms="$wire.set('body', body)"
-                                required
-                            />
-                        </div>
 
-                        {{-- TinyMCE for other types --}}
-                        <div x-show="!isAbout" x-cloak wire:ignore>
-                            <textarea x-ref="tinyHost" :id="'tiny-'+$id('tiny')"></textarea>
-                        </div>
+                        {{-- About Us -> textarea (render only when needed) --}}
+                        <template x-if="isAbout">
+                            <div>
+                                <x-textarea
+                                    :label="trans('validation.attributes.body')"
+                                    x-model="body"
+                                    @input.debounce.300ms="$wire.set('body', body)"
+                                    required
+                                />
+                            </div>
+                        </template>
+
+                        {{-- Other types -> TinyMCE (render only when needed) --}}
+                        <template x-if="!isAbout">
+                            <div wire:ignore>
+                                <textarea x-ref="tinyHost" id="tiny-body"></textarea>
+                            </div>
+                        </template>
+
                     </div>
                 </x-card>
 
@@ -148,22 +158,34 @@
     </div>
 
     <script>
-        function pageEditor({ type, body, config }) {
+        function pageEditor({ type, body, initialBody, aboutValue, config }) {
             return {
-                type, body, editor: null,
-                get isAbout() { return String(this.type) === 'about-us'; },
+                type, body, initialBody, aboutValue, config, editor: null,
+                get isAbout() { return String(this.type) === String(this.aboutValue); },
 
                 init() {
+                    // If Alpine's 'body' is empty at first paint, seed it from the server
+                    if (this.body == null || this.body === '') {
+                        this.body = this.initialBody || '';
+                    }
+
                     this.$nextTick(() => this._toggle());
                     this.$watch('type', () => this._toggle());
 
                     // If body shows up later (update mode), push it into the editor
                     this.$watch('body', (val) => this._loadIntoEditor(val));
 
-                    // After any Livewire patch, try again (covers hydration race)
-                    if (window.Livewire) {
+                    // After any Livewire DOM morph, try again (covers hydration races)
+                    if (window.Livewire?.hook) {
+                        Livewire.hook('morph.updated', () => this._loadIntoEditor(this.body));
                         Livewire.hook('message.processed', () => this._loadIntoEditor(this.body));
                     }
+
+                    // On SPA navigations
+                    document.addEventListener('livewire:navigated', () => {
+                        this._loadIntoEditor(this.body);
+                        this._toggle();
+                    });
                 },
 
                 _toggle() {
@@ -183,11 +205,9 @@
                 _initTiny() {
                     if (this.editor || !window.tinymce || !this.$refs.tinyHost) return;
 
-                    const selector = '#'+this.$refs.tinyHost.id;           // stable selector
-
                     tinymce.init({
-                        selector,
-                        ...config,
+                        selector: '#tiny-body', // stable id
+                        ...this.config,
                         setup: (ed) => {
                             this.editor = ed;
 
