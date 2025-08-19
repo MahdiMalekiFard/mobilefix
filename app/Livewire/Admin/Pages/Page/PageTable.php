@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin\Pages\Page;
 
-use App\Enums\BooleanEnum;
 use App\Enums\PageTypeEnum;
 use App\Helpers\PowerGridHelper;
 use App\Models\Page;
@@ -78,8 +77,7 @@ final class PageTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
-            ->add('type_formatted', fn ($row) => $row->type->title())
-            ->add('created_at_formatted', fn ($row) => PowerGridHelper::fieldCreatedAtFormated($row));
+            ->add('type_formatted', fn ($row) => $row->type->title());
     }
 
     public function columns(): array
@@ -88,7 +86,7 @@ final class PageTable extends PowerGridComponent
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle(),
             Column::make(trans('datatable.type'), 'type_formatted', 'type'),
-            PowerGridHelper::columnCreatedAT(),
+            PowerGridHelper::columnCreatedAT('created_at'),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -102,7 +100,7 @@ final class PageTable extends PowerGridComponent
                 ]),
 
             Filter::enumSelect('type_formatted', 'type')
-                  ->dataSource(PageTypeEnum::cases()),
+                ->dataSource(PageTypeEnum::cases()),
         ];
     }
 

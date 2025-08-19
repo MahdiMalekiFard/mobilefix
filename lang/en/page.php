@@ -20,4 +20,6 @@ return [
     ],
     'page'          => [
     ],
+
+    'media' => 'Media',
 ];

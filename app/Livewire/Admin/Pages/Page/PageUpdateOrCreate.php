@@ -34,6 +34,11 @@ class PageUpdateOrCreate extends Component
             $this->body = $this->model->body;
             $this->type = $this->model->type->value;
 
+            // If editing an About Us page, show plain text in the textarea
+            if ($this->type === PageTypeEnum::ABOUT_US->value) {
+                $this->body = $this->htmlToTextForUi($this->body ?? '');
+            }
+
             // Load existing media
             $this->existingImages = $this->model->getMedia('images')->map(function ($media) {
                 return [
@@ -46,12 +51,27 @@ class PageUpdateOrCreate extends Component
         }
     }
 
+    protected function htmlToTextForUi(string $html): string
+    {
+        $withBreaks = preg_replace('/<\/(p|div|li|h[1-6])>/i', "\n", $html);
+        $withBreaks = preg_replace('/<br\s*\/?>/i', "\n", $withBreaks);
+        $plain = html_entity_decode(strip_tags($withBreaks));
+        $plain = preg_replace('/\r?\n\s*\n+/','\n\n', $plain);
+        $plain = preg_replace('/[ \t]+\n/', "\n", $plain);
+        return trim($plain);
+    }
+
     protected function rules(): array
     {
         return array_merge($this->seoOptionRules(), [
             'slug'     => 'required|string|unique:pages,slug,' . $this->model->id,
             'title'    => 'required|string|max:255',
-            'body'     => 'required|string',
+            'body'  => array_merge(
+                ['required'],
+                $this->type === 'about-us'
+                    ? ['string', 'max:5000']      // tighter limit for plain text
+                    : ['string']                  // HTML allowed for other types
+            ),
             'type'     => 'required|string|in:' . implode(',', PageTypeEnum::values()),
             'images'   => 'nullable',
             'images.*' => 'image|max:2048',
@@ -61,7 +81,11 @@ class PageUpdateOrCreate extends Component
     public function updatedBody($value): void
     {
         if (!$this->model->id || empty($this->seo_description)) {
-            $this->seo_description = Str::limit($value, 200);
+            $plain = html_entity_decode(strip_tags($value));
+            $plain = preg_replace('/\s+/u', ' ', $plain);
+            $plain = trim($plain);
+
+            $this->seo_description = Str::limit($plain, 200);
         }
     }
 
