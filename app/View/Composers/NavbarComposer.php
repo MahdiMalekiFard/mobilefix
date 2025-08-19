@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\View\Composers;
 
+use App\Enums\CategoryTypeEnum;
 use App\Models\Address;
 use App\Models\Blog;
 use App\Models\Category;
@@ -182,6 +183,14 @@ class NavbarComposer
                         'params'     => [],
                         'title'      => trans('_menu.faq.create'),
                         'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Faq::class, 'Store')),
+                    ],
+                    [
+                        'icon'       => 's-plus-circle',
+                        'route_name' => 'admin.category.create',
+                        'exact'      => true,
+                        'params'     => ['type' => CategoryTypeEnum::FAQ->value],
+                        'title'      => trans('_menu.category.create'),
+                        'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Category::class, 'Store')),
                     ],
                 ],
             ],

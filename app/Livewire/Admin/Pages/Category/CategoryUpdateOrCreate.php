@@ -6,6 +6,7 @@ use App\Actions\Category\StoreCategoryAction;
 use App\Actions\Category\UpdateCategoryAction;
 use App\Enums\CategoryTypeEnum;
 use App\Models\Category;
+use http\QueryString;
 use Illuminate\View\View;
 use Livewire\Component;
 use Mary\Traits\Toast;
@@ -17,10 +18,10 @@ class CategoryUpdateOrCreate extends Component
 {
     use Toast, SeoOptionTrait, WithFileUploads, CrudHelperTrait;
 
-    public Category   $model;
-    public string $title       = '';
-    public string $description = '';
-    public bool   $published   = false;
+    public Category $model;
+    public string   $title       = '';
+    public string   $description = '';
+    public bool     $published   = false;
     public ?string  $type        = CategoryTypeEnum::BLOG->value;
     public ?int     $ordering    = 1;
     public          $image;
@@ -28,6 +29,11 @@ class CategoryUpdateOrCreate extends Component
     public function mount(Category $category): void
     {
         $this->model = $category;
+
+        if ($requestType = request()->get('type')) {
+            $this->type = $requestType;
+        }
+
         if ($this->model->id) {
             $this->mountStaticFields();
             $this->title = $this->model->title;
