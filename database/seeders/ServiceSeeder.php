@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Actions\Page\StorePageAction;
+use App\Actions\Service\StoreServiceAction;
 use Exception;
 use Illuminate\Database\Seeder;
 
-class PageSeeder extends Seeder
+class ServiceSeeder extends Seeder
 {
     /** Run the database seeds. */
     public function run(): void
     {
         $data = require database_path('seeders/data/mobilefix.php');
 
-        foreach ($data['pages'] as $row) {
-            $page = StorePageAction::run([
+        foreach ($data['services'] as $row) {
+            $service = StoreServiceAction::run([
                 'title'           => $row['title'],
+                'description'     => $row['description'],
                 'body'            => $row['body'],
-                'type'            => $row['type'],
                 'slug'            => $row['slug'],
-                'view_count'      => $row['view_count'],
+                'published'       => $row['published'],
                 'seo_title'       => $row['seo_options']['title'],
                 'seo_description' => $row['seo_options']['description'],
                 'canonical'       => $row['seo_options']['canonical'],
@@ -30,18 +30,14 @@ class PageSeeder extends Seeder
                 'robots_meta'     => $row['seo_options']['robots_meta'],
             ]);
 
-            // Add images for the (about-us) page
+            // Add image for the blogs
 
-            if (array_key_exists('images', $row)) {
-                foreach ($row['images'] as $image) {
-                    try {
-                        $page->addMedia($image)
-                            ->preservingOriginal()
-                            ->toMediaCollection('images');
-                    } catch (Exception) {
-                        // do nothing
-                    }
-                }
+            try {
+                $service->addMedia($row['path'])
+                    ->preservingOriginal()
+                    ->toMediaCollection('image');
+            } catch (Exception) {
+                // do nothing
             }
         }
     }

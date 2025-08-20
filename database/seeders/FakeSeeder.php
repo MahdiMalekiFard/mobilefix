@@ -23,6 +23,7 @@ class FakeSeeder extends Seeder
             OpinionSeeder::class,
             PageSeeder::class,
             FaqSeeder::class,
+            ServiceSeeder::class,
         ]);
     }
 }

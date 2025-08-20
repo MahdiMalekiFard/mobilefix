@@ -948,4 +948,133 @@ return [
             ],
         ],
     ],
+
+    'services'        => [
+        [
+            'title'       => 'Displayreparatur',
+            'description' => 'Professionelle Reparatur von gesprungenen oder defekten Smartphone-Displays.',
+            'body'        => '
+<p>Ein kaputtes Display ist eines der häufigsten Probleme bei Smartphones. Ob Risse, Streifen im Bild oder ein komplett schwarzer Bildschirm – wir bieten eine schnelle und zuverlässige <strong>Displayreparatur</strong> für alle gängigen Modelle. Dabei verwenden wir ausschließlich <em>Original- oder Premium-Ersatzteile</em>, um beste Qualität zu gewährleisten.</p>
+',
+            'slug'        => 'displayreparatur',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Displayreparatur',
+                'description' => 'Professionelle Reparatur von gesprungenen oder defekten Smartphone-Displays.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
+            ],
+            'path'        => public_path('assets/images/service/01.jpg'),
+        ],
+        [
+            'title'       => 'Akkutausch',
+            'description' => 'Austausch schwacher oder defekter Smartphone-Akkus für längere Laufzeit.',
+            'body'        => '
+<p>Mit der Zeit verliert jeder Akku an Leistung. Ihr Smartphone hält nicht mehr den ganzen Tag durch? Wir führen einen professionellen <strong>Akkutausch</strong> durch, damit Ihr Gerät wieder die volle Energie hat. Unsere Techniker verwenden geprüfte Ersatzakkus, die für eine lange Lebensdauer sorgen.</p>
+',
+            'slug'        => 'akkutausch',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Akkutausch',
+                'description' => 'Austausch schwacher oder defekter Smartphone-Akkus für längere Laufzeit.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
+            ],
+            'path'        => public_path('assets/images/service/02.jpg'),
+        ],
+        [
+            'title'       => 'Wasserschaden-Reparatur',
+            'description' => 'Schnelle Hilfe bei Flüssigkeitsschäden an Ihrem Smartphone.',
+            'body'        => '
+<p>Ein verschüttetes Getränk oder ein Sturz ins Wasser kann Ihr Smartphone schwer beschädigen. Unser Team ist spezialisiert auf die <strong>Wasserschaden-Reparatur</strong> und rettet viele Geräte erfolgreich. Je schneller Sie handeln, desto höher sind die Chancen, dass Ihr Handy wieder voll funktionsfähig wird.</p>
+',
+            'slug'        => 'wasserschaden-reparatur',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Wasserschaden-Reparatur',
+                'description' => 'Schnelle Hilfe bei Flüssigkeitsschäden an Ihrem Smartphone.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
+            ],
+            'path'        => public_path('assets/images/service/03.jpg'),
+        ],
+        [
+            'title'       => 'Ladebuchse-Reparatur',
+            'description' => 'Reparatur oder Austausch defekter Ladeanschlüsse für zuverlässiges Laden.',
+            'body'        => '
+<p>Ihr Handy lädt nicht mehr richtig oder das Kabel wackelt? Dann könnte die Ladebuchse defekt sein. Wir übernehmen die <strong>Ladebuchse-Reparatur</strong> oder tauschen diese professionell aus, damit Ihr Smartphone wieder problemlos geladen werden kann.</p>
+',
+            'slug'        => 'ladebuchse-reparatur',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Ladebuchse-Reparatur',
+                'description' => 'Reparatur oder Austausch defekter Ladeanschlüsse für zuverlässiges Laden.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
+            ],
+            'path'        => public_path('assets/images/service/04.jpg'),
+        ],
+        [
+            'title'       => 'Kamera-Reparatur',
+            'description' => 'Reparatur von Front- und Rückkameras für gestochen scharfe Bilder.',
+            'body'        => '
+<p>Die Smartphone-Kamera ist für viele unverzichtbar. Wenn die Kamera verschwommen ist, nicht mehr fokussiert oder komplett ausfällt, bieten wir eine schnelle <strong>Kamera-Reparatur</strong>. So können Sie wieder Fotos und Videos in gewohnter Qualität aufnehmen.</p>
+',
+            'slug'        => 'kamera-reparatur',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Kamera-Reparatur',
+                'description' => 'Reparatur von Front- und Rückkameras für gestochen scharfe Bilder.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
+            ],
+            'path'        => public_path('assets/images/service/05.jpg'),
+        ],
+        [
+            'title'       => 'Software-Fehlerbehebung',
+            'description' => 'Behebung von Systemproblemen, Viren und Softwarefehlern.',
+            'body'        => '
+<p>Nicht jeder Defekt ist hardwarebedingt. Auch Softwareprobleme wie Abstürze, Viren oder Update-Fehler können die Nutzung einschränken. Wir bieten eine gründliche <strong>Software-Fehlerbehebung</strong>, damit Ihr Smartphone wieder flüssig und sicher läuft.</p>
+',
+            'slug'        => 'software-fehlerbehebung',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Software-Fehlerbehebung',
+                'description' => 'Behebung von Systemproblemen, Viren und Softwarefehlern.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
+            ],
+            'path'        => public_path('assets/images/service/06.jpg'),
+        ],
+    ],
 ];

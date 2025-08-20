@@ -27,7 +27,7 @@ class HomePage extends Component
         $blogs       = Blog::where('published', BooleanEnum::ENABLE)->limit(3)->get();
         $opinions    = Opinion::where('published', BooleanEnum::ENABLE)->orderByDesc('ordering')->get();
         $aboutUsPage = Page::where('type', PageTypeEnum::ABOUT_US)->first();
-        $faqs        = Faq::where('favorite', YesNoEnum::YES)->get();
+        $faqs        = Faq::where('favorite', YesNoEnum::YES)->where('published', BooleanEnum::ENABLE)->get();
         $brands      = Brand::where('published', BooleanEnum::ENABLE)->get();
 
         return view('livewire.web.pages.home-page', [
