@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Actions\Blog\StoreBlogAction;
@@ -32,6 +34,7 @@ class BlogSeeder extends Seeder
                 'wish_count'      => $row['wish_count'],
                 'published'       => $row['published'],
                 'published_at'    => $row['published_at'],
+                'tags'            => $row['tags'],
                 'seo_title'       => $row['seo_options']['title'],
                 'seo_description' => $row['seo_options']['description'],
                 'canonical'       => $row['seo_options']['canonical'],
@@ -44,8 +47,8 @@ class BlogSeeder extends Seeder
 
             try {
                 $blog->addMedia($row['path'])
-                     ->preservingOriginal()
-                     ->toMediaCollection('image');
+                    ->preservingOriginal()
+                    ->toMediaCollection('image');
             } catch (Exception) {
                 // do nothing
             }

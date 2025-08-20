@@ -20,7 +20,7 @@ class PageUpdateOrCreate extends Component
     public Page $model;
     public ?string $title            = '';
     public ?string $body             = '';
-    public ?string $type             = PageTypeEnum::RULES->value;
+    public ?string $type             = PageTypeEnum::ABOUT_US->value;
     public $images;
     public array $existingImages   = [];
     public array $removedNewImages = [];

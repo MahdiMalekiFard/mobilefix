@@ -1,5 +1,6 @@
 @php
     use App\Helpers\Constants;
+    use Illuminate\Support\Str;
 @endphp
 <div>
     <!-- hero slider -->
@@ -566,7 +567,7 @@
                                         <h2 class="accordion-header" id="heading{{ $index }}">
                                             <button class="accordion-button {{ $index ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#collapse{{ $index }}" aria-expanded="{{ $index ? 'false' : 'true' }}" aria-controls="collapse{{ $index }}">
-                                                <span><i class="far fa-question"></i></span> {{ $faq?->title }} ?
+                                                <span><i class="far fa-question"></i></span> {{ $faq?->title }}{{ Str::contains($faq?->title, '?') ? '' : ' ?' }}
                                             </button>
                                         </h2>
                                         <div id="collapse{{ $index }}" class="accordion-collapse collapse {{ $index ? '' : 'show' }}"
@@ -613,7 +614,7 @@
                         </div>
                         <div class="testimonial-quote">
                             <p>
-                                {{ \Illuminate\Support\Str::words($opinion?->comment, 21) }}
+                                {{ $opinion?->comment }}
                             </p>
                             <div class="testimonial-quote-icon">
                                 <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">

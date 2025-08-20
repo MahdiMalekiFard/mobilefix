@@ -22,7 +22,12 @@ class UpdateFaqAction
      * @param Faq $faq
      * @param array{
      *     title:string,
-     *     description:string
+     *     description:string,
+     *     category_id:int,
+     *     favorite:boolean,
+     *     ordering:int,
+     *     published:boolean,
+     *     published_at:string,
      * }               $payload
      * @return Faq
      * @throws Throwable
@@ -30,7 +35,7 @@ class UpdateFaqAction
     public function handle(Faq $faq, array $payload): Faq
     {
         return DB::transaction(function () use ($faq, $payload) {
-            $faq->update($payload);
+            $faq->update(Arr::except($payload, ['title', 'description']));
             $this->syncTranslationAction->handle($faq, Arr::only($payload, ['title', 'description']));
 
             return $faq->refresh();

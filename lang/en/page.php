@@ -12,8 +12,10 @@ return [
     ],
     'enum'          => [
         'type' => [
-            'rules'    => 'Rules',
-            'about-us' => 'About Us',
+            'rules'            => 'Rules',
+            'about-us'         => 'About Us',
+            'terms-of_service' => 'Terms of Service',
+            'privacy_policy'   => 'Privacy Policy',
         ],
     ],
     'notifications' => [
@@ -21,5 +23,5 @@ return [
     'page'          => [
     ],
 
-    'media' => 'Media',
+    'media'         => 'Media',
 ];

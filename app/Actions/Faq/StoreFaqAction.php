@@ -20,7 +20,12 @@ class StoreFaqAction
     /**
      * @param array{
      *     title:string,
-     *     description:string
+     *     description:string,
+     *     category_id:int,
+     *     favorite:boolean,
+     *     ordering:int,
+     *     published:boolean,
+     *     published_at:string,
      * } $payload
      * @return Faq
      * @throws Throwable
@@ -28,7 +33,7 @@ class StoreFaqAction
     public function handle(array $payload): Faq
     {
         return DB::transaction(function () use ($payload) {
-            $model =  Faq::create($payload);
+            $model =  Faq::create(Arr::except($payload, ['title', 'description']));
             $this->syncTranslationAction->handle($model, Arr::only($payload, ['title', 'description']));
 
             return $model->refresh();

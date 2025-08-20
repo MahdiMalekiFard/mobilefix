@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->id();
 
             // translations: title, body
-            $table->string('type')->default(PageTypeEnum::RULES->value);
+            $table->string('type')->default(PageTypeEnum::ABOUT_US->value);
             $table->string('slug')->unique()->index();
             $table->schemalessAttributes('extra_attributes');
             $table->unsignedBigInteger('view_count')->default(0);

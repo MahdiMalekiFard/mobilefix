@@ -3,16 +3,22 @@
 declare(strict_types=1);
 
 use App\Enums\CategoryTypeEnum;
+use App\Enums\PageTypeEnum;
 use App\Enums\PaymentProviderEnum;
 use App\Enums\SeoRobotsMetaEnum;
+use App\Enums\YesNoEnum;
 
 return [
     'blogs'           => [
         [
-            'title'         => 'Schnelleinstieg in Laravel: Ein Leitfaden für Anfänger',
-            'description'   => 'Eine praktische Einführung in Laravel für diejenigen, die ihre Projekte schnell mit diesem Framework starten möchten.',
-            'body'          => 'Laravel ist eines der mächtigen und gleichzeitig einfachen PHP-Frameworks, das für die schnelle Entwicklung von Webanwendungen entwickelt wurde. In diesem Artikel lernen wir Schritt für Schritt, wie man Laravel installiert, das erste Projekt ausführt und einfache Seiten erstellt. Grundkonzepte wie Routing, Controller, Views und Models werden vorgestellt. Das Ziel ist es, ohne tiefgreifende Vorkenntnisse sehr schnell in die Laravel-Welt einzusteigen. Von der Composer-Installation bis zur Ausführung der ersten Seite mit Blade decken wir alles ab. Wenn Sie Anfänger sind, wird dieser Artikel ein ausgezeichneter Ausgangspunkt für Sie sein.',
-            'slug'          => 'schnelleinstieg-in-laravel-ein-leitfaden-fuer-anfaenger',
+            'title'         => 'Häufige Smartphone-Probleme und ihre Lösungen',
+            'description'   => 'Erfahren Sie, welche Handyprobleme am häufigsten auftreten und wie sie schnell behoben werden können.',
+            'body'          => '
+<p>Smartphones sind aus unserem Alltag nicht mehr wegzudenken. Doch wie jedes technische Gerät sind auch sie anfällig für Defekte. Die häufigsten Probleme sind <strong>gesprungene Displays</strong>, <strong>schwache Akkus</strong> und <strong>Wasserschäden</strong>. Ein Displaybruch passiert oft durch Stürze, während Akkus mit der Zeit an Leistung verlieren. Wasserschäden entstehen häufig durch Unachtsamkeit im Alltag.</p>
+
+<p>Zum Glück können diese Schäden in der Regel schnell behoben werden. Mit professionellen Ersatzteilen und erfahrenen Technikern wird Ihr Smartphone wieder wie neu. <em>Wichtig ist, Reparaturen nicht hinauszuzögern</em>, da sich kleine Probleme oft verschlimmern.</p>
+',
+            'slug'          => 'haeufige-smartphone-probleme-und-loesungen',
             'published'     => true,
             'published_at'  => now(),
             'user_id'       => 2,
@@ -24,20 +30,27 @@ return [
                 'de',
             ],
             'seo_options'   => [
-                'title'       => 'Schnelleinstieg in Laravel: Ein Leitfaden für Anfänger',
-                'description' => 'Eine praktische Einführung in Laravel für diejenigen, die ihre Projekte schnell mit diesem Framework starten möchten.',
+                'title'       => 'Häufige Smartphone-Probleme und ihre Lösungen',
+                'description' => 'Erfahren Sie, welche Handyprobleme am häufigsten auftreten und wie sie schnell behoben werden können.',
                 'canonical'   => null,
                 'old_url'     => null,
                 'redirect_to' => null,
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
             ],
-            'path'          => public_path('images/test/blogs/laravel.jpg'),
+            'path'          => public_path('assets/images/blog/01.jpg'),
+            'tags'          => [
+                'mobile', 'tablet', 'iPhone', 'iPad', 'Android',
+            ],
         ],
         [
-            'title'         => 'Laravel-Architektur: Ein tiefer Einblick in die interne Struktur des Frameworks',
-            'description'   => 'Wir untersuchen die MVC-Struktur, Service Container, Facades und andere Schlüsselkonzepte, um ein tieferes Verständnis von Laravel zu erlangen.',
-            'body'          => '',
-            'slug'          => 'laravel-architektur-ein-tiefer-einblick-in-die-interne-struktur-des-frameworks',
+            'title'         => 'Warum eine Handyreparatur besser ist als ein Neukauf',
+            'description'   => 'Entdecken Sie die Vorteile einer Reparatur gegenüber dem Kauf eines neuen Smartphones.',
+            'body'          => '
+<p>Viele Nutzer stehen vor der Frage: <strong>Reparatur oder Neukauf?</strong> Oft lohnt es sich, das Smartphone reparieren zu lassen. Zum einen sparen Sie bares Geld, da Reparaturen meist deutlich günstiger sind als ein neues Gerät. Zum anderen leisten Sie einen Beitrag zum <em>Umweltschutz</em>, indem Sie Elektroschrott vermeiden.</p>
+
+<p>Eine Reparatur verlängert die Lebensdauer Ihres Geräts erheblich, besonders wenn Original- oder Premium-Ersatzteile verwendet werden. Zudem behalten Sie Ihre gespeicherten Daten und müssen sich nicht an ein neues System gewöhnen. Deshalb ist eine Reparatur häufig die nachhaltigere und wirtschaftlichere Wahl.</p>
+',
+            'slug'          => 'handyreparatur-besser-als-neukauf',
             'published'     => true,
             'published_at'  => now(),
             'user_id'       => 3,
@@ -49,14 +62,51 @@ return [
                 'de',
             ],
             'seo_options'   => [
-                'title'       => 'Laravel-Architektur: Ein tiefer Einblick in die interne Struktur des Frameworks',
-                'description' => 'Wir untersuchen die MVC-Struktur, Service Container, Facades und andere Schlüsselkonzepte, um ein tieferes Verständnis von Laravel zu erlangen.',
+                'title'       => 'Warum eine Handyreparatur besser ist als ein Neukauf',
+                'description' => 'Entdecken Sie die Vorteile einer Reparatur gegenüber dem Kauf eines neuen Smartphones.',
                 'canonical'   => null,
                 'old_url'     => null,
                 'redirect_to' => null,
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
             ],
-            'path'          => public_path('images/test/blogs/design.jpg'),
+            'path'          => public_path('assets/images/blog/02.jpg'),
+            'tags'          => [
+                'iPad', 'Android',
+            ],
+        ],
+        [
+            'title'         => 'Tipps zur Pflege Ihres Smartphones für eine längere Lebensdauer',
+            'description'   => 'Mit diesen einfachen Tipps bleibt Ihr Smartphone länger funktionsfähig und zuverlässig.',
+            'body'          => '
+<p>Ein Smartphone begleitet uns täglich – umso wichtiger ist es, es richtig zu pflegen. Verwenden Sie immer eine <strong>Schutzhülle</strong> und <strong>Panzerglas</strong>, um Displaybrüche zu vermeiden. Laden Sie den Akku nicht permanent bis 100 %, sondern zwischen 20 % und 80 %, um die Lebensdauer zu erhöhen.</p>
+
+<p>Achten Sie darauf, Ihr Gerät nicht extremen Temperaturen auszusetzen, da Hitze und Kälte den Akku stark belasten können. Regelmäßige <em>Software-Updates</em> sorgen zudem für Sicherheit und bessere Leistung.</p>
+
+<p>Mit diesen einfachen Maßnahmen sparen Sie nicht nur Reparaturkosten, sondern haben auch länger Freude an Ihrem Smartphone.</p>
+',
+            'slug'          => 'smartphone-pflege-tipps-laengere-lebensdauer',
+            'published'     => true,
+            'published_at'  => now(),
+            'user_id'       => 3,
+            'category_id'   => 1,
+            'view_count'    => 2,
+            'comment_count' => 1,
+            'wish_count'    => 2,
+            'languages'     => [
+                'de',
+            ],
+            'seo_options'   => [
+                'title'       => 'Tipps zur Pflege Ihres Smartphones für eine längere Lebensdauer',
+                'description' => 'Mit diesen einfachen Tipps bleibt Ihr Smartphone länger funktionsfähig und zuverlässig.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::NOINDEX_FOLLOW,
+            ],
+            'path'          => public_path('assets/images/blog/03.jpg'),
+            'tags'          => [
+                'tablet', 'iPhone',
+            ],
         ],
     ],
 
@@ -76,6 +126,29 @@ return [
             ],
             'type'        => CategoryTypeEnum::BLOG->value,
             'ordering'    => 1,
+            'parent_id'   => null,
+            'created_at'  => now(),
+            'updated_at'  => now(),
+            'languages'   => [
+                'de',
+            ],
+            'path'        => public_path('images/test/categories/laravel-cat.png'),
+        ],
+        [
+            'title'       => 'Faq Category',
+            'slug'        => 'faq-category',
+            'description' => 'Laravel ist ein beliebtes und mächtiges Framework für die Webentwicklung mit der PHP-Sprache, das auf der MVC-Architektur (Model-View-Controller) basiert.',
+            'body'        => 'Dieses Framework wurde mit dem Ziel entwickelt, die Entwicklung von Webanwendungen zu vereinfachen und bietet Funktionen wie einfaches Routing, Datenbankmanagement mit Eloquent ORM, Warteschlangensystem, Authentifizierung, E-Mail-Versand und die Blade-Template-Engine für Entwickler. Laravel macht mit seiner schönen Syntax und professionellen Tools die Entwicklung von kleinen bis großen Projekten schneller und angenehmer.',
+            'seo_options' => [
+                'title'       => 'Faq Category',
+                'description' => 'Laravel ist ein beliebtes und mächtiges Framework für die Webentwicklung mit der PHP-Sprache, das auf der MVC-Architektur (Model-View-Controller) basiert.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::INDEX_FOLLOW,
+            ],
+            'type'        => CategoryTypeEnum::FAQ->value,
+            'ordering'    => 2,
             'parent_id'   => null,
             'created_at'  => now(),
             'updated_at'  => now(),
@@ -612,6 +685,267 @@ return [
             'max_price'   => 200.00,
             'languages'   => ['en'],
             'config'      => [],
+        ],
+    ],
+
+    'sliders'         => [
+        [
+            'title'       => 'Schnelle & Zuverlässige Handyreparaturen',
+            'description' => 'Lassen Sie Ihr Handy von zertifizierten Technikern in Deutschland reparieren. Schnelle Abwicklung, Originalteile und garantierte Zufriedenheit.',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'path'        => public_path('assets/images/slider/slider-1.jpg'),
+        ],
+        [
+            'title'       => 'Preiswerte Reparaturen ohne Kompromisse',
+            'description' => 'Hochwertige Handyreparaturen zu fairen Preisen. Transparente Kosten – keine versteckten Gebühren.',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'path'        => public_path('assets/images/slider/slider-2.jpg'),
+        ],
+        [
+            'title'       => 'Service in ganz Deutschland',
+            'description' => 'Ob in Berlin, München oder Hamburg – wir bieten professionelle Handyreparaturen, egal wo Sie sind.',
+            'published'   => true,
+            'languages'   => [
+                'de',
+            ],
+            'path'        => public_path('assets/images/slider/slider-3.jpg'),
+        ],
+    ],
+
+    'opinions'        => [
+        [
+            'user_name'    => 'Anna Müller',
+            'company'      => 'Berlin Tech Store',
+            'comment'      => 'Sehr professioneller Service! Mein iPhone war in weniger als einer Stunde repariert. Absolut empfehlenswert.',
+            'ordering'     => 1,
+            'view_count'   => 10,
+            'published'    => true,
+            'published_at' => now(),
+            'path'         => public_path('assets/images/testimonial/01.jpg'),
+        ],
+        [
+            'user_name'    => 'Markus Schneider',
+            'company'      => 'Privatkunde',
+            'comment'      => 'Transparente Preise und schnelle Reparatur. Endlich ein Reparaturservice, dem man vertrauen kann.',
+            'ordering'     => 2,
+            'view_count'   => 20,
+            'published'    => true,
+            'published_at' => now(),
+            'path'         => public_path('assets/images/testimonial/02.jpg'),
+        ],
+        [
+            'user_name'    => 'Laura Becker',
+            'company'      => 'Mobile Solutions Hamburg',
+            'comment'      => 'Wir lassen regelmäßig unsere Firmenhandys hier reparieren. Immer zuverlässig, schnell und freundlich.',
+            'ordering'     => 3,
+            'view_count'   => 30,
+            'published'    => true,
+            'published_at' => now(),
+            'path'         => public_path('assets/images/testimonial/03.jpg'),
+        ],
+        [
+            'user_name'    => 'Thomas Wagner',
+            'company'      => 'Privatkunde',
+            'comment'      => 'Mein Samsung-Display war kaputt. Die Reparatur war schnell, preiswert und die Qualität hervorragend.',
+            'ordering'     => 4,
+            'view_count'   => 40,
+            'published'    => true,
+            'published_at' => now(),
+            'path'         => public_path('assets/images/testimonial/04.jpg'),
+        ],
+    ],
+
+    'faqs'            => [
+        [
+            'title'        => 'Wie lange dauert eine Handyreparatur',
+            'description'  => 'In den meisten Fällen dauert eine Reparatur zwischen 30 Minuten und 2 Stunden, abhängig vom Modell und Schaden. Für komplexere Reparaturen kann es 1–2 Werktage in Anspruch nehmen.',
+            'ordering'     => 1,
+            'category_id'  => 2,
+            'favorite'     => YesNoEnum::YES->value,
+            'published'    => true,
+            'published_at' => now(),
+            'languages'    => [
+                'en',
+            ],
+        ],
+        [
+            'title'        => 'Werden Originalteile verwendet',
+            'description'  => 'Ja, wir verwenden ausschließlich Originalteile oder Ersatzteile in höchster Qualität, um die Lebensdauer und Funktionalität Ihres Geräts zu gewährleisten.',
+            'ordering'     => 2,
+            'category_id'  => 2,
+            'favorite'     => YesNoEnum::YES->value,
+            'published'    => true,
+            'published_at' => now(),
+            'languages'    => [
+                'en',
+            ],
+        ],
+        [
+            'title'        => 'Gibt es eine Garantie auf die Reparatur',
+            'description'  => 'Auf jede Reparatur erhalten Sie eine Garantie von 6 bis 12 Monaten, je nach Art der Reparatur und verwendeten Ersatzteilen.',
+            'ordering'     => 3,
+            'category_id'  => 2,
+            'favorite'     => YesNoEnum::YES->value,
+            'published'    => true,
+            'published_at' => now(),
+            'languages'    => [
+                'en',
+            ],
+        ],
+        [
+            'title'        => 'Muss ich einen Termin vereinbaren',
+            'description'  => 'Sie können jederzeit ohne Termin vorbeikommen. Für eine schnellere Abwicklung empfehlen wir jedoch, online einen Termin zu buchen.',
+            'ordering'     => 4,
+            'category_id'  => 2,
+            'favorite'     => YesNoEnum::NO->value,
+            'published'    => true,
+            'published_at' => now(),
+            'languages'    => [
+                'en',
+            ],
+        ],
+        [
+            'title'        => 'Welche Geräte können repariert werden',
+            'description'  => 'Wir reparieren Smartphones aller gängigen Marken wie Apple, Samsung, Huawei, Xiaomi, Oppo, Nokia und viele mehr.',
+            'ordering'     => 5,
+            'category_id'  => 2,
+            'favorite'     => YesNoEnum::NO->value,
+            'published'    => true,
+            'published_at' => now(),
+            'languages'    => [
+                'en',
+            ],
+        ],
+    ],
+
+    'pages'           => [
+        [
+            'title'       => 'Wir bieten hochwertige Reparaturdienste',
+            'body'        => 'Mit einem Team erfahrener Techniker und modernster Ausstattung sorgen wir dafür, dass Ihr Smartphone in kürzester Zeit wieder einsatzbereit ist. Wir verwenden ausschließlich Original- und Premium-Ersatzteile, damit Ihr Gerät die gewohnte Leistung und Langlebigkeit behält.',
+            'type'        => PageTypeEnum::ABOUT_US->value,
+            'slug'        => 'wir-bieten-hochwertige-reparaturdienste',
+            'view_count'  => 8,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Wir bieten hochwertige Reparaturdienste',
+                'description' => 'Mit einem Team erfahrener Techniker und modernster Ausstattung sorgen wir dafür, dass Ihr Smartphone in kürzester Zeit wieder einsatzbereit ist.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::INDEX_FOLLOW,
+            ],
+            'images'      => [
+                public_path('assets/images/about/01.jpg'),
+                public_path('assets/images/about/02.jpg'),
+            ],
+        ],
+        [
+            'title'       => 'Servicebedingungen',
+            'body'        => '
+<div class="terms-content">
+<h3>Our Performance</h3>
+<p>Sed ac sollicitudin ipsum. Vivamus vulputate, enim sit amet aliquet lacinia, ex mauris aliquam elit, vel pharetra augue arcu ultricies magna. Suspendisse justo erat, dignissim ut imperdiet ut, convallis vitae urna. Vivamus tincidunt lacinia metus sed suscipit. Phasellus luctus rhoncus mauris ut euismod. Aliquam elementum malesuada erat, vitae bibendum ex rutrum eget. Mauris sed nunc mauris. Curabitur semper sed justo a pellentesque. In hac habitasse platea dictumst. Mauris semper volutpat iaculis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur consectetur dignissim nulla id ornare. Praesent placerat dolor vitae tellus lacinia, a malesuada est sodales. Praesent at consectetur sem, sed scelerisque arcu. Maecenas malesuada lorem id sagittis scelerisque. In hac habitasse platea dictumst.</p>
+</div>
+<div class="terms-content">
+<h3>Cookie</h3>
+<p>Pellentesque sit amet nulla facilisis, lobortis ex at, consequat diam. Pellentesque sed dui lorem. Aliquam vel euismod nunc. Nulla facilisi. Donec consectetur faucibus rutrum. Pellentesque ac ultricies sapien, ac iaculis erat. Vivamus posuere eget nulla sit amet vehicula. Donec finibus maximus eros, at tincidunt ipsum vestibulum ac. Integer vel metus vehicula, consequat velit a, eleifend mi. Curabitur erat mauris, luctus non dictum vel, fringilla dignissim quam. Phasellus eleifend porta fermentum. Pellentesque posuere massa vitae odio pulvinar feugiat. Fusce a risus sodales, maximus sapien sit amet, pharetra ipsum. Vivamus varius eros ac sapien pulvinar, nec tincidunt dui bibendum. Proin consectetur nibh tortor, nec vulputate ex posuere eget.</p>
+</div>
+<div class="terms-content">
+<h3>Payments</h3>
+<p>Amet nulla facilisis, lobortis ex at, consequat diam. Pellentesque sed dui lorem. Aliquam vel euismod nunc. Nulla facilisi. Donec consectetur faucibus rutrum. Pellentesque ac ultricies sapien, ac iaculis erat. Vivamus posuere eget nulla sit amet vehicula. Donec finibus maximus eros, at tincidunt ipsum vestibulum ac. Integer vel metus vehicula, consequat velit a, eleifend mi. Curabitur erat mauris, luctus non dictum vel, fringilla dignissim quam. Phasellus eleifend porta fermentum. Pellentesque posuere massa vitae odio pulvinar feugiat. Fusce a risus sodales, maximus sapien sit amet, pharetra ipsum. Vivamus varius eros ac sapien pulvinar, nec tincidunt dui bibendum. Proin consectetur nibh tortor, nec vulputate ex posuere eget.</p>
+</div>
+<div class="terms-content">
+<h3>Refund Policy</h3>
+<p>Donec ut vestibulum sem, in faucibus mauris. Nulla et luctus nulla. Vestibulum consectetur nisi nec lobortis pretium. Fusce dignissim in sem in bibendum. Vivamus fermentum massa et egestas gravida. Suspendisse at vulputate ante, id tempus nunc. Curabitur sed dolor a elit ornare commodo. Curabitur blandit enim nulla, ornare suscipit risus pretium ut. Nullam rhoncus, sem eget dapibus elementum, purus dolor rutrum magna, nec laoreet odio sapien sit amet erat.</p>
+<p>Proin non ante purus. Donec ante enim, semper vel mauris at, rutrum blandit mauris. Vivamus at ante sit amet leo consequat viverra quis at odio. Proin arcu magna, placerat sed lorem id, rutrum convallis ante.</p>
+<p>Nam venenatis vestibulum mauris ut viverra. Ut porta consequat lorem a ullamcorper. In et arcu quam. Nunc tristique justo nec lectus ornare placerat. Nulla ut fringilla mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+</div>
+<div class="terms-content">
+<h3>Hyperlinking to our Content</h3>
+<p>Sed ac sollicitudin ipsum ivamus vulputate enim sit amet aliquet lacinia mauris aliquam elit:</p>
+<ul class="terms-list ms-4">
+<li>1. Ut scelerisque hendrerit venenatis</li>
+<li>2. Proin fermentum lacus nec augue blandit placerat</li>
+<li>3. Ut vestibulum elit justo suscipit sem ultricies</li>
+<li>4. Integer fermentum vitae magna in condimentum</li>
+<li>5. Aenean ultrices neque id pellentesque tincidunt</li>
+<li>6. Donec ut vestibulum sem, in faucibus mauris.</li>
+</ul>
+</div>
+<div class="terms-content">
+<h3>Disclaimer</h3>
+<p>Donec facilisis consequat nisi. Vivamus euismod at ipsum a gravida. Quisque vitae augue maximus elit iaculis tincidunt. Quisque dapibus dui non justo iaculis volutpat. Phasellus vulputate tempus lorem vitae vehicula. Maecenas interdum venenatis ante, scelerisque porta nibh mollis vitae. Curabitur in erat porttitor, imperdiet lectus non, porttitor odio. Donec efficitur efficitur dapibus. Aenean sit amet tortor id lorem ultricies rhoncus. Etiam ornare eros eu commodo vehicula. Curabitur vel enim eget velit tincidunt viverra eu in risus. Aliquam suscipit tellus eu fermentum facilisis. Pellentesque volutpat posuere ligula. Fusce et consequat mi.</p>
+</div>',
+            'type'        => PageTypeEnum::TERMS_OF_SERVICE->value,
+            'slug'        => 'Servicebedingungen',
+            'view_count'  => 18,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Servicebedingungen',
+                'description' => 'Sed ac sollicitudin ipsum. Vivamus vulputate, enim sit amet aliquet lacinia, ex mauris aliquam elit, vel pharetra augue arcu ultricies magna.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::INDEX_FOLLOW,
+            ],
+        ],
+        [
+            'title'       => 'Datenschutzrichtlinie',
+            'body'        => '
+<div class="terms-content">
+<h3>Privacy Policy</h3>
+<p>Aenean ullamcorper est est, ac bibendum ipsum tincidunt vehicula. Nulla faucibus vulputate lorem, vitae placerat felis blandit ut. Nam sem quam, euismod sit amet augue et, mollis congue nisi. Vestibulum fringilla lobortis nunc ac tincidunt. Cras nec convallis quam. Maecenas non sem ut enim facilisis rhoncus. Sed odio ex, efficitur ac commodo sed, convallis vitae lectus. Aenean at urna ac tellus ullamcorper pretium. Aliquam erat volutpat. Aliquam sit amet tellus in tortor posuere convallis quis nec tellus. Nulla eu mauris sit amet enim eleifend congue. Quisque aliquam, turpis quis elementum tempus, velit arcu dignissim dui, a vehicula lectus nisi non felis.</p>
+</div>
+<div class="terms-content">
+<h3>Collect Information</h3>
+<p>Donec ac pulvinar diam, ac mollis augue. Etiam interdum fringilla magna, at placerat libero malesuada sed. Proin tincidunt a sapien at facilisis. Cras nec lectus pretium, convallis tellus eu, placerat augue. Curabitur luctus odio efficitur elit volutpat, quis venenatis tellus vestibulum. Nam ultrices massa id tellus commodo, at mollis elit mattis. Etiam eget ultrices lectus, at faucibus mauris. Integer at mauris ex. Vivamus interdum cursus mi quis venenatis. Sed pulvinar efficitur quam quis congue. Ut vel ornare lorem. Vivamus mi mi, vestibulum nec eleifend eu, lobortis ac neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit augue dui, non rutrum enim ultrices vel. Fusce mattis ullamcorper nisl, sit amet venenatis odio tincidunt eget.</p>
+</div>
+<div class="terms-content">
+<h3>Usage of Information</h3>
+<p>Phasellus commodo venenatis erat, et vestibulum mi fringilla in. Proin elit urna, condimentum ut elit id, imperdiet rutrum orci. Praesent vehicula velit at est rutrum lacinia. Nullam accumsan at tortor in ullamcorper. Proin semper sagittis nisl, vitae finibus nisl maximus non. Cras dictum risus quis augue tempor egestas. Proin luctus fermentum nunc, eget pretium dolor tristique id.</p>
+<p>Suspendisse hendrerit ex sit amet augue lobortis ullamcorper. Maecenas dignissim facilisis orci, non imperdiet sapien ornare at. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+<p>Nam ultrices mi mauris, eget tempus massa ornare id. Aenean rhoncus vestibulum diam, ut dapibus dolor vehicula non. Proin rhoncus convallis commodo.</p>
+</div>
+<div class="terms-content">
+<h3>Security Of User Data</h3>
+<p>Integer justo neque imperdiet vitae consequat in vehicula quis dolor orbi lorem leo volutpat a tristique :</p>
+<ul class="terms-list ms-4">
+<li>1. Ut scelerisque hendrerit venenatis</li>
+<li>2. Proin fermentum lacus nec augue blandit placerat</li>
+<li>3. Ut vestibulum elit justo suscipit sem ultricies</li>
+<li>4. Integer fermentum vitae magna in condimentum</li>
+<li>5. Aenean ultrices neque id pellentesque tincidunt</li>
+<li>6. Donec ut vestibulum sem, in faucibus mauris.</li>
+</ul>
+</div>
+<div class="terms-content">
+<h3>Copyright and Security</h3>
+<p>Vestibulum bibendum metus quis purus sagittis ultricies. Vestibulum fringilla urna volutpat eros pharetra consectetur. Integer rutrum eu odio et pulvinar. Sed hendrerit pellentesque faucibus. In venenatis lacus sit amet vehicula efficitur. Suspendisse pulvinar malesuada dui non mollis. Aliquam urna massa, rutrum vel luctus in, facilisis a turpis. Ut aliquet accumsan turpis, eget egestas sem pellentesque nec. Phasellus faucibus congue tempor. Mauris ac massa scelerisque metus pulvinar feugiat in ut leo. Proin congue felis orci. Suspendisse consectetur nisl at faucibus venenatis. Quisque pretium rhoncus dui, porttitor varius mi iaculis nec.</p>
+</div>',
+            'type'        => PageTypeEnum::PRIVACY_POLICY->value,
+            'slug'        => 'Datenschutzrichtlinie',
+            'view_count'  => 6,
+            'languages'   => [
+                'de',
+            ],
+            'seo_options' => [
+                'title'       => 'Datenschutzrichtlinie',
+                'description' => 'Aenean ullamcorper est est, ac bibendum ipsum tincidunt vehicula. Nulla faucibus vulputate lorem, vitae placerat felis blandit ut.',
+                'canonical'   => null,
+                'old_url'     => null,
+                'redirect_to' => null,
+                'robots_meta' => SeoRobotsMetaEnum::INDEX_FOLLOW,
+            ],
         ],
     ],
 ];
