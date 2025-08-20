@@ -17,17 +17,17 @@ trait SeoOptionTrait
 
     public function updatedTitle($value): void
     {
-        if (!$this->model->id || empty($this->seo_title)) {
+        if ( ! $this->model->id || empty($this->seo_title)) {
             $this->seo_title = $value;
         }
-        if (!$this->model->id || empty($this->slug)) {
+        if ( ! $this->model->id || empty($this->slug)) {
             $this->slug = StringHelper::slug($value);
         }
     }
 
     public function updatedDescription($value): void
     {
-        if (!$this->model->id || empty($this->seo_description)) {
+        if ( ! $this->model->id || empty($this->seo_description)) {
             $this->seo_description = $value;
         }
     }
@@ -48,12 +48,12 @@ trait SeoOptionTrait
 
     public function mountStaticFields(): void
     {
-        $this->slug = $this->model->slug;
-        $this->seo_title = $this->model->seoOption->title ?? '';
+        $this->slug            = $this->model->slug;
+        $this->seo_title       = $this->model->seoOption->title ?? '';
         $this->seo_description = $this->model->seoOption->description ?? '';
-        $this->canonical = $this->model->seoOption->canonical ?? '';
-        $this->old_url = $this->model->seoOption->old_url ?? '';
-        $this->redirect_to = $this->model->seoOption->redirect_to ?? '';
-        $this->robots_meta = $this->model->seoOption->robots_meta->value ?? '';
+        $this->canonical       = $this->model->seoOption->canonical ?? '';
+        $this->old_url         = $this->model->seoOption->old_url ?? '';
+        $this->redirect_to     = $this->model->seoOption->redirect_to ?? '';
+        $this->robots_meta     = $this->model->seoOption->robots_meta->value ?? '';
     }
 }

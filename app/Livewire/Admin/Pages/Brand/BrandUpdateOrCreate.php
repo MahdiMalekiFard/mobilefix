@@ -13,22 +13,24 @@ use Mary\Traits\Toast;
 
 class BrandUpdateOrCreate extends Component
 {
-    use Toast, SeoOptionTrait, WithFileUploads;
+    use SeoOptionTrait, Toast, WithFileUploads;
 
-    public Brand   $model;
+    public Brand $model;
     public ?string $title       = '';
     public ?string $description = '';
-    public bool    $published   = false;
-    public         $image;
+    public bool $published      = false;
+    public int $ordering        = 1;
+    public $image;
 
     public function mount(Brand $brand): void
     {
         $this->model = $brand;
         if ($this->model->id) {
             $this->mountStaticFields();
-            $this->title = $this->model->title;
+            $this->title       = $this->model->title;
             $this->description = $this->model->description;
-            $this->published = $this->model->published->value;
+            $this->published   = $this->model->published->value;
+            $this->ordering    = $this->model->ordering;
         }
     }
 
@@ -38,6 +40,7 @@ class BrandUpdateOrCreate extends Component
             'slug'        => 'required|string|unique:brands,slug,' . $this->model->id,
             'title'       => 'required|string',
             'description' => 'required|string',
+            'ordering'    => 'required|integer|min:1',
             'published'   => 'required|boolean',
             'image'       => 'nullable|file|mimes:png,jpg,jpeg|max:4096',
         ]);
@@ -67,11 +70,11 @@ class BrandUpdateOrCreate extends Component
             'edit_mode'          => $this->model->id,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.brand.index'), 'label' => trans('general.page.index.title', ['model' => trans('brand.model')])],
+                ['link'  => route('admin.brand.index'), 'label' => trans('general.page.index.title', ['model' => trans('brand.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('brand.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.brand.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.brand.index'), 'icon' => 's-arrow-left'],
             ],
         ]);
     }

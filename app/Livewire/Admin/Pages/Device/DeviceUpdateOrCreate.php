@@ -4,6 +4,9 @@ namespace App\Livewire\Admin\Pages\Device;
 
 use App\Actions\Device\StoreDeviceAction;
 use App\Actions\Device\UpdateDeviceAction;
+use App\Enums\BooleanEnum;
+use App\Livewire\Traits\SeoOptionTrait;
+use App\Models\Brand;
 use App\Models\Device;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -11,30 +14,40 @@ use Mary\Traits\Toast;
 
 class DeviceUpdateOrCreate extends Component
 {
-    use Toast;
+    use SeoOptionTrait, Toast;
 
-    public Device   $model;
-    public string $title       = '';
-    public string $description = '';
-    public bool   $published   = false;
+    public Device $model;
+    public string $title        = '';
+    public string $description  = '';
+    public array $brands        = [];
+    public int $ordering        = 1;
+    public ?int $brand_id       = 1;
+    public bool $published      = false;
 
     public function mount(Device $device): void
     {
-        $this->model = $device;
+        $this->model       = $device;
+        $this->brands      = Brand::where('published', BooleanEnum::ENABLE)->get()->map(fn ($item) => ['name' => $item->title, 'id' => $item->id])->toArray();
         if ($this->model->id) {
-            $this->title = $this->model->title;
+            $this->mountStaticFields();
+            $this->title       = $this->model->title;
             $this->description = $this->model->description;
-            $this->published = $this->model->published->value;
+            $this->published   = $this->model->published->value;
+            $this->ordering    = $this->model->ordering;
+            $this->brand_id    = $this->model->brand_id;
         }
     }
 
     protected function rules(): array
     {
-        return [
+        return array_merge($this->seoOptionRules(), [
+            'slug'        => 'required|string|unique:devices,slug,' . $this->model->id,
             'title'       => 'required|string',
             'description' => 'required|string',
-            'published'   => 'required'
-        ];
+            'published'   => 'required|boolean',
+            'brand_id'    => 'required|exists:brands,id',
+            'ordering'    => 'required|integer|min:1',
+        ]);
     }
 
     public function submit(): void
@@ -61,11 +74,11 @@ class DeviceUpdateOrCreate extends Component
             'edit_mode'          => $this->model->id,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.device.index'), 'label' => trans('general.page.index.title', ['model' => trans('device.model')])],
+                ['link'  => route('admin.device.index'), 'label' => trans('general.page.index.title', ['model' => trans('device.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('device.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.device.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.device.index'), 'icon' => 's-arrow-left'],
             ],
         ]);
     }

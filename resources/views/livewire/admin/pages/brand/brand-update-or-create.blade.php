@@ -9,10 +9,10 @@
             <x-card :title="trans('general.page_sections.data')" shadow separator progress-indicator="submit">
                 <div class="grid grid-cols-1 gap-4">
                     <x-input :label="trans('validation.attributes.title')"
-                             wire:model="title"
+                             wire:model.blur="title"
                     />
                     <x-textarea :label="trans('validation.attributes.description')"
-                                wire:model="description"
+                                wire:model.blur="description"
                     />
                 </div>
             </x-card>
@@ -33,6 +33,12 @@
                 <x-card :title="trans('general.page_sections.publish_config')" shadow separator progress-indicator="submit" class="mt-5">
                     <div class="grid grid-cols-1 gap-4">
                         <x-toggle :label="trans('datatable.status')" wire:model="published" right/>
+                    </div>
+                </x-card>
+
+                <x-card :title="trans('general.page_sections.ordering')" shadow separator progress-indicator="submit" class="mt-5">
+                    <div class="grid grid-cols-1 gap-4">
+                        <x-input :label="trans('datatable.ordering')" wire:model="ordering" type="number"/>
                     </div>
                 </x-card>
             </div>

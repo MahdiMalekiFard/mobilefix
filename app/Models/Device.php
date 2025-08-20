@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\BooleanEnum;
 use App\Traits\HasSchemalessAttributes;
+use App\Traits\HasSeoOption;
 use App\Traits\HasSlugFromTranslation;
 use App\Traits\HasTranslationAuto;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,7 @@ class Device extends Model
 {
     use HasFactory,
         HasSchemalessAttributes,
+        HasSeoOption,
         HasSlugFromTranslation,
         HasTranslationAuto;
 
