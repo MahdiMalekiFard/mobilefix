@@ -10,8 +10,9 @@ use App\Models\Category;
 use App\Traits\PowerGridHelperTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
-use Livewire\Attributes\Computed;
 use Jenssegers\Agent\Agent;
+use Livewire\Attributes\Computed;
+use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -20,8 +21,27 @@ use PowerComponents\LivewirePowerGrid\PowerGridFields;
 final class CategoryTable extends PowerGridComponent
 {
     use PowerGridHelperTrait;
-    public string $tableName = 'index_category_datatable';
+    public string $tableName     = 'index_category_datatable';
     public string $sortDirection = 'desc';
+
+    public function setUp(): array
+    {
+        $setup = [
+            PowerGrid::header()
+                ->includeViewOnTop('components.admin.shared.bread-crumbs')
+                ->showSearchInput(),
+
+            PowerGrid::footer()
+                ->showPerPage()
+                ->showRecordCount(),
+        ];
+
+        if ((new Agent)->isMobile()) {
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
+        }
+
+        return $setup;
+    }
 
     #[Computed(persist: true)]
     public function breadcrumbs(): array
@@ -38,25 +58,6 @@ final class CategoryTable extends PowerGridComponent
         return [
             ['link' => route('admin.category.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('category.model')])],
         ];
-    }
-
-    public function setUp(): array
-    {
-        $setup = [
-            PowerGrid::header()
-                ->includeViewOnTop("components.admin.shared.bread-crumbs")
-                ->showSearchInput(),
-
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
-
-        if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
-        }
-
-        return $setup;
     }
 
     public function datasource(): Builder
@@ -78,6 +79,7 @@ final class CategoryTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('title', fn ($row) => PowerGridHelper::fieldTitle($row))
+            ->add('type_formatted', fn ($row) => $row->type->title())
             ->add('published_formated', fn ($row) => PowerGridHelper::fieldPublishedAtFormated($row));
     }
 
@@ -86,6 +88,7 @@ final class CategoryTable extends PowerGridComponent
         return [
             PowerGridHelper::columnId(),
             PowerGridHelper::columnTitle(),
+            Column::make('type', 'type_formatted'),
             PowerGridHelper::columnPublished(),
             PowerGridHelper::columnUpdatedAT('updated_at'),
             PowerGridHelper::columnAction(),
@@ -96,12 +99,12 @@ final class CategoryTable extends PowerGridComponent
     {
         return [
             Filter::enumSelect('published_formated', 'published')
-                  ->datasource(BooleanEnum::cases()),
+                ->datasource(BooleanEnum::cases()),
 
             Filter::datepicker('created_at_formatted', 'created_at')
-                  ->params([
-                      'maxDate' => now(),
-                  ])
+                ->params([
+                    'maxDate' => now(),
+                ]),
         ];
     }
 
@@ -116,9 +119,8 @@ final class CategoryTable extends PowerGridComponent
 
     public function noDataLabel(): string|View
     {
-        return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.category.create')
+        return view('admin.datatable-shared.empty-table', [
+            'link' => route('admin.category.create'),
         ]);
     }
-
 }
