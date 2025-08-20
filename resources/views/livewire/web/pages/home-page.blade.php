@@ -1,79 +1,28 @@
+@php
+    use App\Helpers\Constants;
+@endphp
 <div>
     <!-- hero slider -->
     <div class="hero-section">
         <div class="hero-slider owl-carousel owl-theme">
-            <div class="hero-single" style="background: url(assets/images/slider/slider-1.jpg)">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-md-7 col-lg-7">
-                            <div class="hero-content">
-                                <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Your Trusted
-                                    Partner</h6>
-                                <h1 class="hero-title" data-animation="fadeInUp" data-delay=".50s">
-                                    Tablet & Mobile <span>Repair</span> Services
-                                </h1>
-                                <p data-animation="fadeInUp" data-delay=".75s">
-                                    There are many variations of passages orem psum available but the majority have
-                                    suffered alteration in some form by injected humour or randomised.
-                                </p>
-                                <!-- <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
-                                    <a href="#" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
-                                    <a href="#" class="theme-btn theme-btn2">Learn More<i
-                                            class="fas fa-arrow-right"></i></a>
-                                </div> -->
+            @foreach($sliders as $slider)
+                <div class="hero-single" style="background: url({{ $slider?->getFirstMediaUrl('image', Constants::RESOLUTION_1280_720) }})">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-7 col-lg-7">
+                                <div class="hero-content">
+                                    <h1 class="hero-title" data-animation="fadeInUp" data-delay=".50s">
+                                        {{ $slider?->title }}
+                                    </h1>
+                                    <p data-animation="fadeInUp" data-delay=".75s">
+                                        {{ $slider?->description }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="hero-single" style="background: url(assets/images/slider/slider-2.jpg)">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-md-7 col-lg-7">
-                            <div class="hero-content">
-                                <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Your Trusted
-                                    Partner</h6>
-                                <h1 class="hero-title" data-animation="fadeInUp" data-delay=".50s">
-                                    Tablet & Mobile <span>Repair</span> Services
-                                </h1>
-                                <p data-animation="fadeInUp" data-delay=".75s">
-                                    There are many variations of passages orem psum available but the majority have
-                                    suffered alteration in some form by injected humour or randomised.
-                                </p>
-                                <!-- <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
-                                    <a href="#" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
-                                    <a href="#" class="theme-btn theme-btn2">Learn More<i
-                                            class="fas fa-arrow-right"></i></a>
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-single" style="background: url(assets/images/slider/slider-3.jpg)">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-md-7 col-lg-7">
-                            <div class="hero-content">
-                                <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Your Trusted
-                                    Partner</h6>
-                                <h1 class="hero-title" data-animation="fadeInUp" data-delay=".50s">
-                                    Tablet & Mobile <span>Repair</span> Services
-                                </h1>
-                                <p data-animation="fadeInUp" data-delay=".75s">
-                                    There are many variations of passages orem psum available but the majority have
-                                    suffered alteration in some form by injected humour or randomised.
-                                </p>
-                                <!-- <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
-                                    <a href="#" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
-                                    <a href="#" class="theme-btn theme-btn2">Learn More<i
-                                            class="fas fa-arrow-right"></i></a>
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
     <!-- hero slider end -->
@@ -138,10 +87,10 @@
                     <div class="about-left wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="about-img">
                             <div class="about-img-1">
-                                <img src="{{ asset('assets/images/about/01.jpg') }}" alt="">
+                                <img src="{{ $aboutUsPage?->getFirstMediaUrl('images') }}" alt="">
                             </div>
                             <div class="about-img-2">
-                                <img src="{{ asset('assets/images/about/02.jpg') }}" alt="">
+                                <img src="{{ $aboutUsPage?->getLastMediaUrl('images') }}" alt="">
                             </div>
                         </div>
                         <div class="about-shape"><img src="{{ asset('assets/images/shape/01.png') }}" alt=""></div>
@@ -158,13 +107,11 @@
                         <div class="site-heading mb-3">
                             <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> About Us</span>
                             <h2 class="site-title">
-                                We Provide Quality <span>Repair</span> Services
+                                {{ $aboutUsPage?->title }}
                             </h2>
                         </div>
                         <p class="about-text">
-                            There are many variations of passages available randomised words which
-                            the majority have suffered alteration in some form, by injected humour
-                            look page when looking at its layout even slightly believable.
+                            {{ $aboutUsPage?->body }}
                         </p>
                         <div class="about-list-wrap">
                             <ul class="about-list list-unstyled">
@@ -213,114 +160,26 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                        <div class="service-icon">
-                            <img src="{{ asset('assets/images/icon/tab.svg') }}" alt="">
-                        </div>
-                        <div class="service-content">
-                            <h3 class="service-title">
-                                <a href="{{ route('service-single-page', ['slug' => 'tablets-ipad-repair']) }}">Tablets & iPad Repair Service</a>
-                            </h3>
-                            <p class="service-text">
-                                There are many variations available majority of word have in some form suffered.
-                            </p>
-                            <div class="service-arrow">
-                                <a href="{{ route('service-single-page', ['slug' => 'tablets-ipad-repair']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
+                @foreach($services as $service)
+                    <div class="col-md-6 col-lg-3">
+                        <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                            <div class="service-icon">
+                                <img src="{{ asset('assets/images/icon/tab.svg') }}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="{{ route('service-single-page', ['slug' => $service?->slug]) }}">{{ $service?->title }}</a>
+                                </h3>
+                                <p class="service-text">
+                                    {{ $service?->description }}
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="{{ route('service-single-page', ['slug' => $service?->slug]) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                        <div class="service-icon">
-                            <img src="{{ asset('assets/images/icon/phone.svg') }}" alt="">
-                        </div>
-                        <div class="service-content">
-                            <h3 class="service-title">
-                                <a href="{{ route('service-single-page', ['slug' => 'smart-phone-repair']) }}">Smart Phone Repair Service</a>
-                            </h3>
-                            <p class="service-text">
-                                There are many variations available majority of word have in some form suffered.
-                            </p>
-                            <div class="service-arrow">
-                                <a href="{{ route('service-single-page', ['slug' => 'smart-phone-repair']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                        <div class="service-icon">
-                            <img src="{{ asset('assets/images/icon/gadget.svg') }}" alt="">
-                        </div>
-                        <div class="service-content">
-                            <h3 class="service-title">
-                                <a href="{{ route('service-single-page', ['slug' => 'gadget-repair']) }}">Gadget Repair Service</a>
-                            </h3>
-                            <p class="service-text">
-                                There are many variations available majority of word have in some form suffered.
-                            </p>
-                            <div class="service-arrow">
-                                <a href="{{ route('service-single-page', ['slug' => 'gadget-repair']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                        <div class="service-icon">
-                            <img src="{{ asset('assets/images/icon/laptop.svg') }}" alt="">
-                        </div>
-                        <div class="service-content">
-                            <h3 class="service-title">
-                                <a href="{{ route('service-single-page', ['slug' => 'laptop-desktop-repair']) }}">Laptop & Desktop Repair</a>
-                            </h3>
-                            <p class="service-text">
-                                There are many variations available majority of word have in some form suffered.
-                            </p>
-                            <div class="service-arrow">
-                                <a href="{{ route('service-single-page', ['slug' => 'laptop-desktop-repair']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                        <div class="service-icon">
-                            <img src="{{ asset('assets/images/icon/recovery.svg') }}" alt="">
-                        </div>
-                        <div class="service-content">
-                            <h3 class="service-title">
-                                <a href="{{ route('service-single-page', ['slug' => 'data-recovery']) }}">Data Recovery Service</a>
-                            </h3>
-                            <p class="service-text">
-                                There are many variations available majority of word have in some form suffered.
-                            </p>
-                            <div class="service-arrow">
-                                <a href="{{ route('service-single-page', ['slug' => 'data-recovery']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                        <div class="service-icon">
-                            <img src="{{ asset('assets/images/icon/tab.svg') }}" alt="">
-                        </div>
-                        <div class="service-content">
-                            <h3 class="service-title">
-                                <a href="{{ route('service-single-page', ['slug' => 'hardware-update']) }}">Hardware Update Service</a>
-                            </h3>
-                            <p class="service-text">
-                                There are many variations available majority of word have in some form suffered.
-                            </p>
-                            <div class="service-arrow">
-                                <a href="{{ route('service-single-page', ['slug' => 'hardware-update']) }}" class="service-btn"><i class="far fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -702,56 +561,22 @@
                             but the majority have suffered alteration in some form by injected.</p>
                         <div class="mt-4">
                             <div class="accordion" id="accordionExample">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            <span><i class="far fa-question"></i></span> What Are The Charges Of Services ?
-                                        </button>
-                                    </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse show"
-                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            We denounce with righteous indignation and dislike men who
-                                            are so beguiled and demoralized by the charms of pleasure of the moment, so
-                                            blinded by desirente odio dignissim quam.
+                                @foreach($faqs as $index => $faq)
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ $index }}">
+                                            <button class="accordion-button {{ $index ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse{{ $index }}" aria-expanded="{{ $index ? 'false' : 'true' }}" aria-controls="collapse{{ $index }}">
+                                                <span><i class="far fa-question"></i></span> {{ $faq?->title }} ?
+                                            </button>
+                                        </h2>
+                                        <div id="collapse{{ $index }}" class="accordion-collapse collapse {{ $index ? '' : 'show' }}"
+                                             aria-labelledby="heading{{ $index }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                {{ $faq?->description }}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingTwo">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            <span><i class="far fa-question"></i></span> How Can I Become A Member
-                                            ?
-                                        </button>
-                                    </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                        data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            We denounce with righteous indignation and dislike men who
-                                            are so beguiled and demoralized by the charms of pleasure of the moment, so
-                                            blinded by desirente odio dignissim quam.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingThree">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseThree" aria-expanded="false"
-                                            aria-controls="collapseThree">
-                                            <span><i class="far fa-question"></i></span> What Payment Gateway You Support ?
-                                        </button>
-                                    </h2>
-                                    <div id="collapseThree" class="accordion-collapse collapse"
-                                        aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            We denounce with righteous indignation and dislike men who
-                                            are so beguiled and demoralized by the charms of pleasure of the moment, so
-                                            blinded by desirente odio dignissim quam.
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

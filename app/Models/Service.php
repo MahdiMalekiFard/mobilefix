@@ -6,14 +6,14 @@ namespace App\Models;
 
 use App\Enums\BooleanEnum;
 use App\Helpers\Constants;
+use App\Traits\HasSeoOption;
+use App\Traits\HasSlugFromTranslation;
+use App\Traits\HasTranslationAuto;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasTranslationAuto;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use App\Traits\HasSlugFromTranslation;
-use App\Traits\HasSeoOption;
-use Spatie\Image\Enums\Fit;
 
 /**
  * @property string $title
@@ -23,10 +23,14 @@ use Spatie\Image\Enums\Fit;
 class Service extends Model implements HasMedia
 {
     use HasFactory;
-    use HasTranslationAuto;
-    use HasSlugFromTranslation;
-    use InteractsWithMedia;
     use HasSeoOption;
+    use HasSlugFromTranslation;
+    use HasTranslationAuto;
+    use InteractsWithMedia;
+
+    public array $translatable = [
+        'title', 'description', 'body',
+    ];
 
     protected $fillable = [
         'slug',
@@ -36,46 +40,36 @@ class Service extends Model implements HasMedia
 
     protected $casts = [
         'published' => BooleanEnum::class,
-        'languages' => 'array'
+        'languages' => 'array',
     ];
 
-    public array $translatable = [
-        'title','description', 'body'
-    ];
-
-    /**
-     * Model Configuration --------------------------------------------------------------------------
-     */
+    /** Model Configuration -------------------------------------------------------------------------- */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')
-             ->singleFile()
-             ->useFallbackUrl('/assets/images/default/user-avatar.png')
-             ->registerMediaConversions(
-                 function () {
-                     $this->addMediaConversion(Constants::RESOLUTION_720_SQUARE)
-                          ->fit(Fit::Crop, 720, 720);
-                 }
-             );
+            ->singleFile()
+            ->useFallbackUrl('/assets/images/default/user-avatar.png')
+            ->registerMediaConversions(
+                function () {
+                    $this->addMediaConversion(Constants::RESOLUTION_720_SQUARE)
+                        ->fit(Fit::Crop, 720, 720);
+                }
+            );
     }
 
     /**
      * Model Relations --------------------------------------------------------------------------
      */
 
-
     /**
      * Model Scope --------------------------------------------------------------------------
      */
-
 
     /**
      * Model Attributes --------------------------------------------------------------------------
      */
 
-
     /**
      * Model Custom Methods --------------------------------------------------------------------------
      */
-
 }
