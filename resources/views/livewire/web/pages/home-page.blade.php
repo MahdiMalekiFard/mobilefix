@@ -600,136 +600,34 @@
                 </div>
             </div>
             <div class="testimonial-slider owl-carousel owl-theme wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/01.jpg') }}" alt="">
+                @foreach($opinions as $opinion)
+                    <div class="testimonial-single">
+                        <div class="testimonial-content">
+                            <div class="testimonial-author-img">
+                                <img src="{{ $opinion?->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}" alt="">
+                            </div>
+                            <div class="testimonial-author-info">
+                                <h4>{{ $opinion?->user_name }}</h4>
+                                <p>{{ $opinion?->company }}</p>
+                            </div>
                         </div>
-                        <div class="testimonial-author-info">
-                            <h4>Sylvia H Green</h4>
-                            <p>Clients</p>
+                        <div class="testimonial-quote">
+                            <p>
+                                {{ \Illuminate\Support\Str::words($opinion?->comment, 21) }}
+                            </p>
+                            <div class="testimonial-quote-icon">
+                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
+                            </div>
                         </div>
-                    </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/02.jpg') }}" alt="">
-                        </div>
-                        <div class="testimonial-author-info">
-                            <h4>Gordo Novak</h4>
-                            <p>Clients</p>
+                        <div class="testimonial-rate">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
                         </div>
                     </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/03.jpg') }}" alt="">
-                        </div>
-                        <div class="testimonial-author-info">
-                            <h4>Reid E Butt</h4>
-                            <p>Clients</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/04.jpg') }}" alt="">
-                        </div>
-                        <div class="testimonial-author-info">
-                            <h4>Parker Jimenez</h4>
-                            <p>Clients</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/05.jpg') }}" alt="">
-                        </div>
-                        <div class="testimonial-author-info">
-                            <h4>Heruli Nez</h4>
-                            <p>Clients</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -742,82 +640,37 @@
             <div class="row">
                 <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Our Blog</span>
-                        <h2 class="site-title">Latest News & <span>Blog</span></h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Our Blogs</span>
+                        <h2 class="site-title">Latest <span>Blogs</span></h2>
                         <div class="heading-divider"></div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                        <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 16, 2024</span>
-                        <div class="blog-item-img">
-                            <img src="{{ asset('assets/images/blog/01.jpg') }}" alt="Thumb">
-                        </div>
-                        <div class="blog-item-info">
-                            <h4 class="blog-title">
-                                <a href="{{ route('blog-detail-page', ['slug' => 'there-are-many-variation-of-passage-available-suffer']) }}">There are many variation of passage available suffer</a>
-                            </h4>
-                            <div class="blog-item-meta">
-                                <ul>
-                                    <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                    <li><a href="#"><i class="far fa-comments"></i> 2.5k Comments</a></li>
-                                </ul>
+                @foreach($blogs as $blog)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                            <span class="blog-date"><i class="far fa-calendar-alt"></i> {{ $blog?->updated_at->format('M d, Y') }}</span>
+                            <div class="blog-item-img">
+                                <img src="{{ $blog?->getFirstMediaUrl('image', Constants::RESOLUTION_854_480) }}" alt="Thumb">
                             </div>
-                            <p>
-                                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
-                            </p>
-                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => 'there-are-many-variation-of-passage-available-suffer']) }}">Read More<i class="fas fa-arrow-right"></i></a>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">{{ \Illuminate\Support\Str::limit($blog?->title, 50) }}</a>
+                                </h4>
+                                <div class="blog-item-meta">
+                                    <ul>
+                                        <li><span href="#"><i class="far fa-user-circle"></i> By {{ $blog?->user?->name }}</span></li>
+                                    </ul>
+                                </div>
+                                <p>
+                                    {{ \Illuminate\Support\Str::limit($blog?->description, 100) }}
+                                </p>
+                                <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                        <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 18, 2024</span>
-                        <div class="blog-item-img">
-                            <img src="{{ asset('assets/images/blog/02.jpg') }}" alt="Thumb">
-                        </div>
-                        <div class="blog-item-info">
-                            <h4 class="blog-title">
-                                <a href="{{ route('blog-detail-page', ['slug' => 'it-is-a-long-established-fact-that-will-be-distracted']) }}">It is a long established fact that will be distracted</a>
-                            </h4>
-                            <div class="blog-item-meta">
-                                <ul>
-                                    <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                    <li><a href="#"><i class="far fa-comments"></i> 2.5k Comments</a></li>
-                                </ul>
-                            </div>
-                            <p>
-                                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
-                            </p>
-                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => 'it-is-a-long-established-fact-that-will-be-distracted']) }}">Read More<i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                        <span class="blog-date"><i class="far fa-calendar-alt"></i> Aug 20, 2024</span>
-                        <div class="blog-item-img">
-                            <img src="{{ asset('assets/images/blog/03.jpg') }}" alt="Thumb">
-                        </div>
-                        <div class="blog-item-info">
-                            <h4 class="blog-title">
-                                <a href="{{ route('blog-detail-page', ['slug' => 'all-the-generators-on-the-tend-to-repeat-predefined-chunks']) }}">All the generators on the tend to repeat predefined chunks</a>
-                            </h4>
-                            <div class="blog-item-meta">
-                                <ul>
-                                    <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                    <li><a href="#"><i class="far fa-comments"></i> 2.5k Comments</a></li>
-                                </ul>
-                            </div>
-                            <p>
-                                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.
-                            </p>
-                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => 'all-the-generators-on-the-tend-to-repeat-predefined-chunks']) }}">Read More<i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -828,13 +681,9 @@
     <div class="partner-area bg pt-50 pb-50">
         <div class="container">
             <div class="partner-wrapper partner-slider owl-carousel owl-theme">
-                <img src="{{ asset('assets/images/partner/samsung.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/nokia.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/huawei.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/xiaomi.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/iphone.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/oppo.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/vivo.png') }}" alt="thumb">
+                @foreach($brands as $brand)
+                    <img src="{{ $brand?->getFirstMediaUrl('image') }}" alt="thumb">
+                @endforeach
             </div>
         </div>
     </div>

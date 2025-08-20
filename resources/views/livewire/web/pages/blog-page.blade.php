@@ -40,7 +40,7 @@
                                 </ul>
                             </div>
                             <p>
-                                {{ Str::limit($blog?->description, 100) }}
+                                {{ Str::limit($blog?->description, 80) }}
                             </p>
                             <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">Read More<i class="fas fa-arrow-right"></i></a>
                         </div>

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\BooleanEnum;
 use App\Helpers\Constants;
 use App\Traits\CLogsActivity;
+use App\Traits\HasCategory;
 use App\Traits\HasSeoOption;
 use App\Traits\HasSlugFromTranslation;
 use App\Traits\HasStatusBoolean;
@@ -36,6 +37,7 @@ class Blog extends Model implements HasMedia
     use HasTags;
     use HasTranslationAuto;
     use HasUser;
+    use HasCategory;
     use HasView;
     use HasWishList;
     use InteractsWithMedia;
