@@ -37,12 +37,9 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Our Services</h4>
                             <ul class="footer-list">
-                                <li><a href="{{ route('service-single-page', ['slug' => 'tablets-ipad-repair']) }}"><i class="fas fa-dot-circle"></i> Tablets & iPad Repair</a></li>
-                                <li><a href="{{ route('service-single-page', ['slug' => 'smart-phone-repair']) }}"><i class="fas fa-dot-circle"></i> Smart Phone Repair</a></li>
-                                <li><a href="{{ route('service-single-page', ['slug' => 'gadget-repair']) }}"><i class="fas fa-dot-circle"></i> Gadget Repair</a></li>
-                                <li><a href="{{ route('service-single-page', ['slug' => 'laptop-desktop-repair']) }}"><i class="fas fa-dot-circle"></i> Laptop & Desktop Repair</a></li>
-                                <li><a href="{{ route('service-single-page', ['slug' => 'data-recovery']) }}"><i class="fas fa-dot-circle"></i> Data Recovery</a></li>
-                                <li><a href="{{ route('service-single-page', ['slug' => 'hardware-update']) }}"><i class="fas fa-dot-circle"></i> Hardware Update</a></li>
+                                @foreach(\App\Models\Service::where('published', \App\Enums\BooleanEnum::ENABLE)->get() as $service)
+                                    <li><a href="{{ route('service-single-page', ['slug' => $service?->slug]) }}"><i class="fas fa-dot-circle"></i> {{ $service?->title }}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -52,13 +49,13 @@
                             <div class="footer-newsletter">
                                 <p>We accept the following payment methods</p>
                                 <div class="d-flex align-items-center gap-3 flex-wrap">
-                                    <img src="{{ asset('assets/images/payments/stripe.png') }}" 
-                                        alt="Stripe" 
-                                        class="img-fluid" 
+                                    <img src="{{ asset('assets/images/payments/stripe.png') }}"
+                                        alt="Stripe"
+                                        class="img-fluid"
                                         style="max-height: 40px; width: auto;">
-                                    <img src="{{ asset('assets/images/payments/paypal.png') }}" 
-                                        alt="PayPal" 
-                                        class="img-fluid" 
+                                    <img src="{{ asset('assets/images/payments/paypal.png') }}"
+                                        alt="PayPal"
+                                        class="img-fluid"
                                         style="max-height: 40px; width: auto;">
                                 </div>
                             </div>
