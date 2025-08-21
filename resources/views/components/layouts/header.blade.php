@@ -7,7 +7,7 @@
             <div class="header-top-wrap">
                 <div class="header-top-left">
                     <div class="header-top-social">
-                        <span>Follow Us:</span>
+                        <span>Folgen Sie uns:</span>
                         <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
                         <a href="https://www.instagram.com/#"><i class="fab fa-instagram"></i></a>
@@ -79,7 +79,7 @@
                                 <a class="nav-link {{ request()->routeIs('service-page') ? 'active' : '' }}" href="{{ route('service-page') }}">Services</a>
                             </li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('gallery-page') ? 'active' : '' }}" href="{{ route('gallery-page') }}">Gallery</a></li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog-page') ? 'active' : '' }}" href="{{ route('blog-page') }}">Blog</a></li>    
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog-page') ? 'active' : '' }}" href="{{ route('blog-page') }}">Blog</a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact-us-page') ? 'active' : '' }}" href="{{ route('contact-us-page') }}">Contact</a></li>
                         </ul>
                         <!-- nav-right -->

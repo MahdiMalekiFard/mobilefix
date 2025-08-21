@@ -23,34 +23,34 @@ Table of contents
 13. Multi dropdown menu
 14. Search popup
 15. Main section css
-16. Hero css 
+16. Hero css
 17. Play btn
-18. About css 
+18. About css
 19. Appointment area
-20. Service css 
+20. Service css
 21. Service single
-22. Feature css 
-23. Video css 
-24. Choose css 
-25. Testimonial css 
-26. Counter css 
-27. Cta-area css 
-28. Gallery css 
-29. Blog css 
+22. Feature css
+23. Video css
+24. Choose css
+25. Testimonial css
+26. Counter css
+27. Cta-area css
+28. Gallery css
+29. Blog css
 30. Blog single css
 31. Sidebar css
 32. Partner css
-33. Contact us css 
-34. Team css 
-35. Pricing css 
-36. Faq css 
+33. Contact us css
+34. Team css
+35. Pricing css
+36. Faq css
 37. Breadcrumb css
-38. Pagination css 
-39. Auth css 
-40. Coming soon css 
-41. Error css 
-42. Terms/privacy css 
-43. Footer css 
+38. Pagination css
+39. Auth css
+40. Coming soon css
+41. Error css
+42. Terms/privacy css
+43. Footer css
 44. Home 2
 45. Home 3
 =======================================================*/
@@ -714,7 +714,7 @@ label {
   text-align: center;
   overflow: hidden;
   border: none;
-  background: var(--theme-color); 
+  background: var(--theme-color);
   box-shadow: var(--box-shadow);
   z-index: 1;
 }
@@ -838,7 +838,7 @@ label {
   left: 0;
   top: 0;
   bottom: -1px;
-  width: 35%;
+  width: 39%;
   background: var(--theme-color);
   border-top-right-radius: 50px;
   z-index: -1;
@@ -1543,7 +1543,7 @@ label {
 
 
 /* ===================
-16. Hero css 
+16. Hero css
 ====================== */
 
 .hero-section {
@@ -1816,7 +1816,7 @@ label {
 
 
 /* ===================
-18. About css 
+18. About css
 ====================== */
 
 .about-area{
@@ -1874,7 +1874,7 @@ label {
   top: -30px;
   border-radius: 100px;
   padding: 18px 20px;
-  background: var(--theme-color); 
+  background: var(--theme-color);
   color: var(--color-white);
   display: flex;
   gap: 12px;
@@ -2049,7 +2049,7 @@ label {
 
 
 /* ===================
-20. Service css 
+20. Service css
 ====================== */
 
 .service-area {
@@ -2260,7 +2260,7 @@ label {
 
 
 /* ===================
-22. Feature css 
+22. Feature css
 ====================== */
 
 .feature-area{
@@ -2331,12 +2331,12 @@ label {
 .feature-content p{
   color: var(--color-white);
   margin-top: 15px;
-} 
+}
 
 
 
 /* ===================
-23. Video css 
+23. Video css
 ====================== */
 
 .video-area{
@@ -2400,7 +2400,7 @@ label {
 
 
 /* ===================
-24. Choose css 
+24. Choose css
 ====================== */
 
 .choose-area{
@@ -2491,7 +2491,7 @@ label {
 
 
 /* ===================
-25. Testimonial css 
+25. Testimonial css
 ====================== */
 
 .testimonial-area {
@@ -2605,7 +2605,7 @@ label {
 
 
 /* ===================
-26. Counter css 
+26. Counter css
 ====================== */
 
 .counter-area {
@@ -2615,7 +2615,7 @@ label {
 
 .counter-wrap{
   padding: 50px 15px 50px 30px;
-  background: var(--theme-color); 
+  background: var(--theme-color);
   border-radius: 100px;
   position: relative;
   border: 10px solid var(--color-white);
@@ -2684,7 +2684,7 @@ label {
 
 
 /* ===================
-27. Cta-area css 
+27. Cta-area css
 ====================== */
 
 .cta-area {
@@ -2740,7 +2740,7 @@ label {
 
 
 /* ========================
-28. Gallery css 
+28. Gallery css
 =========================== */
 
 .gallery-item {
@@ -2847,7 +2847,7 @@ label {
 
 .filter-btns li.active {
   color: var(--color-white);
-  background: var(--theme-color); 
+  background: var(--theme-color);
 }
 
 .filter-btns li i{
@@ -2863,7 +2863,7 @@ label {
 
 
 /* ===================
-29. Blog css 
+29. Blog css
 ====================== */
 
 .blog-item {
@@ -2887,7 +2887,7 @@ label {
 
 .blog-item:hover .blog-item-img img{
   transform: scale(1.1);
-} 
+}
 
 .blog-date{
   position: absolute;
@@ -3435,7 +3435,7 @@ label {
 
 
 /* ===================
-33. Contact us css 
+33. Contact us css
 ====================== */
 
 .contact-wrap {
@@ -3542,7 +3542,7 @@ label {
 
 
 /* ===================
-34. Team css 
+34. Team css
 ====================== */
 
 .team-area{
@@ -3643,7 +3643,7 @@ label {
 
 
 /* ===================
-35. Pricing css 
+35. Pricing css
 ====================== */
 
 .pricing-item{
@@ -3667,7 +3667,7 @@ label {
   top: -60px;
   width: 150px;
   height: 150px;
-  background: var(--theme-color); 
+  background: var(--theme-color);
   border-radius: 50%;
   z-index: -1;
 }
@@ -3679,7 +3679,7 @@ label {
   top: -60px;
   width: 160px;
   height: 160px;
-  border: 2px dashed var(--theme-color); 
+  border: 2px dashed var(--theme-color);
   border-radius: 50%;
   z-index: -1;
 }
@@ -3737,7 +3737,7 @@ label {
 
 
 /* ===================
-36. Faq css 
+36. Faq css
 ====================== */
 
 .faq-area .faq-left{
@@ -3917,7 +3917,7 @@ label {
 
 
 /* ===================
-38. Pagination css 
+38. Pagination css
 ====================== */
 
 .pagination {
@@ -3949,7 +3949,7 @@ label {
 
 
 /* ===================
-39. Auth css 
+39. Auth css
 ====================== */
 
 .login-form {
@@ -4104,7 +4104,7 @@ label {
 
 
 /* ===================
-40. Coming soon css 
+40. Coming soon css
 ====================== */
 
 .coming-soon {
@@ -4234,7 +4234,7 @@ label {
 
 
 /* ===================
-41. Error css 
+41. Error css
 ====================== */
 
 .error-wrapper {
@@ -4277,7 +4277,7 @@ label {
 
 
 /* ===================
-42. Terms/privacy css 
+42. Terms/privacy css
 ====================== */
 
 .terms-content:not(:last-child) {
@@ -4310,7 +4310,7 @@ label {
 
 
 /* ===================
-43. Footer css 
+43. Footer css
 ====================== */
 
 .footer-area {
@@ -4626,12 +4626,12 @@ label {
   .home-2 .hero-single{
     padding-top: 220px;
   }
-  
+
   .home-2 .hero-slider.owl-theme .owl-nav .owl-prev,
   .home-2 .hero-slider.owl-theme .owl-nav .owl-next{
     bottom: 5px !important;
   }
-} 
+}
 
 
 

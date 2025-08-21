@@ -16,7 +16,7 @@
                     ">
                         {{ session('error') }}
                         <div class="float-end">
-                            <small class="text-muted">Auto-close in <span x-text="countdown"></span>s</small>
+                            <small class="text-muted">Automatisches Schließen in <span x-text="countdown"></span>s</small>
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -32,14 +32,14 @@
                             }
                         }, 1000);
                     ">
-                        <strong>Please fix the following errors:</strong>
+                        <strong>Bitte beheben Sie die folgenden Fehler:</strong>
                         <ul class="mb-0 mt-2">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                         <div class="float-end">
-                            <small class="text-muted">Auto-close in <span x-text="countdown"></span>s</small>
+                            <small class="text-muted">Automatisches Schließen in <span x-text="countdown"></span>s</small>
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -49,24 +49,24 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter Name" wire:model="name" required>
+                                <input type="text" class="form-control" placeholder="Namen eingeben" wire:model="name" required>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Enter Email" wire:model="email" required>
+                                <input type="email" class="form-control" placeholder="E-Mail eingeben" wire:model="email" required>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter Phone" wire:model="phone" required>
+                                <input type="text" class="form-control" placeholder="Telefon eingeben" wire:model="phone" required>
                             </div>
                         </div>
                         <!-- Brand select from database -->
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
                                 <select class="form-select" name="brand" id="brand-select" wire:model="brand" required onchange="filterModelsByBrand()">
-                                    <option value="">Choose Brand</option>
+                                    <option value="">Marke wählen</option>
                                     @foreach($brands as $brand)
                                         <option value="{{ $brand->id }}">{{ $brand->title }}</option>
                                     @endforeach
@@ -77,7 +77,7 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
                                 <select class="form-select" name="model" id="model-select" wire:model="model" required>
-                                    <option value="">Choose Model</option>
+                                    <option value="">Gerät auswählen</option>
                                     @foreach($brands as $brand)
                                         @foreach($brand->devices as $device)
                                             <option value="{{ $device->id }}" data-brand="{{ $brand->id }}" style="display:none;">{{ $device->title }}</option>
@@ -92,15 +92,15 @@
                                 <div class="dropdown" style="position: relative;">
                                     <button class="form-select dropdown-toggle text-start" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" style="background: white; border-color: #ced4da;">
                                         @if(empty($problems))
-                                            Choose Problems
+                                            Wählen Sie Probleme
                                         @else
-                                            {{ count($problems) }} problem{{ count($problems) == 1 ? '' : 's' }} selected
+                                            {{ count($problems) }} problem{{ count($problems) == 1 ? '' : 's' }} ausgewählt
                                         @endif
                                     </button>
                                     <div class="dropdown-menu" style="width: 100%; max-height: 200px; overflow-y: auto; padding: 10px; z-index: 1050;">
                                         @foreach($all_problems as $problem)
                                             <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" value="{{ $problem->id }}" 
+                                                <input class="form-check-input" type="checkbox" value="{{ $problem->id }}"
                                                        id="problem_{{ $problem->id }}" wire:model.live="problems">
                                                 <label class="form-check-label" for="problem_{{ $problem->id }}">
                                                     {{ $problem->title }}
@@ -116,25 +116,13 @@
                                 <div class="file-upload-wrapper">
                                     <input type="file" class="form-control" name="videos[]" id="videos" wire:model="videos" multiple accept="video/*">
                                     <label for="videos" class="file-upload-label">
-                                        <i class="fas fa-file"></i> 
+                                        <i class="fas fa-file"></i>
                                         @if(is_array($videos) && count($videos) > 0)
-                                            Upload Videos ({{ count($videos) }} selected)
+                                            Videos hochladen ({{ count($videos) }} ausgewählt)
                                         @else
-                                            Upload Videos
+                                            Videos hochladen
                                         @endif
                                     </label>
-                                    @if(is_array($videos) && count($videos) > 0)
-                                        <div class="file-preview mt-2">
-                                            <small class="text-muted">Selected videos:</small>
-                                            <div class="selected-files">
-                                                @foreach($videos as $index => $video)
-                                                    <span class="badge bg-primary me-1 mb-1">
-                                                        <i class="fas fa-video"></i> Video {{ $index + 1 }}
-                                                    </span>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -143,25 +131,13 @@
                                 <div class="file-upload-wrapper">
                                     <input type="file" class="form-control" name="images[]" id="images" wire:model="images" multiple accept="image/*">
                                     <label for="images" class="file-upload-label">
-                                        <i class="fas fa-file"></i> 
+                                        <i class="fas fa-file"></i>
                                         @if(is_array($images) && count($images) > 0)
-                                            Upload Images ({{ count($images) }} selected)
+                                            Bilder hochladen ({{ count($images) }} ausgewählt)
                                         @else
-                                            Upload Images
+                                            Bilder hochladen
                                         @endif
                                     </label>
-                                    @if(is_array($images) && count($images) > 0)
-                                        <div class="file-preview mt-2">
-                                            <small class="text-muted">Selected images:</small>
-                                            <div class="selected-files">
-                                                @foreach($images as $index => $image)
-                                                    <span class="badge bg-success me-1 mb-1">
-                                                        <i class="fas fa-image"></i> Image {{ $index + 1 }}
-                                                    </span>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -192,14 +168,14 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <button type="button" class="description-btn w-100" data-bs-toggle="modal" data-bs-target="#descriptionModal">
-                                    <i class="fas fa-edit"></i> Add Description
+                                    <i class="fas fa-edit"></i> Beschreibung hinzufügen
                                 </button>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <button type="submit" class="theme-btn theme-btn2 w-100">
-                                    <i class="fas fa-tools"></i> Request Repair
+                                    <i class="fas fa-tools"></i> Reparatur anfordern
                                 </button>
                             </div>
                         </div>
@@ -215,29 +191,29 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="descriptionModalLabel">
-                        <i class="fas fa-edit"></i> Describe Your Problem
+                        <i class="fas fa-edit"></i> Beschreiben Sie Ihr Problem
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="problemDescription" class="form-label">Please provide detailed information about the problem:</label>
-                        <textarea class="form-control" id="problemDescription" name="description" wire:model="description" rows="6" 
-                                    placeholder="Describe the issue you're experiencing with your device. Include when it started, what might have caused it, and any other relevant details..."></textarea>
+                        <label for="problemDescription" class="form-label">Bitte geben Sie detaillierte Informationen zum Problem an:</label>
+                        <textarea class="form-control" id="problemDescription" name="description" wire:model="description" rows="6"
+                                    placeholder="Beschreiben Sie das Problem, das Sie mit Ihrem Gerät haben. Geben Sie an, wann es aufgetreten ist, was die Ursache sein könnte und alle anderen relevanten Details..."></textarea>
                     </div>
                     <div class="mt-3">
                         <small class="text-muted">
-                            <i class="fas fa-info-circle"></i> 
-                            The more detailed your description, the better we can assist you with your repair needs.
+                            <i class="fas fa-info-circle"></i>
+                            Je detaillierter Ihre Beschreibung ist, desto besser können wir Sie bei Ihrem Reparaturbedarf unterstützen.
                         </small>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times"></i> Cancel
+                        <i class="fas fa-times"></i> Stornieren
                     </button>
                     <button type="button" class="btn btn-primary" onclick="saveDescription()" data-bs-dismiss="modal">
-                        <i class="fas fa-save"></i> Save Description
+                        <i class="fas fa-save"></i> Beschreibung speichern
                     </button>
                 </div>
             </div>
@@ -251,7 +227,7 @@
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-success text-white border-0">
                     <h5 class="modal-title" id="successModalLabel">
-                        <i class="fas fa-check-circle me-2"></i> Order Submitted Successfully!
+                        <i class="fas fa-check-circle me-2"></i> Bestellung erfolgreich übermittelt!
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="enableForm()"></button>
                 </div>
@@ -259,46 +235,46 @@
                     <div class="mb-4">
                         <i class="fas fa-mobile-alt text-primary" style="font-size: 4rem;"></i>
                     </div>
-                    <h4 class="text-success mb-4">Thank you for choosing our repair service!</h4>
-                    <p class="lead mb-4">Your repair request has been submitted successfully. Please save your tracking code for future reference.</p>
-                    
+                    <h4 class="text-success mb-4">Vielen Dank, dass Sie sich für unseren Reparaturservice entschieden haben!</h4>
+                    <p class="lead mb-4">Ihre Reparaturanfrage wurde erfolgreich übermittelt. Bitte speichern Sie Ihren Tracking-Code für zukünftige Referenzzwecke.</p>
+
                     <div class="tracking-code-container mb-4">
                         <div class="card bg-light border-primary">
                             <div class="card-header bg-primary text-white">
-                                <h6 class="mb-0"><i class="fas fa-barcode me-2"></i>Your Tracking Code</h6>
+                                <h6 class="mb-0"><i class="fas fa-barcode me-2"></i>Ihr Tracking-Code</h6>
                             </div>
                             <div class="card-body">
                                 <h3 class="text-primary mb-2 fw-bold" id="trackingCode" style="font-family: 'Courier New', monospace; letter-spacing: 2px; user-select: all; cursor: text;">
                                     {{ $trackingCode ?? '' }}
                                 </h3>
                                 <div class="d-flex gap-2 justify-content-center">
-                                    <button class="btn btn-outline-primary btn-sm" onclick="copyTrackingCode(event)" title="Copy to clipboard">
-                                        <i class="fas fa-copy me-1"></i> Copy Code
+                                    <button class="btn btn-outline-primary btn-sm" onclick="copyTrackingCode(event)" title="In die Zwischenablage kopieren">
+                                        <i class="fas fa-copy me-1"></i> Code kopieren
                                     </button>
-                                    <button class="btn btn-outline-secondary btn-sm" onclick="selectTrackingCode(event)" title="Select text for manual copy">
-                                        <i class="fas fa-mouse-pointer me-1"></i> Select
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="selectTrackingCode(event)" title="Text zum manuellen Kopieren auswählen">
+                                        <i class="fas fa-mouse-pointer me-1"></i> Wählen
                                     </button>
                                 </div>
                                 <small class="text-muted mt-2 d-block">
-                                    <i class="fas fa-info-circle me-1"></i> 
-                                    You can also manually select and copy the code above
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Sie können den obigen Code auch manuell auswählen und kopieren
                                 </small>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Important:</strong> Please keep this tracking code safe. You'll need it to check your repair status and for pickup.
+                        <strong>Wichtig:</strong> Bitte bewahren Sie diesen Trackingcode sicher auf. Sie benötigen ihn zur Überprüfung Ihres Reparaturstatus und zur Abholung.
                     </div>
-                    
+
                     <div class="d-grid gap-2 mt-4">
-                        <p class="text-muted mb-3">We'll contact you within 24 hours to confirm your repair details.</p>
+                        <p class="text-muted mb-3">Wir werden Sie innerhalb von 24 Stunden kontaktieren, um Ihre Reparaturdetails zu bestätigen.</p>
                     </div>
                 </div>
                 <div class="modal-footer border-0 justify-content-center">
                     <button type="button" class="btn btn-primary btn-lg px-4" data-bs-dismiss="modal" onclick="enableForm()">
-                        <i class="fas fa-check me-2"></i> I've Saved My Tracking Code
+                        <i class="fas fa-check me-2"></i> Ich habe meinen Tracking-Code gespeichert
                     </button>
                 </div>
             </div>
@@ -311,7 +287,7 @@
         <div class="d-flex align-items-center justify-content-center h-100">
             <div class="text-center text-white">
                 <i class="fas fa-lock fa-3x mb-3"></i>
-                <h4>Please close the success modal to continue</h4>
+                <h4>Bitte schließen Sie das Erfolgsmodal, um fortzufahren</h4>
             </div>
         </div>
     </div>
@@ -321,26 +297,26 @@
         .tracking-code-container .card {
             border-width: 2px !important;
         }
-        
+
         .tracking-code-container h3 {
             font-size: 2.5rem;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
-        
+
         #formOverlay {
             backdrop-filter: blur(3px);
         }
-        
+
         /* Form disabled state */
         .appointment-form.disabled {
             pointer-events: none;
             opacity: 0.6;
         }
-        
+
         .file-upload-wrapper {
             position: relative;
         }
-        
+
         .file-upload-wrapper input[type="file"] {
             opacity: 0;
             position: absolute;
@@ -349,7 +325,7 @@
             height: 0.1px;
             overflow: hidden;
         }
-        
+
         .file-upload-label {
             display: block;
             padding: 12px 20px;
@@ -364,13 +340,13 @@
             position: relative;
             z-index: 1;
         }
-        
+
         .file-upload-label:hover {
             background: #f8f9fa;
             border-color: #03466E;
             color: #03466E;
         }
-        
+
         .description-btn {
             display: block;
             padding: 12px 20px;
@@ -385,20 +361,20 @@
             position: relative;
             z-index: 1;
         }
-        
+
         .description-btn:hover {
             background: #f8f9fa;
             border-color: #03466E !important;
             color: #03466E;
         }
-        
+
         .file-preview {
             margin-top: 0;
             font-size: 12px;
             color: #666;
             display: none;
         }
-        
+
         .file-preview .file-count {
             background: rgba(0, 182, 177, 0.1);
             color: #00B6B1;
@@ -409,27 +385,27 @@
             font-weight: 500;
             border: 1px solid rgba(0, 182, 177, 0.2);
         }
-        
+
         .modal-content {
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-        
+
         .modal-header {
             background: linear-gradient(135deg, #00B6B1 0%, #03466E 100%);
             color: white;
             border-radius: 15px 15px 0 0;
         }
-        
+
         .modal-header .btn-close {
             filter: invert(1);
         }
-        
+
         .modal-footer {
             border-top: 1px solid #e9ecef;
             padding: 20px;
         }
-        
+
         .modal-footer .btn {
             padding: 12px 30px;
             font-weight: 600;
@@ -437,69 +413,69 @@
             transition: all 0.3s ease;
             min-width: 120px;
         }
-        
+
         .modal-footer .btn-secondary {
             background-color: #6c757d;
             border-color: #6c757d;
             color: white;
         }
-        
+
         .modal-footer .btn-secondary:hover {
             background-color: #5a6268;
             border-color: #545b62;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-        
+
         .modal-footer .btn-primary {
             background: linear-gradient(135deg, #00B6B1 0%, #03466E 100%);
             border: none;
             color: white;
         }
-        
+
         .modal-footer .btn-primary:hover:not(:disabled) {
             background: linear-gradient(135deg, #03466E 0%, #00B6B1 100%);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 182, 177, 0.3);
         }
-        
+
         .modal-footer .btn-primary:disabled {
             opacity: 0.8;
             cursor: not-allowed;
             transform: none !important;
         }
-        
+
         .fa-spinner {
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .theme-btn2.w-100 {
             padding: 15px;
             font-size: 16px;
             font-weight: 600;
         }
-        
+
         .description-btn.w-100 {
             padding: 13px 20px;
             font-size: 16px;
             font-weight: 600;
         }
-        
+
         @media (max-width: 768px) {
             .appointment {
                 padding: 30px 0;
             }
-            
+
             .theme-btn2.w-100 {
                 padding: 12px;
                 font-size: 14px;
             }
-            
+
             .description-btn.w-100 {
                 padding: 12px 20px;
                 font-size: 14px;
@@ -511,11 +487,11 @@
         function displayFileNames(inputId, previewId) {
             const input = document.getElementById(inputId);
             const label = document.querySelector(`label[for="${inputId}"]`);
-            
+
             if (input.files.length > 0) {
                 const fileCount = input.files.length;
                 const fileText = fileCount === 1 ? 'file' : 'files';
-                
+
                 // Update the button label text
                 label.innerHTML = `<i class="fas fa-file"></i> ${fileCount} ${fileText} selected`;
             } else {
@@ -523,30 +499,30 @@
                 label.innerHTML = `<i class="fas fa-file"></i> Upload Files`;
             }
         }
-        
+
         function saveDescription() {
             const description = document.getElementById('problemDescription').value;
             const saveButton = document.querySelector('#descriptionModal .btn-primary');
             const originalText = saveButton.innerHTML;
-            
+
             if (description.trim()) {
                 // Instantly update the main "Add Description" button
                 const addDescButton = document.querySelector('[data-bs-target="#descriptionModal"]');
-                addDescButton.innerHTML = '<i class="fas fa-check"></i> Description Added';
+                addDescButton.innerHTML = '<i class="fas fa-check"></i> Beschreibung hinzugefügt';
                 addDescButton.style.background = '#28a745';
                 addDescButton.style.borderColor = '#28a745';
                 addDescButton.style.color = 'white';
                 addDescButton.setAttribute('data-description-added', 'true');
-                
+
                 // Change save button to show saving state
-                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Speichern...';
                 saveButton.disabled = true;
-                
+
                 // Simulate save process
                 setTimeout(() => {
-                    saveButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
+                    saveButton.innerHTML = '<i class="fas fa-check"></i> Gespeichert!';
                     saveButton.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
-                    
+
                     setTimeout(() => {
                         // Reset save button for next time
                         saveButton.innerHTML = originalText;
@@ -556,16 +532,16 @@
                 }, 1500);
             } else {
                 // Show error state if no description
-                saveButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Add Description First';
+                saveButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Fügen Sie zuerst eine Beschreibung hinzu';
                 saveButton.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
-                
+
                 setTimeout(() => {
                     saveButton.innerHTML = originalText;
                     saveButton.style.background = '';
                 }, 2000);
             }
         }
-        
+
         // Auto-resize textarea and form submission handler
         document.addEventListener('DOMContentLoaded', function() {
             const textarea = document.getElementById('problemDescription');
@@ -575,14 +551,14 @@
                     this.style.height = (this.scrollHeight) + 'px';
                 });
             }
-            
+
             // Handle form submission to reset description button
             const form = document.querySelector('.appointment-form form');
             if (form) {
                 form.addEventListener('submit', function() {
                     const addDescButton = document.querySelector('[data-bs-target="#descriptionModal"]');
                     if (addDescButton && addDescButton.getAttribute('data-description-added') === 'true') {
-                        addDescButton.innerHTML = '<i class="fas fa-edit"></i> Add Description';
+                        addDescButton.innerHTML = '<i class="fas fa-edit"></i> Beschreibung hinzufügen';
                         addDescButton.style.background = '';
                         addDescButton.style.borderColor = '';
                         addDescButton.style.color = '';
@@ -591,38 +567,38 @@
                 });
             }
         });
-        
+
         // Success modal functions
         function showSuccessModal(trackingCode) {
             // Update tracking code in modal
             document.getElementById('trackingCode').textContent = trackingCode;
-            
+
             // Disable form
             disableForm();
-            
+
             // Show modal
             const modal = new bootstrap.Modal(document.getElementById('successModal'));
             modal.show();
         }
-        
+
         function copyTrackingCode(event) {
             const trackingCode = document.getElementById('trackingCode').textContent;
             const button = event.target.closest('button');
             const originalText = button.innerHTML;
-            
+
             // Function to show success feedback
             function showSuccess() {
-                button.innerHTML = '<i class="fas fa-check me-1"></i> Copied!';
+                button.innerHTML = '<i class="fas fa-check me-1"></i> Kopiert!';
                 button.classList.remove('btn-outline-primary');
                 button.classList.add('btn-success');
-                
+
                 setTimeout(function() {
                     button.innerHTML = originalText;
                     button.classList.remove('btn-success');
                     button.classList.add('btn-outline-primary');
                 }, 2000);
             }
-            
+
             // Try modern clipboard API first
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(trackingCode).then(function() {
@@ -636,75 +612,75 @@
                 fallbackCopyTextToClipboard(trackingCode, showSuccess);
             }
         }
-        
+
         function fallbackCopyTextToClipboard(text, successCallback) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
-            
+
             // Avoid scrolling to bottom
             textArea.style.top = "0";
             textArea.style.left = "0";
             textArea.style.position = "fixed";
             textArea.style.opacity = "0";
-            
+
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-            
+
             try {
                 const successful = document.execCommand('copy');
                 if (successful) {
                     successCallback();
                 } else {
-                    throw new Error('Copy command was unsuccessful');
+                    throw new Error('Der Kopierbefehl war nicht erfolgreich');
                 }
             } catch (err) {
                 console.error('Fallback: Could not copy text: ', err);
                 // Show manual copy dialog
-                prompt('Copy failed. Please manually copy this tracking code:', text);
+                prompt('Kopieren fehlgeschlagen. Bitte kopieren Sie diesen Tracking-Code manuell:', text);
             } finally {
                 document.body.removeChild(textArea);
             }
         }
-        
+
         function selectTrackingCode(event) {
             const trackingElement = document.getElementById('trackingCode');
-            
+
             // Create a range object
             const range = document.createRange();
             range.selectNodeContents(trackingElement);
-            
+
             // Clear any existing selections
             const selection = window.getSelection();
             selection.removeAllRanges();
-            
+
             // Add the new range to selection
             selection.addRange(range);
-            
+
             // Optional: Show feedback
             const button = event.target.closest('button');
             const originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-check me-1"></i> Selected!';
+            button.innerHTML = '<i class="fas fa-check me-1"></i> Ausgewählt!';
             button.classList.remove('btn-outline-secondary');
             button.classList.add('btn-success');
-            
+
             setTimeout(function() {
                 button.innerHTML = originalText;
                 button.classList.remove('btn-success');
                 button.classList.add('btn-outline-secondary');
             }, 1500);
         }
-        
+
         function disableForm() {
             // Show overlay
             document.getElementById('formOverlay').classList.remove('d-none');
-            
+
             // Add disabled class to form container
             const appointmentForm = document.querySelector('.appointment-form');
             if (appointmentForm) {
                 appointmentForm.classList.add('disabled');
             }
-            
+
             // Disable all form elements
             const form = document.querySelector('.appointment-form form');
             if (form) {
@@ -714,17 +690,17 @@
                 });
             }
         }
-        
+
         function enableForm() {
             // Hide overlay
             document.getElementById('formOverlay').classList.add('d-none');
-            
+
             // Remove disabled class from form container
             const appointmentForm = document.querySelector('.appointment-form');
             if (appointmentForm) {
                 appointmentForm.classList.remove('disabled');
             }
-            
+
             // Enable all form elements
             const form = document.querySelector('.appointment-form form');
             if (form) {
@@ -733,11 +709,10 @@
                     input.disabled = false;
                 });
             }
-            
-            // Notify Livewire that modal was closed
+
             @this.call('modalClosed');
         }
-        
+
         // Listen for Livewire events to show success modal
         window.addEventListener('show-success-modal', event => {
             showSuccessModal(event.detail.trackingCode);

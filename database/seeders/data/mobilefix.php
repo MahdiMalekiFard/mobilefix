@@ -826,7 +826,7 @@ return [
 
     'pages'           => [
         [
-            'title'       => 'Wir bieten hochwertige Reparaturdienste',
+            'title'       => 'Verlässliche Reparaturdienste in bester Qualität',
             'body'        => 'Mit einem Team erfahrener Techniker und modernster Ausstattung sorgen wir dafür, dass Ihr Smartphone in kürzester Zeit wieder einsatzbereit ist. Wir verwenden ausschließlich Original- und Premium-Ersatzteile, damit Ihr Gerät die gewohnte Leistung und Langlebigkeit behält.',
             'type'        => PageTypeEnum::ABOUT_US->value,
             'slug'        => 'wir-bieten-hochwertige-reparaturdienste',

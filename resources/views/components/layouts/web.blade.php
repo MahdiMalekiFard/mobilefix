@@ -10,7 +10,7 @@
     <meta name="keywords" content="">
 
     <!-- title -->
-    <title>Fix Mobile</title>
+    <title>FixMobil</title>
 
     <!-- favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/logo/favicon.png') }}">
