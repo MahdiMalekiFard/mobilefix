@@ -72,15 +72,15 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('home-page') ? 'active' : '' }}" href="{{ route('home-page') }}">Home</a>
+                                <a class="nav-link {{ request()->routeIs('home-page') ? 'active' : '' }}" href="{{ route('home-page') }}">Heim</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('about-us-page') ? 'active' : '' }}" href="{{ route('about-us-page') }}">About</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('about-us-page') ? 'active' : '' }}" href="{{ route('about-us-page') }}">Um</a></li>
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('service-page') ? 'active' : '' }}" href="{{ route('service-page') }}">Services</a>
+                                <a class="nav-link {{ request()->routeIs('service-page') ? 'active' : '' }}" href="{{ route('service-page') }}">Leistungen</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('gallery-page') ? 'active' : '' }}" href="{{ route('gallery-page') }}">Gallery</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('gallery-page') ? 'active' : '' }}" href="{{ route('gallery-page') }}">Galerie</a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog-page') ? 'active' : '' }}" href="{{ route('blog-page') }}">Blog</a></li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact-us-page') ? 'active' : '' }}" href="{{ route('contact-us-page') }}">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact-us-page') ? 'active' : '' }}" href="{{ route('contact-us-page') }}">Kontakt</a></li>
                         </ul>
                         <!-- nav-right -->
                         <div class="nav-right">
@@ -90,7 +90,7 @@
                             </div>
                             <div class="nav-btn">
                                 @if (auth()->check())
-                                    <a href="{{ route('user.dashboard') }}" target="_blank" class="theme-btn">Dashboard <i class="fas fa-arrow-right"></i></a>
+                                    <a href="{{ route('user.dashboard') }}" target="_blank" class="theme-btn">Armaturenbrett <i class="fas fa-arrow-right"></i></a>
                                 @else
                                     <a href="{{ route('user.auth.login') }}" target="_blank" class="theme-btn">Login <i class="fas fa-arrow-right"></i></a>
                                 @endif

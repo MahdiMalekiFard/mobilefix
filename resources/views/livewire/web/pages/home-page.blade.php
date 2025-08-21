@@ -45,8 +45,8 @@
                             <img src="{{ asset('assets/images/icon/repair.svg') }}" alt="">
                         </div>
                         <div class="feature-content">
-                            <h4>Best Electronics Repair Service</h4>
-                            <p>It is a long established fact that a reader will be distracted by the readable content</p>
+                            <h4>Bester Elektronik-Reparaturservice</h4>
+                            <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt abgelenkt wird</p>
                         </div>
                     </div>
                 </div>
@@ -57,8 +57,8 @@
                             <img src="{{ asset('assets/images/icon/team.svg') }}" alt="">
                         </div>
                         <div class="feature-content">
-                            <h4>Repair With Experience Team</h4>
-                            <p>It is a long established fact that a reader will be distracted by the readable content</p>
+                            <h4>Reparatur mit erfahrenem Team</h4>
+                            <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt abgelenkt wird</p>
                         </div>
                     </div>
                 </div>
@@ -69,8 +69,8 @@
                             <img src="{{ asset('assets/images/icon/secure.svg') }}" alt="">
                         </div>
                         <div class="feature-content">
-                            <h4>100% Secure Repair Service For You</h4>
-                            <p>It is a long established fact that a reader will be distracted by the readable content</p>
+                            <h4>100% sicherer Reparaturservice</h4>
+                            <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt abgelenkt wird</p>
                         </div>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                         <div class="about-experience">
                             <h1>25+</h1>
                             <div class="about-experience-text">
-                                Years Of <br> Experience
+                                Jahre <br> Erfahrung
                             </div>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                 <div class="col-lg-6">
                     <div class="about-right wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="site-heading mb-3">
-                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> About Us</span>
+                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Über uns</span>
                             <h2 class="site-title">
                                 {{ $aboutUsPage?->title }}
                             </h2>
@@ -121,8 +121,8 @@
                                         <img src="{{ asset('assets/images/icon/money.svg') }}" alt="">
                                     </div>
                                     <div class="content">
-                                        <h4>Our Affordable Price</h4>
-                                        <p>There are many variations of passage majority have suffered some form injected humour.</p>
+                                        <h4>Unser günstiger Preis</h4>
+                                        <p>Es gibt viele Variationen dieser Passage, die meisten davon sind in irgendeiner Form mit Humor überladen.</p>
                                     </div>
                                 </li>
                                 <li>
@@ -130,13 +130,13 @@
                                         <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="">
                                     </div>
                                     <div class="content">
-                                        <h4>Trusted Repair Service</h4>
-                                        <p>There are many variations of passage majority have suffered some form injected humour.</p>
+                                        <h4>Vertrauenswürdiger Reparaturservice</h4>
+                                        <p>Es gibt viele Variationen dieser Passage, die meisten davon sind in irgendeiner Form mit Humor überladen.</p>
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <a href="{{ route('about-us-page') }}" class="theme-btn mt-4">Discover More <i
+                        <a href="{{ route('about-us-page') }}" class="theme-btn mt-4">Mehr entdecken <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
