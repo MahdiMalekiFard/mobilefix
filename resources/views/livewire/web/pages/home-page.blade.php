@@ -152,12 +152,12 @@
             <div class="row">
                 <div class="col-md-6 col-lg-6">
                     <div class="site-heading">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Services</span>
-                        <h2 class="site-title text-white">Let's Check Our Best Repair <span>Services</span> In City</h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Leistungen</span>
+                        <h2 class="site-title text-white">Schauen wir uns unsere beste <span>Leistungen</span> In der Stadt</h2>
                         <p class="text-white">
-                            There are many variations of passages available injected humour randomised words which don't look majority have suffered
-                            alteration in some form even slightly believable the majority have suffered alteration in some form repeat
-                            predefined chunks as necessary injected humour.
+                            Es gibt viele Variationen von Passagen mit eingebrachtem Humor, zufällig ausgewählten Wörtern,
+                            die nicht einmal annähernd glaubwürdig aussehen (die Mehrheit hat in irgendeiner Form eine Veränderung erfahren),
+                            vordefinierten Abschnitten nach Bedarf und eingebrachtem Humor.
                         </p>
                     </div>
                 </div>
