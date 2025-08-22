@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $email
  * @property string $phone
  * @property string $message
- * @property boolean $is_read
+ * @property bool   $is_read
  */
 class ContactUs extends Model
 {
@@ -38,17 +38,12 @@ class ContactUs extends Model
      * Model Configuration --------------------------------------------------------------------------
      */
 
-
     /**
      * Model Relations --------------------------------------------------------------------------
      */
 
-
-    /**
-     * Model Scope --------------------------------------------------------------------------
-     */
-
-     public function scopeUnread($query)
+    /** Model Scope -------------------------------------------------------------------------- */
+    public function scopeUnread($query)
     {
         return $query->where('is_read', false);
     }
@@ -58,16 +53,11 @@ class ContactUs extends Model
         return $query->where('is_read', true);
     }
 
-
     /**
      * Model Attributes --------------------------------------------------------------------------
      */
 
-
-    /**
-     * Model Custom Methods --------------------------------------------------------------------------
-     */
-
+    /** Model Custom Methods -------------------------------------------------------------------------- */
     public function markAsRead(): void
     {
         $this->update(['is_read' => true]);

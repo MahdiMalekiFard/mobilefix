@@ -44,9 +44,9 @@ class ContactUsPage extends Component
             $this->reset(['name', 'email', 'phone', 'subject', 'message']);
             $this->isSubmitted = true;
 
-            session()->flash('success', 'Your message has been sent successfully! We will get back to you soon.');
+            session()->flash('success', 'Ihre Nachricht wurde erfolgreich gesendet! Wir melden uns in Kürze bei Ihnen.');
         } catch (Exception $e) {
-            session()->flash('error', 'Sorry, there was an error sending your message. Please try again.');
+            session()->flash('error', 'Beim Senden Ihrer Nachricht ist leider ein Fehler aufgetreten. Bitte versuchen Sie es erneut.');
         }
     }
 
