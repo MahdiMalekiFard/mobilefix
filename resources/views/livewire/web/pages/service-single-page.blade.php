@@ -5,10 +5,10 @@
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url({{ asset('assets/images/breadcrumb/01.jpg') }})">
         <div class="container">
-            <h2 class="breadcrumb-title">Service Single</h2>
+            <h2 class="breadcrumb-title">{{ $service?->title }}</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
-                <li class="active">Service Single</li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
+                <li class="active">Service einzeln</li>
             </ul>
         </div>
     </div>
@@ -22,7 +22,7 @@
                     <div class="col-xl-4 col-lg-4">
                         <div class="service-sidebar">
                             <div class="widget category">
-                                <h4 class="widget-title">All Services</h4>
+                                <h4 class="widget-title">Alle Leistungen</h4>
                                 <div class="category-list">
                                     @foreach($otherServices as $otherService)
                                         <a href="{{ route('service-single-page', ['slug' => $otherService?->slug]) }}"><i class="far fa-angle-double-right"></i>{{ $otherService?->title }}</a>

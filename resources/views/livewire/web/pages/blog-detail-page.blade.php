@@ -5,10 +5,10 @@
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url({{ asset('assets/images/breadcrumb/01.jpg') }})">
         <div class="container">
-            <h2 class="breadcrumb-title">Blog Single</h2>
+            <h2 class="breadcrumb-title">Blogdetails</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
-                <li class="active">Blog Single</li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
+                <li class="active">Blogdetails</li>
             </ul>
         </div>
     </div>
@@ -33,7 +33,7 @@
 
                                     <hr>
                                     <div class="blog-details-tags pb-20">
-                                        <h5>Tags : </h5>
+                                        <h5>Schlagwörter : </h5>
                                         <ul>
                                             @foreach($blog->tags ?? [] as $tag)
                                                 <li><a href="{{ route('blog-page', ['tag' => $tag?->name]) }}">{{ $tag?->name }}</a></li>
@@ -49,7 +49,7 @@
                     <aside class="sidebar">
                         <!-- category -->
                         <div class="widget category">
-                            <h5 class="widget-title">Categories</h5>
+                            <h5 class="widget-title">Kategorien</h5>
                             <div class="category-list">
                                 @foreach($categories as $category)
                                     <a href="#"><i class="far fa-angle-double-right"></i>{{ $category?->title }}<span>({{ $category?->blogs->count() }})</span></a>
@@ -58,7 +58,7 @@
                         </div>
                         <!-- recent post -->
                         <div class="widget recent-post">
-                            <h5 class="widget-title">Recent Blogs</h5>
+                            <h5 class="widget-title">Aktuelle Blogeinträge</h5>
                             @foreach($recentBlogs as $recentBlog)
                                 <div class="recent-post-single">
                                     <div class="recent-post-img">
