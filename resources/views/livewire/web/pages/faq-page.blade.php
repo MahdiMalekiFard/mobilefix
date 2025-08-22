@@ -1,11 +1,15 @@
+@php
+    use App\Helpers\Constants;
+    use Illuminate\Support\Str;
+@endphp
 <div>
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url({{ asset('assets/images/breadcrumb/01.jpg') }})">
         <div class="container">
-            <h2 class="breadcrumb-title">Faq's</h2>
+            <h2 class="breadcrumb-title">FAQ</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
-                <li class="active">Faq's</li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
+                <li class="active">FAQ</li>
             </ul>
         </div>
     </div>

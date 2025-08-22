@@ -4,7 +4,7 @@
         <div class="container">
             <h2 class="breadcrumb-title">{{ $page?->title }}</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
                 <li class="active">{{ $page?->title }}</li>
             </ul>
         </div>

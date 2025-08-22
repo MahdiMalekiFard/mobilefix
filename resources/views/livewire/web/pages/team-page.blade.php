@@ -2,10 +2,10 @@
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url({{ asset('assets/images/breadcrumb/01.jpg') }})">
         <div class="container">
-            <h2 class="breadcrumb-title">Our Team</h2>
+            <h2 class="breadcrumb-title">Unser Team</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
-                <li class="active">Our Team</li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
+                <li class="active">Unser Team</li>
             </ul>
         </div>
     </div>

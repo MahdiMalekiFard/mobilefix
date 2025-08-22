@@ -851,26 +851,30 @@ return [
             'title'       => 'Servicebedingungen',
             'body'        => '
 <div class="terms-content">
-<h3>Our Performance</h3>
+<h3>Unsere Leistungen</h3>
 <p>Sed ac sollicitudin ipsum. Vivamus vulputate, enim sit amet aliquet lacinia, ex mauris aliquam elit, vel pharetra augue arcu ultricies magna. Suspendisse justo erat, dignissim ut imperdiet ut, convallis vitae urna. Vivamus tincidunt lacinia metus sed suscipit. Phasellus luctus rhoncus mauris ut euismod. Aliquam elementum malesuada erat, vitae bibendum ex rutrum eget. Mauris sed nunc mauris. Curabitur semper sed justo a pellentesque. In hac habitasse platea dictumst. Mauris semper volutpat iaculis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur consectetur dignissim nulla id ornare. Praesent placerat dolor vitae tellus lacinia, a malesuada est sodales. Praesent at consectetur sem, sed scelerisque arcu. Maecenas malesuada lorem id sagittis scelerisque. In hac habitasse platea dictumst.</p>
 </div>
+
 <div class="terms-content">
-<h3>Cookie</h3>
+<h3>Cookies</h3>
 <p>Pellentesque sit amet nulla facilisis, lobortis ex at, consequat diam. Pellentesque sed dui lorem. Aliquam vel euismod nunc. Nulla facilisi. Donec consectetur faucibus rutrum. Pellentesque ac ultricies sapien, ac iaculis erat. Vivamus posuere eget nulla sit amet vehicula. Donec finibus maximus eros, at tincidunt ipsum vestibulum ac. Integer vel metus vehicula, consequat velit a, eleifend mi. Curabitur erat mauris, luctus non dictum vel, fringilla dignissim quam. Phasellus eleifend porta fermentum. Pellentesque posuere massa vitae odio pulvinar feugiat. Fusce a risus sodales, maximus sapien sit amet, pharetra ipsum. Vivamus varius eros ac sapien pulvinar, nec tincidunt dui bibendum. Proin consectetur nibh tortor, nec vulputate ex posuere eget.</p>
 </div>
+
 <div class="terms-content">
-<h3>Payments</h3>
+<h3>Zahlungen</h3>
 <p>Amet nulla facilisis, lobortis ex at, consequat diam. Pellentesque sed dui lorem. Aliquam vel euismod nunc. Nulla facilisi. Donec consectetur faucibus rutrum. Pellentesque ac ultricies sapien, ac iaculis erat. Vivamus posuere eget nulla sit amet vehicula. Donec finibus maximus eros, at tincidunt ipsum vestibulum ac. Integer vel metus vehicula, consequat velit a, eleifend mi. Curabitur erat mauris, luctus non dictum vel, fringilla dignissim quam. Phasellus eleifend porta fermentum. Pellentesque posuere massa vitae odio pulvinar feugiat. Fusce a risus sodales, maximus sapien sit amet, pharetra ipsum. Vivamus varius eros ac sapien pulvinar, nec tincidunt dui bibendum. Proin consectetur nibh tortor, nec vulputate ex posuere eget.</p>
 </div>
+
 <div class="terms-content">
-<h3>Refund Policy</h3>
+<h3>Rückerstattungsrichtlinie</h3>
 <p>Donec ut vestibulum sem, in faucibus mauris. Nulla et luctus nulla. Vestibulum consectetur nisi nec lobortis pretium. Fusce dignissim in sem in bibendum. Vivamus fermentum massa et egestas gravida. Suspendisse at vulputate ante, id tempus nunc. Curabitur sed dolor a elit ornare commodo. Curabitur blandit enim nulla, ornare suscipit risus pretium ut. Nullam rhoncus, sem eget dapibus elementum, purus dolor rutrum magna, nec laoreet odio sapien sit amet erat.</p>
 <p>Proin non ante purus. Donec ante enim, semper vel mauris at, rutrum blandit mauris. Vivamus at ante sit amet leo consequat viverra quis at odio. Proin arcu magna, placerat sed lorem id, rutrum convallis ante.</p>
 <p>Nam venenatis vestibulum mauris ut viverra. Ut porta consequat lorem a ullamcorper. In et arcu quam. Nunc tristique justo nec lectus ornare placerat. Nulla ut fringilla mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
 </div>
+
 <div class="terms-content">
-<h3>Hyperlinking to our Content</h3>
-<p>Sed ac sollicitudin ipsum ivamus vulputate enim sit amet aliquet lacinia mauris aliquam elit:</p>
+<h3>Verlinkung auf unsere Inhalte</h3>
+<p>Sed ac sollicitudin ipsum. Vivamus vulputate enim sit amet aliquet lacinia mauris aliquam elit:</p>
 <ul class="terms-list ms-4">
 <li>1. Ut scelerisque hendrerit venenatis</li>
 <li>2. Proin fermentum lacus nec augue blandit placerat</li>
@@ -879,10 +883,8 @@ return [
 <li>5. Aenean ultrices neque id pellentesque tincidunt</li>
 <li>6. Donec ut vestibulum sem, in faucibus mauris.</li>
 </ul>
-</div>
-<div class="terms-content">
-<h3>Disclaimer</h3>
-<p>Donec facilisis consequat nisi. Vivamus euismod at ipsum a gravida. Quisque vitae augue maximus elit iaculis tincidunt. Quisque dapibus dui non justo iaculis volutpat. Phasellus vulputate tempus lorem vitae vehicula. Maecenas interdum venenatis ante, scelerisque porta nibh mollis vitae. Curabitur in erat porttitor, imperdiet lectus non, porttitor odio. Donec efficitur efficitur dapibus. Aenean sit amet tortor id lorem ultricies rhoncus. Etiam ornare eros eu commodo vehicula. Curabitur vel enim eget velit tincidunt viverra eu in risus. Aliquam suscipit tellus eu fermentum facilisis. Pellentesque volutpat posuere ligula. Fusce et consequat mi.</p>
+
+<p><strong>Stand:</strong> Januar 2025</p>
 </div>',
             'type'        => PageTypeEnum::TERMS_OF_SERVICE->value,
             'slug'        => 'Servicebedingungen',
@@ -903,21 +905,24 @@ return [
             'title'       => 'Datenschutzrichtlinie',
             'body'        => '
 <div class="terms-content">
-<h3>Privacy Policy</h3>
+<h3>Datenschutzrichtlinie</h3>
 <p>Aenean ullamcorper est est, ac bibendum ipsum tincidunt vehicula. Nulla faucibus vulputate lorem, vitae placerat felis blandit ut. Nam sem quam, euismod sit amet augue et, mollis congue nisi. Vestibulum fringilla lobortis nunc ac tincidunt. Cras nec convallis quam. Maecenas non sem ut enim facilisis rhoncus. Sed odio ex, efficitur ac commodo sed, convallis vitae lectus. Aenean at urna ac tellus ullamcorper pretium. Aliquam erat volutpat. Aliquam sit amet tellus in tortor posuere convallis quis nec tellus. Nulla eu mauris sit amet enim eleifend congue. Quisque aliquam, turpis quis elementum tempus, velit arcu dignissim dui, a vehicula lectus nisi non felis.</p>
 </div>
+
 <div class="terms-content">
-<h3>Collect Information</h3>
+<h3>Erhebung von Informationen</h3>
 <p>Donec ac pulvinar diam, ac mollis augue. Etiam interdum fringilla magna, at placerat libero malesuada sed. Proin tincidunt a sapien at facilisis. Cras nec lectus pretium, convallis tellus eu, placerat augue. Curabitur luctus odio efficitur elit volutpat, quis venenatis tellus vestibulum. Nam ultrices massa id tellus commodo, at mollis elit mattis. Etiam eget ultrices lectus, at faucibus mauris. Integer at mauris ex. Vivamus interdum cursus mi quis venenatis. Sed pulvinar efficitur quam quis congue. Ut vel ornare lorem. Vivamus mi mi, vestibulum nec eleifend eu, lobortis ac neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit augue dui, non rutrum enim ultrices vel. Fusce mattis ullamcorper nisl, sit amet venenatis odio tincidunt eget.</p>
 </div>
+
 <div class="terms-content">
-<h3>Usage of Information</h3>
+<h3>Nutzung der Informationen</h3>
 <p>Phasellus commodo venenatis erat, et vestibulum mi fringilla in. Proin elit urna, condimentum ut elit id, imperdiet rutrum orci. Praesent vehicula velit at est rutrum lacinia. Nullam accumsan at tortor in ullamcorper. Proin semper sagittis nisl, vitae finibus nisl maximus non. Cras dictum risus quis augue tempor egestas. Proin luctus fermentum nunc, eget pretium dolor tristique id.</p>
 <p>Suspendisse hendrerit ex sit amet augue lobortis ullamcorper. Maecenas dignissim facilisis orci, non imperdiet sapien ornare at. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
 <p>Nam ultrices mi mauris, eget tempus massa ornare id. Aenean rhoncus vestibulum diam, ut dapibus dolor vehicula non. Proin rhoncus convallis commodo.</p>
 </div>
+
 <div class="terms-content">
-<h3>Security Of User Data</h3>
+<h3>Sicherheit der Benutzerdaten</h3>
 <p>Integer justo neque imperdiet vitae consequat in vehicula quis dolor orbi lorem leo volutpat a tristique :</p>
 <ul class="terms-list ms-4">
 <li>1. Ut scelerisque hendrerit venenatis</li>
@@ -928,8 +933,9 @@ return [
 <li>6. Donec ut vestibulum sem, in faucibus mauris.</li>
 </ul>
 </div>
+
 <div class="terms-content">
-<h3>Copyright and Security</h3>
+<h3>Urheberrecht und Sicherheit</h3>
 <p>Vestibulum bibendum metus quis purus sagittis ultricies. Vestibulum fringilla urna volutpat eros pharetra consectetur. Integer rutrum eu odio et pulvinar. Sed hendrerit pellentesque faucibus. In venenatis lacus sit amet vehicula efficitur. Suspendisse pulvinar malesuada dui non mollis. Aliquam urna massa, rutrum vel luctus in, facilisis a turpis. Ut aliquet accumsan turpis, eget egestas sem pellentesque nec. Phasellus faucibus congue tempor. Mauris ac massa scelerisque metus pulvinar feugiat in ut leo. Proin congue felis orci. Suspendisse consectetur nisl at faucibus venenatis. Quisque pretium rhoncus dui, porttitor varius mi iaculis nec.</p>
 </div>',
             'type'        => PageTypeEnum::PRIVACY_POLICY->value,
