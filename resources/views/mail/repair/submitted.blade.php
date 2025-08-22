@@ -1,63 +1,63 @@
 <x-mail::message>
-# Your Device Repair Request Was Received
+    # Ihr Reparaturauftrag wurde erhalten
 
-Thanks for submitting your device for repair. Here's a summary:
+    Vielen Dank, dass Sie Ihr Gerät zur Reparatur eingereicht haben. Hier eine Zusammenfassung:
 
-<x-mail::panel>
-- **Name:** {{ $payload['name'] ?? '—' }}
-- **Email:** {{ $payload['email'] ?? '—' }}
-- **Phone:** {{ $payload['phone'] ?? '—' }}
-- **Brand:** {{ $payload['brand'] ?? '—' }}
-- **Model:** {{ $payload['model'] ?? '—' }}
-- **Problems:** {{ collect($payload['problems'] ?? [])->join(', ', ' and ') ?: '—' }}
-</x-mail::panel>
+    <x-mail::panel>
+        - **Name:** {{ $payload['name'] ?? '—' }}
+        - **E-Mail:** {{ $payload['email'] ?? '—' }}
+        - **Telefon:** {{ $payload['phone'] ?? '—' }}
+        - **Marke:** {{ $payload['brand'] ?? '—' }}
+        - **Modell:** {{ $payload['model'] ?? '—' }}
+        - **Probleme:** {{ collect($payload['problems'] ?? [])->join(', ', ' und ') ?: '—' }}
+    </x-mail::panel>
 
-**Description**
-> {{ $payload['description'] ?? '—' }}
+    **Beschreibung**
+    > {{ $payload['description'] ?? '—' }}
 
-<x-mail::panel>
-**🔍 Your Tracking Code: {{ $payload['tracking_code'] ?? '—' }}**
-</x-mail::panel>
+    <x-mail::panel>
+        **🔍 Ihr Tracking-Code: {{ $payload['tracking_code'] ?? '—' }}**
+    </x-mail::panel>
 
-We'll update you soon with the next steps.
+    Wir informieren Sie in Kürze über die nächsten Schritte.
 
-<x-mail::button :url="$payload['magic_link'] ?? route('user.auth.login')">
-🚀 Access Your Dashboard
-</x-mail::button>
+    <x-mail::button :url="$payload['magic_link'] ?? route('user.auth.login')">
+        🚀 Zum Dashboard
+    </x-mail::button>
 
-**Important Information:**
-- **Tracking Code:** {{ $payload['tracking_code'] ?? '—' }}
-- **Email:** {{ $payload['email'] ?? '—' }}
-- **Order ID:** {{ $payload['order_id'] ?? '—' }}
+    **Wichtige Informationen:**
+    - **Tracking-Code:** {{ $payload['tracking_code'] ?? '—' }}
+    - **E-Mail:** {{ $payload['email'] ?? '—' }}
+    - **Bestellnummer:** {{ $payload['order_id'] ?? '—' }}
 
-**How to Track Your Order:**
-@if($payload['is_authenticated'] ?? false)
-1. **Click the button above** to access your dashboard and view your orders
-2. **Your order is linked to your account** - you can track progress anytime
-@else
-1. **Click the button above** to automatically login or create an account
-2. **Magic link access** - No password needed, just click the button
-3. **For immediate support and updates**, contact our support team with your tracking code: {{ $payload['tracking_code'] ?? '—' }}
-4. **Keep this email safe** - it contains all the information you need to track your repair
-5. **Want to track online?** Contact us to link this order to your account if you create one later
-@endif
+    **So verfolgen Sie Ihren Auftrag:**
+    @if($payload['is_authenticated'] ?? false)
+        1. **Klicken Sie auf den Button oben**, um Ihr Dashboard zu öffnen und Ihre Aufträge einzusehen
+        2. **Ihre Bestellung ist mit Ihrem Konto verknüpft** – Sie können den Fortschritt jederzeit verfolgen
+    @else
+        1. **Klicken Sie auf den Button oben**, um sich automatisch einzuloggen oder ein Konto zu erstellen
+        2. **Magic-Link-Zugang** – kein Passwort erforderlich, einfach den Button klicken
+        3. **Für sofortige Unterstützung und Updates** kontaktieren Sie unser Support-Team mit Ihrem Tracking-Code: {{ $payload['tracking_code'] ?? '—' }}
+        4. **Bewahren Sie diese E-Mail gut auf** – sie enthält alle Informationen zur Nachverfolgung Ihrer Reparatur
+        5. **Online nachverfolgen?** Kontaktieren Sie uns, um diesen Auftrag mit Ihrem Konto zu verknüpfen, falls Sie später eines erstellen
+    @endif
 
-**Keep this tracking code safe** - you'll need it for pickup and status inquiries.
+    **Bewahren Sie diesen Tracking-Code gut auf** – Sie benötigen ihn für Abholung und Statusanfragen.
 
-**Support Contact:**
-If you have any questions, please contact our support team with your tracking code: {{ $payload['tracking_code'] ?? '—' }}
+    **Support-Kontakt:**
+    Wenn Sie Fragen haben, kontaktieren Sie bitte unser Support-Team mit Ihrem Tracking-Code: {{ $payload['tracking_code'] ?? '—' }}
 
-**Next Steps:**
-1. **Save this email** - it contains your tracking information
-2. **Check your spam folder** if you don't see this email
-3. **We'll contact you within 24 hours** to confirm repair details
-4. **Keep your tracking code handy** for all future communications
+    **Nächste Schritte:**
+    1. **Speichern Sie diese E-Mail** – sie enthält Ihre Tracking-Informationen
+    2. **Überprüfen Sie Ihren Spam-Ordner**, falls Sie diese E-Mail nicht sehen
+    3. **Wir melden uns innerhalb von 24 Stunden**, um die Reparaturdetails zu bestätigen
+    4. **Halten Sie Ihren Tracking-Code bereit** für alle zukünftigen Rückfragen
 
-**Need Help?**
-- **Email:** support@{{ config('app.name') }}.com
-- **Phone:** Contact our support team
-- **Reference:** Always mention your tracking code: {{ $payload['tracking_code'] ?? '—' }}
+    **Brauchen Sie Hilfe?**
+    - **E-Mail:** support@{{ config('app.name') }}.com
+    - **Telefon:** Kontaktieren Sie unser Support-Team
+    - **Referenz:** Geben Sie immer Ihren Tracking-Code an: {{ $payload['tracking_code'] ?? '—' }}
 
-Thanks,<br>
-{{ config('app.name') }}
+    Vielen Dank,<br>
+    {{ config('app.name') }}
 </x-mail::message>
