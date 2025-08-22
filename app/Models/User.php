@@ -1,31 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\MediaLibrary\HasMedia;
-use App\Traits\CLogsActivity;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 use App\Enums\BooleanEnum;
 use App\Helpers\Constants;
-use Spatie\Image\Enums\Fit;
+use App\Traits\CLogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
- * @property int $id
- * @property string $name
- * @property string $family
- * @property string|null $email
- * @property string|null $mobile
+ * @property int                             $id
+ * @property string                          $name
+ * @property string                          $family
+ * @property string|null                     $email
+ * @property string|null                     $mobile
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property \Illuminate\Support\Carbon|null $mobile_verified_at
- * @property string $password
- * @property BooleanEnum $status
- * @property string|null $remember_token
+ * @property string                          $password
+ * @property BooleanEnum                     $status
+ * @property string|null                     $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
@@ -39,7 +41,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
- * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\UserFactory                    factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User permission($permissions, $without = false)
@@ -64,7 +66,7 @@ use Spatie\Activitylog\LogOptions;
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, CLogsActivity, InteractsWithMedia;
+    use CLogsActivity, HasFactory, HasRoles, InteractsWithMedia, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -99,9 +101,9 @@ class User extends Authenticatable implements HasMedia
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'email_verified_at'  => 'datetime',
             'mobile_verified_at' => 'datetime',
-            'password_set_at'   => 'datetime',
+            'password_set_at'    => 'datetime',
             'status'             => BooleanEnum::class,
         ];
     }
@@ -140,11 +142,9 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Transaction::class);
     }
 
-    /**
-     * Check if the user has set a password
-     */
+    /** Check if the user has set a password */
     public function hasPasswordSet(): bool
     {
-        return !is_null($this->password_set_at) && !is_null($this->password);
+        return ! is_null($this->password_set_at) && ! is_null($this->password);
     }
 }

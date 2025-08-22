@@ -193,12 +193,12 @@
             <div class="row g-4 align-items-center">
                 <div class="col-lg-4">
                     <div class="site-heading mb-0 wow fadeInLeft" data-wow-delay=".25s">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Latest Video</span>
-                        <h2 class="site-title">What makes us <span>different</span> check our video</h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Aktuelles Video</span>
+                        <h2 class="site-title">Was uns ausmacht <span>anders</span> Schauen Sie sich unser Video an</h2>
                         <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected humour randomised words look even going to use a passage believable.
+                            Es stehen zahlreiche Variationen von Passagen zur Verfügung, die meisten wurden jedoch in irgendeiner Form durch das Einbringen von Humor oder zufällig ausgewählte Wörter verändert, sodass selbst die Verwendung einer Passage glaubwürdig erscheint.
                         </p>
-                        <a href="{{ route('about-us-page') }}" class="theme-btn mt-20">Learn More <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ route('about-us-page') }}" class="theme-btn mt-20">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-8">
@@ -227,14 +227,14 @@
                 <div class="col-lg-6">
                     <div class="choose-content wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="site-heading mb-3">
-                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Why Choose Us</span>
+                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Warum Uns Wählen</span>
                             <h2 class="site-title">
-                                When You Need Repair <span>We Are</span> Always Here
+                                Wenn Sie eine Reparatur benötigen <span>Wir sind</span> Immer hier
                             </h2>
                         </div>
                         <p>
-                            There are many variations of passages of Lorem Ipsum available but the randomised words which don't
-                            look even slightly believable.
+                            Es sind viele Variationen von Lorem-Ipsum-Abschnitten verfügbar, aber die
+                            zufällig ausgewählten Wörter sehen nicht einmal annähernd glaubwürdig aus.
                         </p>
                         <div class="choose-wrapper mt-4">
                             <div class="choose-item">
@@ -242,8 +242,8 @@
                                     <img src="{{ asset('assets/images/icon/team-2.svg') }}" alt="">
                                 </div>
                                 <div class="choose-item-content">
-                                    <h4>Skilled Technicians</h4>
-                                    <p>It is a long established fact that a reader will distracted the readable content page when looking its layout.</p>
+                                    <h4>Qualifizierte Techniker</h4>
+                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
                                 </div>
                             </div>
                             <div class="choose-item active">
@@ -251,8 +251,8 @@
                                     <img src="{{ asset('assets/images/icon/quality.svg') }}" alt="">
                                 </div>
                                 <div class="choose-item-content">
-                                    <h4>Quality Guarantee</h4>
-                                    <p>It is a long established fact that a reader will distracted the readable content page when looking its layout.</p>
+                                    <h4>Qualitätsgarantie</h4>
+                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
                                 </div>
                             </div>
                             <div class="choose-item">
@@ -260,8 +260,8 @@
                                     <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="">
                                 </div>
                                 <div class="choose-item-content">
-                                    <h4>Your Trusted Partner</h4>
-                                    <p>It is a long established fact that a reader will distracted the readable content page when looking its layout.</p>
+                                    <h4>Ihr zuverlässiger Partner</h4>
+                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
                                 </div>
                             </div>
                         </div>
@@ -291,16 +291,16 @@
             <div class="row">
                 <div class="col-lg-7 mx-auto text-center">
                     <div class="cta-text">
-                        <h1>We Provide <span>Quality</span> Services</h1>
+                        <h1>Wir bieten <span>Qualität</span> Leistungen</h1>
                         <p>
-                            It is a long established fact that a reader will be distracted by the readable content of a page when
-                            looking at its layout have suffered in some form by injected humour.
+                            Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt einer Seite abgelenkt wird,
+                            wenn das Layout in irgendeiner Form durch eingefügten Humor beeinträchtigt wurde.
                         </p>
                     </div>
                     <div class="mb-20 mt-10">
                         <a href="#" class="cta-border-btn"><i class="fal fa-headset"></i>+49 7648 9939</a>
                     </div>
-                    <a href="{{ route('contact-us-page') }}" class="theme-btn">Contact Now <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ route('contact-us-page') }}" class="theme-btn">Jetzt kontaktieren <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -320,7 +320,7 @@
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="1200" data-speed="3000">1200</span>
-                                <h6 class="title">+ Projects Done </h6>
+                                <h6 class="title">+ alle Anfragen  </h6>
                             </div>
                         </div>
                     </div>
@@ -331,7 +331,7 @@
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="1500" data-speed="3000">1500</span>
-                                <h6 class="title">+ Happy Clients</h6>
+                                <h6 class="title">+ Erledigt</h6>
                             </div>
                         </div>
                     </div>
@@ -342,7 +342,7 @@
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="400" data-speed="3000">400</span>
-                                <h6 class="title">+ Experts Staffs</h6>
+                                <h6 class="title">+ alle Benutzer</h6>
                             </div>
                         </div>
                     </div>
@@ -352,8 +352,8 @@
                                 <img src="{{ asset('assets/images/icon/award.svg') }}" alt="">
                             </div>
                             <div>
-                                <span class="counter" data-count="+" data-to="50" data-speed="3000">50</span>
-                                <h6 class="title">+ Win Awards</h6>
+                                <span class="counter" data-count="+" data-to="80" data-speed="3000">80%</span>
+                                <h6 class="title">+ Zufriedenheit</h6>
                             </div>
                         </div>
                     </div>
@@ -370,16 +370,16 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="site-heading text-center wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Photo Gallery</span>
-                        <h2 class="site-title">Explore Photo <span>Gallery</span></h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Fotogalerie</span>
+                        <h2 class="site-title">Foto erkunden <span>Galerie</span></h2>
                         <div class="heading-divider"></div>
                     </div>
                     <div class="filter-controls wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                         <ul class="filter-btns">
-                            <li class="active" data-filter="*"><i class="far fa-computer-speaker"></i> All</li>
-                            <li data-filter=".cat1"><i class="far fa-mobile"></i> Phone</li>
-                            <li data-filter=".cat2"><i class="far fa-tablet"></i> IPad</li>
-                            <li data-filter=".cat3"><i class="far fa-tablet"></i> Tablet</li>
+                            <li class="active" data-filter="*"><i class="far fa-computer-speaker"></i> Alle</li>
+                            <li data-filter=".cat1"><i class="far fa-mobile"></i> Telefon</li>
+                            <li data-filter=".cat2"><i class="far fa-tablet"></i> iPad</li>
+                            <li data-filter=".cat3"><i class="far fa-tablet"></i> Tablette</li>
                         </ul>
                     </div>
                 </div>
@@ -452,8 +452,8 @@
             <div class="row">
                 <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Our Team</span>
-                        <h2 class="site-title">Meet Our Experts <span>Team</span></h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Unser Team</span>
+                        <h2 class="site-title">Lernen Sie unsere Experten kennen <span>Team</span></h2>
                         <div class="heading-divider"></div>
                     </div>
                 </div>
@@ -555,11 +555,12 @@
                 <div class="col-lg-6">
                     <div class="faq-right wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="site-heading mb-3">
-                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Faq's</span>
-                            <h2 class="site-title my-3">General <span>frequently</span> asked questions</h2>
+                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Häufig gestellte Fragen</span>
+                            <h2 class="site-title my-3">Allgemein <span>häufig</span> gestellte Fragen</h2>
                         </div>
-                        <p class="about-text">There are many variations of passages of Lorem Ipsum available,
-                            but the majority have suffered alteration in some form by injected.</p>
+                        <p class="about-text">
+                            Finden Sie schnelle Antworten auf die häufigsten Fragen zu unseren Handy-Reparaturservices.
+                        </p>
                         <div class="mt-4">
                             <div class="accordion" id="accordionExample">
                                 @foreach($faqs as $index => $faq)
@@ -594,8 +595,8 @@
             <div class="row">
                 <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Testimonials</span>
-                        <h2 class="site-title text-white">What Client <span>Say's</span> About Us</h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Referenzen</span>
+                        <h2 class="site-title text-white">Welcher Kunde <span>Sagen Sie</span> Über uns</h2>
                         <div class="heading-divider"></div>
                     </div>
                 </div>
@@ -641,8 +642,8 @@
             <div class="row">
                 <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Our Blogs</span>
-                        <h2 class="site-title">Latest <span>Blogs</span></h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Unser Blog</span>
+                        <h2 class="site-title">Letzte <span>Blogs</span></h2>
                         <div class="heading-divider"></div>
                     </div>
                 </div>
@@ -661,13 +662,13 @@
                                 </h4>
                                 <div class="blog-item-meta">
                                     <ul>
-                                        <li><span href="#"><i class="far fa-user-circle"></i> By {{ $blog?->user?->name }}</span></li>
+                                        <li><span href="#"><i class="far fa-user-circle"></i> Von {{ $blog?->user?->name }}</span></li>
                                     </ul>
                                 </div>
                                 <p>
                                     {{ \Illuminate\Support\Str::limit($blog?->description, 100) }}
                                 </p>
-                                <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">Read More<i class="fas fa-arrow-right"></i></a>
+                                <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">Mehr lesen<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
