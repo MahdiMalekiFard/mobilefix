@@ -1,11 +1,15 @@
+@php
+    use App\Helpers\Constants;
+    use Illuminate\Support\Str;
+@endphp
 <div>
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url(assets/images/breadcrumb/01.jpg)">
         <div class="container">
-            <h2 class="breadcrumb-title">About Us</h2>
+            <h2 class="breadcrumb-title">Über uns</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
-                <li class="active">About Us</li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
+                <li class="active">Über uns</li>
             </ul>
         </div>
     </div>
@@ -20,17 +24,17 @@
                     <div class="about-left wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="about-img">
                             <div class="about-img-1">
-                                <img src="{{ asset('assets/images/about/01.jpg') }}" alt="">
+                                <img src="{{ $page?->getFirstMediaUrl('images') }}" alt="">
                             </div>
                             <div class="about-img-2">
-                                <img src="{{ asset('assets/images/about/02.jpg') }}" alt="">
+                                <img src="{{ $page?->getLastMediaUrl('images') }}" alt="">
                             </div>
                         </div>
                         <div class="about-shape"><img src="{{ asset('assets/images/shape/01.png') }}" alt=""></div>
                         <div class="about-experience">
                             <h1>25+</h1>
                             <div class="about-experience-text">
-                                Years Of <br> Experience
+                                Jahre <br> Erfahrung
                             </div>
                         </div>
                     </div>
@@ -38,15 +42,13 @@
                 <div class="col-lg-6">
                     <div class="about-right wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="site-heading mb-3">
-                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> About Us</span>
+                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Über uns</span>
                             <h2 class="site-title">
-                                We Provide Quality <span>Repair</span> Services
+                                {{ $page?->title }}
                             </h2>
                         </div>
                         <p class="about-text">
-                            There are many variations of passages available randomised words which
-                            the majority have suffered alteration in some form, by injected humour
-                            look page when looking at its layout even slightly believable.
+                            {{ $page?->body }}
                         </p>
                         <div class="about-list-wrap">
                             <ul class="about-list list-unstyled">
@@ -55,8 +57,8 @@
                                         <img src="{{ asset('assets/images/icon/money.svg') }}" alt="">
                                     </div>
                                     <div class="content">
-                                        <h4>Our Affordable Price</h4>
-                                        <p>There are many variations of passage majority have suffered some form injected humour.</p>
+                                        <h4>Unser günstiger Preis</h4>
+                                        <p>Es gibt viele Variationen dieser Passage, die meisten davon sind in irgendeiner Form mit Humor überladen.</p>
                                     </div>
                                 </li>
                                 <li>
@@ -64,8 +66,8 @@
                                         <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="">
                                     </div>
                                     <div class="content">
-                                        <h4>Trusted Repair Service</h4>
-                                        <p>There are many variations of passage majority have suffered some form injected humour.</p>
+                                        <h4>Vertrauenswürdiger Reparaturservice</h4>
+                                        <p>Es gibt viele Variationen dieser Passage, die meisten davon sind in irgendeiner Form mit Humor überladen.</p>
                                     </div>
                                 </li>
                             </ul>
@@ -90,7 +92,7 @@
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="1200" data-speed="3000">1200</span>
-                                <h6 class="title">+ Projects Done </h6>
+                                <h6 class="title">+ alle Anfragen </h6>
                             </div>
                         </div>
                     </div>
@@ -101,7 +103,7 @@
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="1500" data-speed="3000">1500</span>
-                                <h6 class="title">+ Happy Clients</h6>
+                                <h6 class="title">+ Erledigt</h6>
                             </div>
                         </div>
                     </div>
@@ -112,7 +114,7 @@
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="400" data-speed="3000">400</span>
-                                <h6 class="title">+ Experts Staffs</h6>
+                                <h6 class="title">+ alle Benutzer</h6>
                             </div>
                         </div>
                     </div>
@@ -122,8 +124,8 @@
                                 <img src="{{ asset('assets/images/icon/award.svg') }}" alt="">
                             </div>
                             <div>
-                                <span class="counter" data-count="+" data-to="50" data-speed="3000">50</span>
-                                <h6 class="title">+ Win Awards</h6>
+                                <span class="counter" data-count="+" data-to="80" data-speed="3000">80</span>
+                                <h6 class="title">+ Zufriedenheit</h6>
                             </div>
                         </div>
                     </div>
@@ -141,14 +143,14 @@
                 <div class="col-lg-6">
                     <div class="choose-content wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="site-heading mb-3">
-                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Why Choose Us</span>
+                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Warum Uns Wählen</span>
                             <h2 class="site-title">
-                                When You Need Repair <span>We Are</span> Always Here
+                                Wenn Sie eine Reparatur benötigen <span>Wir sind</span> Immer hier
                             </h2>
                         </div>
                         <p>
-                            There are many variations of passages of Lorem Ipsum available but the randomised words which don't
-                            look even slightly believable.
+                            Es sind viele Variationen von Lorem-Ipsum-Abschnitten verfügbar, aber die
+                            zufällig ausgewählten Wörter sehen nicht einmal annähernd glaubwürdig aus.
                         </p>
                         <div class="choose-wrapper mt-4">
                             <div class="choose-item">
@@ -156,8 +158,8 @@
                                     <img src="{{ asset('assets/images/icon/team-2.svg') }}" alt="">
                                 </div>
                                 <div class="choose-item-content">
-                                    <h4>Skilled Technicians</h4>
-                                    <p>It is a long established fact that a reader will distracted the readable content page when looking its layout.</p>
+                                    <h4>Qualifizierte Techniker</h4>
+                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
                                 </div>
                             </div>
                             <div class="choose-item active">
@@ -165,8 +167,8 @@
                                     <img src="{{ asset('assets/images/icon/quality.svg') }}" alt="">
                                 </div>
                                 <div class="choose-item-content">
-                                    <h4>Quality Guarantee</h4>
-                                    <p>It is a long established fact that a reader will distracted the readable content page when looking its layout.</p>
+                                    <h4>Qualitätsgarantie</h4>
+                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
                                 </div>
                             </div>
                             <div class="choose-item">
@@ -174,8 +176,8 @@
                                     <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="">
                                 </div>
                                 <div class="choose-item-content">
-                                    <h4>Your Trusted Partner</h4>
-                                    <p>It is a long established fact that a reader will distracted the readable content page when looking its layout.</p>
+                                    <h4>Ihr zuverlässiger Partner</h4>
+                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
                                 </div>
                             </div>
                         </div>
@@ -205,143 +207,41 @@
             <div class="row">
                 <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Testimonials</span>
-                        <h2 class="site-title text-white">What Client <span>Say's</span> About Us</h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Referenzen</span>
+                        <h2 class="site-title text-white">Welcher Kunde <span>Sagen Sie</span> Über uns</h2>
                         <div class="heading-divider"></div>
                     </div>
                 </div>
             </div>
             <div class="testimonial-slider owl-carousel owl-theme wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/01.jpg') }}" alt="">
+                @foreach($opinions as $opinion)
+                    <div class="testimonial-single">
+                        <div class="testimonial-content">
+                            <div class="testimonial-author-img">
+                                <img src="{{ $opinion?->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}" alt="">
+                            </div>
+                            <div class="testimonial-author-info">
+                                <h4>{{ $opinion?->user_name }}</h4>
+                                <p>{{ $opinion?->company }}</p>
+                            </div>
                         </div>
-                        <div class="testimonial-author-info">
-                            <h4>Sylvia H Green</h4>
-                            <p>Clients</p>
+                        <div class="testimonial-quote">
+                            <p>
+                                {{ $opinion?->comment }}
+                            </p>
+                            <div class="testimonial-quote-icon">
+                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
+                            </div>
                         </div>
-                    </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="assets/img/icon/quote.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/02.jpg') }}" alt="">
-                        </div>
-                        <div class="testimonial-author-info">
-                            <h4>Gordo Novak</h4>
-                            <p>Clients</p>
+                        <div class="testimonial-rate">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
                         </div>
                     </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="assets/img/icon/quote.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/03.jpg') }}" alt="">
-                        </div>
-                        <div class="testimonial-author-info">
-                            <h4>Reid E Butt</h4>
-                            <p>Clients</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="assets/img/icon/quote.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/04.jpg') }}" alt="">
-                        </div>
-                        <div class="testimonial-author-info">
-                            <h4>Parker Jimenez</h4>
-                            <p>Clients</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="assets/img/icon/quote.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <div class="testimonial-single">
-                    <div class="testimonial-content">
-                        <div class="testimonial-author-img">
-                            <img src="{{ asset('assets/images/testimonial/05.jpg') }}" alt="">
-                        </div>
-                        <div class="testimonial-author-info">
-                            <h4>Heruli Nez</h4>
-                            <p>Clients</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-quote">
-                        <p>
-                            There are many variations of passages available but the majority have suffered alteration in some form by injected popularity belief believable.
-                        </p>
-                        <div class="testimonial-quote-icon">
-                            <img src="assets/img/icon/quote.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="testimonial-rate">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -354,8 +254,8 @@
             <div class="row">
                 <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Our Team</span>
-                        <h2 class="site-title">Meet Our Experts <span>Team</span></h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Unser Team</span>
+                        <h2 class="site-title">Lernen Sie unsere Experten kennen <span>Team</span></h2>
                         <div class="heading-divider"></div>
                     </div>
                 </div>

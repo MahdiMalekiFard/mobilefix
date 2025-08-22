@@ -13,12 +13,14 @@ class BlogPage extends Component
     public $tag            = null;
     protected $queryString = ['tag'];
 
+    protected string $paginationTheme = 'bootstrap';
+
     public function render()
     {
         $blogs = Blog::query()
             ->where('published', true)
             ->when($this->tag, fn ($query) => $query->withAnyTags([$this->tag]))
-            ->get();
+            ->paginate(6);
 
         return view('livewire.web.pages.blog-page', compact('blogs'))
             ->layout('components.layouts.web');

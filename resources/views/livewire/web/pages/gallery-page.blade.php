@@ -2,10 +2,10 @@
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url({{ asset('assets/images/breadcrumb/01.jpg') }})">
         <div class="container">
-            <h2 class="breadcrumb-title">Photo Gallery</h2>
+            <h2 class="breadcrumb-title">Fotogalerie</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
-                <li class="active">Photo Gallery</li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
+                <li class="active">Fotogalerie</li>
             </ul>
         </div>
     </div>
@@ -18,16 +18,16 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="site-heading text-center wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Photo Gallery</span>
-                        <h2 class="site-title">Explore Photo <span>Gallery</span></h2>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Fotogalerie</span>
+                        <h2 class="site-title">Foto erkunden <span>Galerie</span></h2>
                         <div class="heading-divider"></div>
                     </div>
                     <div class="filter-controls wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                         <ul class="filter-btns">
-                            <li class="active" data-filter="*"><i class="far fa-computer-speaker"></i> All</li>
-                            <li data-filter=".cat1"><i class="far fa-mobile"></i> Phone</li>
-                            <li data-filter=".cat2"><i class="far fa-tablet"></i> IPad</li>
-                            <li data-filter=".cat3"><i class="far fa-tablet"></i> Tablet</li>
+                            <li class="active" data-filter="*"><i class="far fa-computer-speaker"></i> Alle</li>
+                            <li data-filter=".cat1"><i class="far fa-mobile"></i> Telefon</li>
+                            <li data-filter=".cat2"><i class="far fa-tablet"></i> iPad</li>
+                            <li data-filter=".cat3"><i class="far fa-tablet"></i> Tablette</li>
                         </ul>
                     </div>
                 </div>

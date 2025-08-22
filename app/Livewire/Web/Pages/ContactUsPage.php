@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Web\Pages;
 
 use App\Actions\ContactUs\StoreContactUsAction;
-use Livewire\Component;
+use Exception;
 use Livewire\Attributes\Rule;
+use Livewire\Component;
 
 class ContactUsPage extends Component
 {
@@ -31,9 +34,9 @@ class ContactUsPage extends Component
 
         try {
             $storeAction->handle([
-                'name' => $this->name,
-                'email' => $this->email,
-                'phone' => $this->phone,
+                'name'    => $this->name,
+                'email'   => $this->email,
+                'phone'   => $this->phone,
                 'subject' => $this->subject,
                 'message' => $this->message,
             ]);
@@ -42,7 +45,7 @@ class ContactUsPage extends Component
             $this->isSubmitted = true;
 
             session()->flash('success', 'Your message has been sent successfully! We will get back to you soon.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             session()->flash('error', 'Sorry, there was an error sending your message. Please try again.');
         }
     }

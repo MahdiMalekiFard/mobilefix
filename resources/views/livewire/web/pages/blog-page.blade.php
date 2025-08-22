@@ -7,10 +7,10 @@
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url(assets/images/breadcrumb/01.jpg)">
         <div class="container">
-            <h2 class="breadcrumb-title">Our Blog</h2>
+            <h2 class="breadcrumb-title">Unsere Blogliste</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
-                <li class="active">Our Blog</li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
+                <li class="active">Blogliste</li>
             </ul>
         </div>
     </div>
@@ -35,14 +35,14 @@
                             <div class="blog-item-meta">
                                 <ul>
                                     <span>
-                                        <li><i class="far fa-user-circle"></i> By {{ $blog?->user->name }}</li>
+                                        <li><i class="far fa-user-circle"></i> Von {{ $blog?->user->name }}</li>
                                     </span>
                                 </ul>
                             </div>
                             <p>
                                 {{ Str::limit($blog?->description, 80) }}
                             </p>
-                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">Read More<i class="fas fa-arrow-right"></i></a>
+                            <a class="theme-btn" href="{{ route('blog-detail-page', ['slug' => $blog?->slug]) }}">Mehr lesen<i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -51,23 +51,7 @@
 
             <!-- pagination -->
             <div class="pagination-area">
-                <div aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true"><i class="far fa-arrow-left"></i></span>
-                            </a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true"><i class="far fa-arrow-right"></i></span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                {{ $blogs->onEachSide(1)->links() }}
             </div>
             <!-- pagination end-->
 

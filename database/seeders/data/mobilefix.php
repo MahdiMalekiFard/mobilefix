@@ -167,7 +167,7 @@ return [
             'ordering'    => 1,
             'published'   => true,
             'languages'   => [
-                'en',
+                'de',
             ],
             'seo_options' => [
                 'title'       => 'Apple',
@@ -186,7 +186,7 @@ return [
             'ordering'    => 2,
             'published'   => true,
             'languages'   => [
-                'en',
+                'de',
             ],
             'seo_options' => [
                 'title'       => 'Samsung',
@@ -205,7 +205,7 @@ return [
             'ordering'    => 3,
             'published'   => true,
             'languages'   => [
-                'en',
+                'de',
             ],
             'seo_options' => [
                 'title'       => 'Oppo',
@@ -224,7 +224,7 @@ return [
             'ordering'    => 4,
             'published'   => true,
             'languages'   => [
-                'en',
+                'de',
             ],
             'seo_options' => [
                 'title'       => 'Vivo',
@@ -243,7 +243,7 @@ return [
             'ordering'    => 5,
             'published'   => true,
             'languages'   => [
-                'en',
+                'de',
             ],
             'seo_options' => [
                 'title'       => 'Nokia',
@@ -262,7 +262,7 @@ return [
             'ordering'    => 6,
             'published'   => true,
             'languages'   => [
-                'en',
+                'de',
             ],
             'seo_options' => [
                 'title'       => 'Huawei',
@@ -281,7 +281,7 @@ return [
             'ordering'    => 7,
             'published'   => true,
             'languages'   => [
-                'en',
+                'de',
             ],
             'seo_options' => [
                 'title'       => 'Xiaomi',
@@ -312,7 +312,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::INDEX_FOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -331,7 +331,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -350,7 +350,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -369,7 +369,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -388,7 +388,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -407,7 +407,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -426,7 +426,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -445,7 +445,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -464,7 +464,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -483,7 +483,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -502,7 +502,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -521,7 +521,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -540,7 +540,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -559,7 +559,7 @@ return [
                 'robots_meta' => SeoRobotsMetaEnum::NOINDEX_NOFOLLOW,
             ],
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
     ],
@@ -571,7 +571,7 @@ return [
             'published'   => true,
             'provider'    => PaymentProviderEnum::PAYPAL->value,
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -580,110 +580,110 @@ return [
             'published'   => true,
             'provider'    => PaymentProviderEnum::STRIPE->value,
             'languages'   => [
-                'en',
+                'de',
             ],
         ],
     ],
 
     'problems'        => [
         [
-            'title'       => 'Screen Replacement',
-            'description' => 'The screen is cracked, broken, or unresponsive and needs to be replaced.',
+            'title'       => 'Bildschirmaustausch',
+            'description' => 'Der Bildschirm ist gesprungen, kaputt oder reagiert nicht und muss ersetzt werden.',
             'published'   => true,
             'ordering'    => 1,
             'min_price'   => 80.00,
             'max_price'   => 250.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Battery Replacement',
-            'description' => 'The battery drains quickly, does not charge, or the phone shuts down unexpectedly.',
+            'title'       => 'Batteriewechsel',
+            'description' => 'Der Akku entlädt sich schnell, lädt nicht oder das Telefon schaltet sich unerwartet ab.',
             'published'   => true,
             'ordering'    => 2,
             'min_price'   => 40.00,
             'max_price'   => 120.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Charging Port Repair',
-            'description' => 'The device does not charge or connect properly due to a faulty charging port.',
+            'title'       => 'Reparatur des Ladeanschlusses',
+            'description' => 'Das Gerät lädt nicht oder stellt aufgrund eines fehlerhaften Ladeanschlusses keine ordnungsgemäße Verbindung her.',
             'published'   => true,
             'ordering'    => 3,
             'min_price'   => 35.00,
             'max_price'   => 90.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Camera Repair',
-            'description' => 'The camera is blurry, not working, or the lens is cracked.',
+            'title'       => 'Kamerareparatur',
+            'description' => 'Die Kamera ist unscharf, funktioniert nicht oder das Objektiv ist gesprungen.',
             'published'   => true,
             'ordering'    => 4,
             'min_price'   => 50.00,
             'max_price'   => 180.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Speaker/Microphone Repair',
-            'description' => 'Problems with sound during calls, music playback, or voice recording.',
+            'title'       => 'Lautsprecher-/Mikrofonreparatur',
+            'description' => 'Probleme mit dem Ton bei Anrufen, Musikwiedergabe oder Sprachaufzeichnung.',
             'published'   => true,
             'ordering'    => 5,
             'min_price'   => 30.00,
             'max_price'   => 80.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Water Damage Repair',
-            'description' => 'The phone has been exposed to water or other liquids and is malfunctioning.',
+            'title'       => 'Wasserschadensanierung',
+            'description' => 'Das Telefon war Wasser oder anderen Flüssigkeiten ausgesetzt und funktioniert nicht richtig.',
             'published'   => true,
             'ordering'    => 6,
             'min_price'   => 60.00,
             'max_price'   => 200.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Button Repair',
-            'description' => 'Power, volume, or home buttons are stuck, unresponsive, or broken.',
+            'title'       => 'Knopfreparatur',
+            'description' => 'Die Ein-/Aus-Taste, die Lautstärke- oder die Home-Taste klemmen, reagieren nicht oder sind defekt.',
             'published'   => true,
             'ordering'    => 7,
             'min_price'   => 25.00,
             'max_price'   => 70.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Back Glass Replacement',
-            'description' => 'The back glass of the phone is cracked or shattered.',
+            'title'       => 'Austausch der Heckscheibe',
+            'description' => 'Das Glas auf der Rückseite des Telefons ist gesprungen oder zersplittert.',
             'published'   => true,
             'ordering'    => 8,
             'min_price'   => 50.00,
             'max_price'   => 150.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Software Troubleshooting',
-            'description' => 'The phone is slow, freezing, or experiencing software glitches.',
+            'title'       => 'Software-Fehlerbehebung',
+            'description' => 'Das Telefon ist langsam, friert ein oder weist Softwarefehler auf.',
             'published'   => true,
             'ordering'    => 9,
             'min_price'   => 20.00,
             'max_price'   => 60.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
         [
-            'title'       => 'Data Recovery',
-            'description' => 'Recover lost or deleted data from the device.',
+            'title'       => 'Datenwiederherstellung',
+            'description' => 'Stellen Sie verlorene oder gelöschte Daten vom Gerät wieder her.',
             'published'   => true,
             'ordering'    => 10,
             'min_price'   => 70.00,
             'max_price'   => 200.00,
-            'languages'   => ['en'],
+            'languages'   => ['de'],
             'config'      => [],
         ],
     ],
@@ -771,7 +771,7 @@ return [
             'published'    => true,
             'published_at' => now(),
             'languages'    => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -783,7 +783,7 @@ return [
             'published'    => true,
             'published_at' => now(),
             'languages'    => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -795,7 +795,7 @@ return [
             'published'    => true,
             'published_at' => now(),
             'languages'    => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -807,7 +807,7 @@ return [
             'published'    => true,
             'published_at' => now(),
             'languages'    => [
-                'en',
+                'de',
             ],
         ],
         [
@@ -819,7 +819,7 @@ return [
             'published'    => true,
             'published_at' => now(),
             'languages'    => [
-                'en',
+                'de',
             ],
         ],
     ],

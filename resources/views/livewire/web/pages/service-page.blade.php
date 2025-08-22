@@ -2,10 +2,10 @@
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url(assets/images/breadcrumb/01.jpg)">
         <div class="container">
-            <h2 class="breadcrumb-title">Services</h2>
+            <h2 class="breadcrumb-title">Leistungen</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="{{ route('home-page') }}">Home</a></li>
-                <li class="active">Services</li>
+                <li><a href="{{ route('home-page') }}">Heim</a></li>
+                <li class="active">Leistungen</li>
             </ul>
         </div>
     </div>
@@ -34,7 +34,7 @@
                                         {{ \Illuminate\Support\Str::limit($service?->description, 80) }}
                                     </p>
                                     <div class="service-arrow">
-                                        <a href="{{ route('service-single-page', ['slug' => $service?->slug]) }}" class="theme-btn"> Read More<i class="fas fa-arrow-right"></i></a>
+                                        <a href="{{ route('service-single-page', ['slug' => $service?->slug]) }}" class="theme-btn"> Mehr lesen<i class="fas fa-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -42,6 +42,12 @@
                     </div>
                 @endforeach
             </div>
+
+            <!-- pagination -->
+            <div class="pagination-area">
+                {{ $services->onEachSide(1)->links() }}
+            </div>
+            <!-- pagination end-->
         </div>
     </div>
     <!-- service-area -->
