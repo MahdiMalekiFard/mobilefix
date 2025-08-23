@@ -1083,4 +1083,55 @@ return [
             'path'        => public_path('assets/images/service/06.jpg'),
         ],
     ],
+
+    'teams'           => [
+        [
+            'name'    => 'Chad Smith',
+            'job'     => 'Technikerin',
+            'special' => true,
+            'social'  => [
+                'youtube'  => '',
+                'facebook' => '',
+                'twitter'  => '',
+                'linkedin' => '',
+            ],
+            'path'    => public_path('assets/images/team/01.jpg'),
+        ],
+        [
+            'name'    => 'Arron Rodri',
+            'job'     => 'CEO & Gründer',
+            'special' => true,
+            'social'  => [
+                'youtube'  => '',
+                'facebook' => '',
+                'twitter'  => '',
+                'linkedin' => '',
+            ],
+            'path'    => public_path('assets/images/team/02.jpg'),
+        ],
+        [
+            'name'    => 'Malissa Fie',
+            'job'     => 'Technikerin',
+            'special' => true,
+            'social'  => [
+                'youtube'  => '',
+                'facebook' => '',
+                'twitter'  => '',
+                'linkedin' => '',
+            ],
+            'path'    => public_path('assets/images/team/03.jpg'),
+        ],
+        [
+            'name'    => 'Tony Pinto',
+            'job'     => 'Technikerin',
+            'special' => true,
+            'social'  => [
+                'youtube'  => '',
+                'facebook' => '',
+                'twitter'  => '',
+                'linkedin' => '',
+            ],
+            'path'    => public_path('assets/images/team/04.jpg'),
+        ],
+    ],
 ];

@@ -33,6 +33,7 @@ class StoreTeamAction
         return DB::transaction(function () use ($payload) {
             $model =  Team::create($payload);
             $this->fileService->addMedia($model, Arr::get($payload, 'image'));
+            $model->config()->set('social_media', Arr::get($payload, 'social_media') ?? []);
 
             return $model->refresh();
         });
