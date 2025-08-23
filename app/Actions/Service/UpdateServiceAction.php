@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Service;
 
 use App\Actions\Translation\SyncTranslationAction;
 use App\Models\Service;
-use App\Services\SeoOption\SeoOptionService;
 use App\Services\File\FileService;
+use App\Services\SeoOption\SeoOptionService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -21,9 +23,7 @@ class UpdateServiceAction
         private readonly FileService $fileService,
     ) {}
 
-
     /**
-     * @param Service $service
      * @param array{
      *     title:string,
      *     description:string,
@@ -37,14 +37,14 @@ class UpdateServiceAction
      *     old_url:string,
      *     redirect_to:string,
      *     robots_meta:string,
+     *     icon:string,
      * }               $payload
-     * @return Service
      * @throws Throwable
      */
     public function handle(Service $service, array $payload): Service
     {
         return DB::transaction(function () use ($service, $payload) {
-            $service->update(Arr::only($payload, ['slug', 'published']));
+            $service->update(Arr::only($payload, ['slug', 'published', 'icon']));
             $this->syncTranslationAction->handle($service, Arr::only($payload, ['title', 'description', 'body']));
             $this->seoOptionService->update($service, Arr::only($payload, ['seo_title', 'seo_description', 'canonical', 'old_url', 'redirect_to', 'robots_meta']));
             $this->fileService->addMedia($service, Arr::get($payload, 'image'));

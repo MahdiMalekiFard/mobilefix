@@ -22,9 +22,10 @@
                             <div class="service-img">
                                 <img src="{{ $service?->getFirstMediaUrl('image') }}" alt="">
                             </div>
+
                             <div class="service-item-wrap">
                                 <div class="service-icon">
-                                    <img src="{{ asset('assets/images/icon/tab.svg') }}" alt="">
+                                    <img src="{{ $service?->getIconUrlAttribute() ?? asset('assets/images/icon/tab.svg') }}" alt="">
                                 </div>
                                 <div class="service-content">
                                     <h3 class="service-title">

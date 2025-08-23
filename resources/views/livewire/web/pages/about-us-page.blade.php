@@ -124,7 +124,7 @@
                                 <img src="{{ asset('assets/images/icon/award.svg') }}" alt="">
                             </div>
                             <div>
-                                <span class="counter" data-count="+" data-to="80" data-speed="3000">80</span>
+                                <span class="counter" data-count="+" data-to="80" data-speed="3000" data-suffix="%">80</span>
                                 <h6 class="title">+ Zufriedenheit</h6>
                             </div>
                         </div>

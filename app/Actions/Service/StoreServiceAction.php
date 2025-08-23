@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Service;
 
 use App\Actions\Translation\SyncTranslationAction;
@@ -35,14 +37,14 @@ class StoreServiceAction
      *     old_url:string,
      *     redirect_to:string,
      *     robots_meta:string,
+     *     icon:string,
      * } $payload
-     * @return Service
      * @throws Throwable
      */
     public function handle(array $payload): Service
     {
         return DB::transaction(function () use ($payload) {
-            $model =  Service::create(Arr::only($payload, ['slug', 'published']));
+            $model =  Service::create(Arr::only($payload, ['slug', 'published', 'icon']));
             $this->syncTranslationAction->handle($model, Arr::only($payload, ['title', 'description', 'body']));
             $this->seoOptionService->create($model, Arr::only($payload, ['seo_title', 'seo_description', 'canonical', 'old_url', 'redirect_to', 'robots_meta']));
             $this->fileService->addMedia($model, Arr::get($payload, 'image'));

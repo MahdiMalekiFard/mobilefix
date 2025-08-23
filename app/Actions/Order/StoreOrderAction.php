@@ -56,7 +56,7 @@ class StoreOrderAction
 
             // Generate order number if not provided
             if ( ! isset($payload['order_number'])) {
-                $payload['order_number'] = 'ORD-' . date('Ymd') . '-' . str_pad(Order::count() + 1, 4, '0', STR_PAD_LEFT);
+                $payload['order_number'] = 'ORD-' . date('Ymd') . '-' . str_pad((string) (Order::count() + 1), 4, '0', STR_PAD_LEFT);
             }
 
             // Generate unique tracking code

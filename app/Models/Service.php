@@ -36,6 +36,7 @@ class Service extends Model implements HasMedia
         'slug',
         'published',
         'languages',
+        'icon',
     ];
 
     protected $casts = [
@@ -66,9 +67,15 @@ class Service extends Model implements HasMedia
      * Model Scope --------------------------------------------------------------------------
      */
 
-    /**
-     * Model Attributes --------------------------------------------------------------------------
-     */
+    /** Model Attributes -------------------------------------------------------------------------- */
+    public function getIconUrlAttribute(): ?string
+    {
+        if ( ! $this->icon) {
+            return null;
+        }
+
+        return asset('assets/images/icon/' . $this->icon);
+    }
 
     /**
      * Model Custom Methods --------------------------------------------------------------------------

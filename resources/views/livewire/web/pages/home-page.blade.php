@@ -165,7 +165,7 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="service-icon">
-                                <img src="{{ asset('assets/images/icon/tab.svg') }}" alt="">
+                                <img src="{{ $service?->getIconUrlAttribute() ?? asset('assets/images/icon/tab.svg') }}" alt="">
                             </div>
                             <div class="service-content">
                                 <h3 class="service-title">
@@ -352,7 +352,7 @@
                                 <img src="{{ asset('assets/images/icon/award.svg') }}" alt="">
                             </div>
                             <div>
-                                <span class="counter" data-count="+" data-to="80" data-speed="3000">80%</span>
+                                <span class="counter" data-count="+" data-to="80" data-speed="3000" data-suffix="%">80%</span>
                                 <h6 class="title">+ Zufriedenheit</h6>
                             </div>
                         </div>
