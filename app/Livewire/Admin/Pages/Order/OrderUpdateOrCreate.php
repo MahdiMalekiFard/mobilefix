@@ -21,56 +21,56 @@ class OrderUpdateOrCreate extends Component
 {
     use Toast, WithFileUploads;
 
-    public Order   $model;
+    public Order $model;
     public ?string $order_number      = null;
     public ?string $tracking_code     = null;
     public ?string $status            = null;
-    public int     $total             = 0;
+    public int $total                 = 0;
     public ?string $user_name         = null;
     public ?string $user_phone        = null;
     public ?string $user_email        = null;
-    public ?int    $brand_id          = null;
-    public ?int    $device_id         = null;
-    public ?int    $user_id           = null;
-    public ?int    $address_id        = null;
-    public ?int    $payment_method_id = null;
-    public array   $selectedProblems  = [];
+    public ?int $brand_id             = null;
+    public ?int $device_id            = null;
+    public ?int $user_id              = null;
+    public ?int $address_id           = null;
+    public ?int $payment_method_id    = null;
+    public array $selectedProblems    = [];
     public ?string $user_note         = null;
     public ?string $admin_note        = null;
-    public         $images;
-    public         $videos;
-    public array   $existingImages    = [];
-    public array   $existingVideos    = [];
-    public array   $removedNewImages  = [];
-    public array   $removedNewVideos  = [];
-    public array   $filteredDevices   = [];
+    public $images;
+    public $videos;
+    public array $existingImages    = [];
+    public array $existingVideos    = [];
+    public array $removedNewImages  = [];
+    public array $removedNewVideos  = [];
+    public array $filteredDevices   = [];
 
     public function mount(Order $order): void
     {
         $this->model = $order;
         if ($this->model->id) {
-            $this->order_number = $this->model->order_number;
-            $this->tracking_code = $this->model->tracking_code;
-            $this->status = $this->model->status;
-            $this->total = $this->model->total;
-            $this->user_name = $this->model->config()->get('name') ?? $this->model->user->name;
-            $this->user_phone = $this->model->config()->get('phone') ?? $this->model->user->mobile;
-            $this->user_email = $this->model->config()->get('email') ?? $this->model->user->email;
-            $this->brand_id = $this->model->brand_id;
-            $this->device_id = $this->model->device_id;
-            $this->user_id = $this->model->user_id;
-            $this->address_id = $this->model->address_id;
+            $this->order_number      = $this->model->order_number;
+            $this->tracking_code     = $this->model->tracking_code;
+            $this->status            = $this->model->status;
+            $this->total             = $this->model->total;
+            $this->user_name         = $this->model->config()->get('name') ?? $this->model->user->name;
+            $this->user_phone        = $this->model->config()->get('phone') ?? $this->model->user->mobile;
+            $this->user_email        = $this->model->config()->get('email') ?? $this->model->user->email;
+            $this->brand_id          = $this->model->brand_id;
+            $this->device_id         = $this->model->device_id;
+            $this->user_id           = $this->model->user_id;
+            $this->address_id        = $this->model->address_id;
             $this->payment_method_id = $this->model->payment_method_id;
-            $this->selectedProblems = $this->model->problems->pluck('id')->toArray();
-            $this->user_note = $this->model->user_note ?? '';
-            $this->admin_note = $this->model->admin_note ?? '';
+            $this->selectedProblems  = $this->model->problems->pluck('id')->toArray();
+            $this->user_note         = $this->model->user_note ?? '';
+            $this->admin_note        = $this->model->admin_note ?? '';
 
             // Populate filteredDevices if brand is already selected
             if ($this->brand_id) {
                 $this->filteredDevices = Device::where('brand_id', $this->brand_id)->get()->map(function ($device) {
                     return [
                         'value' => $device->id,
-                        'label' => $device->title
+                        'label' => $device->title,
                     ];
                 })->toArray() ?? [];
             }
@@ -81,7 +81,7 @@ class OrderUpdateOrCreate extends Component
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'name'      => $media->name,
-                    'file_name' => $media->file_name
+                    'file_name' => $media->file_name,
                 ];
             })->toArray();
 
@@ -90,7 +90,7 @@ class OrderUpdateOrCreate extends Component
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'name'      => $media->name,
-                    'file_name' => $media->file_name
+                    'file_name' => $media->file_name,
                 ];
             })->toArray();
         }
@@ -108,7 +108,7 @@ class OrderUpdateOrCreate extends Component
             $this->filteredDevices = Device::where('brand_id', $value)->get()->map(function ($device) {
                 return [
                     'value' => $device->id,
-                    'label' => $device->title
+                    'label' => $device->title,
                 ];
             })->toArray();
         }
@@ -143,10 +143,10 @@ class OrderUpdateOrCreate extends Component
         ]);
 
         if ($this->model->id) {
-            $rules['order_number'] = 'required|string|unique:orders,order_number,' . $this->model->id;
+            $rules['order_number']  = 'required|string|unique:orders,order_number,' . $this->model->id;
             $rules['tracking_code'] = 'required|string|unique:orders,tracking_code,' . $this->model->id;
-            $rules['user_id'] = 'nullable|exists:users,id';
-            $rules['user_email'] = 'required|email';
+            $rules['user_id']       = 'nullable|exists:users,id';
+            $rules['user_email']    = 'required|email';
         }
 
         return $rules;
@@ -154,7 +154,7 @@ class OrderUpdateOrCreate extends Component
 
     public function submit(): void
     {
-        $payload = $this->validate();
+        $payload             = $this->validate();
         $payload['problems'] = $payload['selectedProblems'];
         unset($payload['selectedProblems']);
 
@@ -183,7 +183,6 @@ class OrderUpdateOrCreate extends Component
         }
     }
 
-
     public function deleteImage($mediaId): void
     {
         $media = $this->model->getMedia('images')->find($mediaId);
@@ -199,7 +198,7 @@ class OrderUpdateOrCreate extends Component
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'name'      => $media->name,
-                    'file_name' => $media->file_name
+                    'file_name' => $media->file_name,
                 ];
             })->toArray();
 
@@ -222,7 +221,7 @@ class OrderUpdateOrCreate extends Component
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'name'      => $media->name,
-                    'file_name' => $media->file_name
+                    'file_name' => $media->file_name,
                 ];
             })->toArray();
 
@@ -234,8 +233,8 @@ class OrderUpdateOrCreate extends Component
     {
         if (isset($this->images[$index])) {
             $this->removedNewImages[] = $index;
-            $this->images = collect($this->images)->filter(function ($image, $key) {
-                return !in_array($key, $this->removedNewImages);
+            $this->images             = collect($this->images)->filter(function ($image, $key) {
+                return ! in_array($key, $this->removedNewImages);
             })->values()->toArray();
             $this->success('New image removed');
         }
@@ -245,8 +244,8 @@ class OrderUpdateOrCreate extends Component
     {
         if (isset($this->videos[$index])) {
             $this->removedNewVideos[] = $index;
-            $this->videos = collect($this->videos)->filter(function ($video, $key) {
-                return !in_array($key, $this->removedNewVideos);
+            $this->videos             = collect($this->videos)->filter(function ($video, $key) {
+                return ! in_array($key, $this->removedNewVideos);
             })->values()->toArray();
             $this->success('New video removed');
         }
@@ -257,13 +256,14 @@ class OrderUpdateOrCreate extends Component
         // Format status options with badge information
         $statusOptions = collect(OrderStatusEnum::formatedCases())->map(function ($status) {
             $statusEnum = OrderStatusEnum::from($status['id']);
+
             return [
                 'value' => $status['id'],
                 'label' => $status['title'],
                 'badge' => [
                     'text'  => $status['title'],
-                    'color' => $statusEnum->color()
-                ]
+                    'color' => $statusEnum->color(),
+                ],
             ];
         })->toArray();
 
@@ -278,11 +278,11 @@ class OrderUpdateOrCreate extends Component
             'problems'           => Problem::all(),
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.order.index'), 'label' => trans('general.page.index.title', ['model' => trans('order.model')])],
+                ['link'  => route('admin.order.index'), 'label' => trans('general.page.index.title', ['model' => trans('order.model')])],
                 ['label' => $this->model->id ? trans('general.page.edit.title', ['model' => trans('order.model')]) : trans('general.page.create.title', ['model' => trans('order.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.order.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.order.index'), 'icon' => 's-arrow-left'],
             ],
         ]);
     }

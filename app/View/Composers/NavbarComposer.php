@@ -300,6 +300,12 @@ class NavbarComposer
                 'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Team::class, 'Store', 'Index')),
                 'route_name' => 'admin.team.index',
             ],
+            [
+                'icon'       => 's-photo',
+                'title'      => trans('_menu.galleries'),
+                'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Team::class, 'Store', 'Index')),
+                'route_name' => 'admin.art-gallery.index',
+            ],
             // [
             //     'icon'     => 's-tag',
             //     'title'    => 'مدیریت تگ ها',

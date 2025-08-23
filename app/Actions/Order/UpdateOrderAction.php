@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Order;
 
 use App\Actions\Translation\SyncTranslationAction;
 use App\Models\Order;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Throwable;
@@ -18,7 +19,6 @@ class UpdateOrderAction
     ) {}
 
     /**
-     * @param Order $order
      * @param array{
      *     order_number?:string,
      *     status?:string,
@@ -37,7 +37,6 @@ class UpdateOrderAction
      *     videos?:array,
      *     problems?:array<int>
      * }               $payload
-     * @return Order
      * @throws Throwable
      */
     public function handle(Order $order, array $payload): Order
@@ -66,7 +65,7 @@ class UpdateOrderAction
                 unset($payload['user_phone']);
             }
             
-            if (!empty($customerInfo)) {
+            if ( ! empty($customerInfo)) {
                 $payload['config'] = array_merge($payload['config'] ?? [], $customerInfo);
             }
             
@@ -78,7 +77,7 @@ class UpdateOrderAction
             $order->update($payload);
             
             // Attach problems to the order if any
-            if (!empty($problems)) {
+            if ( ! empty($problems)) {
                 $order->problems()->sync($problems);
             }
             

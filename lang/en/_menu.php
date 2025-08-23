@@ -30,6 +30,7 @@ return [
     'models'                    => 'Models',
     'devices'                   => 'Devices',
     'teams'                     => 'Team members',
+    'galleries'                 => 'Galleries',
 
     'category_management'       => 'Category management',
     'category'                  => [
