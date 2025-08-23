@@ -1,5 +1,6 @@
 @php
     use App\Enums\BooleanEnum;
+    use Illuminate\Support\Str;
 @endphp
 <div class="">
     <form wire:submit="submit">
@@ -153,7 +154,7 @@
                         </div>
                     </x-card>
 
-                    {{-- NEW: Icon picker --}}
+                    {{-- NEW: Font Awesome Icon picker --}}
                     <x-card title="Icons" shadow separator progress-indicator="submit" class="mt-5">
                         @error('icon')
                         <div class="mb-3 text-sm text-red-600">{{ $message }}</div>
@@ -161,35 +162,35 @@
 
                         @if(!empty($this->icons))
                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                @foreach($this->icons as $file)
-                                    @php $id = 'icon-'.Str::slug(pathinfo($file, PATHINFO_FILENAME)); @endphp
+                                @foreach($this->icons as $key => $class)
+                                    @php $selected = ($icon_key === $key); @endphp
 
-                                    <label for="{{ $id }}" class="group cursor-pointer rounded-2xl p-4 bg-white shadow-sm ring-1 ring-gray-200 hover:ring-teal-400 transition">
-                                        <input id="{{ $id }}" name="service_icon" type="radio" class="sr-only" wire:model.live="icon" value="{{ $file }}" wire:key="icon-radio-{{ $file }}"/>
-                                        <div class="flex flex-col items-center gap-2">
-                                            <img
-                                                src="{{ asset('assets/images/icon/'.$file) }}"
-                                                alt="{{ pathinfo($file, PATHINFO_FILENAME) }}"
-                                                class="h-10 w-10"
-                                            />
-                                            <div class="text-xs text-gray-600 truncate w-full text-center">
-                                                {{ pathinfo($file, PATHINFO_FILENAME) }}
+                                    <label
+                                        class="group cursor-pointer rounded-2xl p-4 bg-white shadow-sm ring-1 ring-gray-200 hover:ring-teal-400 transition"
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="icon"
+                                            class="sr-only"
+                                            wire:model.live="icon_key"
+                                            value="{{ $class }}"
+                                            @checked($selected)
+                                        />
+                                        <div class="@class([
+                                              'rounded-2xl p-4 bg-white transition shadow-sm',
+                                              $selected ? 'ring-2 ring-teal-600 shadow-md' : 'ring-1 ring-gray-200 hover:ring-teal-400'
+                                            ])">
+                                            <div class="flex flex-col items-center gap-2">
+                                                <i class="{{ $class }} fa-2x fa-fw"></i>
+                                                <div class="text-xs text-gray-600 text-center">{{ ucfirst($key) }}</div>
                                             </div>
                                         </div>
-                                        <div
-                                            @class([
-                                                'mt-3 h-1 rounded-full transition-all',
-                                                $icon === $file ? 'bg-teal-500' : 'bg-gray-100 group-hover:bg-teal-200'
-                                            ])
-                                        ></div>
+                                        @if($selected)
+                                            <span class="absolute top-2 right-2 inline-block h-2.5 w-2.5 rounded-full bg-teal-600"></span>
+                                        @endif
                                     </label>
                                 @endforeach
                             </div>
-                        @else
-                            <p class="text-sm text-gray-500">
-                                {{ __('Keine Icons gefunden. Bitte legen Sie SVGs unter') }}
-                                <code>public/assets/images/icon</code> {{ __('ab.') }}
-                            </p>
                         @endif
                     </x-card>
                 </div>

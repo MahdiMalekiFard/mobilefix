@@ -5,7 +5,6 @@ namespace App\Livewire\Admin\Pages\ArtGallery;
 use App\Actions\ArtGallery\StoreArtGalleryAction;
 use App\Actions\ArtGallery\UpdateArtGalleryAction;
 use App\Models\ArtGallery;
-use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -17,11 +16,11 @@ class ArtGalleryUpdateOrCreate extends Component
     use Toast, WithFileUploads;
 
     public ArtGallery $model;
-    public string $title        = '';
-    public string $description  = '';
-    public bool $published      = false;
-    public ?string $icon        = '';
-    public array $icons         = [];
+    public string $title            = '';
+    public string $description      = '';
+    public bool $published          = false;
+    public ?string $icon_key        = null;
+    public array $icons             = [];
 
     // media
     public $images;
@@ -35,17 +34,13 @@ class ArtGalleryUpdateOrCreate extends Component
     {
         $this->model = $artGallery;
 
-        $this->icons = collect(File::files(public_path('assets/images/icon')))
-            ->map(fn ($f) => $f->getFilename())
-            ->sort()
-            ->values()
-            ->all();
+        $this->icons    = config('font_awesome.icons');
+        $this->icon_key = $this->model->icon_key ?? array_key_first($this->icons);
 
         if ($this->model->id) {
             $this->title       = $this->model->title;
             $this->description = $this->model->description;
             $this->published   = $this->model->published->value;
-            $this->icon        = $this->model->icon;
 
             // Load existing media
             $this->existingImages = $this->model->getMedia('images')->map(function ($media) {
@@ -65,9 +60,6 @@ class ArtGalleryUpdateOrCreate extends Component
                     'file_name' => $media->file_name,
                 ];
             })->toArray();
-        } else {
-            // Optional: default icon
-            $this->icon = $this->icons[0] ?? null;
         }
     }
 
@@ -77,7 +69,7 @@ class ArtGalleryUpdateOrCreate extends Component
             'title'       => 'required|string',
             'description' => 'required|string',
             'published'   => 'required|boolean',
-            'icon'        => ['required', 'string', Rule::in($this->icons)],
+            'icon_key'    => ['required', 'string', Rule::in(array_keys($this->icons))],
             'images'      => 'required',
             'images.*'    => 'image|max:2048',
             'videos'      => 'nullable',
