@@ -161,37 +161,60 @@
                         @enderror
 
                         @if(!empty($this->icons))
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                @foreach($this->icons as $key => $class)
-                                    @php $selected = ($icon === $key); @endphp
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
+                                 role="radiogroup" aria-label="Icon choices" wire:key="icon-picker">
 
-                                    <label
-                                        class="group cursor-pointer rounded-2xl p-4 bg-white shadow-sm ring-1 ring-gray-200 hover:ring-teal-400 transition relative"
-                                    >
-                                        <input
-                                            type="radio"
-                                            name="icon"
-                                            class="sr-only"
-                                            wire:model.live="icon"
-                                            value="{{ $key }}"
-                                        />
+                                @foreach($this->icons as $key => $class)
+                                    @php $selected = ($icon === $key); $id = 'icon-'.$key; @endphp
+
+                                    <label for="{{ $id }}"
+                                           role="radio"
+                                           aria-checked="{{ $selected ? 'true' : 'false' }}"
+                                           title="{{ ucfirst($key) }}"
+                                           class="relative cursor-pointer rounded-2xl focus-within:outline-none
+                      focus-within:ring-2 focus-within:ring-teal-500 focus-within:ring-offset-2
+                      transition">
+
+                                        <input id="{{ $id }}"
+                                               type="radio"
+                                               name="icon"
+                                               class="peer sr-only"
+                                               wire:model.live="icon"
+                                               value="{{ $key }}"
+                                            @checked($selected) />
+
                                         <div @class([
-                                              'rounded-2xl p-4 bg-white transition shadow-sm',
-                                              $selected ? 'ring-2 ring-teal-600 shadow-md' : 'ring-1 ring-gray-200 hover:ring-teal-400'
-                                            ])>
+                // base
+                'rounded-2xl p-4 bg-white transition-all duration-200 select-none',
+                'ring-1 ring-gray-200 hover:ring-teal-400 hover:shadow-sm',
+                // selected
+                $selected ? 'ring-2 ring-teal-600 shadow-md bg-teal-50' : '',
+              ])>
                                             <div class="flex flex-col items-center gap-2">
-                                                <i class="{{ $class }} fa-2x fa-fw"></i>
-                                                <div class="text-xs text-gray-600 text-center">{{ ucfirst($key) }}</div>
+                                                <i class="{{ $class }} fa-2x fa-fw transition-transform duration-200
+                         {{ $selected ? 'scale-105 text-teal-700' : 'text-gray-800' }}"></i>
+                                                <div class="text-xs text-gray-700 text-center">{{ ucfirst($key) }}</div>
                                             </div>
+
+                                            {{-- subtle base pill at bottom --}}
+                                            <div class="mt-3 h-1 rounded-full
+                        {{ $selected ? 'bg-teal-500' : 'bg-gray-100 group-hover:bg-teal-200' }}"></div>
                                         </div>
-                                        @if($selected)
-                                            <span class="absolute top-2 right-2 inline-block h-2.5 w-2.5 rounded-full bg-teal-600"></span>
-                                        @endif
+
+                                        {{-- check badge --}}
+                                        <span class="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-teal-600 text-white
+                                                   flex items-center justify-center shadow ring-2 ring-white
+                                                   transition-all duration-200
+                                                   {{ $selected ? 'opacity-100 scale-100' : 'opacity-0 scale-75' }}"
+                                        >
+                                        <i class="fa-solid fa-check text-[10px]"></i>
+                                        </span>
                                     </label>
                                 @endforeach
                             </div>
                         @endif
                     </x-card>
+
                 </div>
             </div>
         </div>

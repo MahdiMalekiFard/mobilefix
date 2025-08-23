@@ -374,72 +374,94 @@
                         <h2 class="site-title">Foto erkunden <span>Galerie</span></h2>
                         <div class="heading-divider"></div>
                     </div>
+
+                    {{-- FILTER BUTTONS --}}
                     <div class="filter-controls wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
                         <ul class="filter-btns">
-                            <li class="active" data-filter="*"><i class="far fa-computer-speaker"></i> Alle</li>
-                            <li data-filter=".cat1"><i class="far fa-mobile"></i> Telefon</li>
-                            <li data-filter=".cat2"><i class="far fa-tablet"></i> iPad</li>
-                            <li data-filter=".cat3"><i class="far fa-tablet"></i> Tablette</li>
+                            <li class="active" data-filter="*">
+                                <i class="fa-solid fa-layer-group"></i> Alle
+                            </li>
+
+                            @foreach($artGalleries as $gallery)
+                                @php
+                                    $slug       = $gallery->slug ?? \Illuminate\Support\Str::slug($gallery->title);
+                                    $iconKey    = $gallery->icon; // e.g. 'phone'
+                                    $iconClass  = config('font_awesome.icons')[$iconKey] ?? 'fa-regular fa-image';
+                                @endphp
+
+                                <li data-filter=".cat-{{ $slug }}">
+                                    <i class="{{ $iconClass }}"></i> {{ $gallery->title }}
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
+
+            {{-- FILTERABLE GRID --}}
             <div class="row mt-3 filter-box popup-gallery wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                <div class="col-md-4 filter-item cat2">
-                    <div class="gallery-item">
-                        <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/i2.jpg') }}" alt="">
+
+                @foreach($artGalleries as $gallery)
+                    @php
+                        $slug = $gallery->slug ?? \Illuminate\Support\Str::slug($gallery->title);
+                        $images = $gallery->getMedia('images');
+                        $videos = $gallery->getMedia('videos');
+                    @endphp
+
+                    {{-- Images --}}
+                    @foreach($images as $media)
+                        <div class="col-md-4 filter-item cat-{{ $slug }}">
+                            <div class="gallery-item">
+                                <div class="gallery-img">
+                                    <img
+                                        src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl() }}"
+                                        alt="{{ $gallery->title }}">
+                                </div>
+                                <div class="gallery-content">
+                                    <a class="popup-img gallery-link" href="{{ $media->getUrl() }}">
+                                        <i class="far fa-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/i2.jpg') }}"><i
-                                    class="far fa-plus"></i></a>
+                    @endforeach
+
+                    {{-- Videos --}}
+                    @foreach($videos as $video)
+                        <div class="col-md-4 filter-item cat-{{ $slug }}">
+                            <div class="gallery-item">
+                                <div class="gallery-img position-relative">
+                                    {{-- If you have a generated poster/thumbnail, use it; otherwise show a generic cover --}}
+                                    @php
+                                        $poster = $video->hasGeneratedConversion('thumb') ? $video->getUrl('thumb') : asset('assets/images/gallery/video-placeholder.jpg');
+                                    @endphp
+                                    <img src="{{ $poster }}" alt="{{ $gallery->title }} video">
+
+                                    {{-- play overlay --}}
+                                    <span class="absolute inset-0 flex items-center justify-center">
+                  <i class="fa-solid fa-play fa-lg text-white bg-black/60 rounded-full p-3"></i>
+                </span>
+                                </div>
+
+                                <div class="gallery-content">
+                                    {{-- Use your lightbox class for videos (depends on your plugin).
+                                       Many libs accept direct mp4 links or YouTube/Vimeo URLs. --}}
+                                    <a class="popup-video gallery-link" href="{{ $video->getUrl() }}">
+                                        <i class="far fa-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+                    @endforeach
+
+                @endforeach
+
+                {{-- Optional: empty state if nothing exists --}}
+                @if($artGalleries->flatMap->media->isEmpty())
+                    <div class="col-12 text-center text-muted py-5">
+                        {{ __('Keine Medien gefunden.') }}
                     </div>
-                </div>
-                <div class="col-md-4 filter-item cat2">
-                    <div class="gallery-item">
-                        <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/i1.jpg') }}" alt="">
-                        </div>
-                        <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/i1.jpg') }}"><i
-                                    class="far fa-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 filter-item cat1">
-                    <div class="gallery-item">
-                        <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/m1.jpg') }}" alt="">
-                        </div>
-                        <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/m1.jpg') }}"><i
-                                    class="far fa-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 filter-item cat1">
-                    <div class="gallery-item">
-                        <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/m3.jpg') }}" alt="">
-                        </div>
-                        <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/m3.jpg') }}"><i
-                                    class="far fa-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 filter-item cat3">
-                    <div class="gallery-item">
-                        <div class="gallery-img">
-                            <img src="{{ asset('assets/images/gallery/t1.jpg') }}" alt="">
-                        </div>
-                        <div class="gallery-content">
-                            <a class="popup-img gallery-link" href="{{ asset('assets/images/gallery/t1.jpg') }}"><i
-                                    class="far fa-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
