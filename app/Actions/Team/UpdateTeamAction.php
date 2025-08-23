@@ -32,8 +32,9 @@ class UpdateTeamAction
     public function handle(Team $team, array $payload): Team
     {
         return DB::transaction(function () use ($team, $payload) {
-            $team->update($payload);
+            $team->update(Arr::only($payload, ['name', 'job', 'special']));
             $this->fileService->addMedia($team, Arr::get($payload, 'image'));
+            $team->config()->set('social_media', Arr::get($payload, 'social_media') ?? []);
 
             return $team->refresh();
         });
