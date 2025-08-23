@@ -24,6 +24,7 @@ class FakeSeeder extends Seeder
             PageSeeder::class,
             FaqSeeder::class,
             ServiceSeeder::class,
+            TeamSeeder::class,
         ]);
     }
 }
