@@ -273,7 +273,7 @@ class OrderUpdateOrCreate extends Component
             'statusOptions'      => $statusOptions,
             'users'              => User::all(['id', 'name']),
             'brands'             => Brand::all(),
-            'addresses'          => Address::where('user_id', $this->user_id)->select('id', 'title')->get(),
+            'addresses'          => Address::where('user_id', $this->user_id)->select(['id', 'title'])->get(),
             'paymentMethods'     => PaymentMethod::all(),
             'problems'           => Problem::all(),
             'breadcrumbs'        => [

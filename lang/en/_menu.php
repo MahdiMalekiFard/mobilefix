@@ -16,7 +16,6 @@ return [
     'setting'                   => 'Setting',
     'faqs'                      => 'Faqs',
     'likes'                     => 'Likes',
-    'opinion'                   => 'Opinion',
     'slider'                    => 'Slider',
     'categories'                => 'Categories',
     'tag'                       => 'Tag',

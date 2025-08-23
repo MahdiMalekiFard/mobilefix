@@ -1,6 +1,5 @@
 @php
     use App\Enums\BooleanEnum;
-    app()->setLocale('en');
 @endphp
 <div class="">
     <form wire:submit="submit">

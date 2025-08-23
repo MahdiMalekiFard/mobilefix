@@ -8,18 +8,37 @@ use App\Helpers\PowerGridUserHelper;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
-use Livewire\Attributes\Computed;
 use Jenssegers\Agent\Agent;
+use Livewire\Attributes\Computed;
+use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Column;
 
 final class UserOrderList extends PowerGridComponent
 {
-    public string $tableName = 'index_user_order_datatable';
+    public string $tableName     = 'index_user_order_datatable';
     public string $sortDirection = 'desc';
+
+    public function setUp(): array
+    {
+        $setup = [
+            PowerGrid::header()
+                ->includeViewOnTop('components.user.shared.bread-crumbs')
+                ->showSearchInput(),
+
+            PowerGrid::footer()
+                ->showPerPage()
+                ->showRecordCount(),
+        ];
+
+        if ((new Agent)->isMobile()) {
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'actions');
+        }
+
+        return $setup;
+    }
 
     #[Computed(persist: true)]
     public function breadcrumbs(): array
@@ -38,25 +57,6 @@ final class UserOrderList extends PowerGridComponent
         ];
     }
 
-    public function setUp(): array
-    {
-        $setup = [
-            PowerGrid::header()
-                ->includeViewOnTop("components.user.shared.bread-crumbs")
-                ->showSearchInput(),
-
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
-
-        if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'actions');
-        }
-
-        return $setup;
-    }
-
     public function boot(): void
     {
         config(['livewire-powergrid.filter' => 'outside']);
@@ -65,31 +65,31 @@ final class UserOrderList extends PowerGridComponent
     public function datasource(): Builder
     {
         $query = Order::query()->where('user_id', auth()->user()?->id);
-        
+
         // Apply search using the action
         if ($this->search) {
-            $searchAction = new SearchOrderAction();
-            $query = $searchAction->execute($query, $this->search);
+            $searchAction = new SearchOrderAction;
+            $query        = $searchAction->execute($query, $this->search);
         }
-        
+
         return $query;
     }
 
     public function relationSearch(): array
     {
         return [
-            'user' => [
+            'user'                       => [
                 'name',
                 'mobile',
                 'email',
             ],
-            'address' => [
+            'address'                    => [
                 'title',
             ],
             'paymentMethod.translations' => [
                 'value',
             ],
-            'brand.translations' => [
+            'brand.translations'         => [
                 'value',
             ],
         ];
@@ -104,15 +104,17 @@ final class UserOrderList extends PowerGridComponent
                 $statusEnum = OrderStatusEnum::from($row->status);
                 $colorClass = match ($statusEnum->color()) {
                     'warning' => 'bg-yellow-100 text-yellow-800 border-yellow-200',
-                    'info' => 'bg-blue-100 text-blue-800 border-blue-200',
-                    'danger' => 'bg-red-100 text-red-800 border-red-200',
+                    'info'    => 'bg-blue-100 text-blue-800 border-blue-200',
+                    'danger'  => 'bg-red-100 text-red-800 border-red-200',
                     'success' => 'bg-green-100 text-green-800 border-green-200',
-                    default => 'bg-gray-100 text-gray-800 border-gray-200'
+                    default   => 'bg-gray-100 text-gray-800 border-gray-200'
                 };
+
                 return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' . $colorClass . '">' . $statusEnum->title() . '</span>';
             })
-            ->add('total', fn ($row) =>
-                    (float) $row->total > 0
+            ->add(
+                'total',
+                fn ($row) => (float) $row->total > 0
                         ? number_format((float) $row->total, 0)
                         : '<span class="text-red-400">not specified</span>'
             )
@@ -147,9 +149,9 @@ final class UserOrderList extends PowerGridComponent
     {
         return [
             Filter::datepicker('updated_at_formatted', 'updated_at')
-                  ->params([
-                      'maxDate' => now(),
-                  ])
+                ->params([
+                    'maxDate' => now(),
+                ]),
         ];
     }
 
@@ -158,18 +160,18 @@ final class UserOrderList extends PowerGridComponent
         $buttons = [
             PowerGridUserHelper::btnShow($row),
         ];
-    
+
         if ($row->status === OrderStatusEnum::COMPLETED->value) {
             $buttons[] = PowerGridUserHelper::btnPay($row);
         }
-    
+
         return $buttons;
     }
 
     public function noDataLabel(): string|View
     {
-        return view('user.datatable-shared.empty-table',[
-            'link'=>null
+        return view('user.datatable-shared.empty-table', [
+            'link' => null,
         ]);
     }
 }
