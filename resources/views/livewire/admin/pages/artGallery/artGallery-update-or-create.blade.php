@@ -163,23 +163,22 @@
                         @if(!empty($this->icons))
                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                 @foreach($this->icons as $key => $class)
-                                    @php $selected = ($icon_key === $key); @endphp
+                                    @php $selected = ($icon === $key); @endphp
 
                                     <label
-                                        class="group cursor-pointer rounded-2xl p-4 bg-white shadow-sm ring-1 ring-gray-200 hover:ring-teal-400 transition"
+                                        class="group cursor-pointer rounded-2xl p-4 bg-white shadow-sm ring-1 ring-gray-200 hover:ring-teal-400 transition relative"
                                     >
                                         <input
                                             type="radio"
                                             name="icon"
                                             class="sr-only"
-                                            wire:model.live="icon_key"
-                                            value="{{ $class }}"
-                                            @checked($selected)
+                                            wire:model.live="icon"
+                                            value="{{ $key }}"
                                         />
-                                        <div class="@class([
+                                        <div @class([
                                               'rounded-2xl p-4 bg-white transition shadow-sm',
                                               $selected ? 'ring-2 ring-teal-600 shadow-md' : 'ring-1 ring-gray-200 hover:ring-teal-400'
-                                            ])">
+                                            ])>
                                             <div class="flex flex-col items-center gap-2">
                                                 <i class="{{ $class }} fa-2x fa-fw"></i>
                                                 <div class="text-xs text-gray-600 text-center">{{ ucfirst($key) }}</div>

@@ -19,7 +19,7 @@ class ArtGalleryUpdateOrCreate extends Component
     public string $title            = '';
     public string $description      = '';
     public bool $published          = false;
-    public ?string $icon_key        = null;
+    public ?string $icon            = null;
     public array $icons             = [];
 
     // media
@@ -35,7 +35,7 @@ class ArtGalleryUpdateOrCreate extends Component
         $this->model = $artGallery;
 
         $this->icons    = config('font_awesome.icons');
-        $this->icon_key = $this->model->icon_key ?? array_key_first($this->icons);
+        $this->icon = $this->model->icon ?? array_key_first($this->icons);
 
         if ($this->model->id) {
             $this->title       = $this->model->title;
@@ -69,7 +69,7 @@ class ArtGalleryUpdateOrCreate extends Component
             'title'       => 'required|string',
             'description' => 'required|string',
             'published'   => 'required|boolean',
-            'icon_key'    => ['required', 'string', Rule::in(array_keys($this->icons))],
+            'icon'        => ['required', 'string', Rule::in(array_keys($this->icons))],
             'images'      => 'required',
             'images.*'    => 'image|max:2048',
             'videos'      => 'nullable',
