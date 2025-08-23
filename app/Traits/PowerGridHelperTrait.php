@@ -19,10 +19,10 @@ trait PowerGridHelperTrait
     //    }
 
     #[On('toggle')]
-    public function toggle($rowId): void
+    public function toggle($rowId, $field='published'): void
     {
         $model = $this->datasource()->getModel()::where('id', $rowId)->first();
-        $model->update(['published' => ! $model->published->value]);
+        $model->update([$field => ! $model->{$field}->value]);
         if ($model->published_at) {
             $model->update(['published_at' => now()->format('Y-m-d')]);
         }

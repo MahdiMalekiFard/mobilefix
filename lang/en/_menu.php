@@ -29,6 +29,7 @@ return [
     'brands'                    => 'Brands',
     'models'                    => 'Models',
     'devices'                   => 'Devices',
+    'teams'                     => 'Team members',
 
     'category_management'       => 'Category management',
     'category'                  => [
@@ -160,6 +161,12 @@ return [
     'page'                      => [
         'all'    => 'All Pages',
         'create' => 'Create Page',
+    ],
+
+    'team_management'           => 'Team management',
+    'team'                      => [
+        'all'    => 'All Teams',
+        'create' => 'Create Team',
     ],
 
     'order_management'          => 'Order management',

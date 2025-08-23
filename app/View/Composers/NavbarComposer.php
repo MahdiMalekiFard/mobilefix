@@ -17,6 +17,7 @@ use App\Models\PaymentMethod;
 use App\Models\Problem;
 use App\Models\Service;
 use App\Models\Slider;
+use App\Models\Team;
 use App\Models\User;
 use App\Services\Permissions\PermissionsService;
 use Illuminate\View\View;
@@ -292,6 +293,12 @@ class NavbarComposer
                 'title'      => trans('_menu.devices'),
                 'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Slider::class, 'Store', 'Index')),
                 'route_name' => 'admin.device.index',
+            ],
+            [
+                'icon'       => 's-device-phone-mobile',
+                'title'      => trans('_menu.teams'),
+                'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Team::class, 'Store', 'Index')),
+                'route_name' => 'admin.team.index',
             ],
             // [
             //     'icon'     => 's-tag',

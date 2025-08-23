@@ -4,56 +4,60 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\BooleanEnum;
+use App\Enums\YesNoEnum;
+use App\Helpers\Constants;
+use App\Traits\HasSchemalessAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasTranslationAuto;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 /**
  * @property string $title
  * @property string $description
  */
-class Team extends Model
+class Team extends Model implements HasMedia
 {
-    use HasFactory;
-    use HasTranslationAuto;
+    use HasFactory, HasSchemalessAttributes, InteractsWithMedia;
 
     protected $fillable = [
-        'published',
-        'languages',
+        'name', 'job', 'special', 'config',
     ];
 
     protected $casts = [
-        'published' => BooleanEnum::class,
-        'languages' => 'array'
+        'config'  => 'array',
+        'special' => YesNoEnum::class,
     ];
 
-    public array $translatable = [
-        'title','description'
-    ];
-
-    /**
-     * Model Configuration --------------------------------------------------------------------------
-     */
-
+    /** Model Configuration -------------------------------------------------------------------------- */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('image')
+            ->singleFile()
+            ->useFallbackUrl('/assets/images/default/user-avatar.png')
+            ->registerMediaConversions(function () {
+                $this->addMediaConversion(Constants::RESOLUTION_100_SQUARE)->fit(Fit::Crop, 100, 100);
+                $this->addMediaConversion(Constants::RESOLUTION_720_SQUARE)->fit(Fit::Crop, 720, 720);
+            });
+    }
 
     /**
      * Model Relations --------------------------------------------------------------------------
      */
 
-
     /**
      * Model Scope --------------------------------------------------------------------------
      */
-
 
     /**
      * Model Attributes --------------------------------------------------------------------------
      */
 
-
-    /**
-     * Model Custom Methods --------------------------------------------------------------------------
-     */
-
+    /** Model Custom Methods -------------------------------------------------------------------------- */
+    public function config(): SchemalessAttributes
+    {
+        return SchemalessAttributes::createForModel($this, 'config');
+    }
 }

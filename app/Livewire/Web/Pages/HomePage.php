@@ -14,6 +14,7 @@ use App\Models\Opinion;
 use App\Models\Page;
 use App\Models\Service;
 use App\Models\Slider;
+use App\Models\Team;
 use Livewire\Component;
 
 class HomePage extends Component
@@ -29,6 +30,7 @@ class HomePage extends Component
         $aboutUsPage = Page::where('type', PageTypeEnum::ABOUT_US)->first();
         $faqs        = Faq::where('favorite', YesNoEnum::YES)->where('published', BooleanEnum::ENABLE)->get();
         $brands      = Brand::where('published', BooleanEnum::ENABLE)->get();
+        $teams       = Team::where('special', YesNoEnum::YES)->limit(4)->get();
 
         return view('livewire.web.pages.home-page', [
             'sliders'     => $sliders ?? [],
@@ -38,6 +40,7 @@ class HomePage extends Component
             'opinions'    => $opinions ?? [],
             'blogs'       => $blogs ?? [],
             'brands'      => $brands ?? [],
+            'teams'       => $teams ?? [],
         ])
             ->layout('components.layouts.web');
     }

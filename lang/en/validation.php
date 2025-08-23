@@ -196,6 +196,7 @@ return [
 
     'attributes'             => [
         'name'                  => 'Name',
+        'job'                   => 'Job',
         'family'                => 'Family Name',
         'username'              => 'Username',
         'email'                 => 'Email',

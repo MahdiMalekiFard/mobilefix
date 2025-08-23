@@ -93,11 +93,13 @@ return [
 
     'page_sections'                      => [
         'data'                 => 'Information',
+        'social'               => 'Social Media',
         'ordering'             => 'Order Settings',
         'seo_options'          => 'SEO Settings',
         'upload_image'         => 'Upload Image',
         'publish_config'       => 'Publish Settings',
         'status'               => 'Status',
+        'special'              => 'Make Special',
         'end_of_work_settings' => 'End-of-Work Settings',
     ],
 

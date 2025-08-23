@@ -121,7 +121,7 @@ class PowerGridHelper
                 'class' => 'btn btn-square md:btn-sm btn-xs',
             ])
             ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Update')))
-            ->dispatch('toggle', ['rowId' => $row->id])
+            ->dispatch('toggle', ['rowId' => $row->id, 'field' => $toggleField])
             ->tooltip(trans('datatable.buttons.toggle'));
     }
 

@@ -261,82 +261,27 @@
                 </div>
             </div>
             <div class="row mt-5">
-                <div class="col-md-6 col-lg-3">
-                    <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                        <div class="team-img">
-                            <img src="{{ asset('assets/images/team/01.jpg') }}" alt="thumb">
-                        </div>
-                        <div class="team-content">
-                            <div class="team-bio">
-                                <h5><a href="#">Chad Smith</a></h5>
-                                <span>Technician</span>
+                @foreach($teams as $team)
+                    <div class="col-md-6 col-lg-3">
+                        <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                            <div class="team-img">
+                                <img src="{{ $team?->getFirstMediaUrl('image') }}" alt="thumb">
+                            </div>
+                            <div class="team-content">
+                                <div class="team-bio">
+                                    <h5><a href="#">{{ $team?->name }}</a></h5>
+                                    <span>{{ $team?->job }}</span>
+                                </div>
+                            </div>
+                            <div class="team-social">
+                                <a href="{{ $team?->config()->get('social_media.facebook') ?? 'https://www.facebook.com/#' }}"><i class="fab fa-facebook-f"></i></a>
+                                <a href="{{ $team?->config()->get('social_media.twitter') ?? 'https://x.com/#' }}"><i class="fab fa-x-twitter"></i></a>
+                                <a href="{{ $team?->config()->get('social_media.linkedin') ?? 'https://www.linkedin.com/in/#' }}"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="{{ $team?->config()->get('social_media.youtube') ?? 'https://www.youtube.com/#' }}"><i class="fab fa-youtube"></i></a>
                             </div>
                         </div>
-                        <div class="team-social">
-                            <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
-                            <a href="https://www.linkedin.com/in/#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a>
-                        </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                        <div class="team-img">
-                            <img src="{{ asset('assets/images/team/02.jpg') }}" alt="thumb">
-                        </div>
-                        <div class="team-content">
-                            <div class="team-bio">
-                                <h5><a href="#">Arron Rodri</a></h5>
-                                <span>CEO & Founder</span>
-                            </div>
-                        </div>
-                        <div class="team-social">
-                            <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
-                            <a href="https://www.linkedin.com/in/#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                        <div class="team-img">
-                            <img src="{{ asset('assets/images/team/03.jpg') }}" alt="thumb">
-                        </div>
-                        <div class="team-content">
-                            <div class="team-bio">
-                                <h5><a href="#">Malissa Fie</a></h5>
-                                <span>Technician</span>
-                            </div>
-                        </div>
-                        <div class="team-social">
-                            <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
-                            <a href="https://www.linkedin.com/in/#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1s">
-                        <div class="team-img">
-                            <img src="{{ asset('assets/images/team/04.jpg') }}" alt="thumb">
-                        </div>
-                        <div class="team-content">
-                            <div class="team-bio">
-                                <h5><a href="#">Tony Pinto</a></h5>
-                                <span>Technician</span>
-                            </div>
-                        </div>
-                        <div class="team-social">
-                            <a href="https://www.facebook.com/#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://x.com/#"><i class="fab fa-x-twitter"></i></a>
-                            <a href="https://www.linkedin.com/in/#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://www.youtube.com/#"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

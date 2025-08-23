@@ -2,8 +2,8 @@
 
 namespace App\Actions\Team;
 
-use App\Actions\Translation\SyncTranslationAction;
 use App\Models\Team;
+use App\Services\File\FileService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -14,13 +14,16 @@ class StoreTeamAction
     use AsAction;
 
     public function __construct(
-        private readonly SyncTranslationAction $syncTranslationAction,
+        private readonly FileService $fileService,
     ) {}
 
     /**
      * @param array{
-     *     title:string,
-     *     description:string
+     *     name:string,
+     *     job:string,
+     *     special:boolean,
+     *     social_media:array<string>,
+     *     image:string,
      * } $payload
      * @return Team
      * @throws Throwable
@@ -29,7 +32,7 @@ class StoreTeamAction
     {
         return DB::transaction(function () use ($payload) {
             $model =  Team::create($payload);
-            $this->syncTranslationAction->handle($model, Arr::only($payload, ['title', 'description']));
+            $this->fileService->addMedia($model, Arr::get($payload, 'image'));
 
             return $model->refresh();
         });

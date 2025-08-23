@@ -13,6 +13,7 @@ use App\Services\Permissions\Models\FaqPermissions;
 use App\Services\Permissions\Models\OpinionPermissions;
 use App\Services\Permissions\Models\PagePermissions;
 use App\Services\Permissions\Models\SliderPermissions;
+use App\Services\Permissions\Models\TeamPermissions;
 use App\Services\Permissions\Models\UserPermissions;
 use App\Services\Permissions\Models\OrderPermissions;
 use App\Services\Permissions\Models\PaymentMethodPermissions;
@@ -40,6 +41,7 @@ class CorePermissions
             resolve(ContactUsPermissions::class)->all(),
             resolve(BrandPermissions::class)->all(),
             resolve(DevicePermissions::class)->all(),
+            resolve(TeamPermissions::class)->all(),
         ];
     }
 }
