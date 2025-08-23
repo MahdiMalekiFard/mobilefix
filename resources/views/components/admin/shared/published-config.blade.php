@@ -1,10 +1,11 @@
 @props([
     'hasPublishedAt' => '1',
-    'published' => false
+    'published' => false,
+    'useFallback' => false,
 ])
 
 <div class="grid grid-cols-1 gap-4" x-data="{ published: @entangle('published') }">
-    <x-toggle :label="trans('validation.attributes.published')" wire:model="published" right/>
+    <x-toggle :label="trans('validation.attributes.published', locale: $useFallback ? app()->getFallbackLocale() : app()->getLocale())" wire:model="published" right/>
 
     <div x-show="!published"
          x-transition:enter="transition ease-out duration-300"
@@ -16,12 +17,12 @@
         @if($hasPublishedAt)
             <div class="space-y-2">
                 <x-admin.shared.date-time-flat
-                    :label="trans('validation.attributes.published_at')"
+                    :label="trans('validation.attributes.published_at', locale: $useFallback ? app()->getFallbackLocale() : app()->getLocale())"
                     wire:model="published_at"
                     x-bind:required="!published"
                 />
                 <p class="text-sm text-gray-600">
-                    {{ trans('blog.help.published_at_explanation') }}
+                    {{ trans('blog.help.published_at_explanation', locale: $useFallback ? app()->getFallbackLocale() : app()->getLocale()) }}
                 </p>
             </div>
         @endif
@@ -37,7 +38,7 @@
         @if($hasPublishedAt)
             <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
                 <p class="text-sm text-green-700">
-                    {{ trans('blog.help.will_publish_immediately') }}
+                    {{ trans('blog.help.will_publish_immediately', locale: $useFallback ? app()->getFallbackLocale() : app()->getLocale()) }}
                 </p>
             </div>
         @endif
