@@ -89,8 +89,8 @@ final class TeamTable extends PowerGridComponent
     {
         return [
             PowerGridHelper::columnId(),
-            PowerGridHelper::columnTitle('name_formatted', 'name'),
-            Column::make('job_formatted', 'job'),
+            PowerGridHelper::columnTitle('name', 'name_formatted'),
+            Column::make('job', 'job_formatted'),
             PowerGridHelper::columnPublished('special_formatted', 'special'),
             PowerGridHelper::columnCreatedAT('created_at'),
             PowerGridHelper::columnAction(),

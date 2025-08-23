@@ -295,7 +295,7 @@ class NavbarComposer
                 'route_name' => 'admin.device.index',
             ],
             [
-                'icon'       => 's-device-phone-mobile',
+                'icon'       => 's-user-group',
                 'title'      => trans('_menu.teams'),
                 'access'     => $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(Team::class, 'Store', 'Index')),
                 'route_name' => 'admin.team.index',
