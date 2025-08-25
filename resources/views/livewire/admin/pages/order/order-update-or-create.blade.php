@@ -252,10 +252,22 @@
                                 <div class="relative group">
                                     <div class="w-full h-32 bg-gray-100 rounded border cursor-pointer hover:bg-gray-200 transition-colors flex items-center justify-center"
                                          onclick="openVideoModal('{{ $video['url'] }}', '{{ $video['name'] }}')">
-                                        <div class="text-center">
-                                            <i class="fas fa-play-circle text-4xl text-blue-500 mb-2"></i>
-                                            <p class="text-xs text-gray-600">{{ $video['name'] }}</p>
-                                        </div>
+                                        @if(!empty($video['poster_url']))
+                                            {{-- Poster image --}}
+                                            <img src="{{ $video['poster_url'] }}"
+                                                 alt="Poster for {{ $video['name'] }}"
+                                                 class="object-cover w-full h-full">
+                                            {{-- Play overlay --}}
+                                            <span class="absolute inset-0 flex items-center justify-center">
+                                                <i class="fas fa-play-circle text-4xl text-white bg-black/60 rounded-full p-3"></i>
+                                            </span>
+                                        @else
+                                            {{-- Fallback (no poster) --}}
+                                            <div class="flex flex-col items-center justify-center w-full h-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                                                <i class="fas fa-play-circle text-4xl text-blue-500 mb-2"></i>
+                                                <p class="text-xs text-gray-600">{{ $video['name'] }}</p>
+                                            </div>
+                                        @endif
                                     </div>
                                     <button type="button"
                                             wire:click="deleteVideo({{ $video['id'] }})"

@@ -9,10 +9,12 @@ use App\Enums\OrderStatusEnum;
 use App\Mail\RepairRequestSubmitted;
 use App\Models\Order;
 use App\Services\MagicLinkService;
+use App\Services\VideoPosterService;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Throwable;
@@ -128,9 +130,31 @@ class StoreOrderAction
 
             if ($videos) {
                 foreach ($videos as $video) {
-                    $model->addMedia($video->getRealPath())->preservingOriginal()
+                    // 1) attach video
+                    $videoMedia = $model->addMedia($video->getRealPath())
+                        ->preservingOriginal()
                         ->usingName($video->getClientOriginalName())
                         ->toMediaCollection('videos');
+
+                    // 2) build a poster on Windows-safe temp path
+                    $sourcePath = $videoMedia->getPath(); // absolute path of stored video
+                    $posterName = Str::uuid() . '.jpg';
+                    $posterPath = storage_path('app' . DIRECTORY_SEPARATOR . 'temp_posters' . DIRECTORY_SEPARATOR . $posterName);
+
+                    app(VideoPosterService::class)->makePoster($sourcePath, $posterPath, 1, 1280, 720, 'crop');
+
+                    // 3) attach poster as an image (so it benefits from your image conversions/CDN/etc.)
+                    $posterMedia = $model->addMedia($posterPath)
+                        ->usingFileName($posterName)
+                        ->toMediaCollection('images');
+
+                    // 4) link poster to the video via custom properties (store both id and url)
+                    $videoMedia->setCustomProperty('poster_media_id', $posterMedia->id);
+                    $videoMedia->setCustomProperty('poster_url', $posterMedia->getUrl());
+                    $videoMedia->save();
+
+                    // 5) cleanup temp file
+                    @unlink($posterPath);
                 }
             }
 

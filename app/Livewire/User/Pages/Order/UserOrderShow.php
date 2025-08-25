@@ -27,7 +27,7 @@ class UserOrderShow extends Component
         return view('livewire.user.pages.order.user-order-show', [
             'breadcrumbs'        => [
                 ['link' => route('user.dashboard'), 'icon' => 's-home'],
-                ['link' => route('user.order.index'), 'label' => trans('general.page.index.title', ['model' => trans('order.model')])],
+                ['link'  => route('user.order.index'), 'label' => trans('general.page.index.title', ['model' => trans('order.model')])],
                 ['label' => trans('general.page.show.title', ['model' => trans('order.model')])],
             ],
             'breadcrumbsActions' => [

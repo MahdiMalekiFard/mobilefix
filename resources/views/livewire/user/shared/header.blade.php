@@ -64,9 +64,9 @@
             <!-- Profile dropdown -->
             <x-dropdown>
                 <x-slot:trigger>
-                    <x-button class="btn-circle"><img class="rounded-full" src="{{ $user->getFirstMediaUrl('avatar') ?? asset('assets/images/default/user-avatar.png') }}" alt=""></x-button>
+                    <x-button class="btn-circle"><img class="rounded-full" src="{{ auth()->user()?->getFirstMediaUrl('avatar') ?? asset('assets/images/default/user-avatar.png') }}" alt=""></x-button>
                 </x-slot:trigger>
-                
+
                 <form method="POST" action="{{ route('user.auth.logout') }}" x-data>
                     @csrf
                     <x-button type="submit">Logout</x-button>

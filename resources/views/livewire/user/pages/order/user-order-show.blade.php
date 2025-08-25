@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="p-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
@@ -317,7 +317,7 @@
                     </div>
                     @endforeach
                 </div>
-                
+
                 <!-- Summary -->
                 <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
                     <div class="flex items-center justify-between">
@@ -372,7 +372,7 @@
         </div>
     </div>
     @endif
-    
+
     <!-- Admin Note -->
     @if($model->admin_note)
     <div class="mb-8">
@@ -400,112 +400,120 @@
 
     <!-- Media/Attachments -->
     @if($model->media && $model->media->count() > 0)
-    <div class="mb-8">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="ml-3 text-lg font-medium text-gray-900 dark:text-white">Attachments</h3>
-                    <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">({{ $model->media->count() }} files)</span>
-                </div>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    @foreach($model->media as $media)
-                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 overflow-hidden hover:shadow-md transition-shadow duration-200">
-                        <!-- Debug info (remove this after testing) -->
-                        <!-- URL: {{ $media->getUrl() }} | Type: {{ $media->mime_type ?? 'unknown' }} -->
-                        
-                        <!-- Media Preview -->
-                        <div class="relative bg-gray-50 dark:bg-gray-600">
-                            @if(str_starts_with($media->mime_type ?? '', 'image/'))
-                                <!-- Try to display image with better fallback -->
-                                <div class="w-full h-32 bg-gray-100 dark:bg-gray-600">
-                                    <img 
-                                        src="{{ $media->getUrl() }}" 
-                                        alt="Order Image" 
-                                        class="w-full h-32 object-cover"
-                                        style="display: block;"
-                                        onload="console.log('Image loaded successfully');"
-                                        onerror="console.log('Image failed to load:', this.src); this.style.display='none'; this.parentNode.querySelector('.fallback-image').style.display='flex';"
-                                    >
-                                    <div class="fallback-image w-full h-32 bg-gray-100 dark:bg-gray-600 items-center justify-center hidden">
-                                        <div class="text-center">
-                                            <svg class="w-8 h-8 text-gray-400 dark:text-gray-300 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                            </svg>
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">Image Preview</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Image type badge -->
-                                <div class="absolute top-2 right-2">
-                                    <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">IMG</span>
-                                </div>
-                            @elseif(str_starts_with($media->mime_type ?? '', 'video/'))
-                                <div class="w-full h-32 bg-gray-100 dark:bg-gray-600 flex items-center justify-center">
-                                    <div class="text-center">
-                                        <svg class="w-12 h-12 text-gray-400 dark:text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Video File</span>
-                                    </div>
-                                </div>
-                                <!-- Video type badge -->
-                                <div class="absolute top-2 right-2">
-                                    <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-medium">VID</span>
-                                </div>
-                            @else
-                                <div class="w-full h-32 bg-gray-100 dark:bg-gray-600 flex items-center justify-center">
-                                    <div class="text-center">
-                                        <svg class="w-12 h-12 text-gray-400 dark:text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Document</span>
-                                    </div>
-                                </div>
-                                <!-- File type badge -->
-                                <div class="absolute top-2 right-2">
-                                    <span class="bg-gray-500 text-white text-xs px-2 py-1 rounded-full font-medium">FILE</span>
-                                </div>
-                            @endif
-                        </div>
-                        
-                        <!-- File Information -->
-                        <div class="p-3 border-t border-gray-100 dark:border-gray-600">
-                            <div class="flex items-center justify-between">
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white truncate" title="{{ $media->name }}">
-                                        {{ $media->name }}
-                                    </p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                        {{ strtoupper(pathinfo($media->name, PATHINFO_EXTENSION) ?: 'FILE') }}
-                                        @if(isset($media->size))
-                                            • {{ number_format($media->size / 1024, 1) }} KB
-                                        @endif
-                                    </p>
-                                </div>
-                                <div class="ml-3">
-                                    <a href="{{ $media->getUrl() }}" target="_blank" class="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-500 rounded-md text-xs font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                                        <svg class="w-3 h-3 mr-1 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                        </svg>
-                                        Open
-                                    </a>
-                                </div>
+        @php
+            // Get videos once, so we can (1) read their poster_url and (2) hide poster images
+            $videos     = $model->getMedia('videos');
+            $posterIds  = $videos->map(fn($v) => $v->getCustomProperty('poster_media_id'))->filter()->values()->all();
+        @endphp
+
+        <div class="mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                                </svg>
                             </div>
                         </div>
+                        <h3 class="ml-3 text-lg font-medium text-gray-900 dark:text-white">Attachments</h3>
+                        <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">({{ $model->media->count() }} files)</span>
                     </div>
-                    @endforeach
+                </div>
+
+                <div class="p-6">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        @foreach($model->media as $media)
+                            @php $mime = $media->mime_type ?? ''; @endphp
+
+                            {{-- Skip poster images so they don’t show as normal images --}}
+                            @if(in_array($media->id, $posterIds, true))
+                                @continue
+                            @endif
+
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 overflow-hidden hover:shadow-md transition-shadow duration-200">
+                                <div class="relative bg-gray-50 dark:bg-gray-600">
+
+                                    {{-- IMAGE PREVIEW --}}
+                                    @if(str_starts_with($mime, 'image/'))
+                                        <div class="w-full h-32 bg-gray-100 dark:bg-gray-600">
+                                            <img
+                                                src="{{ $media->getUrl() }}"
+                                                alt="Image"
+                                                class="w-full h-32 object-cover block rounded-none"
+                                            >
+                                            <div class="fallback-image w-full h-32 bg-gray-100 dark:bg-gray-600 items-center justify-center hidden">
+                                                <div class="text-center">
+                                                    <svg class="w-8 h-8 text-gray-400 dark:text-gray-300 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400">Image Preview</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {{-- VIDEO PREVIEW (use poster) --}}
+                                    @elseif(str_starts_with($mime, 'video/'))
+                                        @php
+                                            $poster = $media->getCustomProperty('poster_url') ?: asset('assets/images/default/video_poster.jpg');
+                                        @endphp
+
+                                        <a href="{{ $media->getUrl() }}" target="_blank" class="block">
+                                            <div class="relative w-full h-32 bg-black overflow-hidden">
+                                                <img src="{{ $poster }}" alt="Video Poster" class="absolute inset-0 w-full h-full object-cover">
+                                                <span class="absolute inset-0 flex items-center justify-center">
+                                                  <i class="fa-solid fa-play text-white text-lg bg-black/60 rounded-full p-2"></i>
+                                                </span>
+                                            </div>
+                                        </a>
+                                    @else
+                                        <div class="w-full h-32 bg-gray-100 dark:bg-gray-600 flex items-center justify-center">
+                                            <div class="text-center">
+                                                <svg class="w-12 h-12 text-gray-400 dark:text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                </svg>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Document</span>
+                                            </div>
+                                        </div>
+                                        <!-- File type badge -->
+                                        <div class="absolute top-2 right-2">
+                                            <span class="bg-gray-500 text-white text-xs px-2 py-1 rounded-full font-medium">FILE</span>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- File Information -->
+                                <div class="p-3 border-t border-gray-100 dark:border-gray-600">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900 dark:text-white truncate" title="{{ $media->name }}">
+                                                {{ $media->name }}
+                                            </p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                {{ strtoupper(pathinfo($media->name, PATHINFO_EXTENSION) ?: 'FILE') }}
+                                                @if(isset($media->size))
+                                                    • {{ number_format($media->size / 1024, 1) }} KB
+                                                @endif
+                                            </p>
+                                        </div>
+                                        @if(str_starts_with($mime, 'image/'))
+                                            <div class="ml-3">
+                                                <a href="{{ $media->getUrl() }}" target="_blank" class="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-500 rounded-md text-xs font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                                                    <svg class="w-3 h-3 mr-1 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                                    </svg>
+                                                    Open
+                                                </a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endif
 </div>

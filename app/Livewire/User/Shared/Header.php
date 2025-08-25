@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Livewire\User\Shared;
 
 use App\Helpers\NotifyHelper;
@@ -33,4 +31,4 @@ class Header extends Component
                 ->get(),
         ]);
     }
-} 
+}

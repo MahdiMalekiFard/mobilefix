@@ -18,7 +18,7 @@ class OrderShow extends Component
             'device.translations',
             'brand.translations',
             'problems.translations',
-            'media'
+            'media',
         ]);
     }
 
@@ -27,7 +27,7 @@ class OrderShow extends Component
         return view('livewire.admin.pages.order.order-show', [
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.order.index'), 'label' => trans('general.page.index.title', ['model' => trans('order.model')])],
+                ['link'  => route('admin.order.index'), 'label' => trans('general.page.index.title', ['model' => trans('order.model')])],
                 ['label' => trans('general.page.show.title', ['model' => trans('order.model')])],
             ],
             'breadcrumbsActions' => [
