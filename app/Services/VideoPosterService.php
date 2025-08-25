@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services;
 
 use FFMpeg\Coordinate\TimeCode;
@@ -50,6 +48,42 @@ class VideoPosterService
         $video = $ffmpeg->open($videoPath);
         $frame = $video->frame(TimeCode::fromSeconds($seconds));
         $frame->save($saveToPath);
+
+        // ✅ Resize with GD
+        $targetWidth  = 1280;
+        $targetHeight = 720;
+
+        $src = imagecreatefromjpeg($saveToPath); // frame is saved as jpg
+        if ( ! $src) {
+            throw new RuntimeException("GD could not open poster: {$saveToPath}");
+        }
+
+        $srcWidth  = imagesx($src);
+        $srcHeight = imagesy($src);
+
+        // Create a new true color image with target dimensions
+        $dst = imagecreatetruecolor($targetWidth, $targetHeight);
+
+        // Fill with black background (to pad if aspect ratio doesn’t match)
+        $black = imagecolorallocate($dst, 0, 0, 0);
+        imagefill($dst, 0, 0, $black);
+
+        // Calculate resize while keeping aspect ratio
+        $ratio      = min($targetWidth / $srcWidth, $targetHeight / $srcHeight);
+        $newWidth   = ($srcWidth * $ratio);
+        $newHeight  = ($srcHeight * $ratio);
+        $dstX       = (int) (($targetWidth - $newWidth) / 2);
+        $dstY       = (int) (($targetHeight - $newHeight) / 2);
+
+        // Resample
+        imagecopyresampled($dst, $src, $dstX, $dstY, 0, 0, $newWidth, $newHeight, $srcWidth, $srcHeight);
+
+        // Save resized image back to file
+        imagejpeg($dst, $saveToPath, 85);
+
+        // Free memory
+        imagedestroy($src);
+        imagedestroy($dst);
 
         return $saveToPath;
     }
