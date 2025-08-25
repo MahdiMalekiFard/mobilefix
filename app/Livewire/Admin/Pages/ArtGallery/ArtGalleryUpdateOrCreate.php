@@ -35,7 +35,7 @@ class ArtGalleryUpdateOrCreate extends Component
         $this->model = $artGallery;
 
         $this->icons    = config('font_awesome.icons');
-        $this->icon = $this->model->icon ?? array_key_first($this->icons);
+        $this->icon     = $this->model->icon ?? array_key_first($this->icons);
 
         if ($this->model->id) {
             $this->title       = $this->model->title;
@@ -43,21 +43,30 @@ class ArtGalleryUpdateOrCreate extends Component
             $this->published   = $this->model->published->value;
 
             // Load existing media
-            $this->existingImages = $this->model->getMedia('images')->map(function ($media) {
-                return [
-                    'id'        => $media->id,
-                    'url'       => $media->getUrl(),
-                    'name'      => $media->name,
-                    'file_name' => $media->file_name,
-                ];
-            })->toArray();
+            $this->existingImages = $this->model->getMedia('images')
+                ->reject(function ($media) {
+                    // reject if this image is linked as a video poster
+                    return $this->model->getMedia('videos')->contains(function ($video) use ($media) {
+                        return $video->getCustomProperty('poster_media_id') === $media->id;
+                    });
+                })
+                ->map(function ($media) {
+                    return [
+                        'id'        => $media->id,
+                        'url'       => $media->getUrl(),
+                        'name'      => $media->name,
+                        'file_name' => $media->file_name,
+                    ];
+                })->toArray();
 
             $this->existingVideos = $this->model->getMedia('videos')->map(function ($media) {
                 return [
-                    'id'        => $media->id,
-                    'url'       => $media->getUrl(),
-                    'name'      => $media->name,
-                    'file_name' => $media->file_name,
+                    'id'              => $media->id,
+                    'url'             => $media->getUrl(),
+                    'name'            => $media->name,
+                    'file_name'       => $media->file_name,
+                    'poster_url'      => $media->getCustomProperty('poster_url'),
+                    'poster_media_id' => $media->getCustomProperty('poster_media_id'),
                 ];
             })->toArray();
         }
@@ -70,7 +79,7 @@ class ArtGalleryUpdateOrCreate extends Component
             'description' => 'required|string',
             'published'   => 'required|boolean',
             'icon'        => ['required', 'string', Rule::in(array_keys($this->icons))],
-            'images'      => 'required',
+            'images'      => 'nullable',
             'images.*'    => 'image|max:2048',
             'videos'      => 'nullable',
             'videos.*'    => 'mimes:mp4,avi,mov,wmv,webm|max:10240',
@@ -130,8 +139,19 @@ class ArtGalleryUpdateOrCreate extends Component
     public function deleteVideo($mediaId): void
     {
         $media = $this->model->getMedia('videos')->find($mediaId);
+
         if ($media) {
+            // also delete poster if we have it
+            $posterId = $media->getCustomProperty('poster_media_id');
+
             $media->delete();
+
+            if ($posterId) {
+                $poster = $this->model->media()->find($posterId);
+                if ($poster) {
+                    $poster->delete();
+                }
+            }
 
             // Refresh the model to clear any cached media collections
             $this->model->refresh();
@@ -139,10 +159,12 @@ class ArtGalleryUpdateOrCreate extends Component
             // Update the existing videos array
             $this->existingVideos = $this->model->getMedia('videos')->map(function ($media) {
                 return [
-                    'id'        => $media->id,
-                    'url'       => $media->getUrl(),
-                    'name'      => $media->name,
-                    'file_name' => $media->file_name,
+                    'id'              => $media->id,
+                    'url'             => $media->getUrl(),
+                    'name'            => $media->name,
+                    'file_name'       => $media->file_name,
+                    'poster_url'      => $media->getCustomProperty('poster_url'),
+                    'poster_media_id' => $media->getCustomProperty('poster_media_id'),
                 ];
             })->toArray();
 

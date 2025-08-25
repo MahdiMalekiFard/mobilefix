@@ -31,6 +31,8 @@ class ArtGallery extends Model implements HasMedia
         'published',
         'languages',
         'icon',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [

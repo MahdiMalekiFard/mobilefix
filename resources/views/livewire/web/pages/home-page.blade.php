@@ -320,7 +320,7 @@
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="1200" data-speed="3000">1200</span>
-                                <h6 class="title">+ alle Anfragen  </h6>
+                                <h6 class="title">+ alle Anfragen </h6>
                             </div>
                         </div>
                     </div>
@@ -384,7 +384,7 @@
 
                             @foreach($artGalleries as $gallery)
                                 @php
-                                    $slug       = $gallery->slug ?? \Illuminate\Support\Str::slug($gallery->title);
+                                    $slug       = $gallery->slug ?? Str::slug($gallery->title);
                                     $iconKey    = $gallery->icon; // e.g. 'phone'
                                     $iconClass  = config('font_awesome.icons')[$iconKey] ?? 'fa-regular fa-image';
                                 @endphp
@@ -400,12 +400,22 @@
 
             {{-- FILTERABLE GRID --}}
             <div class="row mt-3 filter-box popup-gallery wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-
                 @foreach($artGalleries as $gallery)
                     @php
-                        $slug = $gallery->slug ?? \Illuminate\Support\Str::slug($gallery->title);
+                        $slug = $gallery->slug ?? Str::slug($gallery->title);
+
+                        // Load media
                         $images = $gallery->getMedia('images');
                         $videos = $gallery->getMedia('videos');
+
+                        // EXCLUDE video posters that were stored in "images"
+                        $posterIds = $videos->map(fn($v) => $v->getCustomProperty('poster_media_id'))
+                              ->filter()
+                              ->values()
+                              ->all();
+                        if (!empty($posterIds)) {
+                            $images = $images->reject(fn($m) => in_array($m->id, $posterIds, true));
+                        }
                     @endphp
 
                     {{-- Images --}}
@@ -426,42 +436,51 @@
                         </div>
                     @endforeach
 
-                    {{-- Videos --}}
+                    {{-- Videos (use poster) --}}
                     @foreach($videos as $video)
+                        @php
+                            $poster = $video->getCustomProperty('poster_url')
+                                      ?: asset('assets/images/gallery/video-placeholder.jpg');
+                        @endphp
+
                         <div class="col-md-4 filter-item cat-{{ $slug }}">
-                            <div class="gallery-item">
-                                <div class="gallery-img position-relative">
-                                    {{-- If you have a generated poster/thumbnail, use it; otherwise show a generic cover --}}
-                                    @php
-                                        $poster = $video->hasGeneratedConversion('thumb') ? $video->getUrl('thumb') : asset('assets/images/gallery/video-placeholder.jpg');
-                                    @endphp
+                            <div class="gallery-video">
+                                <a href="{{ $video->getUrl() }}"
+                                   target="_blank"
+                                   class="popup-video"
+                                   data-type="video"
+                                   data-title="{{ $gallery->title }}"
+                                >
                                     <img src="{{ $poster }}" alt="{{ $gallery->title }} video">
 
-                                    {{-- play overlay --}}
-                                    <span class="absolute inset-0 flex items-center justify-center">
-                  <i class="fa-solid fa-play fa-lg text-white bg-black/60 rounded-full p-3"></i>
-                </span>
-                                </div>
-
-                                <div class="gallery-content">
-                                    {{-- Use your lightbox class for videos (depends on your plugin).
-                                       Many libs accept direct mp4 links or YouTube/Vimeo URLs. --}}
-                                    <a class="popup-video gallery-link" href="{{ $video->getUrl() }}">
-                                        <i class="far fa-plus"></i>
-                                    </a>
-                                </div>
+                                    <div class="video-icon">
+                                        <i class="fa-solid fa-play"></i>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     @endforeach
 
                 @endforeach
 
-                {{-- Optional: empty state if nothing exists --}}
-                @if($artGalleries->flatMap->media->isEmpty())
-                    <div class="col-12 text-center text-muted py-5">
-                        {{ __('Keine Medien gefunden.') }}
-                    </div>
-                @endif
+                {{-- Optional: empty state --}}
+                @php
+                    // recompute emptiness after filtering posters out of images
+                    $hasMedia = $artGalleries->some(function($g) {
+                      $videos = $g->getMedia('videos');
+                      $images = $g->getMedia('images');
+                      $posterIds = $videos->map(fn($v) => $v->getCustomProperty('poster_media_id'))
+                                          ->filter()->values()->all();
+                      if (!empty($posterIds)) {
+                        $images = $images->reject(fn($m) => in_array($m->id, $posterIds, true));
+                      }
+                      return $images->isNotEmpty() || $videos->isNotEmpty();
+                    });
+                @endphp
+
+                @unless($hasMedia)
+                    <div class="col-12 text-center text-muted py-5">Keine Medien gefunden.</div>
+                @endunless
             </div>
         </div>
     </div>

@@ -2826,6 +2826,58 @@ label {
   margin-top: 0px;
 }
 
+.gallery-video {
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 20px;
+    overflow: hidden;
+
+    .frame {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+}
+
+/* fixed frame 16:9 or fallback height */
+.gallery-video-frame {
+    position: relative;
+    width: 100%;
+    height:220px;
+    padding-top: 56.25%;  /* ensures height */
+    min-height: 200px;    /* fallback if poster missing */
+    background: #000;
+}
+
+.gallery-video-frame img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* play icon */
+.gallery-video .video-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-video .video-icon i {
+    font-size: 2rem;
+    color: #fff;
+    background: rgba(0,0,0,0.6);
+    padding: 12px;
+    border-radius: 50%;
+}
+
 .filter-btns {
   text-align: center;
   margin-bottom: 30px;
