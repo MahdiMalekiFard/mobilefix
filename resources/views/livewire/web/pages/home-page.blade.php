@@ -1,6 +1,7 @@
 @php
     use App\Helpers\Constants;
     use Illuminate\Support\Str;
+    use Spatie\MediaLibrary\MediaCollections\Models\Media;
 @endphp
 <div>
     <!-- hero slider -->
@@ -424,7 +425,7 @@
                             <div class="gallery-item">
                                 <div class="gallery-img">
                                     <img
-                                        src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl() }}"
+                                        src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}"
                                         alt="{{ $gallery->title }}">
                                 </div>
                                 <div class="gallery-content">
@@ -439,8 +440,11 @@
                     {{-- Videos (use poster) --}}
                     @foreach($videos as $video)
                         @php
-                            $poster = $video->getCustomProperty('poster_url')
-                                      ?: asset('assets/images/gallery/video-placeholder.jpg');
+                            if ($posterId = $video->getCustomProperty('poster_media_id')) {
+                                $posterUrl = Media::find($posterId)?->getUrl(Constants::RESOLUTION_1280_720) ?? '#';
+                            } else {
+                                $posterUrl = asset('assets/images/default/video_poster.jpg');
+                            }
                         @endphp
 
                         <div class="col-md-4 filter-item cat-{{ $slug }}">
@@ -451,7 +455,7 @@
                                    data-type="video"
                                    data-title="{{ $gallery->title }}"
                                 >
-                                    <img src="{{ $poster }}" alt="{{ $gallery->title }} video">
+                                    <img src="{{ $posterUrl }}" alt="{{ $gallery->title }} video">
 
                                     <div class="video-icon">
                                         <i class="fa-solid fa-play"></i>

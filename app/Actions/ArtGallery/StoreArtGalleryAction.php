@@ -40,7 +40,7 @@ class StoreArtGalleryAction
             $videos = $payload['videos'] ?? null;
             unset($payload['images'], $payload['videos']);
 
-            $model =  ArtGallery::create(Arr::only($payload, ['published', 'icon']));
+            $model =  ArtGallery::create(Arr::only($payload, ['published', 'icon', 'created_at', 'updated_at']));
             $this->syncTranslationAction->handle($model, Arr::only($payload, ['title', 'description']));
 
             // Handle media uploads
@@ -65,7 +65,7 @@ class StoreArtGalleryAction
                     $posterName = Str::uuid() . '.jpg';
                     $posterPath = storage_path('app' . DIRECTORY_SEPARATOR . 'temp_posters' . DIRECTORY_SEPARATOR . $posterName);
 
-                    app(VideoPosterService::class)->makePoster($sourcePath, $posterPath, 1);
+                    app(VideoPosterService::class)->makePoster($sourcePath, $posterPath, 1, 1280, 720, 'crop');
 
                     // 3) attach poster as an image (so it benefits from your image conversions/CDN/etc.)
                     $posterMedia = $model->addMedia($posterPath)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use FFMpeg\Coordinate\TimeCode;
@@ -23,21 +25,25 @@ class VideoPosterService
      * Extracts a poster frame at $seconds and saves as a JPG at $saveToPath.
      * Returns the absolute path of the saved poster.
      */
-    public function makePoster(string $videoPath, string $saveToPath, int $seconds = 1): string
-    {
-        // Make sure directory exists (Windows-safe)
+    public function makePoster(
+        string $videoPath,
+        string $saveToPath,
+        int $seconds = 1,
+        int $targetWidth = 1280,
+        int $targetHeight = 720,
+        string $fit = 'pad' // 'pad' | 'crop'
+    ): string {
+        // Ensure directory exists
         $dir = dirname($saveToPath);
         if ( ! is_dir($dir) && ! mkdir($dir, 0775, true) && ! is_dir($dir)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
 
-        // Probe to ensure file/codecs are valid
-        $ffprobe = FFProbe::create([
-            'ffprobe.binaries' => $this->ffprobeBin,
-        ]);
+        // Validate video
+        $ffprobe = FFProbe::create(['ffprobe.binaries' => $this->ffprobeBin]);
         $ffprobe->streams($videoPath)->videos()->first(); // throws if invalid
 
-        // Capture frame with ffmpeg
+        // Extract raw frame to a temp file
         $ffmpeg = FFMpeg::create([
             'ffmpeg.binaries'  => $this->ffmpegBin,
             'ffprobe.binaries' => $this->ffprobeBin,
@@ -45,45 +51,86 @@ class VideoPosterService
             'threads'          => 2,
         ]);
 
-        $video = $ffmpeg->open($videoPath);
-        $frame = $video->frame(TimeCode::fromSeconds($seconds));
-        $frame->save($saveToPath);
+        $video   = $ffmpeg->open($videoPath);
+        $rawPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('poster_raw_', true) . '.jpg';
+        $video->frame(TimeCode::fromSeconds($seconds))->save($rawPath);
 
-        // ✅ Resize with GD
-        $targetWidth  = 1280;
-        $targetHeight = 720;
-
-        $src = imagecreatefromjpeg($saveToPath); // frame is saved as jpg
+        // ---- Resize with GD ----
+        $src = @imagecreatefromjpeg($rawPath);
         if ( ! $src) {
-            throw new RuntimeException("GD could not open poster: {$saveToPath}");
+            @unlink($rawPath);
+
+            throw new RuntimeException("GD could not open poster: {$rawPath}");
         }
 
-        $srcWidth  = imagesx($src);
-        $srcHeight = imagesy($src);
+        $srcW = imagesx($src);
+        $srcH = imagesy($src);
+        $dst  = imagecreatetruecolor($targetWidth, $targetHeight);
 
-        // Create a new true color image with target dimensions
-        $dst = imagecreatetruecolor($targetWidth, $targetHeight);
-
-        // Fill with black background (to pad if aspect ratio doesn’t match)
+        // Always fill destination with black first (background)
         $black = imagecolorallocate($dst, 0, 0, 0);
         imagefill($dst, 0, 0, $black);
 
-        // Calculate resize while keeping aspect ratio
-        $ratio      = min($targetWidth / $srcWidth, $targetHeight / $srcHeight);
-        $newWidth   = ($srcWidth * $ratio);
-        $newHeight  = ($srcHeight * $ratio);
-        $dstX       = (int) (($targetWidth - $newWidth) / 2);
-        $dstY       = (int) (($targetHeight - $newHeight) / 2);
+        if ($fit === 'crop') {
+            // Cover: crop source to target aspect, then scale -> no black bars
+            $targetAR = $targetWidth / $targetHeight;
+            $srcAR    = $srcW / $srcH;
 
-        // Resample
-        imagecopyresampled($dst, $src, $dstX, $dstY, 0, 0, $newWidth, $newHeight, $srcWidth, $srcHeight);
+            if ($srcAR > $targetAR) {
+                // Source wider: crop left/right
+                $cropW = (int) round($srcH * $targetAR);
+                $cropH = $srcH;
+                $srcX  = (int) floor(($srcW - $cropW) / 2);
+                $srcY  = 0;
+            } else {
+                // Source taller: crop top/bottom
+                $cropW = $srcW;
+                $cropH = (int) round($srcW / $targetAR);
+                $srcX  = 0;
+                $srcY  = (int) floor(($srcH - $cropH) / 2);
+            }
 
-        // Save resized image back to file
+            imagecopyresampled(
+                $dst,
+                $src,
+                0,
+                0,                // dst x,y
+                $srcX,
+                $srcY,        // src x,y (cropped region start)
+                $targetWidth,
+                $targetHeight, // dst size
+                $cropW,
+                $cropH       // src cropped region size
+            );
+        } else { // 'pad' (letterbox)
+            // Fit inside, keep all, letterbox with black
+            $ratio     = min($targetWidth / $srcW, $targetHeight / $srcH);
+            $newW      = (int) round($srcW * $ratio);
+            $newH      = (int) round($srcH * $ratio);
+            $dstX      = (int) floor(($targetWidth - $newW) / 2);
+            $dstY      = (int) floor(($targetHeight - $newH) / 2);
+
+            imagecopyresampled(
+                $dst,
+                $src,
+                $dstX,
+                $dstY,        // dst x,y (centered)
+                0,
+                0,                // src x,y
+                $newW,
+                $newH,        // dst size
+                $srcW,
+                $srcH         // src size
+            );
+        }
+
+        // Save final JPG
         imagejpeg($dst, $saveToPath, 85);
 
-        // Free memory
+        // Cleanup
         imagedestroy($src);
         imagedestroy($dst);
+        @unlink($rawPath);
 
         return $saveToPath;
     }
