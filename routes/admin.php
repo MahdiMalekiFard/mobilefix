@@ -12,7 +12,7 @@ Route::get('admin/auth/login', LoginPage::class)->name('admin.auth.login');
 Route::get('admin/auth/logout', function () {
     auth()->logout();
 
-    return redirect()->route('admin.auth.login');
+    return redirect()->away(route('admin.auth.login'));
 })->name('admin.auth.logout');
 
 Route::group(['middleware' => ['admin.panel', 'cors']], function () {
