@@ -177,49 +177,64 @@
                                  role="radiogroup" aria-label="Icon choices" wire:key="icon-picker">
 
                                 @foreach($this->icons as $key => $class)
-                                    @php $selected = ($icon === $key); $id = 'icon-'.$key; @endphp
+                                    @php
+                                        $selected = ($icon === $key);
+                                        $id = 'icon-'.$key;
+                                    @endphp
 
                                     <label for="{{ $id }}"
                                            role="radio"
-                                           aria-checked="{{ $selected ? 'true' : 'false' }}"
-                                           title="{{ ucfirst($key) }}"
-                                           class="relative cursor-pointer rounded-2xl focus-within:outline-none
-                      focus-within:ring-2 focus-within:ring-teal-500 focus-within:ring-offset-2
-                      transition">
-
+                                           class="group relative cursor-pointer rounded-2xl focus-within:outline-none
+                                                focus-within:ring-2 focus-within:ring-teal-500 dark:focus-within:ring-teal-400
+                                                focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900 transition">
+                                        <!-- radio (hidden, drives peer-checked styles) -->
                                         <input id="{{ $id }}"
                                                type="radio"
                                                name="icon"
                                                class="peer sr-only"
                                                wire:model.live="icon"
-                                               value="{{ $key }}"
-                                            @checked($selected) />
+                                               value="{{ $key }}" />
 
-                                        <div @class([
-                // base
-                'rounded-2xl p-4 bg-white transition-all duration-200 select-none',
-                'ring-1 ring-gray-200 hover:ring-teal-400 hover:shadow-sm',
-                // selected
-                $selected ? 'ring-2 ring-teal-600 shadow-md bg-teal-50' : '',
-              ])>
+                                        <!-- card -->
+                                        <div class="
+                                          rounded-2xl p-4 select-none transition-all duration-200
+                                          bg-white dark:bg-gray-900
+                                          ring-1 ring-gray-200 dark:ring-gray-700
+                                          hover:ring-teal-400 dark:hover:ring-teal-500 hover:shadow-sm
+                                          peer-checked:ring-2 peer-checked:ring-teal-600 dark:peer-checked:ring-teal-400
+                                          peer-checked:shadow-md
+                                          peer-checked:bg-teal-50 dark:peer-checked:bg-teal-900/30
+                                        ">
                                             <div class="flex flex-col items-center gap-2">
                                                 <i class="{{ $class }} fa-2x fa-fw transition-transform duration-200
-                         {{ $selected ? 'scale-105 text-teal-700' : 'text-gray-800' }}"></i>
-                                                <div class="text-xs text-gray-700 text-center">{{ ucfirst($key) }}</div>
+                                                  text-gray-800 dark:text-gray-100
+                                                  peer-checked:scale-105
+                                                  peer-checked:text-teal-700 dark:peer-checked:text-teal-400">
+                                                </i>
+
+                                                <div class="text-xs text-gray-700 dark:text-gray-300 text-center">
+                                                    {{ ucfirst($key) }}
+                                                </div>
                                             </div>
 
-                                            {{-- subtle base pill at bottom --}}
-                                            <div class="mt-3 h-1 rounded-full
-                        {{ $selected ? 'bg-teal-500' : 'bg-gray-100 group-hover:bg-teal-200' }}"></div>
+                                            <!-- subtle base pill -->
+                                            <div class="mt-3 h-1 rounded-full transition
+                                                {{ $selected
+                                                    ? 'bg-teal-500 dark:bg-teal-400'
+                                                    : 'bg-gray-100 dark:bg-gray-800 group-hover:bg-teal-200 dark:group-hover:bg-teal-700/50'
+                                                }}">
+                                            </div>
                                         </div>
 
-                                        {{-- check badge --}}
-                                        <span class="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-teal-600 text-white
-                                                   flex items-center justify-center shadow ring-2 ring-white
-                                                   transition-all duration-200
-                                                   {{ $selected ? 'opacity-100 scale-100' : 'opacity-0 scale-75' }}"
-                                        >
-                                        <i class="fa-solid fa-check text-[10px]"></i>
+                                        <!-- check badge -->
+                                        <span class="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full
+                                                     bg-teal-600 dark:bg-teal-500 text-white
+                                                     flex items-center justify-center shadow
+                                                     ring-2 ring-white dark:ring-gray-900
+                                                     transition-all duration-200
+                                                     opacity-0 scale-75
+                                                     peer-checked:opacity-100 peer-checked:scale-100">
+                                            <i class="fa-solid fa-check text-[10px]"></i>
                                         </span>
                                     </label>
                                 @endforeach
