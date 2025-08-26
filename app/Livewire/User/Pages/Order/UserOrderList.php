@@ -34,7 +34,7 @@ final class UserOrderList extends PowerGridComponent
         ];
 
         if ((new Agent)->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'actions');
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'order_number', 'status', 'actions');
         }
 
         return $setup;
@@ -129,7 +129,7 @@ final class UserOrderList extends PowerGridComponent
     {
         return [
             PowerGridUserHelper::columnId(),
-            Column::make('order_number', 'order_number')
+            Column::make('Bestellnummer', 'order_number')
                 ->sortable()
                 ->searchable(),
             Column::make('status', 'status')
@@ -137,7 +137,7 @@ final class UserOrderList extends PowerGridComponent
                 ->bodyAttribute('class', 'whitespace-nowrap')
                 ->sortable()
                 ->searchable(),
-            Column::make('total', 'total')
+            Column::make('gesamt', 'total')
                 ->sortable()
                 ->searchable(),
             PowerGridUserHelper::columnUpdatedAT(),

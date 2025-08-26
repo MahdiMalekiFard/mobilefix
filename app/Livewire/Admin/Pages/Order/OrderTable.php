@@ -36,7 +36,7 @@ final class OrderTable extends PowerGridComponent
         ];
 
         if ((new Agent)->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'order_number', 'status', 'actions');
         }
 
         return $setup;
@@ -121,7 +121,7 @@ final class OrderTable extends PowerGridComponent
     {
         return [
             PowerGridHelper::columnId(),
-            Column::make('order_number', 'order_number')
+            Column::make('order number', 'order_number')
                 ->sortable()
                 ->searchable(),
             Column::make('status', 'status')

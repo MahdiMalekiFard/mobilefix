@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'model'                       => 'Order',
+    'model'                       => 'Befehl',
     'permissions'                 => [
     ],
     'exceptions'                  => [
@@ -11,18 +11,18 @@ return [
     'validations'                 => [
     ],
     'actions'                     => [
-        'pay' => 'Pay Now',
+        'pay' => 'Jetzt bezahlen',
     ],
     'enum'                        => [
-        'pending'           => 'Under Review',
-        'rejected'          => 'Rejected',
-        'processing'        => 'In Repair',
-        'failed'            => 'Failed',
-        'cancelled_by_user' => 'Cancelled by User',
-        'completed'         => 'Awaiting Payment',
-        'paid'              => 'Paid',
-        'delivered'         => 'Delivered',
-        'received'          => 'Received',
+        'pending'           => 'Unter Prüfung',
+        'rejected'          => 'Abgelehnt',
+        'processing'        => 'In Reparatur',
+        'failed'            => 'Fehlgeschlagen',
+        'cancelled_by_user' => 'Vom Benutzer abgebrochen',
+        'completed'         => 'Zahlung steht aus',
+        'paid'              => 'Bezahlt',
+        'delivered'         => 'Geliefert',
+        'received'          => 'Erhalten',
     ],
     'notifications'               => [
     ],

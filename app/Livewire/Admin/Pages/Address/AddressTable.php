@@ -1,29 +1,47 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Livewire\Admin\Pages\Address;
 
+use App\Enums\BooleanEnum;
 use App\Helpers\PowerGridHelper;
 use App\Models\Address;
-use App\Enums\BooleanEnum;
 use App\Traits\PowerGridHelperTrait;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
+use Jenssegers\Agent\Agent;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
-use Jenssegers\Agent\Agent;
+use Mary\Traits\Toast;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use Mary\Traits\Toast;
 
 final class AddressTable extends PowerGridComponent
 {
     use PowerGridHelperTrait, Toast;
-    public string $tableName = 'index_address_datatable';
+    public string $tableName     = 'index_address_datatable';
     public string $sortDirection = 'desc';
+
+    public function setUp(): array
+    {
+        $setup = [
+            PowerGrid::header()
+                ->includeViewOnTop('components.admin.shared.bread-crumbs')
+                ->showSearchInput(),
+
+            PowerGrid::footer()
+                ->showPerPage()
+                ->showRecordCount(),
+        ];
+
+        if ((new Agent)->isMobile()) {
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
+        }
+
+        return $setup;
+    }
 
     #[Computed(persist: true)]
     public function breadcrumbs(): array
@@ -41,26 +59,6 @@ final class AddressTable extends PowerGridComponent
             ['link' => route('admin.address.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('address.model')])],
         ];
     }
-
-    public function setUp(): array
-    {
-        $setup = [
-            PowerGrid::header()
-                ->includeViewOnTop("components.admin.shared.bread-crumbs")
-                ->showSearchInput(),
-
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
-
-        if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'title', 'actions');
-        }
-
-        return $setup;
-    }
-
 
     public function datasource(): Builder
     {
@@ -93,7 +91,7 @@ final class AddressTable extends PowerGridComponent
             PowerGridHelper::columnUserName(),
             PowerGridHelper::columnTitle(),
             PowerGridHelper::columnCreatedAT(),
-            PowerGridHelper::columnIsDefault(),  
+            PowerGridHelper::columnIsDefault(),
             PowerGridHelper::columnAction(),
         ];
     }
@@ -102,9 +100,9 @@ final class AddressTable extends PowerGridComponent
     {
         return [
             Filter::datepicker('created_at_formatted', 'created_at')
-                  ->params([
-                      'maxDate' => now(),
-                  ])
+                ->params([
+                    'maxDate' => now(),
+                ]),
         ];
     }
 
@@ -115,7 +113,7 @@ final class AddressTable extends PowerGridComponent
             PowerGridHelper::btnDelete($row),
         ];
 
-        if (!$row->is_default->value) {
+        if ( ! $row->is_default->value) {
             $actions[] = PowerGridHelper::btnMakeDefault($row);
         }
 
@@ -124,8 +122,8 @@ final class AddressTable extends PowerGridComponent
 
     public function noDataLabel(): string|View
     {
-        return view('admin.datatable-shared.empty-table',[
-            'link'=>route('admin.address.create')
+        return view('admin.datatable-shared.empty-table', [
+            'link' => route('admin.address.create'),
         ]);
     }
 
@@ -134,21 +132,20 @@ final class AddressTable extends PowerGridComponent
     {
         try {
             $address = Address::findOrFail($rowId);
-            $user = $address->user;
+            $user    = $address->user;
 
             // First, set all addresses to not default for the user
-            if($user) {
+            if ($user) {
                 Address::where('user_id', $user->id)->update(['is_default' => BooleanEnum::DISABLE->value]);
             }
-            
+
             $address->update(['is_default' => BooleanEnum::ENABLE->value]);
-            
+
             $this->dispatch('pg:eventRefresh-' . $this->tableName);
-            
+
             $this->success(trans('general.model_has_set_default_successfully', ['model' => trans('address.model')]));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error(trans('general.model_has_set_default_failed', ['model' => trans('address.model')]));
         }
     }
-
 }

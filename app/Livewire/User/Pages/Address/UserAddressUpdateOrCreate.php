@@ -13,17 +13,17 @@ class UserAddressUpdateOrCreate extends Component
 {
     use Toast;
 
-    public Address   $model;
+    public Address $model;
     public string $title       = '';
     public string $address     = '';
-    public bool   $is_default  = false;
+    public bool $is_default    = false;
 
     public function mount(Address $address): void
     {
         $this->model = $address;
         if ($this->model->id) {
-            $this->title = $this->model->title;
-            $this->address = $this->model->address;
+            $this->title      = $this->model->title;
+            $this->address    = $this->model->address;
             $this->is_default = $this->model->is_default->value;
         }
     }
@@ -31,9 +31,9 @@ class UserAddressUpdateOrCreate extends Component
     protected function rules(): array
     {
         return [
-            'title'       => 'required|string',
-            'address'     => 'required|string',
-            'is_default'  => 'required'
+            'title'      => 'required|string',
+            'address'    => 'required|string',
+            'is_default' => 'required',
         ];
     }
 
@@ -61,11 +61,11 @@ class UserAddressUpdateOrCreate extends Component
             'edit_mode'          => $this->model->id,
             'breadcrumbs'        => [
                 ['link' => route('user.dashboard'), 'icon' => 's-home'],
-                ['link' => route('user.address.index'), 'label' => trans('general.page.index.title', ['model' => trans('address.model')])],
+                ['link'  => route('user.address.index'), 'label' => trans('general.page.index.title', ['model' => trans('address.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('address.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('user.address.index'), 'icon' => 's-arrow-left']
+                ['link' => route('user.address.index'), 'icon' => 's-arrow-left'],
             ],
         ])->layout('components.layouts.user_panel');
     }

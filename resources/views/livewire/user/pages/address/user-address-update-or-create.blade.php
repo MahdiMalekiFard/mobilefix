@@ -5,18 +5,18 @@
         <div class="grid grid-cols-1 gap-4">
             <x-input :label="trans('address.title')"
                      wire:model="title"
-                     placeholder="Home, Office, etc."
+                     placeholder="Zuhause, Büro usw."
                      :error="$errors->first('title')"
             />
             <x-textarea :label="trans('address.address')"
                         wire:model="address"
-                        placeholder="Enter complete address including street, city, state, postal code"
+                        placeholder="Geben Sie die vollständige Adresse ein, einschließlich Straße, Ort, Bundesland und Postleitzahl"
                         rows="4"
                         :error="$errors->first('address')"
             />
-            <x-toggle :label="trans('address.is_default')" 
-                     wire:model="is_default" 
-                     hint="Set as default delivery address"
+            <x-toggle :label="trans('address.is_default')"
+                     wire:model="is_default"
+                     hint="Als Standardlieferadresse festlegen"
                      right/>
         </div>
     </x-card>

@@ -1,30 +1,52 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\User\Pages\Address;
 
 use App\Actions\Address\SearchAddressAction;
+use App\Enums\BooleanEnum;
 use App\Helpers\PowerGridUserHelper;
 use App\Models\Address;
+use App\Traits\PowerGridHelperTrait;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
-use Livewire\Attributes\Computed;
 use Jenssegers\Agent\Agent;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Mary\Traits\Toast;
+use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Column;
-use Livewire\Attributes\On;
-use App\Enums\BooleanEnum;
-use App\Traits\PowerGridHelperTrait;
-use Mary\Traits\Toast;
 
 final class UserAddressList extends PowerGridComponent
 {
     use PowerGridHelperTrait, Toast;
 
-    public string $tableName = 'index_user_address_datatable';
+    public string $tableName     = 'index_user_address_datatable';
     public string $sortDirection = 'desc';
+
+    public function setUp(): array
+    {
+        $setup = [
+            PowerGrid::header()
+                ->includeViewOnTop('components.user.shared.bread-crumbs')
+                ->showSearchInput(),
+
+            PowerGrid::footer()
+                ->showPerPage()
+                ->showRecordCount(),
+        ];
+
+        if ((new Agent)->isMobile()) {
+            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'actions');
+        }
+
+        return $setup;
+    }
 
     #[Computed(persist: true)]
     public function breadcrumbs(): array
@@ -43,25 +65,6 @@ final class UserAddressList extends PowerGridComponent
         ];
     }
 
-    public function setUp(): array
-    {
-        $setup = [
-            PowerGrid::header()
-                ->includeViewOnTop("components.user.shared.bread-crumbs")
-                ->showSearchInput(),
-
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
-
-        if((new Agent())->isMobile()) {
-            $setup[] = PowerGrid::responsive()->fixedColumns('id', 'actions');
-        }
-
-        return $setup;
-    }
-
     public function boot(): void
     {
         config(['livewire-powergrid.filter' => 'outside']);
@@ -69,32 +72,26 @@ final class UserAddressList extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        $query = Address::query()->where('user_id', auth()->user()?->id);
-        
         // Apply search using the action
-        if ($this->search) {
-            $searchAction = new SearchAddressAction();
-            $query = $searchAction->execute($query, $this->search);
-        }
-        
-        return $query;
+
+        return Address::query()->where('user_id', auth()->user()?->id);
     }
 
     public function relationSearch(): array
     {
         return [
-            'user' => [
+            'user'                       => [
                 'name',
                 'mobile',
                 'email',
             ],
-            'address' => [
+            'address'                    => [
                 'title',
             ],
             'paymentMethod.translations' => [
                 'value',
             ],
-            'brand.translations' => [
+            'brand.translations'         => [
                 'value',
             ],
         ];
@@ -115,7 +112,7 @@ final class UserAddressList extends PowerGridComponent
         return [
             PowerGridUserHelper::columnId(),
             PowerGridUserHelper::columnTitle(),
-            Column::make('address', 'address')
+            Column::make('Adresse', 'address')
                 ->searchable(),
             PowerGridUserHelper::columnIsDefault(),
             PowerGridUserHelper::columnUpdatedAT(),
@@ -127,9 +124,9 @@ final class UserAddressList extends PowerGridComponent
     {
         return [
             Filter::datepicker('updated_at_formatted', 'updated_at')
-                  ->params([
-                      'maxDate' => now(),
-                  ])
+                ->params([
+                    'maxDate' => now(),
+                ]),
         ];
     }
 
@@ -140,17 +137,17 @@ final class UserAddressList extends PowerGridComponent
             PowerGridUserHelper::btnDelete($row),
         ];
 
-        if (!$row->is_default->value) {
+        if ( ! $row->is_default->value) {
             $buttons[] = PowerGridUserHelper::btnMakeDefault($row);
         }
-    
+
         return $buttons;
     }
 
     public function noDataLabel(): string|View
     {
-        return view('user.datatable-shared.empty-table',[
-            'link'=>null
+        return view('user.datatable-shared.empty-table', [
+            'link' => null,
         ]);
     }
 
@@ -159,17 +156,17 @@ final class UserAddressList extends PowerGridComponent
     {
         try {
             $user = auth()->user();
-            if($user) {
+            if ($user) {
                 Address::where('user_id', $user->id)->update(['is_default' => BooleanEnum::DISABLE->value]);
             }
-            
+
             $address = Address::findOrFail($rowId);
             $address->update(['is_default' => BooleanEnum::ENABLE->value]);
-            
+
             $this->dispatch('pg:eventRefresh-' . $this->tableName);
-            
+
             $this->success(trans('general.model_has_set_default_successfully', ['model' => trans('address.model')]));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error(trans('general.model_has_set_default_failed', ['model' => trans('address.model')]));
         }
     }

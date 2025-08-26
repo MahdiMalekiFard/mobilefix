@@ -32,7 +32,7 @@ class NavbarComposer
                 'icon'       => 's-home',
                 'params'     => [],
                 'exact'      => true,
-                'title'      => trans('_menu.dashboard'),
+                'title'      => trans('_menu.dashboard', locale: app()->getFallbackLocale()),
                 'route_name' => 'admin.dashboard',
             ],
             // [
