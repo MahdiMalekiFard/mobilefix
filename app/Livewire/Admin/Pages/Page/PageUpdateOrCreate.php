@@ -21,14 +21,17 @@ class PageUpdateOrCreate extends Component
     public ?string $title            = '';
     public ?string $body             = '';
     public ?string $type             = PageTypeEnum::ABOUT_US->value;
+    public array $typeOptions        = [];
     public $images;
     public array $existingImages   = [];
     public array $removedNewImages = [];
 
     public function mount(Page $page): void
     {
-        $this->model = $page;
-        if ($this->model->id) {
+        $this->model       = $page;
+        $this->typeOptions = PageTypeEnum::formatedCases($this->model->exists);
+
+        if ($this->model->exists) {
             $this->mountStaticFields();
             $this->title = $this->model->title;
             $this->body  = $this->model->body;
@@ -48,6 +51,15 @@ class PageUpdateOrCreate extends Component
                     'file_name' => $media->file_name,
                 ];
             })->toArray();
+
+        } else {
+            $isDisabled = collect($this->typeOptions)->contains(function ($o) {
+                return ($o['value'] ?? null) === $this->type && ! empty($o['disabled']);
+            });
+
+            if ($isDisabled) {
+                $this->type = null;
+            }
         }
     }
 
@@ -151,7 +163,7 @@ class PageUpdateOrCreate extends Component
     public function render(): View
     {
         return view('livewire.admin.pages.page.page-update-or-create', [
-            'edit_mode'          => $this->model->id,
+            'edit_mode'          => $this->model->id ?? false,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
                 ['link'  => route('admin.page.index'), 'label' => trans('general.page.index.title', ['model' => trans('page.model')])],

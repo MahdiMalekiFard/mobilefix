@@ -38,10 +38,13 @@
                         <x-select
                             :label="trans('validation.attributes.type')"
                             wire:model="type"
-                            :options="PageTypeEnum::formatedCases()"
+                            :options="PageTypeEnum::formatedCases($edit_mode)"
                             option-value="value"
                             option-label="label"
                             required
+                            placeholder="Select the page type..."
+                            placeholder-value=""
+                            :disabled="$edit_mode"
                         />
 
                         {{-- About Us -> textarea (render only when needed) --}}
@@ -186,6 +189,10 @@
                         this._loadIntoEditor(this.body);
                         this._toggle();
                     });
+
+                    document.addEventListener('mx:theme-changed', () => {
+                        if (!this.isAbout) this._retheme(); // re-theme TinyMCE only if it's active
+                    });
                 },
 
                 _toggle() {
@@ -205,32 +212,55 @@
                 _initTiny() {
                     if (this.editor || !window.tinymce || !this.$refs.tinyHost) return;
 
-                    tinymce.init({
-                        selector: '#tiny-body', // stable id
+                    const cfg = this._themed({
+                        selector: '#tiny-body',
                         ...this.config,
                         setup: (ed) => {
                             this.editor = ed;
 
                             ed.on('init', () => {
-                                // set whatever we currently have; may be empty first
                                 this._loadIntoEditor(this.body);
-                                // try again on next tick (in case hydration lands right after)
                                 setTimeout(() => this._loadIntoEditor(this.body), 0);
                             });
 
-                            // Throttle pushes to Livewire to prevent rerender churn
                             let pushTimer = null;
                             ed.on('change keyup input undo redo', () => {
                                 const html = ed.getContent();
                                 this.body = html;
-
                                 clearTimeout(pushTimer);
-                                pushTimer = setTimeout(() => {
-                                    this.$wire.set('body', html); // will trigger updatedBody()
-                                }, 200);
+                                pushTimer = setTimeout(() => this.$wire.set('body', html), 200);
                             });
                         },
                     });
+
+                    tinymce.init(cfg);
+
+                    // tinymce.init({
+                    //     selector: '#tiny-body', // stable id
+                    //     ...this.config,
+                    //     setup: (ed) => {
+                    //         this.editor = ed;
+                    //
+                    //         ed.on('init', () => {
+                    //             // set whatever we currently have; may be empty first
+                    //             this._loadIntoEditor(this.body);
+                    //             // try again on next tick (in case hydration lands right after)
+                    //             setTimeout(() => this._loadIntoEditor(this.body), 0);
+                    //         });
+                    //
+                    //         // Throttle pushes to Livewire to prevent rerender churn
+                    //         let pushTimer = null;
+                    //         ed.on('change keyup input undo redo', () => {
+                    //             const html = ed.getContent();
+                    //             this.body = html;
+                    //
+                    //             clearTimeout(pushTimer);
+                    //             pushTimer = setTimeout(() => {
+                    //                 this.$wire.set('body', html); // will trigger updatedBody()
+                    //             }, 200);
+                    //         });
+                    //     },
+                    // });
                 },
 
                 // convertOnExit: when true, convert HTML -> plain text (for About Us textarea)
@@ -254,6 +284,56 @@
                     this.editor = null;
 
                     if (this.$refs.tinyHost) this.$refs.tinyHost.value = '';
+                },
+
+                // --- THEME HELPERS ---
+                _currentMode() {
+                    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                },
+                _themed(cfg) {
+                    const dark = this._currentMode() === 'dark';
+                    return {
+                        ...cfg,
+                        // these work with your self-hosted base_url + suffix
+                        skin: dark ? 'oxide-dark' : 'oxide',
+                        content_css: dark ? 'dark' : 'default',
+                    };
+                },
+                _retheme() {
+                    if (!this.editor || !window.tinymce) return;
+
+                    // preserve content and caret
+                    const id = this.editor.id;
+                    let content = '';
+                    let bookmark = null;
+                    try { content = this.editor.getContent({ format: 'raw' }); } catch(e) {}
+                    try { bookmark = this.editor.selection.getBookmark(2, true); } catch(e) {}
+
+                    // destroy and re-init with themed config
+                    this.editor.remove();
+                    this.editor = null;
+
+                    const cfg = this._themed({
+                        ...this.config,
+                        selector: '#tiny-body',
+                        setup: (ed) => {
+                            this.editor = ed;
+                            ed.on('init', () => {
+                                if (content) ed.setContent(content);
+                                try { if (bookmark) ed.selection.moveToBookmark(bookmark); } catch(e) {}
+                            });
+                            // keep your Livewire sync
+                            let pushTimer = null;
+                            ed.on('change keyup input undo redo', () => {
+                                const html = ed.getContent();
+                                this.body = html;
+                                clearTimeout(pushTimer);
+                                pushTimer = setTimeout(() => this.$wire.set('body', html), 200);
+                            });
+                        },
+                    });
+
+                    tinymce.init(cfg);
                 },
 
                 // ---- helpers ----

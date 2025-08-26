@@ -50,7 +50,8 @@
                     {{--                    :link="route('admin.notification.index')"--}}
                     wire:click="$toggle('notifications_drawer')"
             />
-            <x-theme-toggle/>
+{{--            <x-theme-toggle/>--}}
+            <x-mx.theme-toggle mode="tinymce" selector=".tox-tinymce" class="btn btn-ghost" />
 
             <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true"></div>
 

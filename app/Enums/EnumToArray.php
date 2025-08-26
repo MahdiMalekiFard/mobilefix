@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Enums;
 
 trait EnumToArray
@@ -33,16 +31,28 @@ trait EnumToArray
         return array_combine(self::names(), self::values());
     }
 
-    public static function formatedCases(): array
+    public static function formatedCases(bool $editMode = false): array
     {
         $array = [];
+
         foreach (self::cases() as $case) {
-            $array[] = $case->toArray();
+            $item = $case->toArray();
+
+            // In create mode → check if a Page of this type already exists
+            if ( ! $editMode) {
+                $alreadyExists = \App\Models\Page::where('type', $case->value)->exists();
+
+                if ($alreadyExists) {
+                    $item['disabled'] = true;
+                }
+            }
+
+            $array[] = $item;
         }
 
         return $array;
     }
-    
+
     public static function toArray(): array
     {
         return array_map(static fn ($enum) => $enum->value, self::cases());
