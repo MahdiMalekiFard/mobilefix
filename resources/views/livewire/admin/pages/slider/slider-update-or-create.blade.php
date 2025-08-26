@@ -23,6 +23,7 @@
                 <x-card :title="trans('general.page_sections.upload_image')" shadow separator progress-indicator="submit" class="">
                     <x-admin.shared.single-file-upload
                         default_image="{{ $model->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}"
+                        crop_after_change="0"
                     />
                 </x-card>
 

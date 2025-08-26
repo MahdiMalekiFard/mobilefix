@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
+use Symfony\Component\HttpFoundation\File\File;
 
 class SliderUpdateOrCreate extends Component
 {
@@ -17,16 +18,16 @@ class SliderUpdateOrCreate extends Component
     public Slider $model;
     public string $title       = '';
     public string $description = '';
-    public bool   $published   = false;
+    public bool $published     = false;
     public $image;
 
     public function mount(Slider $slider): void
     {
         $this->model = $slider;
         if ($this->model->id) {
-            $this->title = $this->model->title;
+            $this->title       = $this->model->title;
             $this->description = $this->model->description;
-            $this->published = $this->model->published->value;
+            $this->published   = $this->model->published->value;
         }
     }
 
@@ -64,11 +65,11 @@ class SliderUpdateOrCreate extends Component
             'edit_mode'          => $this->model->id,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.slider.index'), 'label' => trans('general.page.index.title', ['model' => trans('slider.model')])],
+                ['link'  => route('admin.slider.index'), 'label' => trans('general.page.index.title', ['model' => trans('slider.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('slider.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.slider.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.slider.index'), 'icon' => 's-arrow-left'],
             ],
         ]);
     }

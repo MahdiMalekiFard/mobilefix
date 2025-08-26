@@ -36,7 +36,7 @@ class UpdateSliderAction
         return DB::transaction(function () use ($slider, $payload) {
             $slider->update(Arr::only($payload, ['published']));
             $this->syncTranslationAction->handle($slider, Arr::only($payload, ['title', 'description']));
-            $this->fileService->addMedia($model, Arr::get($payload, 'image'));
+            $this->fileService->addMedia($slider, Arr::get($payload, 'image'));
 
             return $slider->refresh();
         });
