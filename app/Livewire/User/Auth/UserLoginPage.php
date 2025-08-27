@@ -22,7 +22,7 @@ class UserLoginPage extends Component
     {
         $this->resetErrorBag('email');
         
-        if (!empty($this->email)) {
+        if ( ! empty($this->email)) {
             $this->validateOnly('email');
         }
     }
@@ -32,7 +32,7 @@ class UserLoginPage extends Component
     {
         $this->resetErrorBag('password');
         
-        if (!empty($this->password)) {
+        if ( ! empty($this->password)) {
             $this->validateOnly('password');
         }
     }
@@ -46,7 +46,6 @@ class UserLoginPage extends Component
         // add error validation for field email
         $this->addError('email', 'Email or password is incorrect');
     }
-
 
     public function render()
     {

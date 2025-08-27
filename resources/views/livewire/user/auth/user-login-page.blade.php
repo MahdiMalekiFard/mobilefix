@@ -39,7 +39,7 @@
                             @enderror
                         </div>
                         <div class="d-flex justify-content-between mb-4">
-                            <a href="forgot-password.html" class="forgot-pass">Passwort vergessen?</a>
+{{--                            <a href="forgot-password.html" class="forgot-pass">Passwort vergessen?</a>--}}
                         </div>
                         <div class="d-grid mb-3">
                             <button type="submit" class="theme-btn btn-lg">
