@@ -54,29 +54,8 @@
                 </div>
                 <x-menu activate-by-route active-bg-color="bg-gray-800 text-white" class="!p-0 !text-white">
 
-                    @foreach($navbarMenu as $menu)
-                        @if(Arr::has($menu,'sub_menu'))
-                            <x-menu-sub :title="Arr::get($menu,'title')" :icon="Arr::get($menu,'icon')" >
-                                @foreach(Arr::get($menu,'sub_menu',[]) as $subMenu)
-                                    <x-menu-item
-                                            :exact="Arr::get($subMenu,'exact',false)"
-                                            :title="Arr::get($subMenu,'title')"
-                                            :icon="Arr::get($subMenu,'icon')"
-                                            :badge="Arr::get($subMenu,'badge')"
-                                            :badge-classes="Arr::get($subMenu,'badge_classes','float-left')"
-                                            :link="route(Arr::get($subMenu,'route_name'),Arr::get($subMenu,'params',[]))" />
-                                @endforeach
-                            </x-menu-sub>
-                        @else
-                            <x-menu-item
-                                    :exact="Arr::get($menu,'exact',false)"
-                                    :title="Arr::get($menu,'title')"
-                                    :icon="Arr::get($menu,'icon')"
-                                    :badge="Arr::get($menu,'badge')"
-                                    :badge-classes="Arr::get($menu,'badge_classes','float-left')"
-                                    :link="route(Arr::get($menu,'route_name'),Arr::get($menu,'params',[]))"/>
-                        @endif
-                    @endforeach
+                    @include('admin.layouts.partials.menu-tree', ['items' => $navbarMenu])
+
                 </x-menu>
             </div>
         </div>
