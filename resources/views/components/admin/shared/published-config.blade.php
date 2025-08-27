@@ -5,7 +5,7 @@
 ])
 
 <div class="grid grid-cols-1 gap-4" x-data="{ published: @entangle('published') }">
-    <x-toggle :label="trans('validation.attributes.published', locale: $useFallback ? app()->getFallbackLocale() : app()->getLocale())" wire:model="published" right/>
+    <x-toggle :label="trans('validation.attributes.published')" wire:model="published" right/>
 
     <div x-show="!published"
          x-transition:enter="transition ease-out duration-300"
