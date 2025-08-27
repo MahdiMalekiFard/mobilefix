@@ -52,7 +52,7 @@
                             <h5 class="widget-title">Kategorien</h5>
                             <div class="category-list">
                                 @foreach($categories as $category)
-                                    <a href="#"><i class="far fa-angle-double-right"></i>{{ $category?->title }}<span>({{ $category?->blogs->count() }})</span></a>
+                                    <a href="{{ route('blog-page', ['category_id' => $category?->id]) }}"><i class="far fa-angle-double-right"></i>{{ $category?->title }}<span>({{ $category?->blogs->count() }})</span></a>
                                 @endforeach
                             </div>
                         </div>

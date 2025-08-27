@@ -21,12 +21,12 @@ class BlogDetailPage extends Component
     public function render()
     {
         $recentBlogs = Blog::latest()->whereNot('id', $this->blog?->id)->limit(3)->get() ?? [];
-        $categories  = Category::where('type', CategoryTypeEnum::BLOG)->limit(5)->get() ?? [];
+        $categories  = Category::where('type', CategoryTypeEnum::BLOG)->limit(8)->get() ?? [];
 
         return view('livewire.web.pages.blog-detail-page', [
             'blog'        => $this->blog,
-            'recentBlogs' => $recentBlogs,
-            'categories'  => $categories,
+            'recentBlogs' => $recentBlogs ?? [],
+            'categories'  => $categories ?? [],
         ])->layout('components.layouts.web');
     }
 }

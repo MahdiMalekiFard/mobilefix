@@ -13,7 +13,7 @@ class GalleryPage extends Component
         $artGalleries = ArtGallery::query()->with('media')->where('published', BooleanEnum::ENABLE)->get();
 
         return view('livewire.web.pages.gallery-page', [
-            'artGalleries' => $artGalleries,
+            'artGalleries' => $artGalleries ?? [],
         ])
             ->layout('components.layouts.web');
     }
