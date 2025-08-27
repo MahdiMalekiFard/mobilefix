@@ -47,7 +47,6 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Zahlungsarten</h4>
                             <div class="footer-newsletter">
-                                <p>Wir akzeptieren folgende Zahlungsarten</p>
                                 <div class="d-flex align-items-center gap-3 flex-wrap">
                                     <img src="{{ asset('assets/images/payments/stripe.png') }}"
                                         alt="Stripe"

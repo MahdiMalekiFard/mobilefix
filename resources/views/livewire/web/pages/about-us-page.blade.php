@@ -58,7 +58,8 @@
                                     </div>
                                     <div class="content">
                                         <h4>Unser günstiger Preis</h4>
-                                        <p>Es gibt viele Variationen dieser Passage, die meisten davon sind in irgendeiner Form mit Humor überladen.</p>
+                                        <p>Faire und transparente Preise – keine versteckten Kosten.
+                                            Hochwertige Reparaturen müssen nicht teuer sein.</p>
                                     </div>
                                 </li>
                                 <li>
@@ -67,7 +68,8 @@
                                     </div>
                                     <div class="content">
                                         <h4>Vertrauenswürdiger Reparaturservice</h4>
-                                        <p>Es gibt viele Variationen dieser Passage, die meisten davon sind in irgendeiner Form mit Humor überladen.</p>
+                                        <p>Wir stehen für Ehrlichkeit, Zuverlässigkeit und Qualität.
+                                            Tausende zufriedene Kunden vertrauen bereits unserem Service.</p>
                                     </div>
                                 </li>
                             </ul>
@@ -149,8 +151,8 @@
                             </h2>
                         </div>
                         <p>
-                            Es sind viele Variationen von Lorem-Ipsum-Abschnitten verfügbar, aber die
-                            zufällig ausgewählten Wörter sehen nicht einmal annähernd glaubwürdig aus.
+                            Ob Displaybruch, Akkuwechsel oder andere Defekte – wir helfen sofort.
+                            Unser Team ist jederzeit für Sie erreichbar und zuverlässig zur Stelle.
                         </p>
                         <div class="choose-wrapper mt-4">
                             <div class="choose-item">
@@ -159,7 +161,8 @@
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Qualifizierte Techniker</h4>
-                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
+                                    <p>Unser Team besteht aus zertifizierten und erfahrenen Experten.
+                                        Jedes Gerät wird mit größter Sorgfalt repariert.</p>
                                 </div>
                             </div>
                             <div class="choose-item active">
@@ -168,7 +171,8 @@
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Qualitätsgarantie</h4>
-                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
+                                    <p>Wir verwenden ausschließlich hochwertige Ersatzteile.
+                                        Auf jede Reparatur erhalten Sie unsere volle Garantie.</p>
                                 </div>
                             </div>
                             <div class="choose-item">
@@ -177,7 +181,8 @@
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Ihr zuverlässiger Partner</h4>
-                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
+                                    <p>Von der Beratung bis zur Reparatur stehen wir an Ihrer Seite.
+                                        Vertrauen Sie auf unseren Service – schnell, fair und professionell.</p>
                                 </div>
                             </div>
                         </div>
@@ -207,7 +212,7 @@
             <div class="row">
                 <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Referenzen</span>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Kundenbewertungen</span>
                         <h2 class="site-title text-white">Welcher Kunde <span>Sagen Sie</span> Über uns</h2>
                         <div class="heading-divider"></div>
                     </div>

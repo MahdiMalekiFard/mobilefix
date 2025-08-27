@@ -47,7 +47,8 @@
                         </div>
                         <div class="feature-content">
                             <h4>Bester Elektronik-Reparaturservice</h4>
-                            <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt abgelenkt wird</p>
+                            <p>Schnelle und zuverlässige Reparaturen für Smartphones, Tablets und mehr.
+                                Qualität und Präzision stehen bei uns an erster Stelle.</p>
                         </div>
                     </div>
                 </div>
@@ -59,7 +60,8 @@
                         </div>
                         <div class="feature-content">
                             <h4>Reparatur mit erfahrenem Team</h4>
-                            <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt abgelenkt wird</p>
+                            <p>Unser geschultes Fachpersonal kennt jedes Detail moderner Geräte.
+                                Jahrelange Erfahrung sorgt für perfekte Ergebnisse.</p>
                         </div>
                     </div>
                 </div>
@@ -71,7 +73,8 @@
                         </div>
                         <div class="feature-content">
                             <h4>100% sicherer Reparaturservice</h4>
-                            <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt abgelenkt wird</p>
+                            <p>Ihre Daten und Geräte sind bei uns in sicheren Händen.
+                                Wir arbeiten transparent, professionell und mit voller Garantie.</p>
                         </div>
                     </div>
                 </div>
@@ -123,7 +126,8 @@
                                     </div>
                                     <div class="content">
                                         <h4>Unser günstiger Preis</h4>
-                                        <p>Es gibt viele Variationen dieser Passage, die meisten davon sind in irgendeiner Form mit Humor überladen.</p>
+                                        <p>Faire und transparente Preise – keine versteckten Kosten.
+                                            Hochwertige Reparaturen müssen nicht teuer sein.</p>
                                     </div>
                                 </li>
                                 <li>
@@ -132,7 +136,8 @@
                                     </div>
                                     <div class="content">
                                         <h4>Vertrauenswürdiger Reparaturservice</h4>
-                                        <p>Es gibt viele Variationen dieser Passage, die meisten davon sind in irgendeiner Form mit Humor überladen.</p>
+                                        <p>Wir stehen für Ehrlichkeit, Zuverlässigkeit und Qualität.
+                                            Tausende zufriedene Kunden vertrauen bereits unserem Service.</p>
                                     </div>
                                 </li>
                             </ul>
@@ -154,11 +159,11 @@
                 <div class="col-md-6 col-lg-6">
                     <div class="site-heading">
                         <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Leistungen</span>
-                        <h2 class="site-title text-white">Schauen wir uns unsere beste <span>Leistungen</span> In der Stadt</h2>
+                        <h2 class="site-title text-white">Schauen wir uns unsere besten <span>Dienstleistungen</span> In der Stadt an</h2>
                         <p class="text-white">
-                            Es gibt viele Variationen von Passagen mit eingebrachtem Humor, zufällig ausgewählten Wörtern,
-                            die nicht einmal annähernd glaubwürdig aussehen (die Mehrheit hat in irgendeiner Form eine Veränderung erfahren),
-                            vordefinierten Abschnitten nach Bedarf und eingebrachtem Humor.
+                            Wir bieten Ihnen eine Auswahl unserer beliebtesten und zuverlässigsten Reparaturservices direkt vor Ort.
+                            Ob Displaywechsel, Akku-Austausch oder komplexere Elektronikreparaturen – entdecken Sie die Leistungen,
+                            die uns in der Stadt zu einer der ersten Adressen für schnelle und professionelle Hilfe machen.
                         </p>
                     </div>
                 </div>
@@ -197,7 +202,9 @@
                         <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Aktuelles Video</span>
                         <h2 class="site-title">Was uns ausmacht <span>anders</span> Schauen Sie sich unser Video an</h2>
                         <p>
-                            Es stehen zahlreiche Variationen von Passagen zur Verfügung, die meisten wurden jedoch in irgendeiner Form durch das Einbringen von Humor oder zufällig ausgewählte Wörter verändert, sodass selbst die Verwendung einer Passage glaubwürdig erscheint.
+                            Bei uns geht es nicht nur um Reparaturen, sondern um Qualität, Vertrauen und einen Service, auf den Sie sich verlassen können.
+                            In unserem Video zeigen wir Ihnen, wie unsere erfahrenen Techniker arbeiten,
+                            welche Sorgfalt wir in jede Reparatur stecken und warum so viele Kunden in Deutschland uns als ihren zuverlässigen Partner wählen.
                         </p>
                         <a href="{{ route('about-us-page') }}" class="theme-btn mt-20">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
                     </div>
@@ -234,8 +241,8 @@
                             </h2>
                         </div>
                         <p>
-                            Es sind viele Variationen von Lorem-Ipsum-Abschnitten verfügbar, aber die
-                            zufällig ausgewählten Wörter sehen nicht einmal annähernd glaubwürdig aus.
+                            Ob Displaybruch, Akkuwechsel oder andere Defekte – wir helfen sofort.
+                            Unser Team ist jederzeit für Sie erreichbar und zuverlässig zur Stelle.
                         </p>
                         <div class="choose-wrapper mt-4">
                             <div class="choose-item">
@@ -244,7 +251,8 @@
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Qualifizierte Techniker</h4>
-                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
+                                    <p>Unser Team besteht aus zertifizierten und erfahrenen Experten.
+                                        Jedes Gerät wird mit größter Sorgfalt repariert.</p>
                                 </div>
                             </div>
                             <div class="choose-item active">
@@ -253,7 +261,8 @@
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Qualitätsgarantie</h4>
-                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
+                                    <p>Wir verwenden ausschließlich hochwertige Ersatzteile.
+                                        Auf jede Reparatur erhalten Sie unsere volle Garantie.</p>
                                 </div>
                             </div>
                             <div class="choose-item">
@@ -262,7 +271,8 @@
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Ihr zuverlässiger Partner</h4>
-                                    <p>Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt der Seite abgelenkt wird, wenn er sich das Layout ansieht.</p>
+                                    <p>Von der Beratung bis zur Reparatur stehen wir an Ihrer Seite.
+                                        Vertrauen Sie auf unseren Service – schnell, fair und professionell.</p>
                                 </div>
                             </div>
                         </div>
@@ -294,8 +304,7 @@
                     <div class="cta-text">
                         <h1>Wir bieten <span>Qualität</span> Leistungen</h1>
                         <p>
-                            Es ist eine seit langem bekannte Tatsache, dass ein Leser durch den lesbaren Inhalt einer Seite abgelenkt wird,
-                            wenn das Layout in irgendeiner Form durch eingefügten Humor beeinträchtigt wurde.
+                            Wir bieten Qualitätsleistungen – zuverlässig, präzise und nachhaltig.
                         </p>
                     </div>
                     <div class="mb-20 mt-10">
@@ -364,131 +373,132 @@
     </div>
     <!-- counter area end -->
 
+    @if($artGalleries->isNotEmpty())
+        <!-- gallery-area -->
+        <div class="gallery-area py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="site-heading text-center wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
+                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Galerien</span>
+                            <h2 class="site-title">Entdecken Sie unsere <span>Galerie</span></h2>
+                            <div class="heading-divider"></div>
+                        </div>
 
-    <!-- gallery-area -->
-    <div class="gallery-area py-120">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="site-heading text-center wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Fotogalerie</span>
-                        <h2 class="site-title">Foto erkunden <span>Galerie</span></h2>
-                        <div class="heading-divider"></div>
-                    </div>
-
-                    {{-- FILTER BUTTONS --}}
-                    <div class="filter-controls wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                        <ul class="filter-btns">
-                            <li class="active" data-filter="*">
-                                <i class="fa-solid fa-layer-group"></i> Alle
-                            </li>
-
-                            @foreach($artGalleries as $gallery)
-                                @php
-                                    $slug       = $gallery->slug ?? Str::slug($gallery->title);
-                                    $iconKey    = $gallery->icon; // e.g. 'phone'
-                                    $iconClass  = config('font_awesome.icons')[$iconKey] ?? 'fa-regular fa-image';
-                                @endphp
-
-                                <li data-filter=".cat-{{ $slug }}">
-                                    <i class="{{ $iconClass }}"></i> {{ $gallery->title }}
+                        {{-- FILTER BUTTONS --}}
+                        <div class="filter-controls wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
+                            <ul class="filter-btns">
+                                <li class="active" data-filter="*">
+                                    <i class="fa-solid fa-layer-group"></i> Alle
                                 </li>
-                            @endforeach
-                        </ul>
+
+                                @foreach($artGalleries as $gallery)
+                                    @php
+                                        $slug       = $gallery->slug ?? Str::slug($gallery->title);
+                                        $iconKey    = $gallery->icon; // e.g. 'phone'
+                                        $iconClass  = config('font_awesome.icons')[$iconKey] ?? 'fa-regular fa-image';
+                                    @endphp
+
+                                    <li data-filter=".cat-{{ $slug }}">
+                                        <i class="{{ $iconClass }}"></i> {{ $gallery->title }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {{-- FILTERABLE GRID --}}
-            <div class="row mt-3 filter-box popup-gallery wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                @foreach($artGalleries as $gallery)
-                    @php
-                        $slug = $gallery->slug ?? Str::slug($gallery->title);
-
-                        // Load media
-                        $images = $gallery->getMedia('images');
-                        $videos = $gallery->getMedia('videos');
-
-                        // EXCLUDE video posters that were stored in "images"
-                        $posterIds = $videos->map(fn($v) => $v->getCustomProperty('poster_media_id'))
-                              ->filter()
-                              ->values()
-                              ->all();
-                        if (!empty($posterIds)) {
-                            $images = $images->reject(fn($m) => in_array($m->id, $posterIds, true));
-                        }
-                    @endphp
-
-                    {{-- Images --}}
-                    @foreach($images as $media)
-                        <div class="col-md-4 filter-item cat-{{ $slug }}">
-                            <div class="gallery-item">
-                                <div class="gallery-img">
-                                    <img
-                                        src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}"
-                                        alt="{{ $gallery->title }}">
-                                </div>
-                                <div class="gallery-content">
-                                    <a class="popup-img gallery-link" href="{{ $media->getUrl() }}">
-                                        <i class="far fa-plus"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-
-                    {{-- Videos (use poster) --}}
-                    @foreach($videos as $video)
+                {{-- FILTERABLE GRID --}}
+                <div class="row mt-3 filter-box popup-gallery wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
+                    @foreach($artGalleries as $gallery)
                         @php
-                            if ($posterId = $video->getCustomProperty('poster_media_id')) {
-                                $posterUrl = Media::find($posterId)?->getUrl(Constants::RESOLUTION_1280_720) ?? '#';
-                            } else {
-                                $posterUrl = asset('assets/images/default/video_poster.jpg');
+                            $slug = $gallery->slug ?? Str::slug($gallery->title);
+
+                            // Load media
+                            $images = $gallery->getMedia('images');
+                            $videos = $gallery->getMedia('videos');
+
+                            // EXCLUDE video posters that were stored in "images"
+                            $posterIds = $videos->map(fn($v) => $v->getCustomProperty('poster_media_id'))
+                                  ->filter()
+                                  ->values()
+                                  ->all();
+                            if (!empty($posterIds)) {
+                                $images = $images->reject(fn($m) => in_array($m->id, $posterIds, true));
                             }
                         @endphp
 
-                        <div class="col-md-4 filter-item cat-{{ $slug }}">
-                            <div class="gallery-video">
-                                <a href="{{ $video->getUrl() }}"
-                                   target="_blank"
-                                   class="popup-video"
-                                   data-type="video"
-                                   data-title="{{ $gallery->title }}"
-                                >
-                                    <img src="{{ $posterUrl }}" alt="{{ $gallery->title }} video">
-
-                                    <div class="video-icon">
-                                        <i class="fa-solid fa-play"></i>
+                        {{-- Images --}}
+                        @foreach($images as $media)
+                            <div class="col-md-4 filter-item cat-{{ $slug }}">
+                                <div class="gallery-item">
+                                    <div class="gallery-img">
+                                        <img
+                                            src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}"
+                                            alt="{{ $gallery->title }}">
                                     </div>
-                                </a>
+                                    <div class="gallery-content">
+                                        <a class="popup-img gallery-link" href="{{ $media->getUrl() }}">
+                                            <i class="far fa-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
+
+                        {{-- Videos (use poster) --}}
+                        @foreach($videos as $video)
+                            @php
+                                if ($posterId = $video->getCustomProperty('poster_media_id')) {
+                                    $posterUrl = Media::find($posterId)?->getUrl(Constants::RESOLUTION_1280_720) ?? '#';
+                                } else {
+                                    $posterUrl = asset('assets/images/default/video_poster.jpg');
+                                }
+                            @endphp
+
+                            <div class="col-md-4 filter-item cat-{{ $slug }}">
+                                <div class="gallery-video">
+                                    <a href="{{ $video->getUrl() }}"
+                                       target="_blank"
+                                       class="popup-video"
+                                       data-type="video"
+                                       data-title="{{ $gallery->title }}"
+                                    >
+                                        <img src="{{ $posterUrl }}" alt="{{ $gallery->title }} video">
+
+                                        <div class="video-icon">
+                                            <i class="fa-solid fa-play"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+
                     @endforeach
 
-                @endforeach
+                    {{-- Optional: empty state --}}
+                    @php
+                        // recompute emptiness after filtering posters out of images
+                        $hasMedia = $artGalleries->some(function($g) {
+                          $videos = $g->getMedia('videos');
+                          $images = $g->getMedia('images');
+                          $posterIds = $videos->map(fn($v) => $v->getCustomProperty('poster_media_id'))
+                                              ->filter()->values()->all();
+                          if (!empty($posterIds)) {
+                            $images = $images->reject(fn($m) => in_array($m->id, $posterIds, true));
+                          }
+                          return $images->isNotEmpty() || $videos->isNotEmpty();
+                        });
+                    @endphp
 
-                {{-- Optional: empty state --}}
-                @php
-                    // recompute emptiness after filtering posters out of images
-                    $hasMedia = $artGalleries->some(function($g) {
-                      $videos = $g->getMedia('videos');
-                      $images = $g->getMedia('images');
-                      $posterIds = $videos->map(fn($v) => $v->getCustomProperty('poster_media_id'))
-                                          ->filter()->values()->all();
-                      if (!empty($posterIds)) {
-                        $images = $images->reject(fn($m) => in_array($m->id, $posterIds, true));
-                      }
-                      return $images->isNotEmpty() || $videos->isNotEmpty();
-                    });
-                @endphp
-
-                @unless($hasMedia)
-                    <div class="col-12 text-center text-muted py-5">Keine Medien gefunden.</div>
-                @endunless
+                    @unless($hasMedia)
+                        <div class="col-12 text-center text-muted py-5">Keine Medien gefunden.</div>
+                    @endunless
+                </div>
             </div>
         </div>
-    </div>
-    <!-- gallery-area end -->
+        <!-- gallery-area end -->
+    @endif
 
 
     <!-- team-area -->
@@ -545,11 +555,11 @@
                 <div class="col-lg-6">
                     <div class="faq-right wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="site-heading mb-3">
-                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Häufig gestellte Fragen</span>
+                            <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> FAQ</span>
                             <h2 class="site-title my-3">Allgemein <span>häufig</span> gestellte Fragen</h2>
                         </div>
                         <p class="about-text">
-                            Finden Sie schnelle Antworten auf die häufigsten Fragen zu unseren Handy-Reparaturservices.
+                            Antworten auf die häufigsten Fragen zu unseren Reparaturservices.
                         </p>
                         <div class="mt-4">
                             <div class="accordion" id="accordionExample">
@@ -585,7 +595,7 @@
             <div class="row">
                 <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Referenzen</span>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Kundenbewertungen</span>
                         <h2 class="site-title text-white">Welcher Kunde <span>Sagen Sie</span> Über uns</h2>
                         <div class="heading-divider"></div>
                     </div>
@@ -632,7 +642,7 @@
             <div class="row">
                 <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Unser Blog</span>
+                        <span class="site-title-tagline"><i class="fas fa-bring-forward"></i> Bleiben Sie informiert</span>
                         <h2 class="site-title">Letzte <span>Blogs</span></h2>
                         <div class="heading-divider"></div>
                     </div>
