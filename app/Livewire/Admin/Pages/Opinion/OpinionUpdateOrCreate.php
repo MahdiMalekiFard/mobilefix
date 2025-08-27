@@ -4,16 +4,16 @@ namespace App\Livewire\Admin\Pages\Opinion;
 
 use App\Actions\Opinion\StoreOpinionAction;
 use App\Actions\Opinion\UpdateOpinionAction;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Opinion;
 use App\Traits\CrudHelperTrait;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class OpinionUpdateOrCreate extends Component
+class OpinionUpdateOrCreate extends BaseAdminComponent
 {
     use CrudHelperTrait, Toast, WithFileUploads;
 

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Pages\Blog;
 use App\Actions\Blog\StoreBlogAction;
 use App\Actions\Blog\UpdateBlogAction;
 use App\Enums\CategoryTypeEnum;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Livewire\Traits\SeoOptionTrait;
 use App\Models\Blog;
 use App\Models\Category;
@@ -12,11 +13,10 @@ use App\Traits\CrudHelperTrait;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class BlogUpdateOrCreate extends Component
+class BlogUpdateOrCreate extends BaseAdminComponent
 {
     use CrudHelperTrait, SeoOptionTrait, Toast, WithFileUploads;
 

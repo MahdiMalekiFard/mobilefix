@@ -5,32 +5,32 @@ namespace App\Livewire\Admin\Pages\Faq;
 use App\Actions\Faq\StoreFaqAction;
 use App\Actions\Faq\UpdateFaqAction;
 use App\Enums\CategoryTypeEnum;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Category;
 use App\Models\Faq;
 use App\Traits\CrudHelperTrait;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Livewire\Component;
 use Mary\Traits\Toast;
 
-class FaqUpdateOrCreate extends Component
+class FaqUpdateOrCreate extends BaseAdminComponent
 {
-    use Toast, CrudHelperTrait;
+    use CrudHelperTrait, Toast;
 
-    public Faq     $model;
+    public Faq $model;
     public ?string $title       = '';
     public ?string $description = '';
-    public bool    $published   = false;
-    public bool    $favorite    = false;
-    public int     $ordering    = 1;
+    public bool $published      = false;
+    public bool $favorite       = false;
+    public int $ordering        = 1;
     public ?string $published_at;
-    public ?int    $category_id;
-    public array   $categories;
+    public ?int $category_id;
+    public array $categories;
 
     public function mount(Faq $faq): void
     {
-        $this->model = $faq;
+        $this->model      = $faq;
         $this->categories = Category::where('published', true)->where('type', CategoryTypeEnum::FAQ->value)->get()->map(function ($category) {
             return [
                 'id'    => $category->id,
@@ -40,12 +40,12 @@ class FaqUpdateOrCreate extends Component
         $this->category_id = count($this->categories) > 0 ? $this->categories[0]['id'] : null;
 
         if ($this->model->id) {
-            $this->title = $this->model->title;
-            $this->description = $this->model->description;
-            $this->published = $this->model->published->value;
-            $this->favorite = $this->model->favorite->value;
-            $this->ordering = $this->model->ordering;
-            $this->category_id = $this->model->category_id;
+            $this->title        = $this->model->title;
+            $this->description  = $this->model->description;
+            $this->published    = $this->model->published->value;
+            $this->favorite     = $this->model->favorite->value;
+            $this->ordering     = $this->model->ordering;
+            $this->category_id  = $this->model->category_id;
             $this->published_at = $this->setPublishedAt($this->model->published_at);
         }
     }
@@ -110,11 +110,11 @@ class FaqUpdateOrCreate extends Component
             'edit_mode'          => $this->model->id,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.faq.index'), 'label' => trans('general.page.index.title', ['model' => trans('faq.model')])],
+                ['link'  => route('admin.faq.index'), 'label' => trans('general.page.index.title', ['model' => trans('faq.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('faq.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.faq.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.faq.index'), 'icon' => 's-arrow-left'],
             ],
         ]);
     }

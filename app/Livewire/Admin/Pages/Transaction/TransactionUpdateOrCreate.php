@@ -4,27 +4,27 @@ namespace App\Livewire\Admin\Pages\Transaction;
 
 use App\Actions\Transaction\StoreTransactionAction;
 use App\Actions\Transaction\UpdateTransactionAction;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Transaction;
 use Illuminate\View\View;
-use Livewire\Component;
 use Mary\Traits\Toast;
 
-class TransactionUpdateOrCreate extends Component
+class TransactionUpdateOrCreate extends BaseAdminComponent
 {
     use Toast;
 
-    public Transaction   $model;
+    public Transaction $model;
     public string $title       = '';
     public string $description = '';
-    public bool   $published   = false;
+    public bool $published     = false;
 
     public function mount(Transaction $transaction): void
     {
         $this->model = $transaction;
         if ($this->model->id) {
-            $this->title = $this->model->title;
+            $this->title       = $this->model->title;
             $this->description = $this->model->description;
-            $this->published = $this->model->published->value;
+            $this->published   = $this->model->published->value;
         }
     }
 
@@ -33,7 +33,7 @@ class TransactionUpdateOrCreate extends Component
         return [
             'title'       => 'required|string',
             'description' => 'required|string',
-            'published'   => 'required'
+            'published'   => 'required',
         ];
     }
 
@@ -61,11 +61,11 @@ class TransactionUpdateOrCreate extends Component
             'edit_mode'          => $this->model->id,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.transaction.index'), 'label' => trans('general.page.index.title', ['model' => trans('transaction.model')])],
+                ['link'  => route('admin.transaction.index'), 'label' => trans('general.page.index.title', ['model' => trans('transaction.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('transaction.model')])],
             ],
             'breadcrumbsActions' => [
-                ['link' => route('admin.transaction.index'), 'icon' => 's-arrow-left']
+                ['link' => route('admin.transaction.index'), 'icon' => 's-arrow-left'],
             ],
         ]);
     }

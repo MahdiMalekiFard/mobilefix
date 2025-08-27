@@ -113,7 +113,7 @@
     },
     "clean_namespace": true,
     "declare_parentheses": true,
-    "declare_strict_types": true,
+    "declare_strict_types": false,
     "doctrine_annotation_indentation": true,
     "doctrine_annotation_spaces": true,
     "fully_qualified_strict_types": true,

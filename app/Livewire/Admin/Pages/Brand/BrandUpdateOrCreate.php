@@ -4,14 +4,14 @@ namespace App\Livewire\Admin\Pages\Brand;
 
 use App\Actions\Brand\StoreBrandAction;
 use App\Actions\Brand\UpdateBrandAction;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Livewire\Traits\SeoOptionTrait;
 use App\Models\Brand;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class BrandUpdateOrCreate extends Component
+class BrandUpdateOrCreate extends BaseAdminComponent
 {
     use SeoOptionTrait, Toast, WithFileUploads;
 

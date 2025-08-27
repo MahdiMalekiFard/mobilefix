@@ -4,13 +4,13 @@ namespace App\Livewire\Admin\Pages\Team;
 
 use App\Actions\Team\StoreTeamAction;
 use App\Actions\Team\UpdateTeamAction;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Team;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class TeamUpdateOrCreate extends Component
+class TeamUpdateOrCreate extends BaseAdminComponent
 {
     use Toast, WithFileUploads;
 

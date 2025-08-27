@@ -4,17 +4,17 @@ namespace App\Livewire\Admin\Pages\Service;
 
 use App\Actions\Service\StoreServiceAction;
 use App\Actions\Service\UpdateServiceAction;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Livewire\Traits\SeoOptionTrait;
 use App\Models\Service;
 use App\Traits\CrudHelperTrait;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class ServiceUpdateOrCreate extends Component
+class ServiceUpdateOrCreate extends BaseAdminComponent
 {
     use CrudHelperTrait, SeoOptionTrait, Toast, WithFileUploads;
 

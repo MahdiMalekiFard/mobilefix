@@ -5,14 +5,14 @@ namespace App\Livewire\Admin\Pages\Device;
 use App\Actions\Device\StoreDeviceAction;
 use App\Actions\Device\UpdateDeviceAction;
 use App\Enums\BooleanEnum;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Livewire\Traits\SeoOptionTrait;
 use App\Models\Brand;
 use App\Models\Device;
 use Illuminate\View\View;
-use Livewire\Component;
 use Mary\Traits\Toast;
 
-class DeviceUpdateOrCreate extends Component
+class DeviceUpdateOrCreate extends BaseAdminComponent
 {
     use SeoOptionTrait, Toast;
 

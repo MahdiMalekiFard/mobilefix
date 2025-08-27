@@ -6,31 +6,30 @@ namespace App\Livewire\Admin\Pages\Setting;
 
 use App\Actions\Setting\UpdateSettingAction;
 use App\Enums\SettingEnum;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Setting;
 use App\Services\Setting\SettingService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class SettingList extends Component
+class SettingList extends BaseAdminComponent
 {
-    use WithFileUploads, Toast;
+    use Toast, WithFileUploads;
 
     public Collection $settings;
 
     public $detail = [];
 
-    public array           $data = [];
+    public array $data = [];
     private SettingService $settingService;
 
     public function boot(SettingService $settingService): void
     {
         $this->settingService = $settingService;
-        $this->settings = Setting::get();
+        $this->settings       = Setting::get();
     }
 
     public function mount(): void
@@ -63,6 +62,7 @@ class SettingList extends Component
             'template' => $this->detail['key'],
             'value'    => $sendData,
         ];
+
         try {
             UpdateSettingAction::run(Setting::where('key', $this->detail['key'])->first(), $sendData);
             $this->success(
@@ -70,22 +70,21 @@ class SettingList extends Component
             );
         } catch (\App\Exceptions\ValidationException $e) {
             foreach (json_decode($e->getMessage(), true) as $key => $errorMessage) {
-//                $key = company.postal_code
-//
-//                dd([
-//                    $this->findDetailKey($key),
-//                    $this->detail
-//                ]);
+                //                $key = company.postal_code
+                //
+                //                dd([
+                //                    $this->findDetailKey($key),
+                //                    $this->detail
+                //                ]);
                 $this->addError($this->findDetailKey($key), $errorMessage[0]); // Add the error to the error bag
             }
         }
-
     }
 
     private function findDetailKey(string $errorKey): string
     {
-        $parts = explode('.', $errorKey); // Split the key into parts
-        $rowKey = $parts[0];              // First part (e.g., "company")
+        $parts   = explode('.', $errorKey); // Split the key into parts
+        $rowKey  = $parts[0];              // First part (e.g., "company")
         $itemKey = $parts[1] ?? null;     // Second part (e.g., "postal_code")
 
         foreach ($this->detail['rows'] as $rowIndex => $row) {

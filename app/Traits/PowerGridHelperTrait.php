@@ -1,23 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Traits;
 
 use App\Helpers\StringHelper;
+use Illuminate\Support\Facades\Lang;
 use Livewire\Attributes\On;
 
 trait PowerGridHelperTrait
 {
-    //    public function rendering(): void
-    //    {
-    //        $this->js("
-    //            document.querySelectorAll('[data-column=\"actions\"]').forEach(element => {element.removeAttribute('style')});
-    //            document.querySelectorAll('.powergrid-id').forEach(element => element.style.width = 0);
-    //            console.log('rendering');
-    //        ");
-    //    }
-
     #[On('toggle')]
     public function toggle($rowId, $field='published'): void
     {
@@ -54,5 +44,28 @@ trait PowerGridHelperTrait
          Livewire.dispatch("force-delete", { rowId: ' . $rowId . ' });
          }
          })');
+    }
+
+    /** Force translator to fallback just for admin area (UI strings only) */
+    private function forceAdminFallbackTranslator(): void
+    {
+        // works for normal requests and Livewire /livewire/message/* thanks to session flag
+        if (session('__area') === 'admin' || request()->is('admin/*')) {
+            $fallback = config('app.fallback_locale', 'en');
+            Lang::setLocale($fallback);
+            app('translator')->setLocale($fallback);
+        }
+    }
+
+    /** Runs on initial load (and before mount) */
+    public function boot(): void
+    {
+        $this->forceAdminFallbackTranslator();
+    }
+
+    /** Runs on every Livewire AJAX hydration */
+    public function hydrate(): void
+    {
+        $this->forceAdminFallbackTranslator();
     }
 }

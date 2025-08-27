@@ -16,6 +16,7 @@ class StoreAddressAction
      *     title:string,
      *     address:string,
      *     is_default:boolean,
+     *     user_id:int,
      * } $payload
      * @return Address
      * @throws Throwable

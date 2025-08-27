@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Livewire\Admin\Pages\User;
 
 use App\Helpers\PowerGridHelper;
@@ -27,15 +25,15 @@ final class UserIndex extends PowerGridComponent
     {
         $setup = [
             PowerGrid::header()
-                     ->includeViewOnTop('components.admin.shared.bread-crumbs')
-                     ->showSearchInput(),
+                ->includeViewOnTop('components.admin.shared.bread-crumbs')
+                ->showSearchInput(),
 
             PowerGrid::footer()
-                     ->showPerPage()
-                     ->showRecordCount(),
+                ->showPerPage()
+                ->showRecordCount(),
         ];
 
-        if ((new Agent())->isMobile()) {
+        if ((new Agent)->isMobile()) {
             $setup[] = PowerGrid::responsive()->fixedColumns('id', 'name', 'actions');
         }
 
@@ -47,7 +45,7 @@ final class UserIndex extends PowerGridComponent
     {
         return [
             ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-            ['label' => trans('general.page.index.title', ['model' => trans('user.model')])],
+            ['label' => trans('general.page.index.title', ['model' => trans('user.model')], locale: app()->getFallbackLocale())],
         ];
     }
 
@@ -55,7 +53,7 @@ final class UserIndex extends PowerGridComponent
     public function breadcrumbsActions(): array
     {
         return [
-            ['link' => route('admin.user.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('user.model')])],
+            ['link' => route('admin.user.create'), 'icon' => 's-plus', 'label' => trans('general.page.create.title', ['model' => trans('user.model')], locale: app()->getFallbackLocale())],
         ];
     }
 
@@ -77,10 +75,10 @@ final class UserIndex extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
-                        ->add('id')
-                        ->add('name')
-                        ->add('email')
-                        ->add('mobile');
+            ->add('id')
+            ->add('name')
+            ->add('email')
+            ->add('mobile');
     }
 
     public function columns(): array
@@ -88,16 +86,16 @@ final class UserIndex extends PowerGridComponent
         return [
             PowerGridHelper::columnId(),
             Column::make('Name', 'name')
-                  ->sortable()
-                  ->searchable(),
+                ->sortable()
+                ->searchable(),
 
             Column::make('Email', 'email')
-                  ->sortable()
-                  ->searchable(),
+                ->sortable()
+                ->searchable(),
 
             Column::make(trans('validation.attributes.mobile'), 'mobile')
-                  ->sortable()
-                  ->searchable(),
+                ->sortable()
+                ->searchable(),
 
             PowerGridHelper::columnCreatedAT('created_at'),
 

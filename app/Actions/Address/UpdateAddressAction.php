@@ -13,16 +13,13 @@ class UpdateAddressAction
 {
     use AsAction;
 
-    public function __construct(
-        private readonly SyncTranslationAction $syncTranslationAction,
-    ) {}
-
-
     /**
      * @param Address $address
      * @param array{
      *     title:string,
-     *     description:string
+     *     address:string,
+     *     is_default:boolean,
+     *     user_id:int,
      * }               $payload
      * @return Address
      * @throws Throwable
@@ -31,7 +28,6 @@ class UpdateAddressAction
     {
         return DB::transaction(function () use ($address, $payload) {
             $address->update($payload);
-            $this->syncTranslationAction->handle($address, Arr::only($payload, ['title', 'description']));
 
             return $address->refresh();
         });

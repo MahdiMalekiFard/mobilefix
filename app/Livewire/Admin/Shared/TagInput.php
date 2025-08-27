@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Admin\Shared;
 
+use App\Livewire\Admin\BaseAdminComponent;
 use Illuminate\View\View;
-use Livewire\Component;
 use Spatie\Tags\Tag;
 
-class TagInput extends Component
+class TagInput extends BaseAdminComponent
 {
     public array $selected = []; // bound to parent
     public array $options  = [];

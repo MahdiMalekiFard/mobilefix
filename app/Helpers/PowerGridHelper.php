@@ -81,7 +81,7 @@ class PowerGridHelper
             ])
             ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Update')))
             ->route("admin.{$param}.edit", [Str::camel($modelBase) => $row->id], '_self')
-            ->tooltip(trans('datatable.buttons.edit'));
+            ->tooltip(trans('datatable.buttons.edit', locale: app()->getFallbackLocale()));
 
         // Enable SPA nav for everything EXCEPT Page
         if ($param !== 'page') {
@@ -132,12 +132,12 @@ class PowerGridHelper
         return Button::add('delete')
             ->slot(self::iconDelete())
             ->attributes([
-                'wire:confirm' => trans('general.are_you_shure_to_delete_record'),
+                'wire:confirm' => trans('general.are_you_shure_to_delete_record', locale: app()->getFallbackLocale()),
                 'class'        => 'btn btn-square md:btn-sm btn-xs',
             ])
             ->can(auth()->user()->hasAnyPermission(PermissionsService::generatePermissionsByModel($row::class, 'Delete')))
             ->dispatch('force-delete', ['rowId' => $row->id])
-            ->tooltip(trans('datatable.buttons.delete'));
+            ->tooltip(trans('datatable.buttons.delete', locale: app()->getFallbackLocale()));
     }
 
     public static function btnMakeDefault(mixed $row)

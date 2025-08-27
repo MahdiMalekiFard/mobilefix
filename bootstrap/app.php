@@ -2,6 +2,8 @@
 
 use App\Http\Middleware\AdminPanelMiddleware;
 use App\Http\Middleware\Cors;
+use App\Http\Middleware\ForceTransToFallbackForAdmin;
+use App\Http\Middleware\SetArea;
 use App\Http\Middleware\UserDashboardMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,10 +19,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->appendToGroup('web', [
+            ForceTransToFallbackForAdmin::class,
+        ]);
+
         $middleware->alias([
-            'admin.panel'    => AdminPanelMiddleware::class,
-            'user.dashboard' => UserDashboardMiddleware::class,
-            'cors'           => Cors::class,
+            'area'                => SetArea::class,
+            'admin.panel'         => AdminPanelMiddleware::class,
+            'admin.transFallback' => ForceTransToFallbackForAdmin::class,
+            'user.dashboard'      => UserDashboardMiddleware::class,
+            'cors'                => Cors::class,
         ]);
 
         // Exclude payment webhooks from CSRF protection

@@ -4,14 +4,13 @@ namespace App\Livewire\Admin\Pages\Slider;
 
 use App\Actions\Slider\StoreSliderAction;
 use App\Actions\Slider\UpdateSliderAction;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Slider;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
-use Symfony\Component\HttpFoundation\File\File;
 
-class SliderUpdateOrCreate extends Component
+class SliderUpdateOrCreate extends BaseAdminComponent
 {
     use Toast, WithFileUploads;
 

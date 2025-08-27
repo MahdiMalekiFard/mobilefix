@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 return [
-    'submit'        => 'Einreichen',
-    'cancel'        => 'Stornieren',
-    'reset'         => 'Zurücksetzen',
-    'page'          => [
+    'submit'                         => 'Einreichen',
+    'cancel'                         => 'Stornieren',
+    'reset'                          => 'Zurücksetzen',
+    'page'                           => [
         'index'  => [
             'page_title' => ':model Liste',
             'title'      => 'Alle :model Artikel',
@@ -24,7 +24,9 @@ return [
             'desc'       => 'Alle Details von :model',
         ],
     ],
-    'page_sections' => [
+    'page_sections'                  => [
         'data' => 'Information',
     ],
+
+    'are_you_shure_to_delete_record' => 'Möchten Sie diesen Datensatz wirklich löschen?',
 ];

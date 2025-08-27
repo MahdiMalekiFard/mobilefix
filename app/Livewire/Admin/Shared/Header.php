@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Livewire\Admin\Shared;
 
 use App\Helpers\NotifyHelper;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\User;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\View\View;
-use Livewire\Component;
 use Mary\Traits\Toast;
 
-class Header extends Component
+class Header extends BaseAdminComponent
 {
     use Toast;
 

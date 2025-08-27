@@ -4,37 +4,37 @@ namespace App\Livewire\Admin\Pages\User;
 
 use App\Actions\User\StoreUserAction;
 use App\Actions\User\UpdateUserAction;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\User;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 use Spatie\Permission\Models\Role;
 
-class UserUpdateOrCreate extends Component
+class UserUpdateOrCreate extends BaseAdminComponent
 {
     use Toast,WithFileUploads;
 
-    public User   $user;
+    public User $user;
     public $avatar;
     public ?string $name                  = '';
     public ?string $email                 = '';
     public ?string $mobile                = '';
     public ?string $password              = '';
     public ?string $password_confirmation = '';
-    public bool   $status                = true;
-    public array  $rules                 = [];
-    public array  $selected_rules        = [];
+    public bool $status                   = true;
+    public array $rules                   = [];
+    public array $selected_rules          = [];
 
     public function mount(User $user): void
     {
-        $this->user = $user;
-        $this->rules = Role::all()->map(fn($item) => ['name' => $item->name, 'id' => $item->id])->toArray();
+        $this->user  = $user;
+        $this->rules = Role::all()->map(fn ($item) => ['name' => $item->name, 'id' => $item->id])->toArray();
         if ($this->user->id) {
-            $this->name = $this->user->name;
-            $this->email = $this->user->email;
-            $this->mobile = $this->user->mobile;
-            $this->status = $this->user->status->value;
+            $this->name           = $this->user->name;
+            $this->email          = $this->user->email;
+            $this->mobile         = $this->user->mobile;
+            $this->status         = $this->user->status->value;
             $this->selected_rules = $this->user->roles->pluck('id')->toArray();
         }
     }
@@ -53,7 +53,7 @@ class UserUpdateOrCreate extends Component
             'password'         => [
                 $this->user->id ? 'nullable' : 'required',
                 'min:8',
-                'confirmed'
+                'confirmed',
             ],
             'selected_rules'   => 'nullable|array',
             'selected_rules.*' => 'exists:roles,id',
@@ -68,7 +68,7 @@ class UserUpdateOrCreate extends Component
 
     public function submit(): void
     {
-        $payload = $this->validate();
+        $payload          = $this->validate();
         $payload['rules'] = $payload['selected_rules'];
 
         if ($this->user->id) {
@@ -77,7 +77,7 @@ class UserUpdateOrCreate extends Component
                 title: trans('general.model_has_updated_successfully', ['model' => trans('user.model')]),
                 redirectTo: route('admin.user.index')
             );
-        }else{
+        } else {
             StoreUserAction::run($payload);
             $this->success(
                 title: trans('general.model_has_stored_successfully', ['model' => trans('user.model')]),
@@ -92,7 +92,7 @@ class UserUpdateOrCreate extends Component
             'edit_mode'          => $this->user->id,
             'breadcrumbs'        => [
                 ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-                ['link' => route('admin.user.index'), 'label' => trans('general.page.index.title', ['model' => trans('user.model')])],
+                ['link'  => route('admin.user.index'), 'label' => trans('general.page.index.title', ['model' => trans('user.model')])],
                 ['label' => trans('general.page.create.title', ['model' => trans('user.model')])],
             ],
             'breadcrumbsActions' => [

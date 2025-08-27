@@ -10,4 +10,17 @@ return [
     'empty_table_description_user' => 'Sie haben noch keine Bestellungen. Erstellen Sie eine neue Bestellung, um loszulegen',
     'title'                        => 'Titel',
     'is_default'                   => 'Ist Standard',
+
+    'buttons'                      => [
+        'translate'   => 'Übersetzen',
+        'edit'        => 'Bearbeiten',
+        'delete'      => 'Löschen',
+        'show'        => 'Zeigen',
+        'create'      => 'Erstellen',
+        'store'       => 'Speichern',
+        'update'      => 'Aktualisieren',
+        'destroy'     => 'Löschen',
+        'toggle'      => 'Status umschalten',
+        'set_default' => 'Als Standard festlegen',
+    ],
 ];

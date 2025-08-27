@@ -5,15 +5,15 @@ namespace App\Livewire\Admin\Pages\Page;
 use App\Actions\Page\StorePageAction;
 use App\Actions\Page\UpdatePageAction;
 use App\Enums\PageTypeEnum;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Livewire\Traits\SeoOptionTrait;
 use App\Models\Page;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class PageUpdateOrCreate extends Component
+class PageUpdateOrCreate extends BaseAdminComponent
 {
     use SeoOptionTrait, Toast, WithFileUploads;
 

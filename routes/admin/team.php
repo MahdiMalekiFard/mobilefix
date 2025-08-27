@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 use App\Livewire\Admin\Pages\Team\TeamUpdateOrCreate;
 use App\Livewire\Admin\Pages\Team\TeamTable;
 use Illuminate\Support\Facades\Route;

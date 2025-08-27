@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Pages\Order;
 use App\Actions\Order\StoreOrderAction;
 use App\Actions\Order\UpdateOrderAction;
 use App\Enums\OrderStatusEnum;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Address;
 use App\Models\Brand;
 use App\Models\Device;
@@ -13,11 +14,10 @@ use App\Models\PaymentMethod;
 use App\Models\Problem;
 use App\Models\User;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class OrderUpdateOrCreate extends Component
+class OrderUpdateOrCreate extends BaseAdminComponent
 {
     use Toast, WithFileUploads;
 

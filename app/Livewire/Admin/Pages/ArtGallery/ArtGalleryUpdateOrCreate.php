@@ -4,14 +4,14 @@ namespace App\Livewire\Admin\Pages\ArtGallery;
 
 use App\Actions\ArtGallery\StoreArtGalleryAction;
 use App\Actions\ArtGallery\UpdateArtGalleryAction;
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\ArtGallery;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-class ArtGalleryUpdateOrCreate extends Component
+class ArtGalleryUpdateOrCreate extends BaseAdminComponent
 {
     use Toast, WithFileUploads;
 

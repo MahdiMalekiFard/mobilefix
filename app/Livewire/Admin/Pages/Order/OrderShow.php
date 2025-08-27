@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Admin\Pages\Order;
 
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Order;
-use Livewire\Component;
 
-class OrderShow extends Component
+class OrderShow extends BaseAdminComponent
 {
     public Order $model;
 

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Livewire\Admin\Shared;
 
 use App\Helpers\Utils;
+use App\Livewire\Admin\BaseAdminComponent;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Livewire\Component;
 use Mary\Traits\Toast;
 
-class DynamicTranslate extends Component
+class DynamicTranslate extends BaseAdminComponent
 {
     use Toast;
 

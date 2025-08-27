@@ -2,12 +2,11 @@
 
 namespace App\Livewire\Admin\Auth;
 
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\User;
 use Illuminate\View\View;
 
-use Livewire\Component;
-
-class LoginPage extends Component
+class LoginPage extends BaseAdminComponent
 {
     public string $email    = '';
     public string $password = '';

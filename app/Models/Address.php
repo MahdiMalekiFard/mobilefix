@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\BooleanEnum;
+use App\Traits\HasSchemalessAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSchemalessAttributes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
@@ -33,18 +33,14 @@ class Address extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
-        'config' => 'array',
+        'config'     => 'array',
     ];
 
     /**
      * Model Configuration --------------------------------------------------------------------------
      */
 
-
-    /**
-     * Model Relations --------------------------------------------------------------------------
-     */
-
+    /** Model Relations -------------------------------------------------------------------------- */
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -59,19 +55,13 @@ class Address extends Model
      * Model Scope --------------------------------------------------------------------------
      */
 
-
     /**
      * Model Attributes --------------------------------------------------------------------------
      */
 
-
-    /**
-     * Model Custom Methods --------------------------------------------------------------------------
-     */
-
+    /** Model Custom Methods -------------------------------------------------------------------------- */
     public function config()
     {
         return SchemalessAttributes::createForModel($this, 'config');
     }
-
 }

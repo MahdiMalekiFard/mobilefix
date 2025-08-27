@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Livewire\Admin\Pages\ContactUs;
 
+use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\ContactUs;
 use Livewire\Attributes\Computed;
-use Livewire\Component;
 
-final class ContactUsView extends Component
+final class ContactUsView extends BaseAdminComponent
 {
     public ContactUs $contactUs;
     public bool $wasUnread = false;
@@ -17,7 +17,7 @@ final class ContactUsView extends Component
     {
         $this->contactUs = $contactUs;
 
-        if (!$this->contactUs->is_read->value) {
+        if ( ! $this->contactUs->is_read->value) {
             $this->wasUnread = true;
             $this->contactUs->markAsRead();
             $this->contactUs->refresh();
@@ -29,7 +29,7 @@ final class ContactUsView extends Component
     {
         return [
             ['link' => route('admin.dashboard'), 'icon' => 's-home'],
-            ['link' => route('admin.contact-us.index'), 'label' => trans('contactUs.model')],
+            ['link'  => route('admin.contact-us.index'), 'label' => trans('contactUs.model')],
             ['label' => 'View Message'],
         ];
     }
