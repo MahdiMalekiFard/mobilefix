@@ -19,7 +19,7 @@ return [
         'processing'        => 'In Reparatur',
         'failed'            => 'Fehlgeschlagen',
         'cancelled_by_user' => 'Vom Benutzer abgebrochen',
-        'completed'         => 'Zahlung steht aus',
+        'completed'         => 'Auf Zahlung wartend',
         'paid'              => 'Bezahlt',
         'delivered'         => 'Geliefert',
         'received'          => 'Erhalten',

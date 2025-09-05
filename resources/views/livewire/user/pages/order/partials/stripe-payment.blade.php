@@ -25,7 +25,7 @@
 
     <div class="p-4 md:p-8 flex flex-col">
         @if($paymentData && $paymentData['success'])
-            <form id="stripe-payment-form" wire:key="stripe-form-{{ $currentTransaction->id ?? 'new' }}" wire:ignore.self 
+            <form id="stripe-payment-form" wire:key="stripe-form-{{ $currentTransaction->id ?? 'new' }}" wire:ignore.self
                   x-data="{ mounted: false }" x-on:submit.prevent
                   x-init="
                       $nextTick(() => {
@@ -45,7 +45,7 @@
                             <span class="text-red-500 ml-1">*</span>
                         </label>
                     </div>
-                    
+
                     <div class="bg-slate-50 rounded-2xl border-2 border-slate-200 p-3 md:p-4 transition-all duration-300 focus-within:border-indigo-400 focus-within:bg-white focus-within:shadow-lg">
                         <div id="stripe-card-element" class="stripe-element" wire:ignore>
                             <!-- Stripe Elements will create form elements here -->
@@ -57,7 +57,7 @@
                 <!-- Payment Buttons -->
                 <div class="flex flex-col md:flex-row gap-3 md:gap-4">
                     <!-- Back Button -->
-                    <button type="button" wire:click="goBack" 
+                    <button type="button" wire:click="goBack"
                             class="cursor-pointer group inline-flex items-center justify-center gap-2 md:gap-3 bg-white text-gray-700 border-2 border-slate-300 px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-slate-400 transition-all duration-300 order-2 md:order-1 disabled:opacity-50 disabled:cursor-not-allowed"
                             {{ $isProcessing ? 'disabled' : '' }}>
                         <div class="w-5 h-5 md:w-6 md:h-6 bg-slate-100 rounded-full flex items-center justify-center group-hover:bg-slate-200 group-hover:-translate-x-1 transition-all duration-300">
@@ -65,12 +65,12 @@
                         </div>
                         Go Back
                     </button>
-                    
+
                     <!-- Payment Button -->
-                    <button type="submit" id="stripe-submit-payment" 
+                    <button type="submit" id="stripe-submit-payment"
                             class="cursor-pointer group relative flex-1 inline-flex items-center justify-center gap-3 md:gap-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden order-1 md:order-2 disabled:opacity-75 disabled:cursor-not-allowed"
                             {{ $isProcessing ? 'disabled' : '' }}>
-                        
+
                         <span id="stripe-button-text" class="relative z-10 flex items-center gap-3 md:gap-4">
                             @if($isProcessing)
                                 <div class="flex items-center gap-2 md:gap-3">
@@ -92,7 +92,7 @@
                                 </div>
                             @endif
                         </span>
-                        
+
                         <!-- Hover Background -->
                         <div class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </button>
@@ -124,15 +124,15 @@
         font-size: 16px;
         min-height: 24px;
     }
-    
+
     .stripe-element.focused {
         outline: none;
     }
-    
+
     .stripe-element.invalid {
         border-color: #ef4444;
     }
-    
+
     .stripe-element.complete {
         border-color: #10b981;
     }
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let stripeInstance = null;
     let cardElement = null;
     // Note: do not rely on a global flag for handler attachment as Livewire re-renders DOM nodes
-    
+
     // Make the function globally available
     window.initStripePayment = function initStripe() {
         if (typeof Stripe === 'undefined') {
@@ -155,12 +155,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         const stripeConfig = @json($paymentConfigs['stripe'] ?? []);
         const paymentData = @json($paymentData ?? []);
-        
+
         if (!stripeConfig.publishable_key) {
             console.error('❌ Missing Stripe publishable key');
             return;
         }
-        
+
         if (!paymentData || !paymentData.client_secret) {
             console.error('❌ Missing Stripe client secret');
             return;
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             cardElement.mount('#stripe-card-element');
             console.log('✅ Stripe card element mounted successfully');
-            
+
         } catch (error) {
             console.error('❌ Failed to mount card element:', error);
             const errorElement = document.getElementById('stripe-card-errors');
@@ -255,13 +255,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
-            
+
             const submitButton = document.getElementById('stripe-submit-payment');
             if (!submitButton || !cardElement) {
                 console.error('❌ Submit button or card element not found');
                 return;
             }
-            
+
             submitButton.disabled = true;
             document.body.classList.add('loading');
 
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     submitButton.disabled = false;
                     document.body.classList.remove('loading');
-                    
+
                     @this.call('handlePaymentFailure', error.message, error.type || '', error.code || '', 'stripe');
                 } else {
                     @this.call('handlePaymentSuccess', paymentIntent.id, 'stripe');
