@@ -22,10 +22,10 @@ class RequestRepairForm extends Component
     public $phone;
     public $brand;
     public $model;
-    public $problems = [];
-    public $description;
-    public $videos = [];
-    public $images = [];
+    public $problems    = [];
+    public $description = '';
+    public $videos      = [];
+    public $images      = [];
 
     // Success modal properties
     public $trackingCode = null;
@@ -51,7 +51,7 @@ class RequestRepairForm extends Component
         return view('livewire.web.forms.request-repair-form', [
             'brands'       => $brands,
             'all_problems' => $all_problems,
-        ]);
+        ])->layout('components.layouts.web');
     }
 
     public function rules(): array

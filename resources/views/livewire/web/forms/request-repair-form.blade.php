@@ -86,24 +86,40 @@
                                 </select>
                             </div>
                         </div>
+
                         <!-- Problems dropdown selection -->
                         <div class="col-lg-3 col-md-6">
-                            <div class="form-group">
+                            <div class="form-group"
+                                 x-data="{ selectedProblems: @entangle('problems') }">
                                 <div class="dropdown" style="position: relative;">
-                                    <button class="form-select dropdown-toggle text-start" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" style="background: white; border-color: #ced4da;">
-                                        @if(empty($problems))
-                                            Wählen Sie Probleme
-                                        @else
-                                            {{ count($problems) }} problem{{ count($problems) == 1 ? '' : 's' }} ausgewählt
-                                        @endif
+                                    <button class="form-select dropdown-toggle text-start"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            data-bs-auto-close="outside"
+                                            aria-expanded="false"
+                                            style="background: white; border-color: #ced4da;">
+                                        <span
+                                            x-text="
+                                            selectedProblems.length === 0
+                                              ? 'Wählen Sie Probleme'
+                                              : (selectedProblems.length === 1
+                                                  ? '1 Problem ausgewählt'
+                                                  : `${selectedProblems.length} Probleme ausgewählt`)
+                                          ">
+                                        </span>
                                     </button>
-                                    <div class="dropdown-menu" style="width: 100%; max-height: 200px; overflow-y: auto; padding: 10px; z-index: 1050;">
+
+                                    <div class="dropdown-menu"
+                                         style="width: 100%; max-height: 200px; overflow-y: auto; padding: 10px; z-index: 1050;">
                                         @foreach($all_problems as $problem)
                                             <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" value="{{ $problem->id }}"
-                                                       id="problem_{{ $problem->id }}" wire:model.live="problems">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       value="{{ $problem?->id }}"
+                                                       id="problem_{{ $problem?->id }}"
+                                                       x-model="selectedProblems">
                                                 <label class="form-check-label" for="problem_{{ $problem->id }}">
-                                                    {{ $problem->title }}
+                                                    {{ $problem?->title }} ({{ $problem?->price_range }})
                                                 </label>
                                             </div>
                                         @endforeach
@@ -111,36 +127,85 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+
+                        <!-- Videos -->
+                        <div class="col-lg-3 col-md-6" wire:key="req-videos">
                             <div class="form-group">
-                                <div class="file-upload-wrapper">
-                                    <input type="file" class="form-control" name="videos[]" id="videos" wire:model="videos" multiple accept="video/*">
+                                <div class="file-upload-wrapper"
+                                     x-data="{ count: 0 }"
+                                     x-effect="count = Array.isArray($wire.videos) ? $wire.videos.length : 0">
+                                    <input type="file"
+                                           class="form-control"
+                                           name="videos[]"
+                                           id="videos"
+                                           x-ref="videosInput"
+                                           wire:model="videos"
+                                           multiple
+                                           accept="video/*"
+                                           @change="count = $event.target.files?.length || 0"/>
+
                                     <label for="videos" class="file-upload-label">
                                         <i class="fas fa-file"></i>
-                                        @if(is_array($videos) && count($videos) > 0)
-                                            Videos hochladen ({{ count($videos) }} ausgewählt)
-                                        @else
-                                            Videos hochladen
-                                        @endif
+                                        <span x-text="count ? `Videos hochladen (${count} ausgewählt)` : 'Videos hochladen'">
+                                          Videos hochladen
+                                        </span>
                                     </label>
+
+                                    <!-- Uploading state -->
+                                    <div class="mt-1 small text-muted" wire:loading wire:target="videos">
+                                        <i class="fas fa-spinner fa-spin me-1"></i> Videos werden hochgeladen …
+                                    </div>
+
+                                    <!-- Validation -->
+                                    @error('videos.*')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+
+                                    <!-- Clear native input after Livewire resets -->
+                                    <div x-effect="if (Array.isArray($wire.videos) && $wire.videos.length === 0) { $refs.videosInput.value = '' }"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+
+                        <!-- Images -->
+                        <div class="col-lg-3 col-md-6" wire:key="req-images">
                             <div class="form-group">
-                                <div class="file-upload-wrapper">
-                                    <input type="file" class="form-control" name="images[]" id="images" wire:model="images" multiple accept="image/*">
+                                <div class="file-upload-wrapper"
+                                     x-data="{ count: 0 }"
+                                     x-effect="count = Array.isArray($wire.images) ? $wire.images.length : 0">
+                                    <input type="file"
+                                           class="form-control"
+                                           name="images[]"
+                                           id="images"
+                                           x-ref="imagesInput"
+                                           wire:model="images"
+                                           multiple
+                                           accept="image/*"
+                                           @change="count = $event.target.files?.length || 0"/>
+
                                     <label for="images" class="file-upload-label">
                                         <i class="fas fa-file"></i>
-                                        @if(is_array($images) && count($images) > 0)
-                                            Bilder hochladen ({{ count($images) }} ausgewählt)
-                                        @else
-                                            Bilder hochladen
-                                        @endif
+                                        <span x-text="count ? `Bilder hochladen (${count} ausgewählt)` : 'Bilder hochladen'">
+                                          Bilder hochladen
+                                        </span>
                                     </label>
+
+                                    <!-- Uploading state -->
+                                    <div class="mt-1 small text-muted" wire:loading wire:target="images">
+                                        <i class="fas fa-spinner fa-spin me-1"></i> Bilder werden hochgeladen …
+                                    </div>
+
+                                    <!-- Validation -->
+                                    @error('images.*')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+
+                                    <!-- Clear native input after Livewire resets -->
+                                    <div x-effect="if (Array.isArray($wire.images) && $wire.images.length === 0) { $refs.imagesInput.value = '' }"></div>
                                 </div>
                             </div>
                         </div>
+
                         <script>
                             function filterModelsByBrand() {
                                 var brandSelect = document.getElementById('brand-select');
@@ -150,69 +215,130 @@
                                 // Hide all model options except the placeholder
                                 for (var i = 0; i < modelSelect.options.length; i++) {
                                     var option = modelSelect.options[i];
-                                    if (option.value === "") {
-                                        option.style.display = "";
+                                    if (option.value === '') {
+                                        option.style.display = '';
                                         option.selected = true;
                                     } else if (option.getAttribute('data-brand') === selectedBrand) {
-                                        option.style.display = "";
+                                        option.style.display = '';
                                     } else {
-                                        option.style.display = "none";
+                                        option.style.display = 'none';
                                     }
                                 }
                                 // Reset model select to placeholder
-                                modelSelect.value = "";
+                                modelSelect.value = '';
                             }
                         </script>
                     </div>
-                    <div class="row mt-3">
+
+                    <div class="row mt-3"
+                         x-data="{ uploading:false, desc:@entangle('description') }"
+                         x-on:livewire-upload-start.window="uploading = true"
+                         x-on:livewire-upload-finish.window="uploading = false"
+                         x-on:livewire-upload-error.window="uploading = false">
+
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <button type="button" class="description-btn w-100" data-bs-toggle="modal" data-bs-target="#descriptionModal">
-                                    <i class="fas fa-edit"></i> Beschreibung hinzufügen
+                                <button type="button"
+                                        :class="{ 'opacity-50 cursor-not-allowed': uploading }"
+                                        class="description-btn w-100"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#descriptionModal"
+                                        :disabled="uploading"
+                                        :title="uploading ? 'Bitte warten – Upload läuft' : ''"
+                                        :style="(desc && desc.trim().length)
+                                                    ? 'background:#28a745;border-color:#28a745;color:#fff'
+                                                    : ''">
+                                    <template x-if="uploading">
+                                        <span><i class="fas fa-spinner fa-spin"></i> Upload läuft …</span>
+                                    </template>
+                                    <template x-if="!uploading">
+                                          <span>
+                                                <i :class="(desc && desc.trim().length) ? 'fas fa-check' : 'fas fa-edit'"></i>
+                                                <span x-text="(desc && desc.trim().length)
+                                                                ? 'Beschreibung hinzugefügt'
+                                                                : 'Beschreibung hinzufügen'">
+                                                </span>
+                                          </span>
+                                    </template>
                                 </button>
                             </div>
                         </div>
+
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <button type="submit" class="theme-btn theme-btn2 w-100">
-                                    <i class="fas fa-tools"></i> Reparatur anfordern
+                                <button type="submit"
+                                        class="theme-btn theme-btn2 w-100"
+                                        :disabled="uploading"
+                                        :class="{ 'opacity-50 cursor-not-allowed': uploading }"
+                                >
+                                    <template x-if="uploading">
+                                        <span><i class="fas fa-spinner fa-spin me-1"></i> Upload läuft …</span>
+                                    </template>
+                                    <template x-if="!uploading">
+                                        <span><i class="fas fa-tools"></i> Reparatur anfordern</span>
+                                    </template>
                                 </button>
                             </div>
                         </div>
                     </div>
+
                 </form>
             </div>
         </div>
     </div>
 
     <!-- Description Modal Start -->
-    <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+    <div class="modal fade" id="descriptionModal" tabindex="-1"
+         aria-labelledby="descriptionModalLabel" aria-hidden="true"
+         wire:ignore.self
+         x-data="{
+        desc: @entangle('description'),
+        draft: '',
+        init() {
+              const el = document.getElementById('descriptionModal');
+              // When opening: copy committed value into draft
+              el.addEventListener('show.bs.modal', () => { this.draft = this.desc || '' });
+              // When fully hidden: clear draft (optional)
+              el.addEventListener('hidden.bs.modal', () => { this.draft = '' });
+            }
+        }"
+    >
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="descriptionModalLabel">
                         <i class="fas fa-edit"></i> Beschreiben Sie Ihr Problem
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="problemDescription" class="form-label">Bitte geben Sie detaillierte Informationen zum Problem an:</label>
-                        <textarea class="form-control" id="problemDescription" name="description" wire:model="description" rows="6"
-                                    placeholder="Beschreiben Sie das Problem, das Sie mit Ihrem Gerät haben. Geben Sie an, wann es aufgetreten ist, was die Ursache sein könnte und alle anderen relevanten Details..."></textarea>
+                        <label for="problemDescription" class="form-label">
+                            Bitte geben Sie detaillierte Informationen zum Problem an:
+                        </label>
+                        <textarea class="form-control" id="problemDescription" rows="6"
+                                  x-model="draft"
+                                  placeholder="Beschreiben Sie das Problem …"></textarea>
                     </div>
                     <div class="mt-3">
                         <small class="text-muted">
                             <i class="fas fa-info-circle"></i>
-                            Je detaillierter Ihre Beschreibung ist, desto besser können wir Sie bei Ihrem Reparaturbedarf unterstützen.
+                            Je detaillierter Ihre Beschreibung …
                         </small>
                     </div>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <!-- Cancel = discard current draft AND clear committed value -->
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="desc = ''">
                         <i class="fas fa-times"></i> Stornieren
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="saveDescription()" data-bs-dismiss="modal">
+
+                    <!-- Save = commit draft -->
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            @click="desc = draft">
                         <i class="fas fa-save"></i> Beschreibung speichern
                     </button>
                 </div>
@@ -300,7 +426,7 @@
 
         .tracking-code-container h3 {
             font-size: 2.5rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         #formOverlay {
@@ -450,8 +576,12 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .theme-btn2.w-100 {
@@ -543,10 +673,10 @@
         }
 
         // Auto-resize textarea and form submission handler
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const textarea = document.getElementById('problemDescription');
             if (textarea) {
-                textarea.addEventListener('input', function() {
+                textarea.addEventListener('input', function () {
                     this.style.height = 'auto';
                     this.style.height = (this.scrollHeight) + 'px';
                 });
@@ -555,7 +685,7 @@
             // Handle form submission to reset description button
             const form = document.querySelector('.appointment-form form');
             if (form) {
-                form.addEventListener('submit', function() {
+                form.addEventListener('submit', function () {
                     const addDescButton = document.querySelector('[data-bs-target="#descriptionModal"]');
                     if (addDescButton && addDescButton.getAttribute('data-description-added') === 'true') {
                         addDescButton.innerHTML = '<i class="fas fa-edit"></i> Beschreibung hinzufügen';
@@ -592,7 +722,7 @@
                 button.classList.remove('btn-outline-primary');
                 button.classList.add('btn-success');
 
-                setTimeout(function() {
+                setTimeout(function () {
                     button.innerHTML = originalText;
                     button.classList.remove('btn-success');
                     button.classList.add('btn-outline-primary');
@@ -601,9 +731,9 @@
 
             // Try modern clipboard API first
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(trackingCode).then(function() {
+                navigator.clipboard.writeText(trackingCode).then(function () {
                     showSuccess();
-                }).catch(function(err) {
+                }).catch(function (err) {
                     console.log('Clipboard API failed, trying fallback method:', err);
                     fallbackCopyTextToClipboard(trackingCode, showSuccess);
                 });
@@ -614,14 +744,14 @@
         }
 
         function fallbackCopyTextToClipboard(text, successCallback) {
-            const textArea = document.createElement("textarea");
+            const textArea = document.createElement('textarea');
             textArea.value = text;
 
             // Avoid scrolling to bottom
-            textArea.style.top = "0";
-            textArea.style.left = "0";
-            textArea.style.position = "fixed";
-            textArea.style.opacity = "0";
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            textArea.style.position = 'fixed';
+            textArea.style.opacity = '0';
 
             document.body.appendChild(textArea);
             textArea.focus();
@@ -664,7 +794,7 @@
             button.classList.remove('btn-outline-secondary');
             button.classList.add('btn-success');
 
-            setTimeout(function() {
+            setTimeout(function () {
                 button.innerHTML = originalText;
                 button.classList.remove('btn-success');
                 button.classList.add('btn-outline-secondary');
@@ -685,7 +815,7 @@
             const form = document.querySelector('.appointment-form form');
             if (form) {
                 const inputs = form.querySelectorAll('input, select, textarea, button');
-                inputs.forEach(function(input) {
+                inputs.forEach(function (input) {
                     input.disabled = true;
                 });
             }
@@ -705,12 +835,13 @@
             const form = document.querySelector('.appointment-form form');
             if (form) {
                 const inputs = form.querySelectorAll('input, select, textarea, button');
-                inputs.forEach(function(input) {
+                inputs.forEach(function (input) {
                     input.disabled = false;
                 });
             }
 
-            @this.call('modalClosed');
+            @this.
+            call('modalClosed');
         }
 
         // Listen for Livewire events to show success modal

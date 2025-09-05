@@ -49,9 +49,26 @@ class Problem extends Model
      * Model Scope --------------------------------------------------------------------------
      */
 
-    /**
-     * Model Attributes --------------------------------------------------------------------------
-     */
+    /** Model Attributes -------------------------------------------------------------------------- */
+    public function getPriceRangeAttribute()
+    {
+        $minPrice = (float) $this->min_price;
+        $maxPrice = (float) $this->max_price;
+
+        if ($minPrice && $maxPrice) {
+            if ($minPrice == $maxPrice) {
+                return number_format($minPrice, 0) . ' ' . __('general.currency');
+            }
+
+            return number_format($minPrice, 0) . ' - ' . number_format($maxPrice, 0) . ' ' . __('general.currency');
+        } elseif ($minPrice) {
+            return number_format($minPrice, 0) . ' ' . __('general.currency') . ' +';
+        } elseif ($maxPrice) {
+            return __('general.price_up_to') . ' ' . number_format($maxPrice, 0) . ' ' . __('general.currency');
+        }
+
+        return __('general.not_set');
+    }
 
     /** Model Custom Methods -------------------------------------------------------------------------- */
     public function config()

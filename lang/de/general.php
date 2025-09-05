@@ -29,4 +29,6 @@ return [
     ],
 
     'are_you_shure_to_delete_record' => 'Möchten Sie diesen Datensatz wirklich löschen?',
+    'currency'                       => 'EUR',
+    'price_up_to'                    => 'Bis zu',
 ];
