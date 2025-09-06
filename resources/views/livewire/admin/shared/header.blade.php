@@ -18,7 +18,7 @@
         </form>
         <div class="flex items-center gap-x-4 lg:gap-x-6">
 
-            <x-popover>
+            {{--<x-popover>
                 <x-slot:trigger class="btn-ghost">
                     <x-icon name="o-rectangle-stack"/>
                 </x-slot:trigger>
@@ -42,14 +42,14 @@
                         <x-icon name="lucide.activity"/>
                     </x-button>
                 </x-slot:content>
-            </x-popover>
+            </x-popover>--}}
 
-            <x-button
+            {{--<x-button
                     class="btn-sm btn-ghost hover-none"
                     icon="o-bell-alert"
-                    {{--                    :link="route('admin.notification.index')"--}}
+                    :link="route('admin.notification.index')"
                     wire:click="$toggle('notifications_drawer')"
-            />
+            />--}}
 {{--            <x-theme-toggle/>--}}
             <x-mx.theme-toggle mode="tinymce" selector=".tox-tinymce" class="btn btn-ghost" />
 

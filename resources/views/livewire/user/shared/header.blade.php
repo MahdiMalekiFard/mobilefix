@@ -25,7 +25,7 @@
                 <span class="hidden sm:inline">Webseite</span>
             </a>
 
-            <x-popover>
+            {{--<x-popover>
                 <x-slot:trigger class="btn-ghost">
                     <x-icon name="o-rectangle-stack"/>
                 </x-slot:trigger>
@@ -49,14 +49,14 @@
                         <x-icon name="lucide.activity"/>
                     </x-button>
                 </x-slot:content>
-            </x-popover>
+            </x-popover>--}}
 
-            <x-button
+            {{--<x-button
                     class="btn-sm btn-ghost hover-none"
                     icon="o-bell-alert"
-                    {{--                    :link="route('admin.notification.index')"--}}
+                    :link="route('admin.notification.index')"
                     wire:click="$toggle('notifications_drawer')"
-            />
+            />--}}
             <x-mx.theme-toggle mode="tinymce" selector=".tox-tinymce" class="btn btn-ghost" />
 
             <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true"></div>
