@@ -118,7 +118,31 @@ class WebhookController extends Controller
             'order_id' => $paymentIntent->metadata['order_id'] ?? null
         ]);
 
-        $this->stripeService->handleSuccessfulPayment($paymentIntent);
+        // Find the transaction using the payment intent ID
+        $transaction = \App\Models\Transaction::where('external_id', $paymentIntent->id)->first();
+        
+        if ($transaction) {
+            try {
+                $this->stripeService->handleSuccessfulPayment($transaction, $paymentIntent->toArray());
+                
+                Log::info('Payment intent processed successfully', [
+                    'payment_intent_id' => $paymentIntent->id,
+                    'transaction_id' => $transaction->transaction_id,
+                    'order_id' => $transaction->order_id
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Failed to process payment intent', [
+                    'payment_intent_id' => $paymentIntent->id,
+                    'transaction_id' => $transaction->transaction_id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        } else {
+            Log::warning('Transaction not found for payment intent', [
+                'payment_intent_id' => $paymentIntent->id,
+                'order_id' => $paymentIntent->metadata['order_id'] ?? null
+            ]);
+        }
     }
 
     /**
@@ -136,7 +160,31 @@ class WebhookController extends Controller
             'error' => $paymentIntent->last_payment_error->message ?? 'Unknown error'
         ]);
 
-        $this->stripeService->handleFailedPayment($paymentIntent);
+        // Find the transaction using the payment intent ID
+        $transaction = \App\Models\Transaction::where('external_id', $paymentIntent->id)->first();
+        
+        if ($transaction) {
+            try {
+                $this->stripeService->handleFailedPayment($transaction, $paymentIntent->toArray());
+                
+                Log::info('Failed payment intent processed', [
+                    'payment_intent_id' => $paymentIntent->id,
+                    'transaction_id' => $transaction->transaction_id,
+                    'order_id' => $transaction->order_id
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Failed to process failed payment intent', [
+                    'payment_intent_id' => $paymentIntent->id,
+                    'transaction_id' => $transaction->transaction_id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        } else {
+            Log::warning('Transaction not found for failed payment intent', [
+                'payment_intent_id' => $paymentIntent->id,
+                'order_id' => $paymentIntent->metadata['order_id'] ?? null
+            ]);
+        }
     }
 
     /**

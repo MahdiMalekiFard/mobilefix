@@ -333,17 +333,29 @@ class StripeService implements PaymentServiceInterface
                     'external_id' => $sessionId,
                 ]);
 
-                // Update order status to paid
+                // Update order status to paid and set payment method
                 $order = $transaction->order;
                 if ($order) {
-                    $order->update([
+                    // Find the Stripe payment method
+                    $stripePaymentMethod = \App\Models\PaymentMethod::where('provider', \App\Enums\PaymentProviderEnum::STRIPE->value)
+                        ->where('published', \App\Enums\BooleanEnum::ENABLE->value)
+                        ->first();
+                    
+                    $updateData = [
                         'status' => \App\Enums\OrderStatusEnum::PAID->value,
-                    ]);
+                    ];
+                    
+                    if ($stripePaymentMethod) {
+                        $updateData['payment_method_id'] = $stripePaymentMethod->id;
+                    }
+                    
+                    $order->update($updateData);
                     
                     Log::info('Order marked as paid via Stripe Checkout', [
                         'order_id' => $order->id,
                         'transaction_id' => $transaction->transaction_id,
                         'session_id' => $sessionId,
+                        'payment_method_id' => $stripePaymentMethod?->id,
                     ]);
                 }
             }
@@ -414,14 +426,23 @@ class StripeService implements PaymentServiceInterface
             'net_amount' => $netAmount,
         ]);
 
-        // Update order status
+        // Update order status and set payment method
         $order = $transaction->order;
         if ($order) {
-            $order->update([
+            // Find the Stripe payment method
+            $stripePaymentMethod = \App\Models\PaymentMethod::where('provider', \App\Enums\PaymentProviderEnum::STRIPE->value)
+                ->where('published', \App\Enums\BooleanEnum::ENABLE->value)
+                ->first();
+            
+            $updateData = [
                 'status' => \App\Enums\OrderStatusEnum::PAID->value,
-            ]);
-
-
+            ];
+            
+            if ($stripePaymentMethod) {
+                $updateData['payment_method_id'] = $stripePaymentMethod->id;
+            }
+            
+            $order->update($updateData);
         }
     }
 

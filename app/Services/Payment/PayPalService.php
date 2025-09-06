@@ -273,17 +273,29 @@ class PayPalService implements PaymentServiceInterface
             'net_amount' => $netAmount,
         ]);
 
-        // Update order status
+        // Update order status and set payment method
         $order = $transaction->order;
         if ($order) {
-            $order->update([
+            // Find the PayPal payment method
+            $paypalPaymentMethod = \App\Models\PaymentMethod::where('provider', \App\Enums\PaymentProviderEnum::PAYPAL->value)
+                ->where('published', \App\Enums\BooleanEnum::ENABLE->value)
+                ->first();
+            
+            $updateData = [
                 'status' => \App\Enums\OrderStatusEnum::PAID->value,
-            ]);
+            ];
+            
+            if ($paypalPaymentMethod) {
+                $updateData['payment_method_id'] = $paypalPaymentMethod->id;
+            }
+            
+            $order->update($updateData);
 
             Log::info('Order payment completed via PayPal transaction', [
                 'order_id' => $order->id,
                 'transaction_id' => $transaction->transaction_id,
-                'paypal_order_id' => $gatewayResponse['id'] ?? null
+                'paypal_order_id' => $gatewayResponse['id'] ?? null,
+                'payment_method_id' => $paypalPaymentMethod?->id,
             ]);
         }
     }

@@ -6,6 +6,7 @@
     'searchable' => true,
     'required' => false,
     'disabled' => false,
+    'clearable' => false,
     'hint' => '',
     'error' => null,
     'multiselect' => false,
@@ -45,6 +46,7 @@
         searchable: {{ $searchable ? 'true' : 'false' }},
         placeholder: '{{ $placeholder }}',
         disabled: {{ $disabled ? 'true' : 'false' }},
+        clearable: {{ $clearable ? 'true' : 'false' }},
         multiselect: {{ $multiselect ? 'true' : 'false' }}
     })" class="relative">
         
@@ -79,7 +81,8 @@
                         <template x-for="option in selectedOptions" :key="option.value">
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
                                 <span x-text="option.label"></span>
-                                <button type="button" @click.stop="removeOption(option)"
+                                <button type="button" @click.stop="!disabled && removeOption(option)"
+                                    x-show="!disabled"
                                     class="ml-1 inline-flex text-indigo-400 hover:text-indigo-600">
                                     <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -92,6 +95,16 @@
                     </div>
                 </template>
             </div>
+            
+            <!-- Clear Button -->
+            <template x-if="clearable && !disabled && hasValue()">
+                <button type="button" @click.stop="clearSelection()" 
+                    class="absolute inset-y-0 right-8 flex items-center text-gray-400 hover:text-gray-600">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </template>
             
             <!-- Dropdown Icon -->
             <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -181,6 +194,7 @@ function select(config) {
         searchable: config.searchable,
         placeholder: config.placeholder,
         disabled: config.disabled,
+        clearable: config.clearable,
         multiselect: config.multiselect,
         
         get selectedOption() {
@@ -212,6 +226,7 @@ function select(config) {
         },
         
         selectOption(option) {
+            if (this.disabled) return;
             if (this.multiselect) {
                 if (this.isSelected(option)) {
                     this.removeOption(option);
@@ -226,15 +241,36 @@ function select(config) {
         },
         
         addOption(option) {
+            if (this.disabled) return;
             if (!this.model) this.model = [];
             if (!Array.isArray(this.model)) this.model = [this.model];
             this.model.push(option.value);
         },
         
         removeOption(option) {
+            if (this.disabled) return;
             if (this.model && Array.isArray(this.model)) {
                 this.model = this.model.filter(value => value !== option.value);
             }
+        },
+        
+        hasValue() {
+            if (this.multiselect) {
+                return this.model && Array.isArray(this.model) && this.model.length > 0;
+            } else {
+                return this.model !== null && this.model !== undefined && this.model !== '';
+            }
+        },
+        
+        clearSelection() {
+            if (this.disabled) return;
+            if (this.multiselect) {
+                this.model = [];
+            } else {
+                this.model = null;
+            }
+            this.open = false;
+            this.search = '';
         }
     }
 }

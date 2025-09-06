@@ -134,6 +134,7 @@
                       :options="$paymentMethods->map(function($paymentMethod) { return ['value' => $paymentMethod->id, 'label' => $paymentMethod->title]; })"
                       placeholder="{{ trans('order.select_payment_method') }}"
                       searchable
+                      clearable
                       :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
             />
         </div>
@@ -146,6 +147,7 @@
                   :options="$problems->map(function($problem) { return ['value' => $problem->id, 'label' => $problem->title]; })"
                   placeholder="{{ trans('order.select_problems') }}"
                   searchable
+                  clearable
                   multiselect
                   :error="$errors->first('selectedProblems')"
                   :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"
@@ -310,7 +312,7 @@
         </div>
     </x-card>
 
-    <x-admin.shared.form-actions/>
+    <x-admin.shared.form-actions :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"/>
 </form>
 
 <!-- Image Modal (Outside the form to prevent form submission) -->
