@@ -290,6 +290,8 @@ class UserOrderPay extends Component
             return;
         }
 
+        Log::info('123');
+
         $this->isProcessing = true;
 
         try {
@@ -406,9 +408,8 @@ class UserOrderPay extends Component
             
             $result = $paymentService->createCheckoutSession($this->currentTransaction, [
                 'success_url' => route('user.order.payment.success', [
-                    'order' => $this->order->id,
-                    'session_id' => '{CHECKOUT_SESSION_ID}'
-                ]),
+                    'order' => $this->order->id
+                ]) . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('user.order.pay', ['order' => $this->order->id])
             ]);
 

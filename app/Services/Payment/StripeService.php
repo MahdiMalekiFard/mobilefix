@@ -265,7 +265,7 @@ class StripeService implements PaymentServiceInterface
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => $options['success_url'] ?? route('user.order.payment.success', ['order' => $order->id, 'session_id' => '{CHECKOUT_SESSION_ID}']),
+                'success_url' => $options['success_url'] ?? route('user.order.payment.success', ['order' => $order->id]) . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => $options['cancel_url'] ?? route('user.order.payment.cancel', ['order' => $order->id]),
                 'metadata' => [
                     'transaction_id' => $transaction->transaction_id,
@@ -318,8 +318,11 @@ class StripeService implements PaymentServiceInterface
         try {
             // Retrieve the checkout session
             $session = $this->stripe->checkout->sessions->retrieve($sessionId);
+
+            Log::info($sessionId);
             
             if ($session->payment_status === 'paid') {
+                Log::info('come to checkout success!');
                 // Retrieve the payment intent
                 $paymentIntent = $this->stripe->paymentIntents->retrieve($session->payment_intent);
                 

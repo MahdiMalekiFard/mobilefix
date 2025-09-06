@@ -19,11 +19,11 @@
             <!-- Step Circle -->
             <div class="flex items-center justify-center w-12 h-12 rounded-full text-sm font-bold transition-all duration-300 ease-in-out transform
                         @if($isCompleted)
-                            bg-green-500 text-white shadow-lg scale-105 ring-4 ring-green-200
+                            bg-green-500 dark:bg-green-600 text-white shadow-lg scale-105 ring-4 ring-green-200 dark:ring-green-800/50
                         @elseif($isCurrent)
-                            bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-xl scale-110 ring-4 ring-purple-300 animate-pulse
+                            bg-gradient-to-r from-purple-500 to-blue-600 dark:from-purple-600 dark:to-blue-700 text-white shadow-xl scale-110 ring-4 ring-purple-300 dark:ring-purple-700/50 animate-pulse
                         @else
-                            bg-gray-200 text-gray-600 hover:bg-gray-300
+                            bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600
                         @endif
                         @if($isAccessible && !$isCurrent) cursor-pointer hover:scale-105 hover:shadow-md @endif"
                  @if($isAccessible && !$isCurrent) 
@@ -41,11 +41,11 @@
             <!-- Step Title -->
             <div class="mt-3 text-xs font-medium text-center transition-colors duration-200
                         @if($isCurrent)
-                            text-purple-600 font-semibold
+                            text-purple-600 dark:text-purple-400 font-semibold
                         @elseif($isCompleted)
-                            text-green-600
+                            text-green-600 dark:text-green-400
                         @else
-                            text-gray-500
+                            text-gray-500 dark:text-gray-400
                         @endif">
                 {{ $stepTitle }}
             </div>
@@ -54,9 +54,9 @@
             @if(!$loop->last)
                 <div class="absolute top-6 left-full w-20 h-1 transition-all duration-300 z-0
                             @if($stepNumber < $currentStep) 
-                                bg-gradient-to-r from-green-500 to-green-400 
+                                bg-gradient-to-r from-green-500 to-green-400 dark:from-green-600 dark:to-green-500
                             @else 
-                                bg-gray-200 
+                                bg-gray-200 dark:bg-gray-700
                             @endif"></div>
             @endif
         </div>

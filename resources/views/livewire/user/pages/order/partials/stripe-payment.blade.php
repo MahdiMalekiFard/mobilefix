@@ -1,22 +1,22 @@
 <!-- Stripe Payment Container -->
-<div class="bg-slate-50 flex flex-col">
+<div class="bg-slate-50 dark:bg-slate-900 flex flex-col">
     <!-- Payment Header -->
-    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 md:p-8 text-white mt-4 mx-4 rounded-3xl shadow-xl mx-4 mt-4">
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-700 dark:to-purple-700 p-6 md:p-8 text-white mt-4 mx-4 rounded-3xl shadow-xl mx-4 mt-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3 md:gap-4">
                 <div class="w-10 h-10 md:w-12 md:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                     <i class="fab fa-stripe text-lg md:text-xl"></i>
                 </div>
                 <div>
-                    <h4 class="text-lg md:text-xl font-bold mb-1">Secure Payment</h4>
-                    <p class="text-indigo-100 text-sm md:text-base">Enter your card details below</p>
+                    <h4 class="text-lg md:text-xl font-bold mb-1">Sichere Zahlung</h4>
+                    <p class="text-indigo-100 dark:text-indigo-200 text-sm md:text-base">Geben Sie Ihre Kartendetails unten ein</p>
                 </div>
             </div>
             <!-- Total Amount in Header -->
             <div class="text-right">
                 <div class="flex items-center gap-2 text-white/90 text-xs md:text-sm font-medium mb-1">
                     <i class="fas fa-shield-alt"></i>
-                    <span>Secure Payment</span>
+                    <span>Sichere Zahlung</span>
                 </div>
                 <div class="text-2xl md:text-3xl font-bold">€{{ number_format($order->total, 2) }}</div>
             </div>
@@ -37,33 +37,33 @@
                 <!-- Card Information Section -->
                 <div class="mb-4 md:mb-6">
                     <div class="flex items-center gap-3 mb-3 md:mb-4">
-                        <div class="w-6 h-6 md:w-8 md:h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-credit-card text-indigo-600 text-xs md:text-sm"></i>
+                        <div class="w-6 h-6 md:w-8 md:h-8 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-credit-card text-indigo-600 dark:text-indigo-400 text-xs md:text-sm"></i>
                         </div>
-                        <label class="text-base md:text-lg font-semibold text-gray-900">
-                            Card Information
+                        <label class="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            Karteninformationen
                             <span class="text-red-500 ml-1">*</span>
                         </label>
                     </div>
 
-                    <div class="bg-slate-50 rounded-2xl border-2 border-slate-200 p-3 md:p-4 transition-all duration-300 focus-within:border-indigo-400 focus-within:bg-white focus-within:shadow-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-slate-200 dark:border-slate-700 p-3 md:p-4 transition-all duration-300 focus-within:border-indigo-400 dark:focus-within:border-indigo-500 focus-within:bg-white dark:focus-within:bg-slate-700 focus-within:shadow-lg">
                         <div id="stripe-card-element" class="stripe-element" wire:ignore>
                             <!-- Stripe Elements will create form elements here -->
                         </div>
                     </div>
-                    <div id="stripe-card-errors" role="alert" class="text-red-600 text-xs md:text-sm mt-2 font-medium"></div>
+                    <div id="stripe-card-errors" role="alert" class="text-red-600 dark:text-red-400 text-xs md:text-sm mt-2 font-medium"></div>
                 </div>
 
                 <!-- Payment Buttons -->
                 <div class="flex flex-col md:flex-row gap-3 md:gap-4">
                     <!-- Back Button -->
                     <button type="button" wire:click="goBack"
-                            class="cursor-pointer group inline-flex items-center justify-center gap-2 md:gap-3 bg-white text-gray-700 border-2 border-slate-300 px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-slate-400 transition-all duration-300 order-2 md:order-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="cursor-pointer group inline-flex items-center justify-center gap-2 md:gap-3 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-2 border-slate-300 dark:border-slate-600 px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-slate-400 dark:hover:border-slate-500 transition-all duration-300 order-2 md:order-1 disabled:opacity-50 disabled:cursor-not-allowed"
                             {{ $isProcessing ? 'disabled' : '' }}>
-                        <div class="w-5 h-5 md:w-6 md:h-6 bg-slate-100 rounded-full flex items-center justify-center group-hover:bg-slate-200 group-hover:-translate-x-1 transition-all duration-300">
+                        <div class="w-5 h-5 md:w-6 md:h-6 bg-slate-100 dark:bg-slate-600 rounded-full flex items-center justify-center group-hover:bg-slate-200 dark:group-hover:bg-slate-500 group-hover:-translate-x-1 transition-all duration-300">
                             <i class="fas fa-arrow-left text-xs md:text-sm"></i>
                         </div>
-                        Go Back
+                        Zurück
                     </button>
 
                     <!-- Payment Button -->
