@@ -69,6 +69,10 @@ class WebhookController extends Controller
                 $this->handlePaymentMethodAttached($event->data->object);
                 break;
 
+            case 'checkout.session.completed':
+                $this->handleCheckoutSessionCompleted($event->data->object);
+                break;
+
             default:
                 Log::info('Unhandled Stripe webhook event type', [
                     'event_type' => $event->type
@@ -198,5 +202,52 @@ class WebhookController extends Controller
         ]);
 
         // You can store payment method information if needed for future use
+    }
+
+    /**
+     * Handle completed checkout session
+     *
+     * @param \Stripe\Checkout\Session $session
+     * @return void
+     */
+    private function handleCheckoutSessionCompleted($session): void
+    {
+        Log::info('Checkout session completed', [
+            'session_id' => $session->id,
+            'payment_status' => $session->payment_status,
+            'order_id' => $session->metadata['order_id'] ?? null,
+            'transaction_id' => $session->metadata['transaction_id'] ?? null
+        ]);
+
+        if ($session->payment_status === 'paid') {
+            $transactionId = $session->metadata['transaction_id'] ?? null;
+            
+            if ($transactionId) {
+                $transaction = \App\Models\Transaction::where('transaction_id', $transactionId)->first();
+                
+                if ($transaction) {
+                    try {
+                        $this->stripeService->handleCheckoutSuccess($transaction, $session->id);
+                        
+                        Log::info('Checkout session processed successfully', [
+                            'session_id' => $session->id,
+                            'transaction_id' => $transactionId,
+                            'order_id' => $transaction->order_id
+                        ]);
+                    } catch (\Exception $e) {
+                        Log::error('Failed to process checkout session', [
+                            'session_id' => $session->id,
+                            'transaction_id' => $transactionId,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
+                } else {
+                    Log::warning('Transaction not found for checkout session', [
+                        'session_id' => $session->id,
+                        'transaction_id' => $transactionId
+                    ]);
+                }
+            }
+        }
     }
 }

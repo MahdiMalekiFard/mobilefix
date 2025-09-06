@@ -21,7 +21,7 @@ class StripeService implements PaymentServiceInterface
     public function __construct()
     {
         $this->stripe = new StripeClient(config('services.stripe.secret'));
-        $this->currency = config('services.stripe.currency', 'usd');
+        $this->currency = strtolower(config('services.stripe.currency', 'eur'));
     }
 
     /**
@@ -233,6 +233,124 @@ class StripeService implements PaymentServiceInterface
                 'success' => false,
                 'error' => $e->getMessage(),
             ];
+        }
+    }
+
+    /**
+     * Create a Stripe Checkout session for the transaction
+     *
+     * @param Transaction $transaction
+     * @param array $options
+     * @return array
+     */
+    public function createCheckoutSession(Transaction $transaction, array $options = []): array
+    {
+        try {
+            $order = $transaction->order;
+            $amount = $this->convertToStripeAmount($order->total);
+
+            $sessionData = [
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => $this->currency,
+                        'product_data' => [
+                            'name' => "Repair Service - Order #{$order->order_number}",
+                            'description' => $order->device && $order->brand 
+                                ? "{$order->brand->name} {$order->device->name} Repair" 
+                                : 'Device Repair Service',
+                        ],
+                        'unit_amount' => $amount,
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => $options['success_url'] ?? route('user.order.payment.success', ['order' => $order->id, 'session_id' => '{CHECKOUT_SESSION_ID}']),
+                'cancel_url' => $options['cancel_url'] ?? route('user.order.payment.cancel', ['order' => $order->id]),
+                'metadata' => [
+                    'transaction_id' => $transaction->transaction_id,
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'user_id' => $order->user_id,
+                ],
+                'customer_email' => $order->user_email,
+                'locale' => 'de', // German locale
+            ];
+
+            $session = $this->stripe->checkout->sessions->create($sessionData);
+
+            // Update transaction with checkout session ID
+            $transaction->update([
+                'external_id' => $session->id,
+                'gateway_transaction_id' => $session->id,
+                'gateway_response' => $session->toArray(),
+            ]);
+
+            return [
+                'success' => true,
+                'checkout_url' => $session->url,
+                'session_id' => $session->id,
+            ];
+
+        } catch (ApiErrorException $e) {
+            Log::error('Stripe checkout session creation failed', [
+                'transaction_id' => $transaction->transaction_id,
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return [
+                'success' => false,
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
+    /**
+     * Handle successful Stripe Checkout session
+     *
+     * @param Transaction $transaction
+     * @param string $sessionId
+     * @return void
+     */
+    public function handleCheckoutSuccess(Transaction $transaction, string $sessionId): void
+    {
+        try {
+            // Retrieve the checkout session
+            $session = $this->stripe->checkout->sessions->retrieve($sessionId);
+            
+            if ($session->payment_status === 'paid') {
+                // Retrieve the payment intent
+                $paymentIntent = $this->stripe->paymentIntents->retrieve($session->payment_intent);
+                
+                // Mark transaction as completed
+                $transaction->markAsCompleted([
+                    'gateway_response' => $session->toArray(),
+                    'gateway_transaction_id' => $session->payment_intent,
+                    'external_id' => $sessionId,
+                ]);
+
+                // Update order status to paid
+                $order = $transaction->order;
+                if ($order) {
+                    $order->update([
+                        'status' => \App\Enums\OrderStatusEnum::PAID->value,
+                    ]);
+                    
+                    Log::info('Order marked as paid via Stripe Checkout', [
+                        'order_id' => $order->id,
+                        'transaction_id' => $transaction->transaction_id,
+                        'session_id' => $sessionId,
+                    ]);
+                }
+            }
+        } catch (ApiErrorException $e) {
+            Log::error('Stripe checkout success handling failed', [
+                'transaction_id' => $transaction->transaction_id,
+                'session_id' => $sessionId,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
         }
     }
 

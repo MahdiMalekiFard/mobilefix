@@ -390,6 +390,43 @@ class UserOrderPay extends Component
         }
     }
 
+    public function redirectToStripeCheckout()
+    {
+        if (!$this->currentTransaction) {
+            $this->createPaymentTransaction();
+        }
+
+        if (!$this->currentTransaction) {
+            $this->errorMessage = 'Unable to create payment transaction.';
+            return;
+        }
+
+        try {
+            $paymentService = PaymentServiceFactory::create(PaymentProviderEnum::STRIPE);
+            
+            $result = $paymentService->createCheckoutSession($this->currentTransaction, [
+                'success_url' => route('user.order.payment.success', [
+                    'order' => $this->order->id,
+                    'session_id' => '{CHECKOUT_SESSION_ID}'
+                ]),
+                'cancel_url' => route('user.order.pay', ['order' => $this->order->id])
+            ]);
+
+            if ($result['success']) {
+                return redirect()->away($result['checkout_url']);
+            } else {
+                $this->errorMessage = 'Unable to create checkout session: ' . $result['error'];
+            }
+        } catch (Exception $e) {
+            $this->errorMessage = 'Payment initialization failed. Please try again.';
+            Log::error('Stripe checkout redirect failed', [
+                'order_id' => $this->order->id,
+                'transaction_id' => $this->currentTransaction?->transaction_id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
     // Multi-step checkout methods
     public function selectAddress($addressId)
     {

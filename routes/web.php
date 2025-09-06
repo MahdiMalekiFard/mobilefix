@@ -35,6 +35,44 @@ Route::get('/payment/paypal/cancel', function () {
     return redirect()->route('user.dashboard')->with('error', 'Payment was cancelled.');
 })->name('payment.paypal.cancel');
 
+// Stripe return URLs
+Route::get('/payment/stripe/success/{order}', function ($orderId) {
+    $sessionId = request('session_id');
+    
+    // Handle Stripe checkout success
+    if ($sessionId) {
+        try {
+            $order = \App\Models\Order::find($orderId);
+            if ($order) {
+                // Find the transaction for this order
+                $transaction = $order->transactions()
+                    ->where('external_id', $sessionId)
+                    ->first();
+                
+                if ($transaction) {
+                    // Verify and complete the payment
+                    $paymentService = \App\Services\Payment\PaymentServiceFactory::create(\App\Enums\PaymentProviderEnum::STRIPE);
+                    $paymentService->handleCheckoutSuccess($transaction, $sessionId);
+                }
+            }
+        } catch (Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Stripe checkout success handling failed', [
+                'order_id' => $orderId,
+                'session_id' => $sessionId,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    return redirect()->route('user.order.show', ['order' => $orderId])
+        ->with('success', 'Payment completed successfully!');
+})->name('user.order.payment.success');
+
+Route::get('/payment/stripe/cancel/{order}', function ($orderId) {
+    return redirect()->route('user.order.pay', ['order' => $orderId])
+        ->with('error', 'Payment was cancelled.');
+})->name('user.order.payment.cancel');
+
 // auth
 Route::get('user/auth/login', UserLoginPage::class)->name('user.auth.login');
 Route::post('user/auth/logout', function () {

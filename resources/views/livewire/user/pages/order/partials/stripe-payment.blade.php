@@ -18,7 +18,7 @@
                     <i class="fas fa-shield-alt"></i>
                     <span>Secure Payment</span>
                 </div>
-                <div class="text-2xl md:text-3xl font-bold">${{ number_format($order->total, 2) }}</div>
+                <div class="text-2xl md:text-3xl font-bold">€{{ number_format($order->total, 2) }}</div>
             </div>
         </div>
     </div>
@@ -84,7 +84,7 @@
                                     </div>
                                     <div class="flex flex-col items-start">
                                         <span class="text-sm md:text-base">Pay Securely</span>
-                                        <span class="text-lg md:text-xl font-bold">${{ number_format($order->total, 2) }}</span>
+                                        <span class="text-lg md:text-xl font-bold">€{{ number_format($order->total, 2) }}</span>
                                     </div>
                                     <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 group-hover:translate-x-1 transition-all duration-300">
                                         <i class="fas fa-arrow-right text-xs md:text-sm"></i>

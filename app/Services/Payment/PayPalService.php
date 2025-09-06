@@ -25,7 +25,7 @@ class PayPalService implements PaymentServiceInterface
         $this->baseUrl = config('services.paypal.sandbox') 
             ? 'https://api-m.sandbox.paypal.com'
             : 'https://api-m.paypal.com';
-        $this->currency = config('services.paypal.currency', 'USD');
+        $this->currency = config('services.paypal.currency', 'EUR');
     }
 
     /**

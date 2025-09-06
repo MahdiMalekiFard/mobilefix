@@ -56,7 +56,7 @@
             <!-- Payment Methods Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 mb-6 flex-1">
                 @foreach($availableProviders as $provider)
-                    <div class="group">
+                    <div class="group" wire:click="selectPaymentProvider('{{ $provider->value }}')">
                         <div class="bg-white rounded-2xl border-2 {{ $selectedProvider === $provider->value ? 'border-emerald-400 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg shadow-emerald-200/50' : 'border-slate-200 hover:border-indigo-300' }} p-4 md:p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden text-center h-48 md:h-52 flex flex-col justify-center">
                             
                             <!-- Selection Indicator -->
