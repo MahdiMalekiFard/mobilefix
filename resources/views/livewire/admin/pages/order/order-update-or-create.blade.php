@@ -312,7 +312,7 @@
         </div>
     </x-card>
 
-    <x-admin.shared.form-actions :disabled="$currentStatus == 'paid' || $currentStatus == 'cancelled_by_user' || $currentStatus == 'delivered' || $currentStatus == 'failed'"/>
+    <x-admin.shared.form-actions :resetExist="!$edit_mode"/>
 </form>
 
 <!-- Image Modal (Outside the form to prevent form submission) -->
