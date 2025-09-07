@@ -596,6 +596,11 @@
             font-weight: 600;
         }
 
+        /* Problems dropdown: selected items text only */
+        .dropdown-menu .form-check-input:checked + .form-check-label {
+            color: #00B6B1;
+        }
+
         @media (max-width: 768px) {
             .appointment {
                 padding: 30px 0;
