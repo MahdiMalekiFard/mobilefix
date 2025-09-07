@@ -286,7 +286,7 @@
                 <button
                     class="inline-flex items-center justify-center h-11 w-11 lg:h-12 lg:w-12 rounded-full
                  bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700
-                 shadow-md disabled:opacity-40"
+                 shadow-md disabled:opacity-40 hover:cursor-pointer"
                     wire:click="send" @disabled(!$active) title="Send">
                     <svg class="h-5 w-5 lg:h-6 lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/>
