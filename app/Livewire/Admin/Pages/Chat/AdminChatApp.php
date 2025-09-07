@@ -13,6 +13,7 @@ class AdminChatApp extends BaseAdminComponent
 {
     public ?int $selectedId    = null;
     public string $messageText = '';
+    public string $search      = '';
 
     public function mount(?int $conversationId = null): void
     {
@@ -22,9 +23,9 @@ class AdminChatApp extends BaseAdminComponent
     public function getConversationsProperty()
     {
         // Eager-load lastMessage + user and compute unread_count efficiently
-        return Conversation::query()
+        $query = Conversation::query()
             ->with([
-                'user:id,name',
+                'user:id,name,email',
                 'user.media',
                 'lastMessage:id,conversation_id,body,created_at',
             ])
@@ -34,8 +35,16 @@ class AdminChatApp extends BaseAdminComponent
                         ->where('sender_id', '!=', Auth::id());
                 },
             ])
-            ->orderByDesc('last_message_at')
-            ->get();
+            ->when(trim($this->search) !== '', function ($q) {
+                $term = trim($this->search);
+                $q->whereHas('user', function ($uq) use ($term) {
+                    $uq->where('name', 'like', "%{$term}%")
+                        ->orWhere('email', 'like', "%{$term}%");
+                });
+            })
+            ->orderByDesc('last_message_at');
+
+        return $query->get();
     }
 
     public function getActiveConversationProperty(): ?Conversation

@@ -27,18 +27,20 @@
         {{-- Search --}}
         <div class="px-5 pb-3 shrink-0">
             <label class="relative block">
-        <span class="absolute inset-y-0 left-3 flex items-center">
-          <svg class="h-4 w-4 text-neutral-400 dark:text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
-          </svg>
-        </span>
+                <span class="absolute inset-y-0 left-3 flex items-center">
+                  <svg class="h-4 w-4 text-neutral-400 dark:text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                  </svg>
+                </span>
                 <input
+                    wire:model.live.debounce.300ms="search"
                     class="w-full rounded-full border border-neutral-200 dark:border-neutral-800
-                 bg-white dark:bg-neutral-800
-                 text-neutral-800 dark:text-neutral-100
-                 placeholder-neutral-400 dark:placeholder-neutral-500
-                 pl-9 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/60"
-                    placeholder="Search Here..." />
+                             bg-white dark:bg-neutral-800
+                             text-neutral-800 dark:text-neutral-100
+                             placeholder-neutral-400 dark:placeholder-neutral-500
+                             pl-9 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/60"
+                    placeholder="Search users..."
+                />
             </label>
         </div>
 
@@ -49,16 +51,17 @@
                     wire:click="open({{ $conv->id }})"
                     wire:key="conv-{{ $conv->id }}"
                     class="w-full text-left px-5 py-3 flex items-center gap-3
-                 hover:bg-white dark:hover:bg-neutral-800
-                 {{ $selectedId === $conv->id ? 'bg-white dark:bg-neutral-800' : '' }}">
+                     hover:bg-white dark:hover:bg-neutral-800 hover:cursor-pointer
+                    {{ $selectedId === $conv->id ? 'bg-white dark:bg-neutral-800' : '' }}"
+                >
                     <img class="h-10 w-10 rounded-full"
                          src="{{ $conv?->user?->getFirstMediaUrl('avatar') ?? asset('assets/images/default/user-avatar.png') }}" alt="">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center justify-between">
                             <span class="font-medium truncate text-neutral-900 dark:text-neutral-100">{{ $conv?->user?->name }}</span>
                             <span class="text-[11px] text-neutral-400 dark:text-neutral-500">
-                {{ optional($conv?->lastMessage?->created_at)->format('H:i') }}
-              </span>
+                                {{ optional($conv?->lastMessage?->created_at)->format('H:i') }}
+                            </span>
                         </div>
                         <div class="text-sm truncate text-neutral-500 dark:text-neutral-400">
                             {{ $conv?->lastMessage?->body }}
@@ -66,8 +69,8 @@
                     </div>
                     @if(($conv->unread_count ?? 0) > 0)
                         <span class="ml-2 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-blue-500 text-white text-[11px] px-1">
-              {{ $conv->unread_count }}
-            </span>
+                            {{ $conv->unread_count }}
+                        </span>
                     @endif
                 </button>
             @endforeach
@@ -113,18 +116,20 @@
             {{-- Search --}}
             <div class="px-4 py-3">
                 <label class="relative block">
-          <span class="absolute inset-y-0 left-3 flex items-center">
-            <svg class="h-4 w-4 text-neutral-400 dark:text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
-            </svg>
-          </span>
+                    <span class="absolute inset-y-0 left-3 flex items-center">
+                        <svg class="h-4 w-4 text-neutral-400 dark:text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                        </svg>
+                    </span>
                     <input
+                        wire:model.live.debounce.300ms="search"
                         class="w-full rounded-full border border-neutral-200 dark:border-neutral-800
-                   bg-white dark:bg-neutral-800
-                   text-neutral-800 dark:text-neutral-100
-                   placeholder-neutral-400 dark:placeholder-neutral-500
-                   pl-9 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/60"
-                        placeholder="Search Here..." />
+                             bg-white dark:bg-neutral-800
+                             text-neutral-800 dark:text-neutral-100
+                             placeholder-neutral-400 dark:placeholder-neutral-500
+                             pl-9 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500/60"
+                        placeholder="Search users..."
+                    />
                 </label>
             </div>
 
@@ -136,16 +141,17 @@
                         wire:key="mconv-{{ $conv->id }}"
                         @click="drawer=false"
                         class="w-full text-left px-4 py-3 flex items-center gap-3
-                   hover:bg-white dark:hover:bg-neutral-800
-                   {{ $selectedId === $conv->id ? 'bg-white dark:bg-neutral-800' : '' }}">
+                            hover:bg-white dark:hover:bg-neutral-800
+                            {{ $selectedId === $conv->id ? 'bg-white dark:bg-neutral-800' : '' }}"
+                    >
                         <img class="h-10 w-10 rounded-full"
                              src="{{ $conv?->user?->getFirstMediaUrl('avatar') ?? asset('assets/images/default/user-avatar.png') }}" alt="">
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center justify-between">
                                 <span class="font-medium truncate text-neutral-900 dark:text-neutral-100">{{ $conv?->user?->name }}</span>
                                 <span class="text-[11px] text-neutral-400 dark:text-neutral-500">
-                  {{ optional($conv?->lastMessage?->created_at)->format('H:i') }}
-                </span>
+                                    {{ optional($conv?->lastMessage?->created_at)->format('H:i') }}
+                                </span>
                             </div>
                             <div class="text-sm truncate text-neutral-500 dark:text-neutral-400">
                                 {{ $conv?->lastMessage?->body }}
@@ -153,8 +159,8 @@
                         </div>
                         @if(($conv->unread_count ?? 0) > 0)
                             <span class="ml-2 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-blue-500 text-white text-[11px] px-1">
-                {{ $conv->unread_count }}
-              </span>
+                                {{ $conv->unread_count }}
+                            </span>
                         @endif
                     </button>
                 @endforeach
@@ -186,42 +192,80 @@
             @endif
         </header>
 
-        {{-- Messages (scrollable + bottom-aligned when short) --}}
-        <div id="messages-box" class="flex-1 overflow-y-auto px-4 lg:px-6 py-4 lg:py-6 min-h-0">
+        <!-- Messages (scrollable, bottom-aligned when short) -->
+        <div id="messages-box"
+             x-data="{ atBottom: true }"
+             x-ref="box"
+             {{-- scroll programmatically when Livewire dispatches --}}
+             @scroll-bottom.window="$nextTick(() => {
+                                        $refs.box.scrollTo({ top: $refs.box.scrollHeight, behavior: 'smooth' });
+                                     })"
+             {{-- track user scroll position on THIS element (the scroller) --}}
+             @scroll.passive="
+                                atBottom = ($el.scrollTop + $el.clientHeight) >= ($el.scrollHeight - 50)
+                             "
+             class="relative flex-1 overflow-y-auto px-4 lg:px-6 py-4 lg:py-6 min-h-0 bg-white dark:bg-neutral-900">
+
             @if(!$active)
-                <div class="text-center text-neutral-400 dark:text-neutral-500 mt-20">Choose a conversation from the left.</div>
+                <div class="text-center text-neutral-400 dark:text-neutral-500 mt-20">
+                    Choose a conversation from the left.
+                </div>
             @else
                 <div class="min-h-full flex flex-col justify-end">
                     <div class="space-y-4">
                         @foreach($this->messages as $m)
-                            @php $isMine = $m->sender_id === $auth->id; @endphp
+                            @php $isMine = $m->sender_id === auth()->id(); @endphp
+                            <div class="flex {{ $isMine ? 'justify-end' : 'justify-start' }}" wire:key="m-{{ $m->id }}">
+                                <div class="relative max-w-[85%] lg:max-w-[70%]">
+                                    <div class="
+                                            px-3 py-2 break-words shadow-sm leading-relaxed relative
+                                            {{ $isMine
+                                                ? 'bg-blue-500 text-white rounded-2xl rounded-br-none'
+                                                : 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 rounded-2xl rounded-bl-none'
+                                            }}
+                                        "
+                                    >
+                                        <p class="whitespace-pre-line">{{ $m->body }}</p>
+                                        <div class="mt-1 text-[11px] opacity-70 text-right
+                                                {{ $isMine ? 'text-white/80' : 'text-neutral-500 dark:text-neutral-400' }}">
+                                            {{ $m->created_at->format('H:i') }}
+                                        </div>
 
-                            <div class="flex items-start gap-3 {{ $isMine ? 'justify-end' : '' }}">
-                                @unless($isMine)
-                                    <img class="h-8 w-8 rounded-full"
-                                         src="{{ $active?->user?->getFirstMediaUrl('avatar') ?? asset('assets/images/default/user-avatar.png') }}" alt="">
-                                @endunless
-
-                                <div class="max-w-[85%] lg:max-w-[70%] rounded-2xl p-3 break-words
-                            {{ $isMine
-                                ? 'bg-blue-500 text-white dark:bg-blue-600'
-                                : 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100' }}">
-                                    <p class="whitespace-pre-line">{{ $m->body }}</p>
-                                    <div class="mt-1 text-[11px] opacity-70 text-right
-                              {{ $isMine ? 'text-white' : 'text-neutral-500 dark:text-neutral-400' }}">
-                                        {{ $m->created_at->format('H:i') }}
+                                        {{-- tail --}}
+                                        @if($isMine)
+                                            <span class="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-bl-full"></span>
+                                        @else
+                                            <span class="absolute bottom-0 left-0 w-4 h-4 bg-neutral-100 dark:bg-neutral-800 rounded-br-full"></span>
+                                        @endif
                                     </div>
                                 </div>
-
-                                @if($isMine)
-                                    <img class="h-8 w-8 rounded-full"
-                                         src="{{ $auth?->getFirstMediaUrl('avatar') ?? asset('assets/images/default/user-avatar.png') }}" alt="">
-                                @endif
                             </div>
                         @endforeach
+
+                        <!-- anchor -->
+                        <div id="messages-end" wire:key="messages-end"></div>
                     </div>
                 </div>
             @endif
+
+            <!-- Sticky, centered scroll-to-bottom button INSIDE the messages area -->
+            <div class="sticky bottom-4 flex justify-center pointer-events-none">
+                <button
+                    x-cloak
+                    x-show="!atBottom"
+                    x-transition.opacity
+                    @click="$refs.box.scrollTo({ top: $refs.box.scrollHeight, behavior: 'smooth' })"
+                    class="pointer-events-auto z-10 h-10 w-10 flex items-center justify-center
+                           rounded-full bg-neutral-400/50 hover:bg-neutral-500/70 hover:cursor-pointer
+                           text-white shadow-md"
+                    title="Scroll to bottom"
+                >
+                    <!-- Down arrow icon -->
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+                        <path d="M12 16.5l-6-6 1.4-1.4L12 13.7l4.6-4.6 1.4 1.4-6 6z"/>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         {{-- Composer --}}
