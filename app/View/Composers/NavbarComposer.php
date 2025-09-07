@@ -19,6 +19,8 @@ use App\Models\Service;
 use App\Models\Slider;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\Conversation;
+use App\Models\Message;
 use App\Services\Permissions\PermissionsService;
 use Illuminate\View\View;
 
@@ -27,6 +29,10 @@ class NavbarComposer
     public function compose(View $view): void
     {
         $user = auth()->user();
+        // Calculate unread user messages for admin
+        $unreadUserMessages = Message::where('sender_type', 'user')
+            ->where('is_read', false)
+            ->count();
         // -- leaf groups (same as your current items) -----------------------------
         $userMgmt = [
             'icon'     => 's-users',
@@ -236,6 +242,15 @@ class NavbarComposer
                 'exact'      => true,
                 'title'      => trans('_menu.dashboard', locale: app()->getFallbackLocale()),
                 'route_name' => 'admin.dashboard',
+            ],
+            [
+                'icon'          => 's-chat-bubble-left-right',
+                'title'         => 'User Chats',
+                'route_name'    => 'admin.chat.index',
+                'exact'         => true,
+                'params'        => [],
+                'badge'         => $unreadUserMessages > 0 ? $unreadUserMessages : null,
+                'badge_classes' => 'bg-red-500 text-white text-xs px-2 py-1 rounded-full',
             ],
 
             // Folder: People
