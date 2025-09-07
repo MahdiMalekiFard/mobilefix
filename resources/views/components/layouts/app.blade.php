@@ -30,8 +30,11 @@
     <div class="lg:ps-72 flex flex-col flex-1">
         <livewire:admin.shared.header />
         <main class="bg-base-300 h-full flex-1">
-            <div class="md:px-4 sm:px-6 lg:px-8 h-full {{$external_class??''}}" x-ref="contentarea">
-                {{$slot}}
+            <div
+                x-ref="contentarea"
+                class="h-full {{ $external_class ?? '' }} {{ request()->routeIs('admin.chat.index') ? 'px-0' : 'md:px-4 sm:px-6 lg:px-8' }}"
+            >
+                {{ $slot }}
             </div>
         </main>
     </div>
