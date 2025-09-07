@@ -12,9 +12,23 @@ class ServicePage extends Component
     use WithPagination;
     protected string $paginationTheme = 'bootstrap';
 
+    public string $q = '';
+
     public function render()
     {
-        $services = Service::where('published', BooleanEnum::ENABLE)->paginate(6);
+        $search = trim(request()->query('q', $this->q));
+        $this->q = $search;
+
+        $services = Service::query()
+            ->where('published', BooleanEnum::ENABLE)
+            ->when($search !== '', function ($query) use ($search) {
+                $query->whereHas('translations', function ($t) use ($search) {
+                    $t->whereIn('key', ['title', 'description'])
+                      ->where('value', 'like', "%{$search}%");
+                });
+            })
+            ->paginate(6)
+            ->withQueryString();
 
         return view('livewire.web.pages.service-page', [
             'services' => $services,

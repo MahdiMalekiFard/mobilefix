@@ -1,10 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\User;
 use App\Services\Permissions\PermissionsService;
 
@@ -16,7 +13,7 @@ class UserPolicy
         return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class, 'Index'));
     }
 
-    public function view(User $user, User $user): bool
+    public function view(User $user, User $model): bool
     {
         return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class, 'Show'));
     }
@@ -26,22 +23,22 @@ class UserPolicy
         return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class, 'Store'));
     }
 
-    public function update(User $user, User $user): bool
+    public function update(User $user, User $model): bool
     {
         return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class, 'Update'));
     }
 
-    public function delete(User $user, User $user): bool
+    public function delete(User $user, User $model): bool
     {
         return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class, 'Delete'));
     }
 
-    public function restore(User $user, User $user): bool
+    public function restore(User $user, User $model): bool
     {
         return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class, 'Restore'));
     }
 
-    public function forceDelete(User $user, User $user): bool
+    public function forceDelete(User $user, User $model): bool
     {
         return $user->hasAnyPermission(PermissionsService::generatePermissionsByModel(User::class));
     }

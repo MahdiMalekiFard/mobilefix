@@ -45,9 +45,9 @@
     <!-- popup search -->
     <div class="search-popup">
         <button class="close-search"><span class="far fa-times"></span></button>
-        <form action="#">
+        <form action="{{ route('service-page') }}" method="GET">
             <div class="form-group">
-                <input type="search" name="search-field" placeholder="Suche hier..." required>
+                <input type="search" name="q" value="{{ request('q') }}" placeholder="Suche Leistungen..." required>
                 <button type="submit"><i class="far fa-search"></i></button>
             </div>
         </form>
