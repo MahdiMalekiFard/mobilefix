@@ -601,6 +601,24 @@
             color: #00B6B1;
         }
 
+        /* Problems dropdown: align checkbox with label */
+        .dropdown-menu .form-check {
+            display: flex;
+            align-items: center;
+            padding-left: 0;
+        }
+
+        .dropdown-menu .form-check-input {
+            float: none;
+            margin: 0 8px 0 0;
+            vertical-align: middle;
+        }
+
+        .dropdown-menu .form-check-label {
+            margin: 0;
+            vertical-align: middle;
+        }
+
         @media (max-width: 768px) {
             .appointment {
                 padding: 30px 0;
