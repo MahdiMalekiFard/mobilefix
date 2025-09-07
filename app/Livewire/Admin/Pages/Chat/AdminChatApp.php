@@ -6,14 +6,16 @@ use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Conversation;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class AdminChatList extends BaseAdminComponent
+class AdminChatApp extends BaseAdminComponent
 {
+    public bool $asSidebar = false;
+    public ?int $currentConversationId = null;
     public string $search = '';
 
     public function getConversationsProperty(): LengthAwarePaginator
     {
         return Conversation::query()
-            ->with(['user'])
+            ->with(['user', 'lastMessage'])
             ->when($this->search, function ($q) {
                 $q->whereHas('user', function ($uq) {
                     $uq->where('name', 'like', "%{$this->search}%")
@@ -26,7 +28,7 @@ class AdminChatList extends BaseAdminComponent
 
     public function render()
     {
-        return view('livewire.admin.pages.chat.admin-chat-list', [
+        return view('livewire.admin.pages.chat.admin-chat-app', [
             'conversations' => $this->conversations,
         ]);
     }

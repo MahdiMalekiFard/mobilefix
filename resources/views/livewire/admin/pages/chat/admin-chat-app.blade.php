@@ -1,0 +1,277 @@
+<main class="min-h-screen flex items-center justify-center p-4">
+    <!-- App Frame -->
+    <div class="w-[1200px] max-w-full bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-[300px_1fr_300px]">
+        <!-- Left Sidebar -->
+        <aside class="bg-neutral-100 border-r border-neutral-200">
+            <!-- Current user / header -->
+            <div class="flex items-center gap-3 p-5">
+                <img class="h-12 w-12 rounded-full object-cover" src="{{ auth()->user()?->getFirstMediaUrl('avatar') ?? asset('assets/images/default/user-avatar.png') }}" alt="">
+                <div class="flex-1">
+                    <div class="font-semibold leading-tight">{{ auth()->user()->name }}</div>
+                    <div class="text-xs text-neutral-500">{{ auth()->user()->email }}</div>
+                </div>
+                <button class="text-neutral-400 hover:text-neutral-700" title="Edit">
+                    <!-- pencil -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L7.5 20.313 3 21l.687-4.5L16.862 4.487z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="px-5 pb-3">
+                <label class="relative block">
+                    <span class="absolute inset-y-0 left-3 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                    </svg>
+                    </span>
+                    <input class="w-full rounded-full border border-neutral-200 bg-white pl-9 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Search Here..." />
+                </label>
+            </div>
+
+            <!-- Chats -->
+            <nav class="overflow-y-auto h-[calc(100vh-180px)] pb-5">
+                <!-- Item -->
+                <button class="w-full text-left px-5 py-3 flex items-center gap-3 hover:bg-white">
+                    <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/100?img=1" alt="">
+                    <div class="min-w-0 flex-1">
+                    <div class="flex items-center justify-between">
+                        <span class="font-medium truncate">Lisa Roy</span>
+                        <span class="text-[11px] text-neutral-400">10:35 AM</span>
+                    </div>
+                    <div class="text-sm text-neutral-500 truncate">Hi, are you Available Tomorrow?</div>
+                    </div>
+                    <span class="ml-2 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-blue-500 text-white text-[11px] px-1">1</span>
+                </button>
+
+                <button class="w-full text-left px-5 py-3 flex items-center gap-3 bg-white">
+                    <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/100?img=5" alt="">
+                    <div class="min-w-0 flex-1">
+                    <div class="flex items-center justify-between">
+                        <span class="font-medium truncate">Jamie Taylor</span>
+                        <span class="text-[11px] text-neutral-400">10:35 AM</span>
+                    </div>
+                    <div class="text-sm text-neutral-500 truncate">Nice one. Will do it tomorrow</div>
+                    </div>
+                    <svg class="ml-2 h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z"/>
+                    </svg>
+                </button>
+
+                <!-- More dummy items -->
+                <template id="list-template"></template>
+                <script>
+                    // just to fill the list quickly (optional; remove in production)
+                    const names = [
+                    ["Jason Roy","That's Great. I am Looking forward to having a great start."],
+                    ["Amy Frost","Hi, will you start working on the chat app right now?"],
+                    ["Paul Wilson","See you tomorrow champ"],
+                    ["Ana Williams","??"]
+                    ];
+                    const c = document.querySelector('#list-template');
+                    const nav = document.querySelector('nav');
+                    names.forEach((n,i) => {
+                    const b = document.createElement('button');
+                    b.className="w-full text-left px-5 py-3 flex items-center gap-3 hover:bg-white";
+                    b.innerHTML = `
+                        <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/100?img=${i+10}" alt="">
+                        <div class="min-w-0 flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium truncate">${n[0]}</span>
+                            <span class="text-[11px] text-neutral-400">10:35 AM</span>
+                        </div>
+                        <div class="text-sm text-neutral-500 truncate">${n[1]}</div>
+                        </div>
+                        <span class="ml-2 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-blue-500 text-white text-[11px] px-1">1</span>`;
+                    nav.appendChild(b);
+                    });
+                </script>
+            </nav>
+        </aside>
+
+        <!-- Chat Column -->
+        <section class="flex flex-col">
+            <!-- Chat Header -->
+            <header class="flex items-center gap-3 px-6 py-4 border-b">
+            <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/100?img=32" alt="">
+            <div class="flex-1">
+                <div class="font-semibold">Dianne Jhonson</div>
+                <div class="text-xs text-neutral-500 flex items-center gap-2">
+                <span class="inline-block h-2 w-2 rounded-full bg-green-500"></span> Online
+                </div>
+            </div>
+
+            <!-- Header actions -->
+            <div class="flex items-center gap-3 text-neutral-500">
+                <button class="hover:text-neutral-800" title="Search">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                </svg>
+                </button>
+                <button class="hover:text-neutral-800" title="Favorite">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A6 6 0 0119 3c3.04 0 5.5 2.46 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                </button>
+            </div>
+            </header>
+
+            <!-- Messages -->
+            <div class="flex-1 overflow-y-auto bg-white px-6 py-6 space-y-6">
+                <!-- Left bubble -->
+                <div class="flex items-start gap-3">
+                    <img class="h-8 w-8 rounded-full" src="https://i.pravatar.cc/100?img=32" alt="">
+                    <div class="max-w-[60%] rounded-2xl bg-blue-50 text-neutral-800 p-3">
+                        <p>Hi David, have you got the project report pdf?</p>
+                    </div>
+                </div>
+
+                <!-- Right bubble -->
+                <div class="flex items-start gap-3 justify-end">
+                    <div class="max-w-[60%] rounded-2xl bg-blue-500 text-white p-3">
+                        <p>NO. I did not get it</p>
+                    </div>
+                    <img class="h-8 w-8 rounded-full" src="https://i.pravatar.cc/100?img=68" alt="">
+                </div>
+
+                <!-- Divider -->
+                <div class="relative text-center">
+                    <span class="text-xs text-neutral-400 bg-white px-3 relative z-10">Yesterday</span>
+                    <span class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-neutral-200"></span>
+                </div>
+
+                <!-- Left bubble with file -->
+                <div class="flex items-start gap-3">
+                    <img class="h-8 w-8 rounded-full" src="https://i.pravatar.cc/100?img=32" alt="">
+                    <div class="space-y-2">
+                        <div class="max-w-[60%] rounded-2xl bg-blue-50 p-3">
+                            <p>Ok, I will just sent it here. Plz be sure to fill the details by today end of the day.</p>
+                        </div>
+                        <div class="max-w-[60%] rounded-2xl border border-neutral-200 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1555421689-43cad7100751?q=80&w=600&auto=format&fit=crop" alt="" class="h-28 w-full object-cover">
+                            <div class="px-3 py-2 text-sm">project_report.pdf</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right bubble -->
+                <div class="flex items-start gap-3 justify-end">
+                    <div class="max-w-[60%] rounded-2xl bg-blue-500 text-white p-3">
+                        <p>Ok. Should I send it over email as well after filling the details.</p>
+                    </div>
+                    <img class="h-8 w-8 rounded-full" src="https://i.pravatar.cc/100?img=68" alt="">
+                </div>
+
+                <!-- Left bubble -->
+                <div class="flex items-start gap-3">
+                    <img class="h-8 w-8 rounded-full" src="https://i.pravatar.cc/100?img=32" alt="">
+                    <div class="max-w-[60%] rounded-2xl bg-blue-50 text-neutral-800 p-3">
+                        <p>Ya. I’ll be adding more team members to it.</p>
+                    </div>
+                </div>
+
+                <!-- Right mini bubble -->
+                <div class="flex items-start gap-3 justify-end">
+                    <div class="max-w-[25%] rounded-2xl bg-blue-500 text-white p-3">
+                        <p>OK</p>
+                    </div>
+                    <img class="h-8 w-8 rounded-full" src="https://i.pravatar.cc/100?img=68" alt="">
+                </div>
+            </div>
+
+            <!-- Composer -->
+            <footer class="border-t bg-neutral-50 px-4 py-3">
+                <div class="flex items-center gap-3">
+                    <button class="p-2 rounded-full hover:bg-white text-blue-600" title="Voice">
+                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 003-3V6a3 3 0 10-6 0v5a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 0014 0h-2z"/><path d="M13 19.938V22h-2v-2.062A8.003 8.003 0 014 12h2a6 6 0 0012 0h2a8.003 8.003 0 01-7 7.938z"/></svg>
+                    </button>
+                    <input class="flex-1 rounded-full border border-neutral-200 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Write Something..." />
+                    <button class="p-2 rounded-full hover:bg-white text-neutral-600" title="Attach">
+                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 6.75v7.5a4.5 4.5 0 11-9 0V6.75a3 3 0 116 0v7.5a1.5 1.5 0 11-3 0V7.5h-1.5v6.75a3 3 0 006 0v-7.5a4.5 4.5 0 10-9 0v7.5a6 6 0 1012 0v-7.5h-1.5z"/></svg>
+                    </button>
+                    <button class="p-2 rounded-full hover:bg-white text-neutral-600" title="Camera">
+                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M4 7a3 3 0 013-3h2l1-1h4l1 1h2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7zm8 3.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zm0 1.5a3 3 0 110 6 3 3 0 010-6z"/></svg>
+                    </button>
+                    <button class="p-2 rounded-full hover:bg-white text-neutral-600" title="Emoji">
+                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1010 10A10.011 10.011 0 0012 2zm-3 7a1.5 1.5 0 11-1.5 1.5A1.502 1.502 0 019 9zm9 3a6 6 0 11-12 0h2a4 4 0 008 0zM16.5 10.5A1.5 1.5 0 1118 9a1.5 1.5 0 01-1.5 1.5z"/></svg>
+                    </button>
+                    <button class="ml-1 inline-flex items-center justify-center h-12 w-12 rounded-full bg-blue-500 text-white shadow-md hover:bg-blue-600" title="Send">
+                    <svg class="h-6 w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/></svg>
+                    </button>
+                </div>
+            </footer>
+        </section>
+
+        <!-- Right Sidebar -->
+        <aside class="bg-neutral-100 border-l border-neutral-200">
+            <div class="p-5">
+                <!-- Search -->
+                <label class="relative block mb-5">
+                    <span class="absolute inset-y-0 left-3 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                        </svg>
+                    </span>
+                    <input class="w-full rounded-full border border-neutral-200 bg-white pl-9 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Search Here..." />
+                </label>
+
+                <!-- Profile -->
+                <div class="flex flex-col items-center text-center">
+                    <img class="h-28 w-28 rounded-full object-cover mb-3" src="https://i.pravatar.cc/200?img=32" alt="">
+                    <div class="font-semibold">Dianne Jhonson</div>
+                    <div class="text-xs text-neutral-500 mb-5">Junior Developer</div>
+
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <button class="flex flex-col items-center gap-2 rounded-2xl bg-white p-4 shadow-sm border hover:shadow">
+                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <svg class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor"><path d="M2 8a2 2 0 012-2h4l2-2h4l2 2h4a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V8z"/></svg>
+                            </div>
+                            <span class="text-sm font-medium">Chat</span>
+                        </button>
+                        <button class="flex flex-col items-center gap-2 rounded-2xl bg-white p-4 shadow-sm border hover:shadow">
+                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <svg class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor"><path d="M15 10.5V6a3 3 0 00-6 0v4.5a3 3 0 106 0z"/><path d="M5 10v4a7 7 0 0014 0v-4"/></svg>
+                            </div>
+                            <span class="text-sm font-medium">Video Call</span>
+                        </button>
+                    </div>
+
+                    <div class="mt-6 w-full space-y-3">
+                        <button class="w-full flex items-center gap-3 text-sm text-neutral-700 hover:underline">
+                            <svg class="h-5 w-5 text-neutral-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 100-10 5 5 0 000 10z"/><path d="M2 22a10 10 0 1120 0H2z"/></svg>
+                            View Friends
+                        </button>
+                        <button class="w-full flex items-center gap-3 text-sm text-neutral-700 hover:underline">
+                            <svg class="h-5 w-5 text-neutral-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A6 6 0 0119 3c3.04 0 5.5 2.46 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            Add to Favorites
+                        </button>
+                    </div>
+
+                    <!-- Attachments -->
+                    <div class="mt-8 w-full">
+                        <div class="text-sm font-semibold mb-3">Attachments</div>
+                        <div class="grid grid-cols-4 gap-3">
+                            <button class="flex flex-col items-center gap-2 rounded-xl bg-white p-3 border shadow-sm hover:shadow">
+                                <span class="text-[10px] font-semibold">PDF</span>
+                            </button>
+                            <button class="flex flex-col items-center gap-2 rounded-xl bg-white p-3 border shadow-sm hover:shadow">
+                                <span class="text-[10px] font-semibold">VIDEO</span>
+                            </button>
+                            <button class="flex flex-col items-center gap-2 rounded-xl bg-white p-3 border shadow-sm hover:shadow">
+                                <span class="text-[10px] font-semibold">MP3</span>
+                            </button>
+                            <button class="flex flex-col items-center gap-2 rounded-xl bg-white p-3 border shadow-sm hover:shadow">
+                                <span class="text-[10px] font-semibold">IMAGE</span>
+                            </button>
+                        </div>
+                        <button class="mt-4 w-full rounded-full border border-blue-500 text-blue-600 px-4 py-2 text-sm hover:bg-blue-50">View All</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
