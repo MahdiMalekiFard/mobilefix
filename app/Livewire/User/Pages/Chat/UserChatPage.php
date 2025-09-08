@@ -7,16 +7,15 @@ use App\Models\Message;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class UserChatPage extends Component
 {
     public ?Conversation $conversation = null;
-    public string $newMessage = '';
+    public string $messageText = '';
     public Collection $chatMessages;
+    public bool $adminIsTyping = false;
 
-    protected $rules = [
-        'newMessage' => 'required|string|min:1|max:2000',
-    ];
 
     public function mount(): void
     {
@@ -47,30 +46,36 @@ class UserChatPage extends Component
             ->get();
     }
 
-    public function sendMessage(): void
+    public function send(): void
     {
-        $this->validate();
+        if (trim($this->messageText) === '') {
+            return;
+        }
 
         if (! $this->conversation) {
             $this->ensureConversationExists();
         }
 
-        $message = new Message([
+        $msg = Message::create([
             'conversation_id' => $this->conversation->id,
-            'sender_id'       => Auth::id(),
+            'sender_id'       => auth()->id(),
             'sender_type'     => 'user',
-            'body'            => trim($this->newMessage),
+            'body'            => $this->messageText,
+            'is_read'         => false,
         ]);
-        $message->save();
 
+        // update conversation pointers
         $this->conversation->update([
-            'last_message_id' => $message->id,
+            'last_message_id' => $msg->id,
             'last_message_at' => now(),
         ]);
 
-        $this->newMessage = '';
+        $this->messageText = '';
         $this->loadMessages();
+        $this->dispatch('message-sent');
     }
+
+
 
     public function markOtherSideMessagesAsRead(): void
     {
@@ -87,11 +92,24 @@ class UserChatPage extends Component
             ]);
     }
 
+    public function getListeners()
+    {
+        return [
+            'echo:conversation.' . ($this->conversation?->id ?? 'none') . ',MessageSent' => 'messageReceived',
+        ];
+    }
+
+    public function messageReceived($event): void
+    {
+        // Refresh messages when a new message is received via broadcasting
+        $this->loadMessages();
+    }
+
     public function render()
     {
-        // Polling will be handled in Blade via wire:poll
+        // Reduced polling frequency since we'll use events for real-time updates
         return view('livewire.user.pages.chat.user-chat-page')
-            ->layout('components.layouts.user_panel');
+            ->layout('components.layouts.user_panel', ['external_class' => 'p-0 h-full overflow-hidden']);
     }
 }
 
