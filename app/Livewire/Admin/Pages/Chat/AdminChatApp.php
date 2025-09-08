@@ -80,7 +80,7 @@ class AdminChatApp extends BaseAdminComponent
             ->cursorPaginate($this->perPage, ['*'], 'cursor', $this->cursor);
 
         // pointer for “Load older”
-        $this->nextCursor = optional($page->nextCursor())->encode();
+        $this->nextCursor = optional($page->nextCursor())?->encode();
 
         // Reverse so UI is oldest → newest
         return collect($page->items())->reverse()->values();
