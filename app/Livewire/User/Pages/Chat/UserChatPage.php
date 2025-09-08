@@ -4,16 +4,38 @@ namespace App\Livewire\User\Pages\Chat;
 
 use App\Models\Conversation;
 use App\Models\Message;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UserChatPage extends Component
 {
+    use WithFileUploads;
+
     public ?Conversation $conversation = null;
     public string $messageText         = '';
     public Collection $chatMessages;
     public bool $adminIsTyping = false;
+
+    /** pagination state */
+    public int $perPage        = 50;
+    public ?string $cursor     = null;
+    public ?string $nextCursor = null;
+
+    /** new: file uploads */
+    public array $uploads = []; // array of Livewire\Features\SupportFileUploads\TemporaryUploadedFile
+
+    protected function rules(): array
+    {
+        return [
+            'messageText' => ['nullable', 'string', 'max:5000'],
+            'uploads'     => ['array', 'max:5'], // allow up to 5 files per message
+            'uploads.*'   => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+        ];
+    }
 
     public function mount(): void
     {
@@ -32,21 +54,51 @@ class UserChatPage extends Component
         );
     }
 
+    /** cursor-paginated */
     public function loadMessages(): void
     {
         if ( ! $this->conversation) {
             return;
         }
 
-        $this->chatMessages = $this->conversation
-            ->messages()
-            ->orderBy('created_at')
-            ->get();
+        $page = Message::query()
+            ->select(['id', 'conversation_id', 'sender_id', 'sender_type', 'body', 'is_read', 'created_at'])
+            ->where('conversation_id', $this->conversation->id)
+            ->orderByDesc('id')
+            ->cursorPaginate($this->perPage, ['*'], 'cursor', $this->cursor);
+
+        $this->nextCursor   = optional($page->nextCursor())?->encode();
+        $this->chatMessages = collect($page->items())->reverse()->values();
     }
 
+    public function loadOlder(): void
+    {
+        if ($this->nextCursor) {
+            $this->cursor = $this->nextCursor;
+            $this->loadMessages();
+            $this->dispatch('older-loaded');
+        }
+    }
+
+    /** remove one selected file before sending */
+    public function removeUpload(int $index): void
+    {
+        if (isset($this->uploads[$index])) {
+            unset($this->uploads[$index]);
+            $this->uploads = array_values($this->uploads);
+        }
+    }
+
+    /**
+     * @throws FileIsTooBig
+     * @throws FileDoesNotExist
+     */
     public function send(): void
     {
-        if (trim($this->messageText) === '') {
+        $this->validate();
+
+        // disallow empty message if no files selected
+        if (trim($this->messageText) === '' && count($this->uploads) === 0) {
             return;
         }
 
@@ -54,6 +106,7 @@ class UserChatPage extends Component
             $this->ensureConversationExists();
         }
 
+        // create the message (text can be empty for file-only)
         $msg = Message::create([
             'conversation_id' => $this->conversation->id,
             'sender_id'       => auth()->id(),
@@ -62,14 +115,26 @@ class UserChatPage extends Component
             'is_read'         => false,
         ]);
 
+        // attach files (images/docs)
+        foreach ($this->uploads as $file) {
+            $msg->addMedia($file->getRealPath())
+                ->usingFileName($file->getClientOriginalName())
+                ->toMediaCollection('attachments');
+        }
+
         // update conversation pointers
         $this->conversation->update([
             'last_message_id' => $msg->id,
             'last_message_at' => now(),
         ]);
 
+        // reset UI and reload latest page
         $this->messageText = '';
+        $this->uploads     = [];
+
+        $this->cursor = null;
         $this->loadMessages();
+
         $this->dispatch('message-sent');
     }
 
@@ -97,13 +162,22 @@ class UserChatPage extends Component
 
     public function messageReceived(): void
     {
-        // Refresh messages when a new message is received via broadcasting
+        $this->cursor = null;
         $this->loadMessages();
+        $this->dispatch('message-received');
+    }
+
+    public function removeUploadByName(string $filename): void
+    {
+        // keep only files whose temp filename doesn't match
+        $this->uploads = collect($this->uploads)
+            ->reject(fn ($f) => method_exists($f, 'getFilename') && $f->getFilename() === $filename)
+            ->values()
+            ->all();
     }
 
     public function render()
     {
-        // Reduced polling frequency since we'll use events for real-time updates
         return view('livewire.user.pages.chat.user-chat-page')
             ->layout('components.layouts.user_panel', ['external_class' => 'p-0 h-full overflow-hidden']);
     }
