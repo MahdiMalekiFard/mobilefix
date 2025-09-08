@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\DownloadMediaController;
 use App\Http\Controllers\WebhookController;
 use App\Livewire\User\Auth\UserLoginPage;
 use App\Livewire\User\Pages\Dashboard\UserDashboardIndex;
@@ -21,6 +22,9 @@ use App\Livewire\Web\Pages\TermsPage;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomePage::class)->name('home-page');
+Route::get('/media/{media}/download', DownloadMediaController::class)
+    ->middleware(['auth'])
+    ->name('media.download');
 
 // Payment webhooks and callbacks (must be before auth middleware)
 Route::post('/stripe/webhook', [WebhookController::class, 'handleStripe'])->name('stripe.webhook');
@@ -38,62 +42,62 @@ Route::get('/payment/paypal/cancel', function () {
 // Stripe return URLs
 Route::get('/payment/stripe/success/{order}', function ($orderId) {
     $sessionId = request('session_id');
-    
-    \Illuminate\Support\Facades\Log::info('Stripe success route called', [
-        'order_id' => $orderId,
-        'session_id' => $sessionId
+
+    Illuminate\Support\Facades\Log::info('Stripe success route called', [
+        'order_id'   => $orderId,
+        'session_id' => $sessionId,
     ]);
-    
+
     // Handle Stripe checkout success
     if ($sessionId) {
         try {
-            $order = \App\Models\Order::find($orderId);
+            $order = App\Models\Order::find($orderId);
             if ($order) {
-                \Illuminate\Support\Facades\Log::info('Order found', [
-                    'order_id' => $order->id,
-                    'order_status' => $order->status
+                Illuminate\Support\Facades\Log::info('Order found', [
+                    'order_id'     => $order->id,
+                    'order_status' => $order->status,
                 ]);
-                
+
                 // Find the transaction for this order
                 $transaction = $order->transactions()
                     ->where('external_id', $sessionId)
                     ->first();
-                
+
                 if ($transaction) {
-                    \Illuminate\Support\Facades\Log::info('Transaction found, processing payment', [
+                    Illuminate\Support\Facades\Log::info('Transaction found, processing payment', [
                         'transaction_id' => $transaction->transaction_id,
-                        'session_id' => $sessionId
+                        'session_id'     => $sessionId,
                     ]);
-                    
+
                     // Verify and complete the payment
-                    $paymentService = \App\Services\Payment\PaymentServiceFactory::create(\App\Enums\PaymentProviderEnum::STRIPE);
+                    $paymentService = App\Services\Payment\PaymentServiceFactory::create(App\Enums\PaymentProviderEnum::STRIPE);
                     $paymentService->handleCheckoutSuccess($transaction, $sessionId);
-                    
-                    \Illuminate\Support\Facades\Log::info('Payment processing completed successfully');
+
+                    Illuminate\Support\Facades\Log::info('Payment processing completed successfully');
                 } else {
-                    \Illuminate\Support\Facades\Log::warning('No transaction found for session', [
-                        'order_id' => $orderId,
-                        'session_id' => $sessionId,
-                        'all_transactions' => $order->transactions()->pluck('external_id', 'transaction_id')->toArray()
+                    Illuminate\Support\Facades\Log::warning('No transaction found for session', [
+                        'order_id'         => $orderId,
+                        'session_id'       => $sessionId,
+                        'all_transactions' => $order->transactions()->pluck('external_id', 'transaction_id')->toArray(),
                     ]);
                 }
             } else {
-                \Illuminate\Support\Facades\Log::warning('Order not found', [
-                    'order_id' => $orderId
+                Illuminate\Support\Facades\Log::warning('Order not found', [
+                    'order_id' => $orderId,
                 ]);
             }
         } catch (Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Stripe checkout success handling failed', [
-                'order_id' => $orderId,
+            Illuminate\Support\Facades\Log::error('Stripe checkout success handling failed', [
+                'order_id'   => $orderId,
                 'session_id' => $sessionId,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'error'      => $e->getMessage(),
+                'trace'      => $e->getTraceAsString(),
             ]);
         }
     } else {
-        \Illuminate\Support\Facades\Log::warning('No session_id provided in success URL');
+        Illuminate\Support\Facades\Log::warning('No session_id provided in success URL');
     }
-    
+
     return redirect()->route('user.order.show', ['order' => $orderId])
         ->with('success', 'Payment completed successfully!');
 })->name('user.order.payment.success');

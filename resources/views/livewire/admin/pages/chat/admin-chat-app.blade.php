@@ -253,23 +253,128 @@
                                                         </a>
                                                     @else
                                                         @php
-                                                            $downloadUrl = \Illuminate\Support\Facades\Route::has('media.download')
-                                                                ? route('media.download', $md)
-                                                                : $md->getFullUrl();
+                                                            $ext = strtolower(pathinfo($md->file_name, PATHINFO_EXTENSION));
+                                                            $mime = $md->mime_type ?? '';
+                                                            $isArchive = in_array($ext, ['zip','rar','7z']) || str_contains($mime, 'zip') || str_contains($mime, 'x-rar') || str_contains($mime, 'x-7z-compressed');
+
+                                                            // simple color/icon map by extension
+                                                            $types = [
+                                                                'pdf' => [
+                                                                    'bubble' => 'bg-red-50 dark:bg-red-400/10 ring-red-200 dark:ring-red-500/30',
+                                                                    'fg'     => 'text-red-600 dark:text-red-300',
+                                                                    'icon'   => 'pdf',
+                                                                ],
+                                                                'zip' => [
+                                                                    'bubble' => 'bg-amber-50 dark:bg-amber-400/10 ring-amber-200 dark:ring-amber-500/30',
+                                                                    'fg'     => 'text-amber-700 dark:text-amber-300',
+                                                                    'icon'   => 'zip',
+                                                                ],
+                                                                'txt' => [
+                                                                    'bubble' => 'bg-sky-50 dark:bg-sky-400/10 ring-sky-200 dark:ring-sky-500/30',
+                                                                    'fg'     => 'text-sky-700 dark:text-sky-300',
+                                                                    'icon'   => 'txt',
+                                                                ],
+                                                                'doc' => [
+                                                                    'bubble' => 'bg-blue-50 dark:bg-blue-400/10 ring-blue-200 dark:ring-blue-500/30',
+                                                                    'fg'     => 'text-blue-700 dark:text-blue-300',
+                                                                    'icon'   => 'doc',
+                                                                ],
+                                                                'docx' => [
+                                                                    'bubble' => 'bg-blue-50 dark:bg-blue-400/10 ring-blue-200 dark:ring-blue-500/30',
+                                                                    'fg'     => 'text-blue-700 dark:text-blue-300',
+                                                                    'icon'   => 'doc',
+                                                                ],
+                                                                // default/generic
+                                                                '*' => [
+                                                                    'bubble' => 'bg-neutral-50 dark:bg-neutral-700/20 ring-neutral-200 dark:ring-neutral-600/40',
+                                                                    'fg'     => 'text-neutral-700 dark:text-neutral-300',
+                                                                    'icon'   => 'file',
+                                                                ],
+                                                            ];
+                                                            $style = $types[$ext] ?? $types['*'];
+
+                                                            $previewUrl  = $md->getFullUrl(); // open in new tab
+                                                            $downloadUrl = route('media.download', $md);
+
+                                                            $sizeMB = number_format($md->size / 1048576, 2);
                                                         @endphp
-                                                        <a href="{{ $downloadUrl }}"
-                                                           target="_blank" rel="noopener noreferrer"
-                                                           class="flex items-center gap-2 px-3 py-2 rounded-lg border
-                                                                  border-neutral-200 dark:border-neutral-700
-                                                                  bg-white/70 dark:bg-neutral-800/70 hover:bg-neutral-50 dark:hover:bg-neutral-800">
-                                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                                                                <path d="M14.59 2.59L21 9l-7 7-6.41-6.41L14.59 2.59zM3 13l4 4H3v-4z"/>
-                                                            </svg>
-                                                            <span class="truncate text-sm">{{ $md->file_name }}</span>
-                                                            <span class="ml-auto text-[11px] opacity-70">
-                                                                {{ number_format($md->size/1048576, 2) }} MB
-                                                            </span>
-                                                        </a>
+                                                        <div class="group flex items-center gap-3 w-full max-w-[520px]
+                                                            rounded-xl border border-neutral-200 dark:border-neutral-700
+                                                            bg-white/80 dark:bg-neutral-800/70 px-3 py-2
+                                                            hover:bg-neutral-50 dark:hover:bg-neutral-800 transition"
+                                                        >
+                                                            {{-- icon bubble --}}
+                                                            <div class="shrink-0 h-8 w-8 rounded-lg ring-1 {{ $style['bubble'] }} flex items-center justify-center">
+                                                                @switch($style['icon'])
+                                                                    @case('pdf')
+                                                                        <svg viewBox="0 0 24 24" class="h-4 w-4 {{ $style['fg'] }}" fill="currentColor">
+                                                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 3.5L18.5 8H14V3.5zM8 13h2.5a1.5 1.5 0 0 1 0 3H9.5V18H8v-5zm1.5 1.5H10a.5.5 0 0 0 0-1h-1v1zM12 13h3a1 1 0 1 1 0 2h-2v3h-1v-5zm3 1h-2v1h2a.5.5 0 0 0 0-1zM17 13h1.5a1.5 1.5 0 0 1 0 3H18V18h-1v-5zm1.5 1.5H18v1h.5a.5.5 0 0 0 0-1z"/>
+                                                                        </svg>
+                                                                        @break
+                                                                    @case('zip')
+                                                                        <svg viewBox="0 0 24 24" class="h-4 w-4 {{ $style['fg'] }}" fill="currentColor">
+                                                                            <path d="M7 2h7l4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm6 2v4h4M9 6h2v2H9V6zm0 4h2v2H9v-2zm2 4H9v2h2v-2z"/>
+                                                                        </svg>
+                                                                        @break
+                                                                    @case('txt')
+                                                                        <svg viewBox="0 0 24 24" class="h-4 w-4 {{ $style['fg'] }}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                                            <path d="M14 2v6h6M8 13h8M8 16h8M8 10h4"/>
+                                                                        </svg>
+                                                                        @break
+                                                                    @case('doc')
+                                                                        <svg viewBox="0 0 24 24" class="h-4 w-4 {{ $style['fg'] }}" fill="currentColor">
+                                                                            <path d="M6 2h8l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 2v4h4M8 10h8v2H8v-2zm0 4h8v2H8v-2z"/>
+                                                                        </svg>
+                                                                        @break
+                                                                    @default
+                                                                        <svg viewBox="0 0 24 24" class="h-4 w-4 {{ $style['fg'] }}" fill="currentColor">
+                                                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/>
+                                                                        </svg>
+                                                                @endswitch
+                                                            </div>
+
+                                                            {{-- name + meta --}}
+                                                            <div class="min-w-0 flex-1">
+                                                                <div class="flex items-center gap-2">
+                                                                    <a href="{{ $previewUrl }}" target="_blank" rel="noopener noreferrer" wire:navigate="false"
+                                                                       class="font-medium text-neutral-800 dark:text-neutral-100 hover:underline truncate">
+                                                                        {{ $md->file_name }}
+                                                                    </a>
+                                                                    <span class="shrink-0 text-[10px] uppercase px-1.5 py-0.5 rounded
+                                                                                 ring-1 {{ $style['bubble'] }} {{ $style['fg'] }}">
+                                                                        {{ $ext ?: 'file' }}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+                                                                    {{ $sizeMB }} MB
+                                                                </div>
+                                                            </div>
+
+                                                            {{-- actions --}}
+                                                            <div class="flex items-center gap-1.5" wire:navigate="false">
+                                                                {{-- Only show "open in new tab" for non-archives --}}
+                                                                @unless($isArchive)
+                                                                    <a href="{{ $previewUrl }}" target="_blank" rel="noopener noreferrer" wire:navigate="false"
+                                                                       class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700" title="Open in new tab">
+                                                                        <svg viewBox="0 0 24 24" class="h-4 w-4 text-neutral-600 dark:text-neutral-300" fill="none" stroke="currentColor" stroke-width="1.7">
+                                                                            <path d="M14 3h7v7M10 14L21 3M21 14v7h-7"/>
+                                                                        </svg>
+                                                                    </a>
+                                                                @endunless
+
+                                                                {{-- Always keep Download; for archives this is the only action --}}
+                                                                <a href="{{ $downloadUrl }}"
+                                                                   wire:navigate="false"
+                                                                   class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                                                   title="Download" target="_self">
+                                                                    <svg viewBox="0 0 24 24" class="h-4 w-4 text-neutral-600 dark:text-neutral-300"
+                                                                         fill="none" stroke="currentColor" stroke-width="1.7">
+                                                                        <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/>
+                                                                    </svg>
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     @endif
                                                 @endforeach
                                             </div>
