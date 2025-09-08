@@ -8,17 +8,34 @@ use App\Models\Message;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
+use Livewire\WithFileUploads;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class AdminChatApp extends BaseAdminComponent
 {
+    use WithFileUploads;
+
     public ?int $selectedId    = null;
     public string $messageText = '';
     public string $search      = '';
 
     /** Pagination (latest chunk only) */
-    public int $perPage        = 50;          // tune: 30–100
-    public ?string $cursor     = null;     // current cursor (older)
-    public ?string $nextCursor = null; // set when more older messages exist
+    public int $perPage        = 50;
+    public ?string $cursor     = null;       // current cursor (older)
+    public ?string $nextCursor = null;   // set when more older messages exist
+
+    /** New: uploads */
+    public array $uploads = []; // array of Livewire temporary files
+
+    protected function rules(): array
+    {
+        return [
+            'messageText' => ['nullable', 'string', 'max:5000'],
+            'uploads'     => ['array', 'max:5'],
+            'uploads.*'   => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+        ];
+    }
 
     public function mount(?int $conversationId = null): void
     {
@@ -59,10 +76,7 @@ class AdminChatApp extends BaseAdminComponent
         }
 
         return Conversation::query()
-            ->with([
-                'user:id,name,email',
-                'user.media',
-            ])
+            ->with(['user:id,name,email', 'user.media'])
             ->find($this->selectedId);
     }
 
@@ -76,13 +90,11 @@ class AdminChatApp extends BaseAdminComponent
         $page = Message::query()
             ->select(['id', 'conversation_id', 'sender_id', 'sender_type', 'body', 'created_at'])
             ->where('conversation_id', $this->selectedId)
-            ->orderByDesc('id') // best for cursor pagination
+            ->orderByDesc('id')
             ->cursorPaginate($this->perPage, ['*'], 'cursor', $this->cursor);
 
-        // pointer for “Load older”
         $this->nextCursor = optional($page->nextCursor())?->encode();
 
-        // Reverse so UI is oldest → newest
         return collect($page->items())->reverse()->values();
     }
 
@@ -92,16 +104,15 @@ class AdminChatApp extends BaseAdminComponent
         $this->selectedId = $conversationId;
         $this->cursor     = null;
         $this->nextCursor = null;
+        $this->uploads    = [];
 
         Message::where('conversation_id', $conversationId)
             ->where('sender_id', '!=', Auth::id())
             ->where('is_read', false)
-            ->update([
-                'is_read' => true,
-                'read_at' => now(),
-            ]);
+            ->update(['is_read' => true, 'read_at' => now()]);
 
         $this->dispatch('scroll-bottom');
+        $this->dispatch('focus-composer');
     }
 
     /** Load older chunk (adds older items at the top on next render) */
@@ -109,7 +120,18 @@ class AdminChatApp extends BaseAdminComponent
     {
         if ($this->nextCursor) {
             $this->cursor = $this->nextCursor;
+            // let the blade JS preserve scroll
+            $this->dispatch('older-loaded');
         }
+    }
+
+    /** Remove a selected temp upload by its temp filename (stable id) */
+    public function removeUploadByName(string $filename): void
+    {
+        $this->uploads = collect($this->uploads)
+            ->reject(fn ($f) => method_exists($f, 'getFilename') && $f->getFilename() === $filename)
+            ->values()
+            ->all();
     }
 
     #[On('message-sent')]
@@ -118,9 +140,20 @@ class AdminChatApp extends BaseAdminComponent
         $this->dispatch('scroll-bottom');
     }
 
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function send(): void
     {
-        if ( ! $this->selectedId || trim($this->messageText) === '') {
+        $this->validate();
+
+        if ( ! $this->selectedId) {
+            return;
+        }
+
+        // disallow truly empty messages
+        if (trim($this->messageText) === '' && count($this->uploads) === 0) {
             return;
         }
 
@@ -132,6 +165,13 @@ class AdminChatApp extends BaseAdminComponent
             'is_read'         => false,
         ]);
 
+        // attach files (pass real path to Spatie)
+        foreach ($this->uploads as $file) {
+            $msg->addMedia($file->getRealPath())
+                ->usingFileName($file->getClientOriginalName())
+                ->toMediaCollection('attachments');
+        }
+
         // update pointers on conversation
         $conv = Conversation::find($this->selectedId);
         $conv?->update([
@@ -139,7 +179,13 @@ class AdminChatApp extends BaseAdminComponent
             'last_message_at' => now(),
         ]);
 
+        // reset
         $this->messageText = '';
+        $this->uploads     = [];
+
+        // show latest page again
+        $this->cursor = null;
+
         $this->dispatch('scroll-bottom');
         $this->dispatch('message-sent');
     }
