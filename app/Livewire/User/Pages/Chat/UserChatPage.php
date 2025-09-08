@@ -7,19 +7,17 @@ use App\Models\Message;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Livewire\Attributes\On;
 
 class UserChatPage extends Component
 {
     public ?Conversation $conversation = null;
-    public string $messageText = '';
+    public string $messageText         = '';
     public Collection $chatMessages;
     public bool $adminIsTyping = false;
 
-
     public function mount(): void
     {
-        $this->chatMessages = new Collection();
+        $this->chatMessages = new Collection;
         $this->ensureConversationExists();
         $this->loadMessages();
         $this->markOtherSideMessagesAsRead();
@@ -27,7 +25,7 @@ class UserChatPage extends Component
 
     public function ensureConversationExists(): void
     {
-        $userId = Auth::id();
+        $userId             = Auth::id();
         $this->conversation = Conversation::firstOrCreate(
             ['user_id' => $userId],
             ['last_message_at' => now()]
@@ -36,7 +34,7 @@ class UserChatPage extends Component
 
     public function loadMessages(): void
     {
-        if (! $this->conversation) {
+        if ( ! $this->conversation) {
             return;
         }
 
@@ -52,7 +50,7 @@ class UserChatPage extends Component
             return;
         }
 
-        if (! $this->conversation) {
+        if ( ! $this->conversation) {
             $this->ensureConversationExists();
         }
 
@@ -75,11 +73,9 @@ class UserChatPage extends Component
         $this->dispatch('message-sent');
     }
 
-
-
     public function markOtherSideMessagesAsRead(): void
     {
-        if (! $this->conversation) {
+        if ( ! $this->conversation) {
             return;
         }
 
@@ -92,14 +88,14 @@ class UserChatPage extends Component
             ]);
     }
 
-    public function getListeners()
+    public function getListeners(): array
     {
         return [
             'echo:conversation.' . ($this->conversation?->id ?? 'none') . ',MessageSent' => 'messageReceived',
         ];
     }
 
-    public function messageReceived($event): void
+    public function messageReceived(): void
     {
         // Refresh messages when a new message is received via broadcasting
         $this->loadMessages();
@@ -112,5 +108,3 @@ class UserChatPage extends Component
             ->layout('components.layouts.user_panel', ['external_class' => 'p-0 h-full overflow-hidden']);
     }
 }
-
-

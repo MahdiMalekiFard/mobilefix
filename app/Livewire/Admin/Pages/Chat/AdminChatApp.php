@@ -15,15 +15,20 @@ class AdminChatApp extends BaseAdminComponent
     public string $messageText = '';
     public string $search      = '';
 
+    /** Pagination (latest chunk only) */
+    public int $perPage        = 50;          // tune: 30–100
+    public ?string $cursor     = null;     // current cursor (older)
+    public ?string $nextCursor = null; // set when more older messages exist
+
     public function mount(?int $conversationId = null): void
     {
         $this->selectedId = $conversationId;
     }
 
+    /** Sidebar list (users + last message + unread count) */
     public function getConversationsProperty()
     {
-        // Eager-load lastMessage + user and compute unread_count efficiently
-        $query = Conversation::query()
+        return Conversation::query()
             ->with([
                 'user:id,name,email',
                 'user.media',
@@ -42,11 +47,11 @@ class AdminChatApp extends BaseAdminComponent
                         ->orWhere('email', 'like', "%{$term}%");
                 });
             })
-            ->orderByDesc('last_message_at');
-
-        return $query->get();
+            ->orderByDesc('last_message_at')
+            ->get();
     }
 
+    /** Active conversation (header info) */
     public function getActiveConversationProperty(): ?Conversation
     {
         if ( ! $this->selectedId) {
@@ -61,23 +66,33 @@ class AdminChatApp extends BaseAdminComponent
             ->find($this->selectedId);
     }
 
+    /** Messages: only latest chunk via cursor pagination, then reverse for UI */
     public function getMessagesProperty()
     {
         if ( ! $this->selectedId) {
             return collect();
         }
 
-        return Message::query()
+        $page = Message::query()
+            ->select(['id', 'conversation_id', 'sender_id', 'sender_type', 'body', 'created_at'])
             ->where('conversation_id', $this->selectedId)
-            ->orderBy('created_at')
-            ->get();
+            ->orderByDesc('id') // best for cursor pagination
+            ->cursorPaginate($this->perPage, ['*'], 'cursor', $this->cursor);
+
+        // pointer for “Load older”
+        $this->nextCursor = optional($page->nextCursor())->encode();
+
+        // Reverse so UI is oldest → newest
+        return collect($page->items())->reverse()->values();
     }
 
+    /** Open a conversation (reset cursor and mark others as read) */
     public function open(int $conversationId): void
     {
         $this->selectedId = $conversationId;
+        $this->cursor     = null;
+        $this->nextCursor = null;
 
-        // mark others' messages as read when opening
         Message::where('conversation_id', $conversationId)
             ->where('sender_id', '!=', Auth::id())
             ->where('is_read', false)
@@ -86,11 +101,18 @@ class AdminChatApp extends BaseAdminComponent
                 'read_at' => now(),
             ]);
 
-        // trigger front-end to scroll to bottom
         $this->dispatch('scroll-bottom');
     }
 
-    #[On('message-sent')] // optional: after sending a message from another component
+    /** Load older chunk (adds older items at the top on next render) */
+    public function loadOlder(): void
+    {
+        if ($this->nextCursor) {
+            $this->cursor = $this->nextCursor;
+        }
+    }
+
+    #[On('message-sent')]
     public function refreshThread(): void
     {
         $this->dispatch('scroll-bottom');
@@ -110,16 +132,16 @@ class AdminChatApp extends BaseAdminComponent
             'is_read'         => false,
         ]);
 
-        // update conversation pointers
+        // update pointers on conversation
         $conv = Conversation::find($this->selectedId);
-        $conv->update([
+        $conv?->update([
             'last_message_id' => $msg->id,
             'last_message_at' => now(),
         ]);
 
         $this->messageText = '';
         $this->dispatch('scroll-bottom');
-        $this->dispatch('message-sent'); // if other widgets listen
+        $this->dispatch('message-sent');
     }
 
     public function render()

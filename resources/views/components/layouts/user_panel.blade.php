@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html
-        lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-        dir="{{app()->getLocale()=='fa'?'rtl':'ltr'}}">
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    dir="{{ app()->getLocale()=='fa' ? 'rtl' : 'ltr' }}"
+    class="h-full"> {{-- lock html height --}}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
@@ -16,34 +17,30 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body class="">
+<body class="h-full overflow-hidden"> {{-- lock body height and kill page scroll --}}
 
 <div x-data="{ open: false }"
-     x-init="() => { $refs.contentarea.scrollTop = 99999999 }"
-     @keydown.window.escape="open = false" class="flex flex-col min-h-screen">
+     x-init="() => { $refs.contentarea && ($refs.contentarea.scrollTop = 99999999) }"
+     @keydown.window.escape="open = false"
+     class="h-full min-h-0 overflow-hidden flex"> {{-- was min-h-screen --}}
 
+    {{-- Mobile nav --}}
     @include('user.layouts.nav-mobile')
 
-
-    <!-- Static sidebar for desktop -->
+    {{-- Static sidebar for desktop --}}
     @include('user.layouts.nav')
 
-    <div class="lg:ps-72 flex flex-col flex-1">
+    <div class="lg:ps-72 flex flex-col flex-1 min-h-0 overflow-hidden">
         <livewire:user.shared.header />
-        <main class="bg-base-300 h-full flex-1">
-            <div class="md:px-4 sm:px-6 lg:px-8 h-full {{$external_class??''}}" x-ref="contentarea">
+
+        <main class="bg-base-300 flex-1 min-h-0 overflow-hidden"> {{-- ensure no page scroll here --}}
+            <div
+                class="h-full min-h-0 overflow-hidden {{$external_class ?? ''}} {{ request()->routeIs('user.chat.index') ? 'px-0' : 'md:px-4 sm:px-6 lg:px-8' }}"
+                x-ref="contentarea">
                 {{$slot}}
             </div>
         </main>
     </div>
-
-
-
-    {{--    <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">--}}
-    {{--        <aside>--}}
-    {{--            <p>Copyright © {new Date().getFullYear()} - All right reserved by ACME Industries Ltd</p>--}}
-    {{--        </aside>--}}
-    {{--    </footer>--}}
 </div>
 
 {{--  TOAST area --}}

@@ -10,7 +10,6 @@
            grid grid-cols-1 lg:[grid-template-columns:clamp(320px,28vw,420px)_minmax(0,1fr)]">
 
     {{-- ========== LEFT SIDEBAR (Conversations) ========== --}}
-    {{-- Desktop: static column (lg: block) --}}
     <aside class="hidden lg:flex flex-col min-w-0 h-full overflow-hidden
                 border-r border-neutral-200 dark:border-neutral-800
                 bg-neutral-100 dark:bg-neutral-900/40">
@@ -96,6 +95,7 @@
              bg-neutral-100 dark:bg-neutral-900/95
              border-r border-neutral-200 dark:border-neutral-800
              flex flex-col overflow-hidden">
+
             {{-- Drawer header --}}
             <div class="flex items-center justify-between gap-3 p-4 border-b border-neutral-200 dark:border-neutral-800">
                 <div class="flex items-center gap-3 min-w-0">
@@ -172,7 +172,6 @@
     <section class="flex flex-col min-w-0 h-full overflow-hidden">
         {{-- Header --}}
         <header class="flex items-center gap-3 px-4 lg:px-6 py-3 lg:py-4 border-b border-neutral-200 dark:border-neutral-800 shrink-0">
-            {{-- Mobile: conversation toggle button --}}
             <button class="lg:hidden p-2 mr-1 rounded-full hover:bg-neutral-200/60 dark:hover:bg-neutral-800"
                     @click="drawer=true" title="Conversations">
                 <svg class="h-5 w-5 text-neutral-700 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -196,15 +195,11 @@
         <div id="messages-box"
              x-data="{ atBottom: true }"
              x-ref="box"
-             {{-- scroll programmatically when Livewire dispatches --}}
              @scroll-bottom.window="$nextTick(() => {
-                                        $refs.box.scrollTo({ top: $refs.box.scrollHeight, behavior: 'smooth' });
-                                     })"
-             {{-- track user scroll position on THIS element (the scroller) --}}
-             @scroll.passive="
-                                atBottom = ($el.scrollTop + $el.clientHeight) >= ($el.scrollHeight - 50)
-                             "
-             class="relative flex-1 overflow-y-auto px-4 lg:px-6 py-4 lg:py-6 min-h-0 bg-white dark:bg-neutral-900">
+                 $refs.box.scrollTo({ top: $refs.box.scrollHeight, behavior: 'smooth' });
+             })"
+             @scroll.passive="atBottom = ($el.scrollTop + $el.clientHeight) >= ($el.scrollHeight - 50)"
+             class="relative flex-1 overflow-y-auto overflow-x-hidden px-4 lg:px-6 py-4 lg:py-6 min-h-0 bg-white dark:bg-neutral-900">
 
             @if(!$active)
                 <div class="text-center text-neutral-400 dark:text-neutral-500 mt-20">
@@ -213,42 +208,41 @@
             @else
                 <div class="min-h-full flex flex-col justify-end">
                     <div class="space-y-4">
+
+                        {{-- Load older appears when there is a next cursor --}}
+                        @if($this->nextCursor)
+                            <div class="flex justify-center">
+                                <button wire:click="loadOlder"
+                                        class="text-xs px-3 py-1 rounded-full border border-neutral-300 dark:border-neutral-700
+                                               hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                                    Load older messages
+                                </button>
+                            </div>
+                        @endif
+
                         @foreach($this->messages as $m)
                             @php $isMine = $m->sender_id === auth()->id(); @endphp
                             <div class="flex {{ $isMine ? 'justify-end' : 'justify-start' }}" wire:key="m-{{ $m->id }}">
                                 <div class="relative max-w-[85%] lg:max-w-[70%]">
-                                    <div class="
-                                            px-3 py-2 break-words shadow-sm leading-relaxed relative
-                                            {{ $isMine
-                                                ? 'bg-blue-500 text-white rounded-2xl rounded-br-none'
-                                                : 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 rounded-2xl rounded-bl-none'
-                                            }}
-                                        "
-                                    >
+                                    <div class="{{ $isMine
+                                        ? 'bg-blue-500 text-white rounded-2xl rounded-br-none'
+                                        : 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 rounded-2xl rounded-bl-none'
+                                        }} px-4 py-3 shadow-sm break-words">
                                         <p class="whitespace-pre-line">{{ $m->body }}</p>
-                                        <div class="mt-1 text-[11px] opacity-70 text-right
-                                                {{ $isMine ? 'text-white/80' : 'text-neutral-500 dark:text-neutral-400' }}">
+                                        <div class="mt-1 text-[11px] opacity-70 text-right {{ $isMine ? 'text-white/80' : 'text-neutral-500 dark:text-neutral-400' }}">
                                             {{ $m->created_at->format('H:i') }}
                                         </div>
-
-                                        {{-- tail --}}
-                                        @if($isMine)
-                                            <span class="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-bl-full"></span>
-                                        @else
-                                            <span class="absolute bottom-0 left-0 w-4 h-4 bg-neutral-100 dark:bg-neutral-800 rounded-br-full"></span>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
                         @endforeach
 
-                        <!-- anchor -->
                         <div id="messages-end" wire:key="messages-end"></div>
                     </div>
                 </div>
             @endif
 
-            <!-- Sticky, centered scroll-to-bottom button INSIDE the messages area -->
+            {{-- Sticky scroll-to-bottom button inside the messages area --}}
             <div class="sticky bottom-4 flex justify-center pointer-events-none">
                 <button
                     x-cloak
@@ -258,9 +252,7 @@
                     class="pointer-events-auto z-10 h-10 w-10 flex items-center justify-center
                            rounded-full bg-neutral-400/50 hover:bg-neutral-500/70 hover:cursor-pointer
                            text-white shadow-md"
-                    title="Scroll to bottom"
-                >
-                    <!-- Down arrow icon -->
+                    title="Scroll to bottom">
                     <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
                         <path d="M12 16.5l-6-6 1.4-1.4L12 13.7l4.6-4.6 1.4 1.4-6 6z"/>
                     </svg>
@@ -277,16 +269,16 @@
                     wire:model.defer="messageText"
                     wire:keydown.enter="send"
                     class="flex-1 rounded-full border
-                 border-neutral-200 dark:border-neutral-800
-                 bg-white dark:bg-neutral-800
-                 text-neutral-800 dark:text-neutral-100
-                 placeholder-neutral-400 dark:placeholder-neutral-500
-                 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/60"
+                           border-neutral-200 dark:border-neutral-800
+                           bg-white dark:bg-neutral-800
+                           text-neutral-800 dark:text-neutral-100
+                           placeholder-neutral-400 dark:placeholder-neutral-500
+                           px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/60"
                     placeholder="{{ $active ? 'Write Something...' : 'Select a conversation first' }}" />
                 <button
                     class="inline-flex items-center justify-center h-11 w-11 lg:h-12 lg:w-12 rounded-full
-                 bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700
-                 shadow-md disabled:opacity-40 hover:cursor-pointer"
+                           bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700
+                           shadow-md disabled:opacity-40 hover:cursor-pointer"
                     wire:click="send" @disabled(!$active) title="Send">
                     <svg class="h-5 w-5 lg:h-6 lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/>

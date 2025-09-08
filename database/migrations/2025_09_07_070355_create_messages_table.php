@@ -25,10 +25,9 @@ return new class extends Migration
             $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->index(['conversation_id']);
-            $table->index(['sender_id']);
-            $table->index(['is_read']);
-            $table->index(['created_at']);
+            $table->index(['conversation_id', 'id']);
+            $table->index(['conversation_id', 'created_at']);
+            $table->index(['conversation_id', 'is_read', 'sender_id']);
         });
     }
 

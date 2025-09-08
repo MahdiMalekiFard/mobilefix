@@ -1,4 +1,4 @@
-<div class="@container h-[100vh] flex flex-col">
+<div class="@container h-full min-h-0 flex flex-col">
     <style>
         @layer utilities {
             .message-bubble {
@@ -17,9 +17,14 @@
             }
         }
     </style>
-    <div class="bg-white dark:bg-neutral-900/95 flex flex-col h-full @container-normal">
-        <!-- Header -->
-        <div class="px-6 py-4 border-b border-neutral-200/70 dark:border-neutral-800 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-neutral-800 dark:to-neutral-700 shrink-0">
+
+    <div class="bg-white dark:bg-neutral-900/95 flex flex-col h-full min-h-0 @container-normal">
+        <!-- Header (sticky inside chat) -->
+        <div
+            class="sticky top-0 z-20 px-6 py-4 border-b border-neutral-200/70 dark:border-neutral-800
+                   bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-neutral-800 dark:to-neutral-700
+                   backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-neutral-900/70
+                   shrink-0">
             <div class="flex items-center gap-4">
                 <div class="h-12 w-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
                     <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,58 +42,52 @@
             </div>
         </div>
 
-        <!-- Messages Area -->
-        <div 
+        <!-- Messages Area (only this scrolls) -->
+        <div
             id="messages-container"
             x-data="{ atBottom: true }"
             x-ref="messagesBox"
             @scroll.passive="atBottom = ($el.scrollTop + $el.clientHeight) >= ($el.scrollHeight - 50)"
-            class="flex-1 overflow-y-auto px-4 @lg:px-6 py-4 @lg:py-6 min-h-0 bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900 dark:to-neutral-900 scrollbar-hide"
+            class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 @lg:px-6 py-4 @lg:py-6
+                    bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900 dark:to-neutral-900"
         >
             @forelse($chatMessages ?? [] as $msg)
                 @php $isUser = $msg->sender_type === 'user'; @endphp
                 <div class="flex {{ $isUser ? 'justify-end' : 'justify-start' }} mb-4 message-bubble" wire:key="msg-{{ $msg->id }}">
-                    <div class="relative max-w-[85%] @lg:max-w-[70%]">
-                        <!-- Message Bubble -->
-                        <div class="px-4 py-3 break-words shadow-sm leading-relaxed relative focus:outline-2 focus:outline-blue-500 focus:outline-offset-2
-                            {{ $isUser 
-                                ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl rounded-br-none' 
-                                : 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-2xl rounded-bl-none border border-neutral-200 dark:border-neutral-700' 
-                            }}">
-                            
-                            <!-- Avatar for admin messages -->
-                            @if(!$isUser)
-                                <div class="absolute -left-10 bottom-0">
-                                    <div class="h-8 w-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-md">
-                                        <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            @endif
+                    {{-- wrapper reserves space for the avatar on admin messages --}}
+                    <div class="relative {{ $isUser ? '' : 'pl-10' }} max-w-[85%] @lg:max-w-[70%]">
 
-                            <!-- Message Content -->
+                        {{-- Admin avatar (now inside the wrapper, no negative offsets) --}}
+                        @unless($isUser)
+                            <div class="absolute left-0 bottom-2">
+                                <div class="h-8 w-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full
+                                            flex items-center justify-center shadow-md">
+                                    <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        @endunless
+
+                        {{-- Message bubble --}}
+                        <div class="px-4 py-3 break-words shadow-sm leading-relaxed relative focus:outline-2 focus:outline-blue-500 focus:outline-offset-2
+                            {{ $isUser
+                                ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl rounded-br-none'
+                                : 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-2xl rounded-bl-none border border-neutral-200 dark:border-neutral-700'
+                            }}"
+                        >
                             <div class="whitespace-pre-line">{{ $msg->body }}</div>
-                            
-                            <!-- Timestamp -->
-                            <div class="mt-2 text-[11px] opacity-75 
-                                {{ $isUser ? 'text-blue-100' : 'text-neutral-500 dark:text-neutral-400' }}">
+                            <div class="mt-2 text-[11px] opacity-75 {{ $isUser ? 'text-blue-100' : 'text-neutral-500 dark:text-neutral-400' }}">
                                 {{ $msg->created_at->format('g:i A') }}
                                 @if($isUser)
                                     <span class="ml-1">
                                         <svg class="inline h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                         </svg>
                                     </span>
                                 @endif
                             </div>
-
-                            <!-- Chat Tail -->
-                            @if($isUser)
-                                <div class="absolute bottom-0 right-0 w-4 h-4 bg-blue-600 transform rotate-45 translate-x-2 translate-y-2 rounded-sm"></div>
-                            @else
-                                <div class="absolute bottom-0 left-0 w-4 h-4 bg-white dark:bg-neutral-800 border-l border-b border-neutral-200 dark:border-neutral-700 transform rotate-45 -translate-x-2 translate-y-2 rounded-sm"></div>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -104,7 +103,6 @@
                 </div>
             @endforelse
 
-            <!-- Typing indicator (placeholder for when admin is typing) -->
             @if($adminIsTyping)
                 <div class="flex justify-start mb-4">
                     <div class="relative max-w-[85%] @lg:max-w-[70%]">
@@ -117,15 +115,12 @@
                                 </div>
                                 <span class="text-xs text-neutral-500 dark:text-neutral-400">Support is typing...</span>
                             </div>
-                            
-                            <!-- Chat tail for typing indicator -->
                             <div class="absolute bottom-0 left-0 w-4 h-4 bg-white dark:bg-neutral-800 border-l border-b border-neutral-200 dark:border-neutral-700 transform rotate-45 -translate-x-2 translate-y-2 rounded-sm"></div>
                         </div>
                     </div>
                 </div>
             @endif
 
-            <!-- Scroll anchor -->
             <div id="messages-end"></div>
 
             <!-- Scroll to bottom button -->
@@ -135,8 +130,8 @@
                     x-show="!atBottom"
                     x-transition.opacity.duration.200ms
                     @click="$refs.messagesBox.scrollTo({ top: $refs.messagesBox.scrollHeight, behavior: 'smooth' })"
-                    class="pointer-events-auto h-10 w-10 flex items-center justify-center rounded-full 
-                           bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 
+                    class="pointer-events-auto h-10 w-10 flex items-center justify-center rounded-full
+                           bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700
                            hover:bg-neutral-50 dark:hover:bg-neutral-700 shadow-lg text-neutral-600 dark:text-neutral-300
                            transition-colors duration-200"
                     title="Scroll to bottom"
@@ -149,8 +144,7 @@
         </div>
 
         <!-- Input Area -->
-        <footer class="border-t border-neutral-200 dark:border-neutral-800
-                       bg-neutral-50 dark:bg-neutral-900/40 px-3 @lg:px-4 py-3 shrink-0">
+        <footer class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 px-3 @lg:px-4 py-3 shrink-0">
             <div class="flex items-center gap-2 @lg:gap-3">
                 <input
                     wire:model.defer="messageText"
@@ -166,21 +160,19 @@
                     class="inline-flex items-center justify-center h-11 w-11 @lg:h-12 @lg:w-12 rounded-full
                            bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700
                            shadow-md disabled:opacity-40 hover:cursor-pointer transition-colors"
-                    wire:click="send" 
+                    wire:click="send"
                     title="Send">
                     <svg class="h-5 w-5 @lg:h-6 @lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/>
                     </svg>
                 </button>
             </div>
-            
         </footer>
     </div>
 </div>
 
 <script>
     document.addEventListener('livewire:init', () => {
-        // Auto-scroll to bottom ONLY when user sends a message
         Livewire.on('message-sent', () => {
             const el = document.getElementById('messages-container');
             if (el) {
@@ -188,13 +180,10 @@
                     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
                 }, 150);
             }
-            
-            // Input clears automatically with wire:model.defer
         });
 
-        // Show notification if window is not focused when message received
         Livewire.on('message-received', () => {
-            if (!document.hasFocus()) {
+            if (!document.hasFocus() && 'Notification' in window) {
                 if (Notification.permission === 'granted') {
                     new Notification('New message from Support', {
                         body: 'You have received a new message',
@@ -204,12 +193,10 @@
             }
         });
 
-        // Request notification permission
         if ('Notification' in window && Notification.permission === 'default') {
             Notification.requestPermission();
         }
 
-        // Auto-focus on input when page loads
         setTimeout(() => {
             const input = document.querySelector('input[wire\\:model\\.defer="messageText"]');
             if (input) input.focus();
@@ -217,12 +204,9 @@
     });
 
     document.addEventListener('livewire:navigated', () => {
-        // Auto-focus on input after navigation
         setTimeout(() => {
             const input = document.querySelector('input[wire\\:model\\.defer="messageText"]');
             if (input) input.focus();
         }, 500);
     });
-
-    // Enter key handling is now handled by wire:keydown.enter="send" in the template
 </script>
