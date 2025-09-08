@@ -71,6 +71,16 @@ class UserMagicLinkPage extends Component
             $magicLinkService = app(MagicLinkService::class);
             $magicLinkService->markAsUsed($this->token);
 
+            // set the mobile if not set
+            if (!$this->user->mobile) {
+                $this->user->mobile = $this->orderInfo['mobile'] ?? null;
+                $this->user->save();
+            }
+
+            if ($this->existingOrdersCount > 0) {
+                $magicLinkService->linkOrdersToUser($this->email, $this->user->id);
+            }
+
             // Redirect to dashboard
             return $this->redirect(route('user.dashboard'));
         }

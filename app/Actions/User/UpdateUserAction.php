@@ -34,7 +34,7 @@ class UpdateUserAction
     public function handle(User $user, array $payload): User
     {
         return DB::transaction(function () use ($user, $payload) {
-            $user->update($payload);
+            $user->update(Arr::except($payload, ['password']));
             $user->syncRoles(Arr::get($payload, 'rules', []));
             $this->fileService->addMedia($user, Arr::get($payload,'avatar'), 'avatar');
 
