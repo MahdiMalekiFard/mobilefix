@@ -337,13 +337,9 @@
                                                             {{-- name + meta --}}
                                                             <div class="min-w-0 flex-1">
                                                                 <div class="flex items-center gap-2">
-                                                                    <a href="{{ $previewUrl }}" target="_blank" rel="noopener noreferrer" wire:navigate="false"
-                                                                       class="font-medium text-neutral-800 dark:text-neutral-100 hover:underline truncate">
+                                                                    <span
+                                                                       class="font-medium text-neutral-800 dark:text-neutral-100">
                                                                         {{ $md->file_name }}
-                                                                    </a>
-                                                                    <span class="shrink-0 text-[10px] uppercase px-1.5 py-0.5 rounded
-                                                                                 ring-1 {{ $style['bubble'] }} {{ $style['fg'] }}">
-                                                                        {{ $ext ?: 'file' }}
                                                                     </span>
                                                                 </div>
                                                                 <div class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">
@@ -352,10 +348,10 @@
                                                             </div>
 
                                                             {{-- actions --}}
-                                                            <div class="flex items-center gap-1.5" wire:navigate="false">
+                                                            <div class="flex items-center gap-1.5">
                                                                 {{-- Only show "open in new tab" for non-archives --}}
                                                                 @unless($isArchive)
-                                                                    <a href="{{ $previewUrl }}" target="_blank" rel="noopener noreferrer" wire:navigate="false"
+                                                                    <a href="{{ $previewUrl }}" target="_blank" rel="noopener noreferrer"
                                                                        class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700" title="Open in new tab">
                                                                         <svg viewBox="0 0 24 24" class="h-4 w-4 text-neutral-600 dark:text-neutral-300" fill="none" stroke="currentColor" stroke-width="1.7">
                                                                             <path d="M14 3h7v7M10 14L21 3M21 14v7h-7"/>
@@ -365,9 +361,10 @@
 
                                                                 {{-- Always keep Download; for archives this is the only action --}}
                                                                 <a href="{{ $downloadUrl }}"
-                                                                   wire:navigate="false"
+                                                                   target="_blank" rel="noopener noreferrer"
                                                                    class="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                                                                   title="Download" target="_self">
+                                                                   title="Download"
+                                                                >
                                                                     <svg viewBox="0 0 24 24" class="h-4 w-4 text-neutral-600 dark:text-neutral-300"
                                                                          fill="none" stroke="currentColor" stroke-width="1.7">
                                                                         <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/>
@@ -488,8 +485,15 @@
 
             <div class="mt-2 flex items-center gap-2 lg:gap-3">
                 {{-- hidden file input --}}
-                <input type="file" multiple class="hidden" x-ref="file" wire:model="uploads"
-                       accept=".jpg,.jpeg,.png,.webp,.gif,.pdf,.txt,.zip,.doc,.docx,image/*"/>
+                <input
+                    id="chat-file-input"
+                    type="file"
+                    multiple
+                    class="hidden"
+                    x-ref="file"
+                    wire:model="newUploads"
+                    accept=".jpg,.jpeg,.png,.webp,.gif,.pdf,.txt,.zip,.doc,.docx,image/*"
+                />
 
                 {{-- improved attach button --}}
                 <button type="button"
@@ -540,6 +544,147 @@
 
             </div>
         </footer>
+
+        <!-- Upload Modal -->
+        <div
+            x-data="{ open: @entangle('showUploadModal').live }"
+            x-show="open"
+            x-cloak
+            class="fixed inset-0 z-[70] flex items-center justify-center"
+            aria-modal="true" role="dialog"
+        >
+            <!-- Backdrop -->
+            <div class="absolute inset-0 bg-black/40"></div>
+
+            <!-- Dialog with drag-drop support -->
+            <div
+                x-data="{
+                    over:false,
+                    addFiles(files){
+                            const dt = new DataTransfer();
+                            if ($refs.file.files?.length) Array.from($refs.file.files).forEach(f => dt.items.add(f));
+                            Array.from(files).forEach(f => dt.items.add(f));
+                            $refs.file.files = dt.files;
+                            $refs.file.dispatchEvent(new Event('change', { bubbles:true }));
+                    }
+                }"
+                @dragover.prevent="over=true"
+                @dragleave.prevent="over=false"
+                @drop.prevent="over=false; if ($event.dataTransfer?.files?.length) addFiles($event.dataTransfer.files)"
+                :class="over ? 'ring-2 ring-blue-400/50' : ''"
+                class="relative w-[92vw] max-w-xl rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden"
+                x-trap.noscroll="open"
+            >
+                <!-- Header -->
+                <div class="flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-800">
+                    <div class="font-semibold text-neutral-800 dark:text-neutral-100">
+                        {{ count($uploads ?? []) }} files selected
+                    </div>
+                    <button
+                        class="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        @click="open=false; $wire.cancelUploads()"
+                        aria-label="Close"
+                    >
+                        <svg class="h-5 w-5 text-neutral-600 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div class="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
+                    <!-- File list -->
+                    <div class="space-y-2">
+                        @foreach($uploads as $file)
+                            @php
+                                $isImg = str_starts_with($file->getMimeType(), 'image/');
+                                $name = $file->getClientOriginalName();
+                                $ext  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                                $sizeMB = number_format($file->getSize() / 1048576, 2);
+                                $map = [
+                                    'pdf' => ['ring' => 'ring-red-200 dark:ring-red-500/30', 'fg' => 'text-red-600 dark:text-red-300', 'label' => 'PDF'],
+                                    'zip' => ['ring' => 'ring-amber-200 dark:ring-amber-500/30', 'fg' => 'text-amber-700 dark:text-amber-300', 'label' => 'ZIP'],
+                                    'txt' => ['ring' => 'ring-sky-200 dark:ring-sky-500/30', 'fg' => 'text-sky-700 dark:text-sky-300', 'label' => 'TXT'],
+                                    'doc' => ['ring' => 'ring-blue-200 dark:ring-blue-500/30', 'fg' => 'text-blue-700 dark:text-blue-300', 'label' => 'DOC'],
+                                    'docx'=> ['ring' => 'ring-blue-200 dark:ring-blue-500/30', 'fg' => 'text-blue-700 dark:text-blue-300', 'label' => 'DOCX'],
+                                ];
+                                $sty = $map[$ext] ?? ['ring' => 'ring-neutral-200 dark:ring-neutral-600/40', 'fg' => 'text-neutral-700 dark:text-neutral-300', 'label' => strtoupper($ext ?: 'FILE')];
+                            @endphp
+
+                            <div class="flex items-center gap-3 rounded-xl border border-neutral-200 dark:border-neutral-700 p-2">
+                                @if($isImg)
+                                    <img src="{{ $file->temporaryUrl() }}" class="h-12 w-12 rounded-md object-cover border border-neutral-200 dark:border-neutral-700" />
+                                @else
+                                    <div class="h-12 w-12 shrink-0 rounded-md ring-1 {{ $sty['ring'] }} flex items-center justify-center">
+                                        <span class="text-xs font-semibold {{ $sty['fg'] }}">{{ $sty['label'] }}</span>
+                                    </div>
+                                @endif
+
+                                <div class="min-w-0 flex-1">
+                                    <div class="truncate text-sm font-medium text-neutral-800 dark:text-neutral-100">{{ $name }}</div>
+                                    <div class="text-[11px] text-neutral-500 dark:text-neutral-400">{{ $sizeMB }} MB</div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                                    wire:click="removeUploadByName(@js($file->getFilename()))"
+                                    title="Remove"
+                                >
+                                    <svg class="h-4 w-4 text-neutral-600 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Options -->
+                    <div class="flex items-center justify-between gap-4">
+                        <label class="inline-flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-neutral-300 dark:border-neutral-700"
+                                   wire:model.live="groupItems">
+                            <span class="text-sm text-neutral-700 dark:text-neutral-300">Group items</span>
+                        </label>
+
+                        <label class="inline-flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-neutral-300 dark:border-neutral-700"
+                                   wire:model.live="compressImages">
+                            <span class="text-sm text-neutral-700 dark:text-neutral-300">Compress images</span>
+                        </label>
+                    </div>
+
+                    <!-- Comment (uses your messageText) -->
+                    <div>
+                        <label class="block text-xs mb-1 text-neutral-500 dark:text-neutral-400">Comment</label>
+                        <textarea
+                            wire:model.defer="messageText"
+                            rows="2"
+                            class="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                            placeholder="Add a comment…"></textarea>
+                    </div>
+                </div>
+
+                <!-- Footer actions -->
+                <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
+                    <button
+                        class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        @click="document.getElementById('chat-file-input')?.click()"
+                    >Add</button>
+
+                    <button
+                        class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        @click="$wire.cancelUploads()"
+                    >Cancel</button>
+
+                    <button
+                        class="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow"
+                        wire:click="confirmSendFromModal"
+                    >Send</button>
+                </div>
+            </div>
+        </div>
+
     </section>
 </div>
 

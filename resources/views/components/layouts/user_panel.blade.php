@@ -2,7 +2,7 @@
 <html
     lang="{{ str_replace('_', '-', app()->getLocale()) }}"
     dir="{{ app()->getLocale()=='fa' ? 'rtl' : 'ltr' }}"
-    class="h-full"> {{-- lock html height --}}
+    class="{{ request()->routeIs('user.chat.index') ? 'h-full' : '' }}"> {{-- lock html height --}}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
@@ -17,12 +17,13 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body class="h-full overflow-hidden"> {{-- lock body height and kill page scroll --}}
+<body class="{{ request()->routeIs('user.chat.index') ? 'h-full' : '' }}"> {{-- lock body height and kill page scroll --}}
 
 <div x-data="{ open: false }"
      x-init="() => { $refs.contentarea && ($refs.contentarea.scrollTop = 99999999) }"
      @keydown.window.escape="open = false"
-     class="h-full min-h-0 overflow-hidden flex"> {{-- was min-h-screen --}}
+     class="{{ request()->routeIs('user.chat.index') ? 'flex h-full min-h-0 overflow-hidden' : 'flex flex-col min-h-screen' }}"
+>
 
     {{-- Mobile nav --}}
     @include('user.layouts.nav-mobile')
@@ -33,9 +34,9 @@
     <div class="lg:ps-72 flex flex-col flex-1 min-h-0 overflow-hidden">
         <livewire:user.shared.header />
 
-        <main class="bg-base-300 flex-1 min-h-0 overflow-hidden"> {{-- ensure no page scroll here --}}
+        <main class="bg-base-300 flex-1 min-h-0">
             <div
-                class="h-full min-h-0 overflow-hidden {{$external_class ?? ''}} {{ request()->routeIs('user.chat.index') ? 'px-0' : 'md:px-4 sm:px-6 lg:px-8' }}"
+                class="h-full min-h-0 {{$external_class ?? ''}} {{ request()->routeIs('user.chat.index') ? 'px-0' : 'md:px-4 sm:px-6 lg:px-8' }}"
                 x-ref="contentarea">
                 {{$slot}}
             </div>

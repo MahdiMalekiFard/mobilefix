@@ -7,6 +7,7 @@ use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -25,16 +26,83 @@ class AdminChatApp extends BaseAdminComponent
     public ?string $cursor     = null;       // current cursor (older)
     public ?string $nextCursor = null;   // set when more older messages exist
 
-    /** New: uploads */
-    public array $uploads = []; // array of Livewire temporary files
+    /** uploads */
+    public array $uploads        = []; // array of Livewire temporary files
+    public array $newUploads     = [];  // staging: last picked/dropped files
+    public bool $showUploadModal = false;
+    public bool $groupItems      = true;
+    public bool $compressImages  = false;
 
     protected function rules(): array
     {
         return [
-            'messageText' => ['nullable', 'string', 'max:5000'],
-            'uploads'     => ['array', 'max:5'],
-            'uploads.*'   => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+            'messageText'    => ['nullable', 'string', 'max:5000'],
+            'uploads'        => ['array', 'max:5'],
+            'uploads.*'      => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+
+            'newUploads'     => ['sometimes', 'array'],
+            'newUploads.*'   => ['sometimes', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+
+            'groupItems'     => ['boolean'],
+            'compressImages' => ['boolean'],
         ];
+    }
+
+    /** Auto-open modal right after files are chosen */
+    public function updatedUploads(): void
+    {
+        if ($this->selectedId && count($this->uploads ?? []) > 0) {
+            $this->showUploadModal = true;
+            $this->dispatch('focus-composer');
+        }
+    }
+
+    /** When user picks/drops a new batch, append to main list and clear the staging input */
+    public function updatedNewUploads(): void
+    {
+        // validate just this batch (optional but recommended for fast feedback)
+        $this->validateOnly('newUploads');
+        $this->validateOnly('newUploads.*');
+
+        // merge old + new, enforce uniqueness by tmp filename, cap at 5
+        $merged = collect($this->uploads)
+            ->concat($this->newUploads)
+            ->unique(fn ($f) => method_exists($f, 'getFilename') ? $f->getFilename() : spl_object_hash($f))
+            ->take(5) // keep earliest first; drop extras beyond 5
+            ->values()
+            ->all();
+
+        $this->uploads = $merged;
+        $this->reset('newUploads');       // clear the input so next Add only contains new picks
+        $this->showUploadModal = true;    // keep/bring modal up
+    }
+
+    /** Cancel: discard selected files & close */
+    public function cancelUploads(): void
+    {
+        $this->uploads         = [];
+        $this->reset('newUploads');
+        $this->showUploadModal = false;
+    }
+
+    /** “Send” from modal: reuse your send() then close */
+    public function confirmSendFromModal(): void
+    {
+        try {
+            $this->send();
+        } catch (FileDoesNotExist|FileIsTooBig $e) {
+            Log::error($e->getMessage());
+        }
+
+        $this->showUploadModal = false;
+    }
+
+    public function removeUploadByName(string $filename): void
+    {
+        $this->uploads = collect($this->uploads)
+            ->reject(fn ($f) => method_exists($f, 'getFilename') && $f->getFilename() === $filename)
+            ->values()
+            ->all();
     }
 
     public function mount(?int $conversationId = null): void
@@ -125,15 +193,6 @@ class AdminChatApp extends BaseAdminComponent
         }
     }
 
-    /** Remove a selected temp upload by its temp filename (stable id) */
-    public function removeUploadByName(string $filename): void
-    {
-        $this->uploads = collect($this->uploads)
-            ->reject(fn ($f) => method_exists($f, 'getFilename') && $f->getFilename() === $filename)
-            ->values()
-            ->all();
-    }
-
     #[On('message-sent')]
     public function refreshThread(): void
     {
@@ -157,27 +216,75 @@ class AdminChatApp extends BaseAdminComponent
             return;
         }
 
-        $msg = Message::create([
-            'conversation_id' => $this->selectedId,
-            'sender_id'       => auth()->id(),
-            'sender_type'     => 'admin',
-            'body'            => $this->messageText,
-            'is_read'         => false,
-        ]);
+        // ========== CASE 1: Group items into one message ==========
+        if ($this->groupItems) {
+            $msg = Message::create([
+                'conversation_id' => $this->selectedId,
+                'sender_id'       => auth()->id(),
+                'sender_type'     => 'admin',
+                'body'            => $this->messageText,
+                'is_read'         => false,
+            ]);
 
-        // attach files (pass real path to Spatie)
-        foreach ($this->uploads as $file) {
-            $msg->addMedia($file->getRealPath())
-                ->usingFileName($file->getClientOriginalName())
-                ->toMediaCollection('attachments');
+            foreach ($this->uploads as $file) {
+                $adder = $msg->addMedia($file->getRealPath())
+                    ->usingFileName($file->getClientOriginalName());
+
+                if ($this->compressImages && str_starts_with($file->getMimeType(), 'image/')) {
+                    $adder->withCustomProperties(['compress' => true]);
+                }
+
+                $adder->toMediaCollection('attachments');
+            }
+
+            $lastMessageId = $msg->id;
         }
 
-        // update pointers on conversation
-        $conv = Conversation::find($this->selectedId);
-        $conv?->update([
-            'last_message_id' => $msg->id,
-            'last_message_at' => now(),
-        ]);
+        // ========== CASE 2: Separate messages ==========
+        else {
+            $lastMessageId = null;
+
+            // 1. Send text first (if any)
+            if (trim($this->messageText) !== '') {
+                $textMsg = Message::create([
+                    'conversation_id' => $this->selectedId,
+                    'sender_id'       => auth()->id(),
+                    'sender_type'     => 'admin',
+                    'body'            => $this->messageText,
+                    'is_read'         => false,
+                ]);
+                $lastMessageId = $textMsg->id;
+            }
+
+            // 2. Send each file as its own message
+            foreach ($this->uploads as $file) {
+                $fileMsg = Message::create([
+                    'conversation_id' => $this->selectedId,
+                    'sender_id'       => auth()->id(),
+                    'sender_type'     => 'admin',
+                    'body'            => null,
+                    'is_read'         => false,
+                ]);
+
+                $adder = $fileMsg->addMedia($file->getRealPath())
+                    ->usingFileName($file->getClientOriginalName());
+
+                if ($this->compressImages && str_starts_with($file->getMimeType(), 'image/')) {
+                    $adder->withCustomProperties(['compress' => true]);
+                }
+
+                $adder->toMediaCollection('attachments');
+                $lastMessageId = $fileMsg->id;
+            }
+        }
+
+        // Update conversation pointers
+        if ($lastMessageId) {
+            Conversation::find($this->selectedId)?->update([
+                'last_message_id' => $lastMessageId,
+                'last_message_at' => now(),
+            ]);
+        }
 
         // reset
         $this->messageText = '';

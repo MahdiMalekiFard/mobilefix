@@ -4,11 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+return new class extends Migration {
+    /** Run the migrations. */
     public function up(): void
     {
         Schema::create('messages', function (Blueprint $table) {
@@ -16,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('conversation_id');
             $table->unsignedBigInteger('sender_id');
             $table->enum('sender_type', ['user', 'admin']);
-            $table->text('body');
+            $table->text('body')->nullable();
             $table->boolean('is_read')->default(false);
             $table->timestamp('read_at')->nullable();
             $table->softDeletes();
@@ -31,9 +28,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    /** Reverse the migrations. */
     public function down(): void
     {
         Schema::dropIfExists('messages');
