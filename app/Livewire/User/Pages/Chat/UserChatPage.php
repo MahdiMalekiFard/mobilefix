@@ -19,7 +19,8 @@ class UserChatPage extends Component
     public ?Conversation $conversation = null;
     public string $messageText         = '';
     public Collection $chatMessages;
-    public bool $adminIsTyping = false;
+    public bool $adminIsTyping    = false;
+    public bool $didInitialScroll = false;
 
     /** pagination state */
     public int $perPage        = 50;
@@ -111,6 +112,10 @@ class UserChatPage extends Component
         $this->ensureConversationExists();
         $this->loadMessages();
         $this->markOtherSideMessagesAsRead();
+
+        // Tell the browser to scroll after the DOM is painted
+        $this->didInitialScroll = true;
+        $this->dispatch('ui:scroll-bottom');
     }
 
     public function ensureConversationExists(): void

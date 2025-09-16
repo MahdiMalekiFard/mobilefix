@@ -1,8 +1,21 @@
 <div class="@container h-full min-h-0 flex flex-col">
     <style>
         @layer utilities {
-            .message-bubble { @starting-style { opacity: 0; transform: translateY(10px);} transition: all 300ms ease-out; }
-            .scrollbar-hide { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+            .message-bubble {
+                @starting-style {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                transition: all 300ms ease-out;
+            }
+
+            .scrollbar-hide {
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
         }
     </style>
 
@@ -65,148 +78,223 @@
                     $hasBody  = trim($msg->body) !== '';
                 @endphp
 
-                <div class="flex {{ $isUser ? 'justify-end' : 'justify-start' }} mb-10 message-bubble" wire:key="msg-{{ $msg->id }}">
-                    {{-- avatar only for admin --}}
-                    @unless($isUser)
-                        <div class="mr-2 flex-shrink-0 self-end">
-                            <div class="h-8 w-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-md">
-                                <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    @endunless
+                <div class="flex {{ $isUser ? 'justify-start' : 'justify-end' }} mb-10 message-bubble" wire:key="msg-{{ $msg->id }}">
+                    {{-- USER (blue, left) --}}
+                    @if($isUser)
+                        <div class="flex flex-col gap-2 max-w-[85%] @lg:max-w-[70%] items-start">
 
-                    {{-- message content column --}}
-                    <div class="flex flex-col gap-2 max-w-[85%] @lg:max-w-[70%] {{ $isUser ? 'items-end' : 'items-start' }}">
+                            {{-- TEXT --}}
+                            @if($hasBody)
+                                <div class="bg-blue-50 ring-1 ring-blue-200 text-blue-900 dark:bg-blue-600/20 dark:ring-blue-400/40 dark:text-blue-100 rounded-2xl rounded-bl-none px-4 py-3 text-sm font-medium">
+                                    <div class="whitespace-pre-line">{{ $msg->body }}</div>
+                                </div>
+                            @endif
 
-                        {{-- TEXT --}}
-                        @if($hasBody)
-                            <div class="{{ $isUser
-                                            ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl rounded-br-none px-4 py-3'
-                                            : 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-2xl rounded-bl-none border border-neutral-200 dark:border-neutral-700 px-4 py-3'
-                                        }}">
-                                <div class="whitespace-pre-line">{{ $msg->body }}</div>
-                            </div>
-                        @endif
+                            {{-- IMAGES (align left) --}}
+                            @if($images->isNotEmpty())
+                                <div class="{{ $images->count() > 1 ? 'grid grid-cols-2 gap-2' : 'flex' }} items-start">
+                                    @foreach($images as $im)
+                                        <a href="{{ $im->getFullUrl() }}" target="_blank" class="block">
+                                            <img src="{{ $im->getFullUrl() }}"
+                                                 alt="{{ $im->file_name }}"
+                                                 class="w-[260px] h-[160px] object-cover rounded-2xl border border-neutral-200 dark:border-neutral-700"/>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
 
-                        {{-- IMAGES --}}
-                        @if($images->isNotEmpty())
-                            <div class="{{ $images->count() > 1 ? 'grid grid-cols-2 gap-2' : 'flex' }}">
-                                @foreach($images as $im)
-                                    <a href="{{ $im->getFullUrl() }}" target="_blank" class="block">
-                                        <img src="{{ $im->getFullUrl() }}"
-                                             alt="{{ $im->file_name }}"
-                                             class="w-[260px] h-[160px] object-cover rounded-2xl border border-neutral-200 dark:border-neutral-700" />
-                                    </a>
-                                @endforeach
-                            </div>
-                        @endif
-
-                        {{-- FILES --}}
-                        @if($files->isNotEmpty())
-                            @foreach($files as $md)
-                                @php
-                                    $bytes = $md->size;
-                                    if ($bytes < 1024) {
-                                        // under 1 KB → show in bytes
-                                        $sizeLabel = $bytes . ' B';
-                                    } elseif ($bytes < 1048576) {
-                                        // under 1 MB → show in KB
-                                        $sizeLabel = number_format($bytes / 1024, 0) . ' KB';
-                                    } else {
-                                        // 1 MB or more → show in MB with 2 decimals
-                                        $sizeLabel = number_format($bytes / 1048576, 2) . ' MB';
-                                    }
-                                    $sizeMB   = number_format($md->size / 1048576, 2);
-                                    $full     = $md->file_name;
-                                    $ext      = pathinfo($full, PATHINFO_EXTENSION);
-                                    $base     = pathinfo($full, PATHINFO_FILENAME);
-                                    $nameShort = (mb_strlen($base) > 18)
-                                        ? mb_substr($base,0,12).'…'.mb_substr($base,-4).($ext?'.'.$ext:'')
-                                        : $full;
-                                @endphp
-
-                                <div
-                                    x-data="fileCard({
-                                            srcUrl:   @js($md->getFullUrl()),
-                                            filename: @js($md->file_name),
-                                          })"
-                                    class="flex flex-col {{ $isUser ? 'items-end' : 'items-start' }}"
-                                >
+                            {{-- FILES (align left, blue-tinted card styles kept) --}}
+                            @if($files->isNotEmpty())
+                                @foreach($files as $md)
                                     @php
-                                        if ($isUser) {
-                                            // Light mode: blue-tinted card
-                                            // Dark mode: strong blue accent instead of translucent white
-                                            $cardBg  = 'bg-blue-50 ring-1 ring-blue-200 text-blue-900 dark:bg-blue-600/20 dark:ring-blue-400/40 dark:text-blue-100';
-                                            $iconBg  = 'bg-blue-100 dark:bg-blue-500/30';
-                                            $iconClr = 'text-blue-700 dark:text-blue-300';
-                                            $metaClr = 'text-blue-700/70 dark:text-blue-300/80';
-                                            $hoverBg = 'hover:bg-blue-100/70 dark:hover:bg-blue-600/40';
-                                        } else {
-                                            $cardBg  = 'bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100';
-                                            $iconBg  = 'bg-neutral-100 dark:bg-neutral-700';
-                                            $iconClr = 'text-neutral-700 dark:text-neutral-300';
-                                            $metaClr = 'text-neutral-500 dark:text-neutral-400';
-                                            $hoverBg = 'hover:bg-neutral-50 dark:hover:bg-neutral-700/60';
-                                        }
+                                        $bytes = $md->size;
+                                        $sizeLabel = $bytes < 1024 ? ($bytes.' B') : ($bytes < 1048576 ? number_format($bytes/1024,0).' KB' : number_format($bytes/1048576,2).' MB');
+                                        $full = $md->file_name;
+                                        $ext  = pathinfo($full, PATHINFO_EXTENSION);
+                                        $base = pathinfo($full, PATHINFO_FILENAME);
+                                        $nameShort = (mb_strlen($base) > 18) ? mb_substr($base,0,12).'…'.mb_substr($base,-4).($ext?'.'.$ext:'') : $full;
+
+                                        // user-side (left) card palette
+                                        $cardBg  = 'bg-blue-50 ring-1 ring-blue-200 text-blue-900 dark:bg-blue-600/20 dark:ring-blue-400/40 dark:text-blue-100';
+                                        $iconBg  = 'bg-blue-100 dark:bg-blue-500/30';
+                                        $iconClr = 'text-blue-700 dark:text-blue-300';
+                                        $metaClr = 'text-blue-700/70 dark:text-blue-300/80';
+                                        $hoverBg = 'hover:bg-blue-100/70 dark:hover:bg-blue-600/40';
                                     @endphp
 
                                     <div
-                                        @click="openOrSave"
-                                        @contextmenu.prevent="onContextMenu"
-                                        class="flex items-center gap-3 px-3 py-2 rounded-2xl shadow-sm cursor-pointer transition {{ $cardBg }} {{ $hoverBg }}"
+                                        x-data="fileCard({
+                                                    srcUrl:   @js(parse_url($md->getFullUrl(), PHP_URL_PATH), JSON_THROW_ON_ERROR),
+                                                    filename: @js($md->file_name, JSON_THROW_ON_ERROR),
+                                                })"
+                                        class="flex flex-col items-start"
                                     >
-                                        <div class="shrink-0 h-10 w-10 rounded-full flex items-center justify-center {{ $iconBg }}">
-                                            <svg class="h-5 w-5 {{ $iconClr }}" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M7 2h7l4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 2v4h4"/>
-                                            </svg>
+                                        <div @click="openOrSave" @contextmenu.prevent="onContextMenu"
+                                             class="flex items-center gap-3 px-3 py-2 rounded-2xl shadow-sm cursor-pointer transition {{ $cardBg }} {{ $hoverBg }}">
+                                            <div class="shrink-0 h-10 w-10 rounded-full flex items-center justify-center {{ $iconBg }}">
+                                                <svg class="h-5 w-5 {{ $iconClr }}" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M7 2h7l4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 2v4h4"/>
+                                                </svg>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div class="text-sm font-medium truncate max-w-[220px]" title="{{ $md->file_name }}">{{ $nameShort }}</div>
+                                                <div class="text-[11px] {{ $metaClr }}">{{ $sizeLabel }}</div>
+                                            </div>
                                         </div>
 
-                                        <div class="min-w-0">
-                                            <div class="text-sm font-medium truncate max-w-[220px]" title="{{ $md->file_name }}">
-                                                {{ $nameShort }}
-                                            </div>
-                                            <div class="text-[11px] {{ $metaClr }}">
-                                                {{ $sizeLabel }}
+                                        {{-- optional save modal kept as-is --}}
+                                        <div x-show="showSaveModal" x-cloak x-transition.opacity class="fixed inset-0 z-[70] flex items-center justify-center">
+                                            <div class="absolute inset-0 bg-black/40" @click="showSaveModal=false"></div>
+                                            <div class="relative w-[90vw] max-w-sm rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                                                <div class="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 font-semibold">Save File</div>
+                                                <div class="p-4 text-sm text-neutral-700 dark:text-neutral-300">Do you want to save <span class="font-medium" x-text="filename"></span>?</div>
+                                                <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
+                                                    <button class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800" @click="showSaveModal=false">Cancel</button>
+                                                    <button class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow" @click="confirmSave">Save</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                @endforeach
+                            @endif
 
-                                    <!-- Save Modal (only shows for previewable files) -->
-                                    <div
-                                        x-show="showSaveModal"
-                                        x-cloak
-                                        x-transition.opacity
-                                        class="fixed inset-0 z-[70] flex items-center justify-center"
-                                        aria-modal="true" role="dialog"
-                                    >
-                                        <div class="absolute inset-0 bg-black/40" @click="showSaveModal=false"></div>
-                                        <div class="relative w-[90vw] max-w-sm rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
-                                            <div class="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 font-semibold">
-                                                Save File
-                                            </div>
-                                            <div class="p-4 text-sm text-neutral-700 dark:text-neutral-300">
-                                                Do you want to save <span class="font-medium" x-text="filename"></span>?
-                                            </div>
-                                            <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
-                                                <button class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:cursor-pointer"
-                                                        @click="showSaveModal=false">Cancel</button>
-                                                <button class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow hover:cursor-pointer"
-                                                        @click="confirmSave">Save</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @endif
-
-                        {{-- TIME (always once at the end, for all types) --}}
-                        <div class="text-[11px] opacity-70 {{ $isUser ? 'text-neutral-500 dark:text-white/80 text-right' : 'text-neutral-500 dark:text-neutral-400 text-left' }}">
-                            {{ $msg->created_at->format('g:i A') }}
+                            <div class="text-[11px] opacity-70 text-neutral-500 dark:text-neutral-400 text-left">{{ $msg->created_at->format('g:i A') }}</div>
                         </div>
-                    </div>
+                    @else
+                        {{-- ADMIN (white, right) with avatar on the right for all blocks --}}
+                        <div class="flex items-end gap-2 max-w-[85%] @lg:max-w-[70%]">
+
+                            {{-- CONTENT COLUMN (bubble(s) + images + files + time) --}}
+                            <div class="flex flex-col items-end gap-2">
+
+                                {{-- TEXT --}}
+                                @if($hasBody)
+                                    <div class="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100
+                                                rounded-2xl rounded-br-none border border-neutral-200 dark:border-neutral-700 px-4 py-3">
+                                        <div class="whitespace-pre-line">{{ $msg->body }}</div>
+                                    </div>
+                                @endif
+
+                                {{-- IMAGES (kept together) --}}
+                                @if($images->isNotEmpty())
+                                    <div class="{{ $images->count() > 1 ? 'grid grid-cols-2 gap-2' : 'flex' }} justify-end">
+                                        @foreach($images as $im)
+                                            <a href="{{ $im->getFullUrl() }}" target="_blank" class="block">
+                                                <img src="{{ $im->getFullUrl() }}"
+                                                     alt="{{ $im->file_name }}"
+                                                     class="w-[260px] h-[160px] object-cover rounded-2xl border border-neutral-200 dark:border-neutral-700"/>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                {{-- FILES (stacked cards; NO avatar here) --}}
+                                @if($files->isNotEmpty())
+                                    <div class="flex flex-col items-end gap-2">
+                                        @foreach($files as $md)
+                                            @php
+                                                $bytes = $md->size;
+                                                if ($bytes < 1024) {
+                                                    // under 1 KB → show in bytes
+                                                    $sizeLabel = $bytes . ' B';
+                                                } elseif ($bytes < 1048576) {
+                                                    // under 1 MB → show in KB
+                                                    $sizeLabel = number_format($bytes / 1024, 0) . ' KB';
+                                                } else {
+                                                    // 1 MB or more → show in MB with 2 decimals
+                                                    $sizeLabel = number_format($bytes / 1048576, 2) . ' MB';
+                                                }
+                                                $full = $md->file_name;
+                                                $ext  = pathinfo($full, PATHINFO_EXTENSION);
+                                                $base = pathinfo($full, PATHINFO_FILENAME);
+                                                $nameShort = (mb_strlen($base) > 18)
+                                                  ? mb_substr($base,0,12).'…'.mb_substr($base,-4).($ext?'.'.$ext:'')
+                                                  : $full;
+
+                                                // neutral palette for admin side
+                                                $cardBg  = 'bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100';
+                                                $iconBg  = 'bg-neutral-100 dark:bg-neutral-700';
+                                                $iconClr = 'text-neutral-700 dark:text-neutral-300';
+                                                $metaClr = 'text-neutral-500 dark:text-neutral-400';
+                                                $hoverBg = 'hover:bg-neutral-50 dark:hover:bg-neutral-700/60';
+                                            @endphp
+
+                                            <div
+                                                x-data="fileCard({
+                                                    srcUrl:   @js(parse_url($md->getFullUrl(), PHP_URL_PATH), JSON_THROW_ON_ERROR),
+                                                    filename: @js($md->file_name, JSON_THROW_ON_ERROR),
+                                                })"
+                                                class="flex flex-col items-end"
+                                            >
+                                                <div
+                                                    @click="openOrSave"
+                                                    @contextmenu.prevent="onContextMenu"
+                                                    class="flex items-center gap-3 px-3 py-2 rounded-2xl shadow-sm cursor-pointer transition {{ $cardBg }} {{ $hoverBg }}"
+                                                >
+                                                    <div class="shrink-0 h-10 w-10 rounded-full flex items-center justify-center {{ $iconBg }}">
+                                                        <svg class="h-5 w-5 {{ $iconClr }}" viewBox="0 0 24 24" fill="currentColor">
+                                                            <path d="M7 2h7l4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 2v4h4"/>
+                                                        </svg>
+                                                    </div>
+
+                                                    <div class="min-w-0">
+                                                        <div class="text-sm font-medium truncate max-w-[220px]" title="{{ $md->file_name }}">
+                                                            {{ $nameShort }}
+                                                        </div>
+                                                        <div class="text-[11px] {{ $metaClr }}">
+                                                            {{ $sizeLabel }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Save Modal (only shows for previewable files) -->
+                                                <div
+                                                    x-show="showSaveModal"
+                                                    x-cloak
+                                                    x-transition.opacity
+                                                    class="fixed inset-0 z-[70] flex items-center justify-center"
+                                                    aria-modal="true" role="dialog"
+                                                >
+                                                    <div class="absolute inset-0 bg-black/40" @click="showSaveModal=false"></div>
+                                                    <div class="relative w-[90vw] max-w-sm rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                                                        <div class="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 font-semibold">
+                                                            Save File
+                                                        </div>
+                                                        <div class="p-4 text-sm text-neutral-700 dark:text-neutral-300">
+                                                            Do you want to save <span class="font-medium" x-text="filename"></span>?
+                                                        </div>
+                                                        <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
+                                                            <button class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:cursor-pointer"
+                                                                    @click="showSaveModal=false">Cancel
+                                                            </button>
+                                                            <button class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow hover:cursor-pointer"
+                                                                    @click="confirmSave">Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                {{-- TIME (under the whole message) --}}
+                                <div class="text-[11px] opacity-70 text-neutral-500 dark:text-neutral-400 text-right mt-1">
+                                    {{ $msg->created_at->format('g:i A') }}
+                                </div>
+                            </div>
+
+                            {{-- AVATAR (only once for the whole message) --}}
+                            <div class="ml-2 flex-shrink-0 self-end">
+                                <div class="h-8 w-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-md">
+                                    <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             @empty
                 <div class="flex flex-col items-center justify-center h-full text-center py-12">
@@ -246,7 +334,9 @@
                         class="pointer-events-auto h-10 w-10 flex items-center justify-center rounded-full
                                bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:cursor-pointer
                                hover:bg-neutral-50 dark:hover:bg-neutral-700 shadow-lg text-neutral-600 dark:text-neutral-300">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -283,15 +373,18 @@
                         @endphp
                         <div class="relative group" wire:key="upload-{{ $tempName }}">
                             @if($isImg)
-                                <img src="{{ $file->temporaryUrl() }}" class="h-16 w-16 object-cover rounded-lg border border-neutral-200 dark:border-neutral-700" />
+                                <img src="{{ $file->temporaryUrl() }}" class="h-16 w-16 object-cover rounded-lg border border-neutral-200 dark:border-neutral-700"/>
                             @else
                                 <div class="h-16 w-44 flex items-center gap-2 px-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70">
-                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M14.59 2.59L21 9l-7 7-6.41-6.41L14.59 2.59zM3 13l4 4H3v-4z"/></svg>
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14.59 2.59L21 9l-7 7-6.41-6.41L14.59 2.59zM3 13l4 4H3v-4z"/>
+                                    </svg>
                                     <span class="truncate text-xs">{{ $file->getClientOriginalName() }}</span>
                                 </div>
                             @endif
                             <button type="button" class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 text-white text-xs hidden group-hover:flex items-center justify-center"
-                                    wire:click="removeUploadByName(@js($tempName))" title="Remove">×</button>
+                                    wire:click="removeUploadByName(@js($tempName))" title="Remove">×
+                            </button>
                         </div>
                     @endforeach
                 </div>
@@ -340,14 +433,16 @@
                     class="flex-1 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-800
                            text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500
                            px-4 py-3 outline-none focus:outline-2 focus:outline-blue-500 focus:outline-offset-2"
-                    placeholder="Write Something..." />
+                    placeholder="Write Something..."/>
 
                 {{-- send --}}
                 <button class="inline-flex items-center justify-center h-11 w-11 @lg:h-12 @lg:w-12 rounded-full
                                bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700
                                shadow-md disabled:opacity-40 hover:cursor-pointer transition-colors"
                         wire:click="send" title="Send">
-                    <svg class="h-5 w-5 @lg:h-6 @lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/></svg>
+                    <svg class="h-5 w-5 @lg:h-6 @lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/>
+                    </svg>
                 </button>
             </div>
         </footer>
@@ -420,7 +515,7 @@
 
                             <div class="flex items-center gap-3 rounded-xl border border-neutral-200 dark:border-neutral-700 p-2">
                                 @if($isImg)
-                                    <img src="{{ $file->temporaryUrl() }}" class="h-12 w-12 rounded-md object-cover border border-neutral-200 dark:border-neutral-700" />
+                                    <img src="{{ $file->temporaryUrl() }}" class="h-12 w-12 rounded-md object-cover border border-neutral-200 dark:border-neutral-700"/>
                                 @else
                                     <div class="h-12 w-12 shrink-0 rounded-md ring-1 {{ $sty['ring'] }} flex items-center justify-center">
                                         <span class="text-xs font-semibold {{ $sty['fg'] }}">{{ $sty['label'] }}</span>
@@ -477,17 +572,20 @@
                     <button
                         class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                         @click="document.getElementById('chat-file-input')?.click()"
-                    >Add</button>
+                    >Add
+                    </button>
 
                     <button
                         class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                         @click="$wire.cancelUploads()"
-                    >Cancel</button>
+                    >Cancel
+                    </button>
 
                     <button
                         class="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow"
                         wire:click="confirmSendFromModal"
-                    >Send</button>
+                    >Send
+                    </button>
                 </div>
             </div>
         </div>
@@ -496,14 +594,30 @@
 
 <script>
     document.addEventListener('livewire:init', () => {
+        const scrollBottomSmooth = (el) => {
+            if (!el) return;
+            const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+            const behavior = prefersReduced ? 'auto' : 'smooth';
+
+            const doScroll = () => el.scrollTo({top: el.scrollHeight, behavior});
+
+            // Wait for Livewire DOM patch, then smooth scroll
+            requestAnimationFrame(() => {
+                requestAnimationFrame(doScroll);
+            });
+
+            // Safety pass in case images/fonts expand height shortly after
+            setTimeout(doScroll, 150);
+        };
+
         Livewire.on('message-sent', () => {
             const el = document.getElementById('messages-container');
-            if (el) setTimeout(() => el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }), 150);
+            if (el) setTimeout(() => el.scrollTo({top: el.scrollHeight, behavior: 'smooth'}), 150);
         });
 
         Livewire.on('message-received', () => {
             if (!document.hasFocus() && 'Notification' in window && Notification.permission === 'granted') {
-                new Notification('New message from Support', { body: 'You have received a new message', icon: '/favicon.ico' });
+                new Notification('New message from Support', {body: 'You have received a new message', icon: '/favicon.ico'});
             }
         });
 
@@ -517,6 +631,10 @@
             }
         });
 
+        Livewire.on('ui:scroll-bottom', () => {
+            scrollBottomSmooth(document.getElementById('messages-container'));
+        });
+
         if ('Notification' in window && Notification.permission === 'default') {
             Notification.requestPermission();
         }
@@ -526,24 +644,22 @@
             if (input) input.focus();
         }, 500);
     });
-</script>
 
-<script>
-    function fileCard({ srcUrl, filename }) {
+    function fileCard({srcUrl, filename}) {
         return {
             srcUrl, filename,
             showSaveModal: false,
 
-            guessMime(){
+            guessMime() {
                 const n = (this.filename || '').toLowerCase();
                 if (n.endsWith('.pdf')) return 'application/pdf';
-                if (/\.(png|jpg|jpeg|webp|gif)$/i.test(n)) return 'image/'+ n.split('.').pop();
+                if (/\.(png|jpg|jpeg|webp|gif)$/i.test(n)) return 'image/' + n.split('.').pop();
                 if (n.endsWith('.txt')) return 'text/plain';
                 if (/\.(mp3|wav|ogg)$/i.test(n)) return 'audio/mpeg';
                 if (/\.(mp4|webm|ogv)$/i.test(n)) return 'video/mp4';
                 return 'application/octet-stream';
             },
-            canPreview(m){
+            canPreview(m) {
                 return m.startsWith('image/')
                     || m.startsWith('audio/')
                     || m.startsWith('video/')
@@ -551,22 +667,23 @@
                     || m === 'text/plain';
             },
 
-            async openOrSave(){
-                const resp = await fetch(this.srcUrl, { credentials:'same-origin' });
+            async openOrSave() {
+                console.log('I am here in (openOrSave) function!');
+                const resp = await fetch(this.srcUrl, {credentials: 'same-origin'});
                 const blob = await resp.blob();
                 const mime = blob.type || this.guessMime();
-                const url  = URL.createObjectURL(blob);
+                const url = URL.createObjectURL(blob);
 
                 if (this.canPreview(mime)) {
                     window.open(url, '_blank', 'noopener,noreferrer');
                 } else {
                     this._save(url);
                 }
-                setTimeout(()=>URL.revokeObjectURL(url), 60000);
+                setTimeout(() => URL.revokeObjectURL(url), 60000);
             },
 
-            async onContextMenu(){
-                const resp = await fetch(this.srcUrl, { credentials:'same-origin' });
+            async onContextMenu() {
+                const resp = await fetch(this.srcUrl, {credentials: 'same-origin'});
                 const blob = await resp.blob();
                 const mime = blob.type || this.guessMime();
 
@@ -577,20 +694,20 @@
                     // Non-previewable → just save
                     const url = URL.createObjectURL(blob);
                     this._save(url);
-                    setTimeout(()=>URL.revokeObjectURL(url), 60000);
+                    setTimeout(() => URL.revokeObjectURL(url), 60000);
                 }
             },
 
-            async confirmSave(){
-                const resp = await fetch(this.srcUrl, { credentials:'same-origin' });
+            async confirmSave() {
+                const resp = await fetch(this.srcUrl, {credentials: 'same-origin'});
                 const blob = await resp.blob();
-                const url  = URL.createObjectURL(blob);
+                const url = URL.createObjectURL(blob);
                 this._save(url);
-                setTimeout(()=>URL.revokeObjectURL(url), 60000);
+                setTimeout(() => URL.revokeObjectURL(url), 60000);
                 this.showSaveModal = false;
             },
 
-            _save(url){
+            _save(url) {
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = this.filename || 'download';
