@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Admin\Pages\Chat;
 
+use App\Events\MessageSent;
+use App\Events\UserTyping;
 use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Conversation;
 use App\Models\Message;
@@ -29,9 +31,10 @@ class AdminChatApp extends BaseAdminComponent
     /** uploads */
     public array $uploads        = []; // array of Livewire temporary files
     public array $newUploads     = [];  // staging: last picked/dropped files
-    public bool $showUploadModal = false;
     public bool $groupItems      = true;
     public bool $compressImages  = false;
+    public bool $isSending       = false; // loading state for file uploads
+    public bool $userIsTyping    = false; // track user typing status
 
     protected function rules(): array
     {
@@ -48,11 +51,10 @@ class AdminChatApp extends BaseAdminComponent
         ];
     }
 
-    /** Auto-open modal right after files are chosen */
+    /** Auto-trigger when files are chosen - Alpine.js handles modal opening */
     public function updatedUploads(): void
     {
         if ($this->selectedId && count($this->uploads ?? []) > 0) {
-            $this->showUploadModal = true;
             $this->dispatch('focus-composer');
         }
     }
@@ -74,27 +76,27 @@ class AdminChatApp extends BaseAdminComponent
 
         $this->uploads = $merged;
         $this->reset('newUploads');       // clear the input so next Add only contains new picks
-        $this->showUploadModal = true;    // keep/bring modal up
     }
 
-    /** Cancel: discard selected files & close */
+    /** Cancel: discard selected files */
     public function cancelUploads(): void
     {
         $this->uploads         = [];
         $this->reset('newUploads');
-        $this->showUploadModal = false;
     }
 
-    /** “Send” from modal: reuse your send() then close */
+    /** "Send" from modal */
     public function confirmSendFromModal(): void
     {
+        $this->isSending = true;
+        
         try {
             $this->send();
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             Log::error($e->getMessage());
+        } finally {
+            $this->isSending = false;
         }
-
-        $this->showUploadModal = false;
     }
 
     public function removeUploadByName(string $filename): void
@@ -199,20 +201,53 @@ class AdminChatApp extends BaseAdminComponent
         $this->dispatch('scroll-bottom');
     }
 
+    public function getListeners(): array
+    {
+        if (!$this->selectedId) {
+            return [];
+        }
+        
+        return [
+            'echo:conversation.' . $this->selectedId . ',MessageSent' => 'messageReceived',
+            'echo:conversation.' . $this->selectedId . ',UserTyping' => 'userTypingReceived',
+        ];
+    }
+
+    public function messageReceived(): void
+    {
+        $this->cursor = null;
+        $this->dispatch('scroll-bottom');
+    }
+
+    public function userTypingReceived($event): void
+    {
+        // Only show typing indicator for other users (user in this case)
+        if ($event['user_type'] === 'user' && $event['user_id'] !== auth()->id()) {
+            $this->userIsTyping = $event['is_typing'];
+        }
+    }
+
     /**
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
     public function send(): void
     {
+        // Set loading state if sending from regular input (not modal)
+        if (!$this->isSending) {
+            $this->isSending = true;
+        }
+        
         $this->validate();
 
         if ( ! $this->selectedId) {
+            $this->isSending = false;
             return;
         }
 
         // disallow truly empty messages
         if (trim($this->messageText) === '' && count($this->uploads) === 0) {
+            $this->isSending = false;
             return;
         }
 
@@ -238,6 +273,9 @@ class AdminChatApp extends BaseAdminComponent
             }
 
             $lastMessageId = $msg->id;
+            
+            // Broadcast the message
+            broadcast(new MessageSent($msg));
         }
 
         // ========== CASE 2: Separate messages ==========
@@ -254,6 +292,9 @@ class AdminChatApp extends BaseAdminComponent
                     'is_read'         => false,
                 ]);
                 $lastMessageId = $textMsg->id;
+                
+                // Broadcast the text message
+                broadcast(new MessageSent($textMsg));
             }
 
             // 2. Send each file as its own message
@@ -275,6 +316,9 @@ class AdminChatApp extends BaseAdminComponent
 
                 $adder->toMediaCollection('attachments');
                 $lastMessageId = $fileMsg->id;
+                
+                // Broadcast the file message
+                broadcast(new MessageSent($fileMsg));
             }
         }
 
@@ -289,12 +333,39 @@ class AdminChatApp extends BaseAdminComponent
         // reset
         $this->messageText = '';
         $this->uploads     = [];
+        $this->isSending   = false;
 
         // show latest page again
         $this->cursor = null;
 
         $this->dispatch('scroll-bottom');
         $this->dispatch('message-sent');
+    }
+
+    public function startTyping(): void
+    {
+        if ($this->selectedId) {
+            broadcast(new UserTyping(
+                $this->selectedId,
+                auth()->id(),
+                'admin',
+                auth()->user()->name,
+                true
+            ));
+        }
+    }
+
+    public function stopTyping(): void
+    {
+        if ($this->selectedId) {
+            broadcast(new UserTyping(
+                $this->selectedId,
+                auth()->id(),
+                'admin',
+                auth()->user()->name,
+                false
+            ));
+        }
     }
 
     public function render()

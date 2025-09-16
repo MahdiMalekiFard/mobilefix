@@ -2,6 +2,8 @@
 
 namespace App\Livewire\User\Pages\Chat;
 
+use App\Events\MessageSent;
+use App\Events\UserTyping;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Collection;
@@ -19,7 +21,6 @@ class UserChatPage extends Component
     public ?Conversation $conversation = null;
     public string $messageText         = '';
     public Collection $chatMessages;
-    public bool $adminIsTyping    = false;
     public bool $didInitialScroll = false;
 
     /** pagination state */
@@ -30,9 +31,10 @@ class UserChatPage extends Component
     /** new: file uploads */
     public array $uploads        = []; // array of Livewire\Features\SupportFileUploads\TemporaryUploadedFile
     public array $newUploads     = [];  // staging: last picked/dropped files
-    public bool $showUploadModal = false;
     public bool $groupItems      = true;
     public bool $compressImages  = false;
+    public bool $isSending       = false; // loading state for file uploads
+    public bool $adminIsTyping   = false; // track admin typing status
 
     protected function rules(): array
     {
@@ -49,11 +51,10 @@ class UserChatPage extends Component
         ];
     }
 
-    /** Auto-open modal right after files are chosen */
+    /** Auto-trigger when files are chosen - Alpine.js handles modal opening */
     public function updatedUploads(): void
     {
         if (count($this->uploads ?? []) > 0) {
-            $this->showUploadModal = true;
             $this->dispatch('focus-composer');
         }
     }
@@ -75,27 +76,27 @@ class UserChatPage extends Component
 
         $this->uploads = $merged;
         $this->reset('newUploads');       // clear the input so next Add only contains new picks
-        $this->showUploadModal = true;    // keep/bring modal up
     }
 
-    /** Cancel: discard selected files & close */
+    /** Cancel: discard selected files */
     public function cancelUploads(): void
     {
         $this->uploads         = [];
         $this->reset('newUploads');
-        $this->showUploadModal = false;
     }
 
-    /** “Send” from modal: reuse your send() then close */
+    /** "Send" from modal */
     public function confirmSendFromModal(): void
     {
+        $this->isSending = true;
+        
         try {
             $this->send();
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             Log::error($e->getMessage());
+        } finally {
+            $this->isSending = false;
         }
-
-        $this->showUploadModal = false;
     }
 
     public function removeUploadByName(string $filename): void
@@ -168,10 +169,16 @@ class UserChatPage extends Component
      */
     public function send(): void
     {
+        // Set loading state if sending from regular input (not modal)
+        if (!$this->isSending) {
+            $this->isSending = true;
+        }
+        
         $this->validate();
 
         // disallow empty message if no files selected
         if (trim($this->messageText) === '' && count($this->uploads) === 0) {
+            $this->isSending = false;
             return;
         }
 
@@ -201,6 +208,9 @@ class UserChatPage extends Component
             }
 
             $lastMessageId = $msg->id;
+            
+            // Broadcast the message
+            broadcast(new MessageSent($msg));
         }
 
         // ========== CASE 2: Separate messages ==========
@@ -217,6 +227,9 @@ class UserChatPage extends Component
                     'is_read'         => false,
                 ]);
                 $lastMessageId = $textMsg->id;
+                
+                // Broadcast the text message
+                broadcast(new MessageSent($textMsg));
             }
 
             // 2. Send each file as its own message
@@ -238,6 +251,9 @@ class UserChatPage extends Component
 
                 $adder->toMediaCollection('attachments');
                 $lastMessageId = $fileMsg->id;
+                
+                // Broadcast the file message
+                broadcast(new MessageSent($fileMsg));
             }
         }
 
@@ -252,6 +268,7 @@ class UserChatPage extends Component
         // reset UI and reload latest page
         $this->messageText = '';
         $this->uploads     = [];
+        $this->isSending   = false;
 
         $this->cursor = null;
         $this->loadMessages();
@@ -278,6 +295,7 @@ class UserChatPage extends Component
     {
         return [
             'echo:conversation.' . ($this->conversation?->id ?? 'none') . ',MessageSent' => 'messageReceived',
+            'echo:conversation.' . ($this->conversation?->id ?? 'none') . ',UserTyping' => 'userTypingReceived',
         ];
     }
 
@@ -286,6 +304,40 @@ class UserChatPage extends Component
         $this->cursor = null;
         $this->loadMessages();
         $this->dispatch('message-received');
+    }
+
+    public function userTypingReceived($event): void
+    {
+        // Only show typing indicator for other users (admin in this case)
+        if ($event['user_type'] === 'admin' && $event['user_id'] !== auth()->id()) {
+            $this->adminIsTyping = $event['is_typing'];
+        }
+    }
+
+    public function startTyping(): void
+    {
+        if ($this->conversation) {
+            broadcast(new UserTyping(
+                $this->conversation->id,
+                auth()->id(),
+                'user',
+                auth()->user()->name,
+                true
+            ));
+        }
+    }
+
+    public function stopTyping(): void
+    {
+        if ($this->conversation) {
+            broadcast(new UserTyping(
+                $this->conversation->id,
+                auth()->id(),
+                'user',
+                auth()->user()->name,
+                false
+            ));
+        }
     }
 
     public function render()

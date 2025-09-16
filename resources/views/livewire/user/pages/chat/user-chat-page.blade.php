@@ -315,9 +315,9 @@
             @endforelse
 
             @if($adminIsTyping)
-                <div class="flex justify-start mb-4">
+                <div class="flex justify-end mb-4">
                     <div class="relative max-w-[85%] @lg:max-w-[70%]">
-                        <div class="px-4 py-3 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-2xl rounded-bl-none border border-neutral-200 dark:border-neutral-700">
+                        <div class="px-4 py-3 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-2xl rounded-br-none border border-neutral-200 dark:border-neutral-700">
                             <div class="flex items-center gap-2">
                                 <div class="flex gap-1">
                                     <div class="w-2 h-2 bg-neutral-400 rounded-full animate-bounce"></div>
@@ -403,6 +403,15 @@
                 </div>
             </div>
 
+            <!-- Sending indicator -->
+            <div wire:loading wire:target="send" class="mb-2 flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+                <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Sending message...</span>
+            </div>
+
             <div class="mt-2 flex items-center gap-2 @lg:gap-3">
                 {{-- hidden file input --}}
                 <input
@@ -418,12 +427,15 @@
                 {{-- improved attach button --}}
                 <button type="button"
                         @click="$refs.file.click()"
+                        wire:loading.attr="disabled"
+                        wire:target="send"
                         class="group relative inline-flex h-11 w-11 @lg:h-12 @lg:w-12 items-center justify-center
                                rounded-full border border-neutral-200 dark:border-neutral-700
                                bg-white dark:bg-neutral-800 shadow hover:shadow-md
                                hover:bg-neutral-50 dark:hover:bg-neutral-700
                                focus:outline-none focus:ring-2 focus:ring-blue-500/40
-                               ring-1 ring-inset ring-neutral-200 dark:ring-neutral-700 transition hover:cursor-pointer"
+                               ring-1 ring-inset ring-neutral-200 dark:ring-neutral-700 transition hover:cursor-pointer
+                               disabled:opacity-50 disabled:cursor-not-allowed"
                         title="Attach files">
                     <svg viewBox="0 0 24 24"
                          class="h-5 w-5 @lg:h-6 @lg:w-6 text-neutral-600 dark:text-neutral-300"
@@ -436,17 +448,43 @@
                 <input
                     wire:model.defer="messageText"
                     wire:keydown.enter="send"
+                    wire:loading.attr="disabled"
+                    wire:target="send"
+                    x-data="{
+                        typingTimer: null,
+                        startTyping() {
+                            $wire.startTyping();
+                            clearTimeout(this.typingTimer);
+                            this.typingTimer = setTimeout(() => {
+                                $wire.stopTyping();
+                            }, 2000);
+                        }
+                    }"
+                    @input="startTyping()"
+                    @blur="$wire.stopTyping()"
                     class="flex-1 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-800
                            text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500
-                           px-4 py-3 outline-none focus:outline-2 focus:outline-blue-500 focus:outline-offset-2"
+                           px-4 py-3 outline-none focus:outline-2 focus:outline-blue-500 focus:outline-offset-2
+                           disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Write Something..."/>
 
                 {{-- send --}}
                 <button class="inline-flex items-center justify-center h-11 w-11 @lg:h-12 @lg:w-12 rounded-full
                                bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700
                                shadow-md disabled:opacity-40 hover:cursor-pointer transition-colors"
-                        wire:click="send" title="Send">
-                    <svg class="h-5 w-5 @lg:h-6 @lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor">
+                        wire:click="send" 
+                        wire:loading.attr="disabled"
+                        wire:target="send"
+                        title="Send">
+                    
+                    <!-- Loading spinner -->
+                    <svg wire:loading wire:target="send" class="animate-spin h-5 w-5 @lg:h-6 @lg:w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    
+                    <!-- Send icon -->
+                    <svg wire:loading.remove wire:target="send" class="h-5 w-5 @lg:h-6 @lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/>
                     </svg>
                 </button>
@@ -455,7 +493,20 @@
 
         <!-- Upload Modal -->
         <div
-            x-data="{ open: @entangle('showUploadModal').live }"
+            x-data="{ 
+                open: false,
+                init() {
+                    // Listen for file selection to open modal instantly
+                    this.$watch('$wire.uploads', (uploads) => {
+                        if (uploads && uploads.length > 0) {
+                            this.open = true;
+                        } else if (uploads && uploads.length === 0 && this.open) {
+                            // Close modal when uploads are cleared after sending
+                            this.open = false;
+                        }
+                    });
+                }
+            }"
             x-show="open"
             x-cloak
             class="fixed inset-0 z-[70] flex items-center justify-center"
@@ -489,8 +540,10 @@
                         {{ count($uploads ?? []) }} files selected
                     </div>
                     <button
-                        class="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        class="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
                         @click="open=false; $wire.cancelUploads()"
+                        wire:loading.attr="disabled"
+                        wire:target="confirmSendFromModal"
                         aria-label="Close"
                     >
                         <svg class="h-5 w-5 text-neutral-600 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -500,7 +553,17 @@
                 </div>
 
                 <!-- Body -->
-                <div class="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
+                <div class="relative p-4 space-y-4 max-h-[70vh] overflow-y-auto">
+                    <!-- Loading overlay -->
+                    <div wire:loading wire:target="confirmSendFromModal" class="absolute inset-0 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
+                        <div class="flex flex-col items-center gap-3">
+                            <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <div class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Uploading files...</div>
+                        </div>
+                    </div>
                     <!-- File list -->
                     <div class="space-y-2">
                         @foreach($uploads as $file)
@@ -576,21 +639,33 @@
                 <!-- Footer actions -->
                 <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
                     <button
-                        class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
                         @click="document.getElementById('chat-file-input')?.click()"
+                        wire:loading.attr="disabled"
+                        wire:target="confirmSendFromModal"
                     >Add
                     </button>
 
                     <button
-                        class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                        @click="$wire.cancelUploads()"
+                        class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                        @click="open=false; $wire.cancelUploads()"
+                        wire:loading.attr="disabled"
+                        wire:target="confirmSendFromModal"
                     >Cancel
                     </button>
 
                     <button
-                        class="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow"
+                        class="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                         wire:click="confirmSendFromModal"
-                    >Send
+                        wire:loading.attr="disabled"
+                        wire:target="confirmSendFromModal"
+                    >
+                        <svg wire:loading wire:target="confirmSendFromModal" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span wire:loading.remove wire:target="confirmSendFromModal">Send</span>
+                        <span wire:loading wire:target="confirmSendFromModal">Sending...</span>
                     </button>
                 </div>
             </div>
