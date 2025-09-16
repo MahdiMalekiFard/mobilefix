@@ -47,6 +47,12 @@
             id="messages-container"
             x-data="{ atBottom: true }"
             x-ref="messagesBox"
+            x-init="$nextTick(() => {
+                $refs.messagesBox.scrollTo({ top: $refs.messagesBox.scrollHeight, behavior: 'smooth' });
+            })"
+            @ui:scroll-bottom.window="$nextTick(() => {
+                  $refs.messagesBox.scrollTo({ top: $refs.messagesBox.scrollHeight, behavior: 'smooth' });
+            })"
             @scroll.passive="atBottom = ($el.scrollTop + $el.clientHeight) >= ($el.scrollHeight - 50)"
             @dragover.prevent
             @drop.prevent="
@@ -594,22 +600,6 @@
 
 <script>
     document.addEventListener('livewire:init', () => {
-        const scrollBottomSmooth = (el) => {
-            if (!el) return;
-            const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-            const behavior = prefersReduced ? 'auto' : 'smooth';
-
-            const doScroll = () => el.scrollTo({top: el.scrollHeight, behavior});
-
-            // Wait for Livewire DOM patch, then smooth scroll
-            requestAnimationFrame(() => {
-                requestAnimationFrame(doScroll);
-            });
-
-            // Safety pass in case images/fonts expand height shortly after
-            setTimeout(doScroll, 150);
-        };
-
         Livewire.on('message-sent', () => {
             const el = document.getElementById('messages-container');
             if (el) setTimeout(() => el.scrollTo({top: el.scrollHeight, behavior: 'smooth'}), 150);
@@ -629,10 +619,6 @@
                 el.scrollTop += delta;
                 window.__uc_prevH = 0;
             }
-        });
-
-        Livewire.on('ui:scroll-bottom', () => {
-            scrollBottomSmooth(document.getElementById('messages-container'));
         });
 
         if ('Notification' in window && Notification.permission === 'default') {
