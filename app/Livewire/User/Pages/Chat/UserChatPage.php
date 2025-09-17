@@ -293,10 +293,12 @@ class UserChatPage extends Component
 
     public function getListeners(): array
     {
-        return [
+        $listeners = [
             'echo:conversation.' . ($this->conversation?->id ?? 'none') . ',MessageSent' => 'messageReceived',
             'echo:conversation.' . ($this->conversation?->id ?? 'none') . ',UserTyping' => 'userTypingReceived',
         ];
+        
+        return $listeners;
     }
 
     public function messageReceived(): void
@@ -316,6 +318,7 @@ class UserChatPage extends Component
 
     public function startTyping(): void
     {
+        
         if ($this->conversation) {
             broadcast(new UserTyping(
                 $this->conversation->id,
@@ -329,6 +332,7 @@ class UserChatPage extends Component
 
     public function stopTyping(): void
     {
+        
         if ($this->conversation) {
             broadcast(new UserTyping(
                 $this->conversation->id,

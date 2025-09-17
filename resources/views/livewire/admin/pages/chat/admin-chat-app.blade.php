@@ -612,7 +612,8 @@
                     x-data="{
                         typingTimer: null,
                         startTyping() {
-                            if ({{ $active ? 'true' : 'false' }}) {
+                            const isActive = $wire.get('selectedId') !== null;
+                            if (isActive) {
                                 $wire.startTyping();
                                 clearTimeout(this.typingTimer);
                                 this.typingTimer = setTimeout(() => {
@@ -852,6 +853,63 @@
                 window.__ac_prevH = 0;
             }
         });
+
+        // Wait for Echo to be fully ready, then set up manual listeners
+        if (window.Echo) {
+            
+            try {
+                const channel = window.Echo.private('conversation.2');
+                
+                channel.listen('MessageSent', (e) => {
+                    
+                    // Find the AdminChatApp Livewire component specifically
+                    // Look for the chat component by finding the element with messages
+                    const chatElement = document.getElementById('messages-box');
+                    const wireElement = chatElement ? chatElement.closest('[wire\\:id]') : document.querySelector('[wire\\:id]');
+                    
+                    if (wireElement) {
+                        const wireId = wireElement.getAttribute('wire:id');
+                        
+                        const component = Livewire.find(wireId);
+                        
+                        if (component) {
+                            // Try different method names that might exist
+                            if (typeof component.messageReceived === 'function') {
+                                component.messageReceived();
+                            } else if (typeof component.call === 'function') {
+                                component.call('messageReceived');
+                            } else {
+                                // Force a refresh of the component
+                                component.$refresh();
+                            }
+                        }
+                    }
+                });
+                
+                channel.listen('UserTyping', (e) => {
+                    // Find the AdminChatApp Livewire component for typing indicator
+                    const chatElement = document.getElementById('messages-box');
+                    const wireElement = chatElement ? chatElement.closest('[wire\\:id]') : document.querySelector('[wire\\:id]');
+                    
+                    if (wireElement) {
+                        const wireId = wireElement.getAttribute('wire:id');
+                        const component = Livewire.find(wireId);
+                        
+                        if (component) {
+                            // Call the typing method with the event data
+                            if (typeof component.call === 'function') {
+                                component.call('userTypingReceived', e);
+                            } else if (typeof component.userTypingReceived === 'function') {
+                                component.userTypingReceived(e);
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error setting up Echo listeners:', error);
+            }
+        }
     });
 
     function fileCard({srcUrl, filename}) {

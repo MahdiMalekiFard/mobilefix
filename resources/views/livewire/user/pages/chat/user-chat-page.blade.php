@@ -778,4 +778,98 @@
             }
         };
     }
+
+    // Manual Echo listener for admin typing events
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.Echo) {
+            
+            const channel = window.Echo.private('conversation.{{ $conversation?->id ?? "none" }}');
+            
+            // Listen for new messages
+            channel.listen('MessageSent', (e) => {
+                
+                // Find the UserChatPage Livewire component
+                const messagesContainer = document.getElementById('messages-container');
+                const wireElement = messagesContainer ? messagesContainer.closest('[wire\\:id]') : document.querySelector('[wire\\:id]');
+                
+                if (wireElement) {
+                    const wireId = wireElement.getAttribute('wire:id');
+                    const component = Livewire.find(wireId);
+                    
+                    if (component) {
+                        // Try different ways to call the method
+                        try {
+                            if (typeof component.call === 'function') {
+                                component.call('messageReceived');
+                            } else if (typeof component.messageReceived === 'function') {
+                                component.messageReceived();
+                            } else {
+                                component.$refresh();
+                            }
+                            
+                            // Auto-scroll to bottom after receiving message
+                            setTimeout(() => {
+                                const el = document.getElementById('messages-container');
+                                if (el) {
+                                    el.scrollTo({top: el.scrollHeight + 1000, behavior: 'smooth'});
+                                }
+                            }, 100);
+                            
+                            setTimeout(() => {
+                                const el = document.getElementById('messages-container');
+                                if (el) {
+                                    el.scrollTo({top: el.scrollHeight + 1000, behavior: 'smooth'});
+                                }
+                                
+                                // Also try Alpine element
+                                const alpineEl = document.querySelector('[x-ref="messagesBox"]');
+                                if (alpineEl) {
+                                    alpineEl.scrollTo({top: alpineEl.scrollHeight + 1000, behavior: 'smooth'});
+                                }
+                            }, 500);
+                            
+                            setTimeout(() => {
+                                const el = document.getElementById('messages-container');
+                                if (el) {
+                                    el.scrollTop = el.scrollHeight; // Force instant scroll
+                                }
+                            }, 800);
+                            
+                        } catch (error) {
+                            // Fallback: just refresh the component
+                            component.$refresh();
+                        }
+                    }
+                }
+            });
+
+            // Listen for admin typing events
+            channel.listen('UserTyping', (e) => {
+                // Find the UserChatPage Livewire component
+                const messagesContainer = document.getElementById('messages-container');
+                const wireElement = messagesContainer ? messagesContainer.closest('[wire\\:id]') : document.querySelector('[wire\\:id]');
+                
+                if (wireElement) {
+                    const wireId = wireElement.getAttribute('wire:id');
+                    const component = Livewire.find(wireId);
+                    
+                    if (component) {
+                        // Try different ways to call the method
+                        try {
+                            if (typeof component.call === 'function') {
+                                component.call('userTypingReceived', e);
+                            } else if (typeof component.userTypingReceived === 'function') {
+                                component.userTypingReceived(e);
+                            } else {
+                                component.$refresh();
+                            }
+                        } catch (error) {
+                            // Fallback: just refresh the component
+                            component.$refresh();
+                        }
+                    }
+                }
+            });
+        }
+    });
 </script>

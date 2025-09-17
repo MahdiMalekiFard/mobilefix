@@ -19,6 +19,7 @@ class AdminChatApp extends BaseAdminComponent
 {
     use WithFileUploads;
 
+    public int $receivedCount = 0;
     public ?int $selectedId    = null;
     public string $messageText = '';
     public string $search      = '';
@@ -200,22 +201,28 @@ class AdminChatApp extends BaseAdminComponent
     {
         $this->dispatch('scroll-bottom');
     }
-
+    
     public function getListeners(): array
     {
         if (!$this->selectedId) {
             return [];
         }
         
-        return [
+        $listeners = [
             'echo:conversation.' . $this->selectedId . ',MessageSent' => 'messageReceived',
             'echo:conversation.' . $this->selectedId . ',UserTyping' => 'userTypingReceived',
         ];
+        
+        return $listeners;
     }
 
     public function messageReceived(): void
     {
         $this->cursor = null;
+
+        // Force component refresh
+        $this->skipRender = false;
+
         $this->dispatch('scroll-bottom');
     }
 
@@ -344,6 +351,7 @@ class AdminChatApp extends BaseAdminComponent
 
     public function startTyping(): void
     {
+        
         if ($this->selectedId) {
             broadcast(new UserTyping(
                 $this->selectedId,
@@ -357,6 +365,7 @@ class AdminChatApp extends BaseAdminComponent
 
     public function stopTyping(): void
     {
+        
         if ($this->selectedId) {
             broadcast(new UserTyping(
                 $this->selectedId,
@@ -370,6 +379,10 @@ class AdminChatApp extends BaseAdminComponent
 
     public function render()
     {
+        $listeners = $this->getListeners();
+        if (!empty($listeners)) {
+        }
+        
         return view('livewire.admin.pages.chat.admin-chat-app', [
             'conversations' => $this->conversations,
         ]);

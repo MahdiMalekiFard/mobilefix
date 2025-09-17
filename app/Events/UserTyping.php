@@ -30,6 +30,7 @@ class UserTyping implements ShouldBroadcast
         $this->userType = $userType;
         $this->userName = $userName;
         $this->isTyping = $isTyping;
+        
     }
 
     /**
