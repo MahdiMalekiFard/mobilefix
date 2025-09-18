@@ -89,7 +89,7 @@ class UserChatPage extends Component
     public function confirmSendFromModal(): void
     {
         $this->isSending = true;
-        
+
         try {
             $this->send();
         } catch (FileDoesNotExist|FileIsTooBig $e) {
@@ -170,15 +170,16 @@ class UserChatPage extends Component
     public function send(): void
     {
         // Set loading state if sending from regular input (not modal)
-        if (!$this->isSending) {
+        if ( ! $this->isSending) {
             $this->isSending = true;
         }
-        
+
         $this->validate();
 
         // disallow empty message if no files selected
         if (trim($this->messageText) === '' && count($this->uploads) === 0) {
             $this->isSending = false;
+
             return;
         }
 
@@ -208,7 +209,7 @@ class UserChatPage extends Component
             }
 
             $lastMessageId = $msg->id;
-            
+
             // Broadcast the message
             broadcast(new MessageSent($msg));
         }
@@ -227,7 +228,7 @@ class UserChatPage extends Component
                     'is_read'         => false,
                 ]);
                 $lastMessageId = $textMsg->id;
-                
+
                 // Broadcast the text message
                 broadcast(new MessageSent($textMsg));
             }
@@ -251,7 +252,7 @@ class UserChatPage extends Component
 
                 $adder->toMediaCollection('attachments');
                 $lastMessageId = $fileMsg->id;
-                
+
                 // Broadcast the file message
                 broadcast(new MessageSent($fileMsg));
             }
@@ -293,12 +294,16 @@ class UserChatPage extends Component
 
     public function getListeners(): array
     {
-        $listeners = [
-            'echo:conversation.' . ($this->conversation?->id ?? 'none') . ',MessageSent' => 'messageReceived',
-            'echo:conversation.' . ($this->conversation?->id ?? 'none') . ',UserTyping' => 'userTypingReceived',
+        $cid = $this->conversation?->id;
+
+        if ( ! $cid) {
+            return [];
+        }
+
+        return [
+            "echo-private:conversation.{$cid},MessageSent" => 'messageReceived',
+            "echo-private:conversation.{$cid},UserTyping"  => 'userTypingReceived',
         ];
-        
-        return $listeners;
     }
 
     public function messageReceived(): void
@@ -306,6 +311,7 @@ class UserChatPage extends Component
         $this->cursor = null;
         $this->loadMessages();
         $this->dispatch('message-received');
+        $this->dispatch('ui:scroll-bottom');
     }
 
     public function userTypingReceived($event): void
@@ -313,12 +319,12 @@ class UserChatPage extends Component
         // Only show typing indicator for other users (admin in this case)
         if ($event['user_type'] === 'admin' && $event['user_id'] !== auth()->id()) {
             $this->adminIsTyping = $event['is_typing'];
+            $this->dispatch('ui:scroll-bottom');
         }
     }
 
     public function startTyping(): void
     {
-        
         if ($this->conversation) {
             broadcast(new UserTyping(
                 $this->conversation->id,
@@ -332,7 +338,6 @@ class UserChatPage extends Component
 
     public function stopTyping(): void
     {
-        
         if ($this->conversation) {
             broadcast(new UserTyping(
                 $this->conversation->id,

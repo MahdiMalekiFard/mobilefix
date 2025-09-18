@@ -1,3 +1,4 @@
+import './bootstrap-echo'
 import './bootstrap';
 import './components.js';
 import './../../vendor/power-components/livewire-powergrid/dist/powergrid';

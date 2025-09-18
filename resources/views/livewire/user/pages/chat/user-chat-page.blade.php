@@ -472,17 +472,17 @@
                 <button class="inline-flex items-center justify-center h-11 w-11 @lg:h-12 @lg:w-12 rounded-full
                                bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700
                                shadow-md disabled:opacity-40 hover:cursor-pointer transition-colors"
-                        wire:click="send" 
+                        wire:click="send"
                         wire:loading.attr="disabled"
                         wire:target="send"
                         title="Send">
-                    
+
                     <!-- Loading spinner -->
                     <svg wire:loading wire:target="send" class="animate-spin h-5 w-5 @lg:h-6 @lg:w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    
+
                     <!-- Send icon -->
                     <svg wire:loading.remove wire:target="send" class="h-5 w-5 @lg:h-6 @lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/>
@@ -493,7 +493,7 @@
 
         <!-- Upload Modal -->
         <div
-            x-data="{ 
+            x-data="{
                 open: false,
                 init() {
                     // Listen for file selection to open modal instantly
@@ -778,98 +778,4 @@
             }
         };
     }
-
-    // Manual Echo listener for admin typing events
-    document.addEventListener('DOMContentLoaded', () => {
-        if (window.Echo) {
-            
-            const channel = window.Echo.private('conversation.{{ $conversation?->id ?? "none" }}');
-            
-            // Listen for new messages
-            channel.listen('MessageSent', (e) => {
-                
-                // Find the UserChatPage Livewire component
-                const messagesContainer = document.getElementById('messages-container');
-                const wireElement = messagesContainer ? messagesContainer.closest('[wire\\:id]') : document.querySelector('[wire\\:id]');
-                
-                if (wireElement) {
-                    const wireId = wireElement.getAttribute('wire:id');
-                    const component = Livewire.find(wireId);
-                    
-                    if (component) {
-                        // Try different ways to call the method
-                        try {
-                            if (typeof component.call === 'function') {
-                                component.call('messageReceived');
-                            } else if (typeof component.messageReceived === 'function') {
-                                component.messageReceived();
-                            } else {
-                                component.$refresh();
-                            }
-                            
-                            // Auto-scroll to bottom after receiving message
-                            setTimeout(() => {
-                                const el = document.getElementById('messages-container');
-                                if (el) {
-                                    el.scrollTo({top: el.scrollHeight + 1000, behavior: 'smooth'});
-                                }
-                            }, 100);
-                            
-                            setTimeout(() => {
-                                const el = document.getElementById('messages-container');
-                                if (el) {
-                                    el.scrollTo({top: el.scrollHeight + 1000, behavior: 'smooth'});
-                                }
-                                
-                                // Also try Alpine element
-                                const alpineEl = document.querySelector('[x-ref="messagesBox"]');
-                                if (alpineEl) {
-                                    alpineEl.scrollTo({top: alpineEl.scrollHeight + 1000, behavior: 'smooth'});
-                                }
-                            }, 500);
-                            
-                            setTimeout(() => {
-                                const el = document.getElementById('messages-container');
-                                if (el) {
-                                    el.scrollTop = el.scrollHeight; // Force instant scroll
-                                }
-                            }, 800);
-                            
-                        } catch (error) {
-                            // Fallback: just refresh the component
-                            component.$refresh();
-                        }
-                    }
-                }
-            });
-
-            // Listen for admin typing events
-            channel.listen('UserTyping', (e) => {
-                // Find the UserChatPage Livewire component
-                const messagesContainer = document.getElementById('messages-container');
-                const wireElement = messagesContainer ? messagesContainer.closest('[wire\\:id]') : document.querySelector('[wire\\:id]');
-                
-                if (wireElement) {
-                    const wireId = wireElement.getAttribute('wire:id');
-                    const component = Livewire.find(wireId);
-                    
-                    if (component) {
-                        // Try different ways to call the method
-                        try {
-                            if (typeof component.call === 'function') {
-                                component.call('userTypingReceived', e);
-                            } else if (typeof component.userTypingReceived === 'function') {
-                                component.userTypingReceived(e);
-                            } else {
-                                component.$refresh();
-                            }
-                        } catch (error) {
-                            // Fallback: just refresh the component
-                            component.$refresh();
-                        }
-                    }
-                }
-            });
-        }
-    });
 </script>

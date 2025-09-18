@@ -19,7 +19,7 @@ class AdminChatApp extends BaseAdminComponent
 {
     use WithFileUploads;
 
-    public int $receivedCount = 0;
+    public int $receivedCount  = 0;
     public ?int $selectedId    = null;
     public string $messageText = '';
     public string $search      = '';
@@ -90,7 +90,7 @@ class AdminChatApp extends BaseAdminComponent
     public function confirmSendFromModal(): void
     {
         $this->isSending = true;
-        
+
         try {
             $this->send();
         } catch (FileDoesNotExist|FileIsTooBig $e) {
@@ -201,20 +201,6 @@ class AdminChatApp extends BaseAdminComponent
     {
         $this->dispatch('scroll-bottom');
     }
-    
-    public function getListeners(): array
-    {
-        if (!$this->selectedId) {
-            return [];
-        }
-        
-        $listeners = [
-            'echo:conversation.' . $this->selectedId . ',MessageSent' => 'messageReceived',
-            'echo:conversation.' . $this->selectedId . ',UserTyping' => 'userTypingReceived',
-        ];
-        
-        return $listeners;
-    }
 
     public function messageReceived(): void
     {
@@ -231,6 +217,7 @@ class AdminChatApp extends BaseAdminComponent
         // Only show typing indicator for other users (user in this case)
         if ($event['user_type'] === 'user' && $event['user_id'] !== auth()->id()) {
             $this->userIsTyping = $event['is_typing'];
+            $this->dispatch('scroll-bottom');
         }
     }
 
@@ -241,20 +228,22 @@ class AdminChatApp extends BaseAdminComponent
     public function send(): void
     {
         // Set loading state if sending from regular input (not modal)
-        if (!$this->isSending) {
+        if ( ! $this->isSending) {
             $this->isSending = true;
         }
-        
+
         $this->validate();
 
         if ( ! $this->selectedId) {
             $this->isSending = false;
+
             return;
         }
 
         // disallow truly empty messages
         if (trim($this->messageText) === '' && count($this->uploads) === 0) {
             $this->isSending = false;
+
             return;
         }
 
@@ -280,7 +269,7 @@ class AdminChatApp extends BaseAdminComponent
             }
 
             $lastMessageId = $msg->id;
-            
+
             // Broadcast the message
             broadcast(new MessageSent($msg));
         }
@@ -299,7 +288,7 @@ class AdminChatApp extends BaseAdminComponent
                     'is_read'         => false,
                 ]);
                 $lastMessageId = $textMsg->id;
-                
+
                 // Broadcast the text message
                 broadcast(new MessageSent($textMsg));
             }
@@ -323,7 +312,7 @@ class AdminChatApp extends BaseAdminComponent
 
                 $adder->toMediaCollection('attachments');
                 $lastMessageId = $fileMsg->id;
-                
+
                 // Broadcast the file message
                 broadcast(new MessageSent($fileMsg));
             }
@@ -351,7 +340,6 @@ class AdminChatApp extends BaseAdminComponent
 
     public function startTyping(): void
     {
-        
         if ($this->selectedId) {
             broadcast(new UserTyping(
                 $this->selectedId,
@@ -365,7 +353,6 @@ class AdminChatApp extends BaseAdminComponent
 
     public function stopTyping(): void
     {
-        
         if ($this->selectedId) {
             broadcast(new UserTyping(
                 $this->selectedId,
@@ -379,10 +366,6 @@ class AdminChatApp extends BaseAdminComponent
 
     public function render()
     {
-        $listeners = $this->getListeners();
-        if (!empty($listeners)) {
-        }
-        
         return view('livewire.admin.pages.chat.admin-chat-app', [
             'conversations' => $this->conversations,
         ]);

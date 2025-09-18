@@ -4,7 +4,8 @@
 @endphp
 
 <div
-    x-data="{ drawer:false }"
+    x-data="{ ...adminEcho(@entangle('selectedId').live), drawer:false }"
+    x-init="boot()"
     class="h-[calc(100dvh-64px)] w-full overflow-hidden
            bg-white dark:bg-neutral-900
            grid grid-cols-1 lg:[grid-template-columns:clamp(320px,28vw,420px)_minmax(0,1fr)]">
@@ -650,7 +651,7 @@
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    
+
                     <!-- Send icon -->
                     <svg wire:loading.remove wire:target="send" class="h-5 w-5 lg:h-6 lg:w-6 -mr-0.5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/>
@@ -662,7 +663,7 @@
 
         <!-- Upload Modal -->
         <div
-            x-data="{ 
+            x-data="{
                 open: false,
                 init() {
                     // Listen for file selection to open modal instantly
@@ -853,63 +854,6 @@
                 window.__ac_prevH = 0;
             }
         });
-
-        // Wait for Echo to be fully ready, then set up manual listeners
-        if (window.Echo) {
-            
-            try {
-                const channel = window.Echo.private('conversation.2');
-                
-                channel.listen('MessageSent', (e) => {
-                    
-                    // Find the AdminChatApp Livewire component specifically
-                    // Look for the chat component by finding the element with messages
-                    const chatElement = document.getElementById('messages-box');
-                    const wireElement = chatElement ? chatElement.closest('[wire\\:id]') : document.querySelector('[wire\\:id]');
-                    
-                    if (wireElement) {
-                        const wireId = wireElement.getAttribute('wire:id');
-                        
-                        const component = Livewire.find(wireId);
-                        
-                        if (component) {
-                            // Try different method names that might exist
-                            if (typeof component.messageReceived === 'function') {
-                                component.messageReceived();
-                            } else if (typeof component.call === 'function') {
-                                component.call('messageReceived');
-                            } else {
-                                // Force a refresh of the component
-                                component.$refresh();
-                            }
-                        }
-                    }
-                });
-                
-                channel.listen('UserTyping', (e) => {
-                    // Find the AdminChatApp Livewire component for typing indicator
-                    const chatElement = document.getElementById('messages-box');
-                    const wireElement = chatElement ? chatElement.closest('[wire\\:id]') : document.querySelector('[wire\\:id]');
-                    
-                    if (wireElement) {
-                        const wireId = wireElement.getAttribute('wire:id');
-                        const component = Livewire.find(wireId);
-                        
-                        if (component) {
-                            // Call the typing method with the event data
-                            if (typeof component.call === 'function') {
-                                component.call('userTypingReceived', e);
-                            } else if (typeof component.userTypingReceived === 'function') {
-                                component.userTypingReceived(e);
-                            }
-                        }
-                    }
-                });
-                
-            } catch (error) {
-                console.error('Error setting up Echo listeners:', error);
-            }
-        }
     });
 
     function fileCard({srcUrl, filename}) {
@@ -957,7 +901,7 @@
                     // Show save modal for previewable files
                     this.showSaveModal = true;
                 } else {
-                    // Non-previewable → just save
+                    // Non-preview able → just save
                     const url = URL.createObjectURL(blob);
                     this._save(url);
                     setTimeout(() => URL.revokeObjectURL(url), 60000);
@@ -982,5 +926,41 @@
                 a.remove();
             }
         };
+    }
+
+    function adminEcho(sid) {
+        return {
+            sid,              // two-way bound to $wire.selectedId
+            current: null,    // currently subscribed conversation id
+            channel: null,
+
+            boot() {
+                // subscribe immediately if sid already set
+                if (this.sid) this.subscribe(this.sid);
+                // watch for conversation changes from Livewire
+                this.$watch('sid', (id) => this.subscribe(id));
+            },
+
+            subscribe(id) {
+                if (!id) return;
+
+                // leave previous channel
+                if (this.current && this.current !== id) {
+                    try { window.Echo.leave(`private-conversation.${this.current}`); } catch (_) {}
+                }
+                this.current = id;
+
+                // (re)subscribe
+                const ch = window.Echo.private(`conversation.${id}`);
+                ch.subscribed(() => console.log('✅ admin subscribed to', id));
+
+                // avoid duplicate handlers on reconnects
+                ch.stopListening('MessageSent')
+                    .listen('MessageSent',  () => this.$wire.messageReceived());
+
+                ch.stopListening('UserTyping')
+                    .listen('UserTyping', (e) => this.$wire.userTypingReceived(e));
+            }
+        }
     }
 </script>
