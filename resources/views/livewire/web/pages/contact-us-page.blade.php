@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="contact-info-content">
                                     <h5>Büroadresse</h5>
-                                    <p>Friedrichstraße 123 10117 Berlin Deutschland</p>
+                                    <p>Landwehr 15 22087 Hamburg</p>
                                 </div>
                             </div>
                             <div class="contact-info">
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="contact-info-content">
                                     <h5>Offene Zeit</h5>
-                                    <p>Montag - Samstag (10.00AM - 05.30PM)</p>
+                                    <p>Montag - Samstag (10:30 - 18:30)</p>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +137,7 @@
 
     <!-- map -->
     <div class="contact-map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96708.34194156103!2d-74.03927096447748!3d40.759040329405195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x4a01c8df6fb3cb8!2sSolomon%20R.%20Guggenheim%20Museum!5e0!3m2!1sen!2sbd!4v1619410634508!5m2!1sen!2s"
+        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2369.6959866896027!2d10.032885776744918!3d53.56319427235296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNTPCsDMzJzQ3LjUiTiAxMMKwMDInMDcuNyJF!5e0!3m2!1sen!2sde!4v1758375124882!5m2!1sen!2sde"
             style="border:0;" allowfullscreen="" loading="lazy"></iframe>
     </div>
 </div>

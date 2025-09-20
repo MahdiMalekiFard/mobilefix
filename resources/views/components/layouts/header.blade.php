@@ -30,7 +30,7 @@
                             </li>
                             <li>
                                 <div class="header-top-contact-info">
-                                    <a href="#"><i class="far fa-clock"></i> Sun - Fri (08AM - 10PM)</a>
+                                    <a href="#"><i class="far fa-clock"></i> Mo - Sa (10:30 - 18:30)</a>
                                 </div>
                             </li>
                         </ul>

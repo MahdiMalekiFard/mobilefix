@@ -214,7 +214,7 @@
                         <div class="row align-items-center">
                             <div class="col-lg-12">
                                 <div class="video-wrap">
-                                    <a class="play-btn popup-youtube" href="https://www.youtube.com/watch?v=ckHzmP1evNU">
+                                    <a class="play-btn popup-youtube" href="{{ asset('assets/videos/home.mp4') }}">
                                         <i class="fas fa-play"></i>
                                     </a>
                                 </div>

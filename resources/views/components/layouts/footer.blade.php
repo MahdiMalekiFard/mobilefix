@@ -14,7 +14,7 @@
                             </p>
                             <ul class="footer-contact">
                                 <li><a href="tel:+4976489939"><i class="far fa-phone"></i>+49 7648 9939</a></li>
-                                <li><i class="far fa-map-marker-alt"></i>Friedrichstraße 123 10117 Berlin Deutschland</li>
+                                <li><i class="far fa-map-marker-alt"></i>Landwehr 15 22087 Hamburg</li>
                                 <li><a href="mailto:info@Fix-mobil.de"><i
                                             class="far fa-envelope"></i>info@Fix-mobil.de</a></li>
                             </ul>
