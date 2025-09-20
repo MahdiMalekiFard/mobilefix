@@ -33,7 +33,7 @@
                 </div>
                 <div class="flex-1">
                     <h2 class="text-xl font-bold text-neutral-800 dark:text-neutral-100">Support Chat</h2>
-                    <p class="text-sm text-neutral-600 dark:text-neutral-300">Get help from our support team</p>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-300">Holen Sie sich Hilfe von unserem Support-Team</p>
                 </div>
                 <!-- <div class="flex items-center gap-2">
                     <div class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -152,11 +152,11 @@
                                         <div x-show="showSaveModal" x-cloak x-transition.opacity class="fixed inset-0 z-[70] flex items-center justify-center">
                                             <div class="absolute inset-0 bg-black/40" @click="showSaveModal=false"></div>
                                             <div class="relative w-[90vw] max-w-sm rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
-                                                <div class="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 font-semibold">Save File</div>
-                                                <div class="p-4 text-sm text-neutral-700 dark:text-neutral-300">Do you want to save <span class="font-medium" x-text="filename"></span>?</div>
+                                                <div class="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 font-semibold">Datei speichern</div>
+                                                <div class="p-4 text-sm text-neutral-700 dark:text-neutral-300">Möchten Sie sparen <span class="font-medium" x-text="filename"></span>?</div>
                                                 <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
-                                                    <button class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800" @click="showSaveModal=false">Cancel</button>
-                                                    <button class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow" @click="confirmSave">Save</button>
+                                                    <button class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:cursor-pointer" @click="showSaveModal=false">Stornieren</button>
+                                                    <button class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow hover:cursor-pointer" @click="confirmSave">Speichern</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -409,7 +409,7 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span>Sending message...</span>
+                <span>Nachricht senden...</span>
             </div>
 
             <div class="mt-2 flex items-center gap-2 @lg:gap-3">
@@ -436,7 +436,7 @@
                                focus:outline-none focus:ring-2 focus:ring-blue-500/40
                                ring-1 ring-inset ring-neutral-200 dark:ring-neutral-700 transition hover:cursor-pointer
                                disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="Attach files">
+                        title="Dateien anhängen">
                     <svg viewBox="0 0 24 24"
                          class="h-5 w-5 @lg:h-6 @lg:w-6 text-neutral-600 dark:text-neutral-300"
                          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -466,7 +466,7 @@
                            text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500
                            px-4 py-3 outline-none focus:outline-2 focus:outline-blue-500 focus:outline-offset-2
                            disabled:opacity-50 disabled:cursor-not-allowed"
-                    placeholder="Write Something..."/>
+                    placeholder="Schreib etwas..."/>
 
                 {{-- send --}}
                 <button class="inline-flex items-center justify-center h-11 w-11 @lg:h-12 @lg:w-12 rounded-full
@@ -475,7 +475,7 @@
                         wire:click="send"
                         wire:loading.attr="disabled"
                         wire:target="send"
-                        title="Send">
+                        title="Schicken">
 
                     <!-- Loading spinner -->
                     <svg wire:loading wire:target="send" class="animate-spin h-5 w-5 @lg:h-6 @lg:w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -537,7 +537,7 @@
                 <!-- Header -->
                 <div class="flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-800">
                     <div class="font-semibold text-neutral-800 dark:text-neutral-100">
-                        {{ count($uploads ?? []) }} files selected
+                        {{ count($uploads ?? []) }} ausgewählte Dateien
                     </div>
                     <button
                         class="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -561,7 +561,7 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <div class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Uploading files...</div>
+                            <div class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Hochladen von Dateien...</div>
                         </div>
                     </div>
                     <!-- File list -->
@@ -615,24 +615,24 @@
                         <label class="inline-flex items-center gap-2">
                             <input type="checkbox" class="rounded border-neutral-300 dark:border-neutral-700"
                                    wire:model.live="groupItems">
-                            <span class="text-sm text-neutral-700 dark:text-neutral-300">Group items</span>
+                            <span class="text-sm text-neutral-700 dark:text-neutral-300">Elemente gruppieren</span>
                         </label>
 
-                        <label class="inline-flex items-center gap-2">
-                            <input type="checkbox" class="rounded border-neutral-300 dark:border-neutral-700"
-                                   wire:model.live="compressImages">
-                            <span class="text-sm text-neutral-700 dark:text-neutral-300">Compress images</span>
-                        </label>
+{{--                        <label class="inline-flex items-center gap-2">--}}
+{{--                            <input type="checkbox" class="rounded border-neutral-300 dark:border-neutral-700"--}}
+{{--                                   wire:model.live="compressImages">--}}
+{{--                            <span class="text-sm text-neutral-700 dark:text-neutral-300">Compress images</span>--}}
+{{--                        </label>--}}
                     </div>
 
                     <!-- Comment (uses your messageText) -->
                     <div>
-                        <label class="block text-xs mb-1 text-neutral-500 dark:text-neutral-400">Comment</label>
+                        <label class="block text-xs mb-1 text-neutral-500 dark:text-neutral-400">Kommentar</label>
                         <textarea
                             wire:model.defer="messageText"
                             rows="2"
                             class="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-                            placeholder="Add a comment…"></textarea>
+                            placeholder="Einen Kommentar hinzufügen…"></textarea>
                     </div>
                 </div>
 
@@ -643,7 +643,7 @@
                         @click="document.getElementById('chat-file-input')?.click()"
                         wire:loading.attr="disabled"
                         wire:target="confirmSendFromModal"
-                    >Add
+                    >Hinzufügen
                     </button>
 
                     <button
@@ -651,7 +651,7 @@
                         @click="open=false; $wire.cancelUploads()"
                         wire:loading.attr="disabled"
                         wire:target="confirmSendFromModal"
-                    >Cancel
+                    >Stornieren
                     </button>
 
                     <button
@@ -664,8 +664,8 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <span wire:loading.remove wire:target="confirmSendFromModal">Send</span>
-                        <span wire:loading wire:target="confirmSendFromModal">Sending...</span>
+                        <span wire:loading.remove wire:target="confirmSendFromModal">Schicken</span>
+                        <span wire:loading wire:target="confirmSendFromModal">Senden...</span>
                     </button>
                 </div>
             </div>

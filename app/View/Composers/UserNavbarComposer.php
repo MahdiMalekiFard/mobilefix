@@ -10,9 +10,9 @@ class UserNavbarComposer
 {
     public function compose(View $view): void
     {
-        $userId = Auth::id();
+        $userId       = Auth::id();
         $conversation = $userId ? Conversation::where('user_id', $userId)->first() : null;
-        $unreadCount = $conversation
+        $unreadCount  = $conversation
             ? $conversation->messages()->where('sender_type', 'admin')->where('is_read', false)->count()
             : 0;
 
@@ -41,10 +41,10 @@ class UserNavbarComposer
                 'exact'      => true,
             ],
             [
-                'type'          => 'custom_component',
-                'component'     => 'user.components.support-chat-menu-item',
-                'route_name'    => 'user.chat.index',
-                'access'        => true,
+                'type'       => 'custom_component',
+                'component'  => 'user.components.support-chat-menu-item',
+                'route_name' => 'user.chat.index',
+                'access'     => true,
             ],
         ]);
     }

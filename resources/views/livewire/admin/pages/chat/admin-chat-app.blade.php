@@ -304,8 +304,8 @@
                                                             <div class="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 font-semibold">Save File</div>
                                                             <div class="p-4 text-sm text-neutral-700 dark:text-neutral-300">Do you want to save <span class="font-medium" x-text="filename"></span>?</div>
                                                             <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
-                                                                <button class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800" @click="showSaveModal=false">Cancel</button>
-                                                                <button class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow" @click="confirmSave">Save</button>
+                                                                <button class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:cursor-pointer" @click="showSaveModal=false">Cancel</button>
+                                                                <button class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow hover:cursor-pointer" @click="confirmSave">Save</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -948,7 +948,7 @@
                 if (this.sid) this.subscribe(this.sid);
                 // watch for conversation changes from Livewire
                 this.$watch('sid', (id) => this.subscribe(id));
-                
+
                 // Cleanup on page navigation
                 document.addEventListener('livewire:navigating', () => {
                     this.cleanup();
@@ -968,18 +968,18 @@
             subscribe(id) {
                 // leave previous channel if exists
                 if (this.current) {
-                    try { 
+                    try {
                         window.Echo.leave(`private-conversation.${this.current}`);
                         console.log('🚪 admin left conversation', this.current);
                     } catch (_) {}
                 }
-                
+
                 // If no id provided, just clear current and don't subscribe to anything
                 if (!id) {
                     this.current = null;
                     return;
                 }
-                
+
                 this.current = id;
 
                 // (re)subscribe
