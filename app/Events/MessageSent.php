@@ -29,9 +29,19 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        return [
+        $channels = [
             new PrivateChannel('conversation.' . $this->message->conversation_id),
         ];
+        
+        if ($this->message->sender_type === 'user') {
+            // User messages: broadcast to global admin channel
+            $channels[] = new PrivateChannel('admin-chat');
+        } else {
+            // Admin messages: broadcast to specific user channel for live badge updates
+            $channels[] = new PrivateChannel('user-chat.' . $this->message->conversation->user_id);
+        }
+        
+        return $channels;
     }
 
     public function broadcastWith(): array

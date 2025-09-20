@@ -29,10 +29,6 @@ class NavbarComposer
     public function compose(View $view): void
     {
         $user = auth()->user();
-        // Calculate unread user messages for admin
-        $unreadUserMessages = Message::where('sender_type', 'user')
-            ->where('is_read', false)
-            ->count();
         // -- leaf groups (same as your current items) -----------------------------
         $userMgmt = [
             'icon'     => 's-users',
@@ -244,13 +240,8 @@ class NavbarComposer
                 'route_name' => 'admin.dashboard',
             ],
             [
-                'icon'          => 's-chat-bubble-left-right',
-                'title'         => 'User Chats',
-                'route_name'    => 'admin.chat.index',
-                'exact'         => true,
-                'params'        => [],
-                'badge'         => $unreadUserMessages > 0 ? $unreadUserMessages : null,
-                'badge_classes' => 'bg-red-500 text-white text-xs px-2 py-1 rounded-full',
+                'type'          => 'custom_component',
+                'component'     => 'admin.components.user-chats-menu-item',
             ],
 
             // Folder: People

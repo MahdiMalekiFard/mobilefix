@@ -283,13 +283,18 @@ class UserChatPage extends Component
             return;
         }
 
-        $this->conversation->messages()
+        $updatedCount = $this->conversation->messages()
             ->where('sender_type', 'admin')
             ->where('is_read', false)
             ->update([
                 'is_read' => true,
                 'read_at' => now(),
             ]);
+
+        // Dispatch event to update badge if any messages were marked as read
+        if ($updatedCount > 0) {
+            $this->dispatch('messages-marked-as-read');
+        }
     }
 
     public function getListeners(): array
@@ -310,6 +315,10 @@ class UserChatPage extends Component
     {
         $this->cursor = null;
         $this->loadMessages();
+        
+        // Automatically mark new admin messages as read when received via WebSocket
+        $this->markOtherSideMessagesAsRead();
+        
         $this->dispatch('message-received');
         $this->dispatch('ui:scroll-bottom');
     }

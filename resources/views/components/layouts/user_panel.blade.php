@@ -48,6 +48,10 @@
 <x-toast position="toast-button toast-end"/>
 
 @livewireScripts
+
+{{-- Global user chat listener for real-time notifications --}}
+@include('user.layouts.partials.global-chat-listener')
+
 @stack('scripts')
 
 </body>

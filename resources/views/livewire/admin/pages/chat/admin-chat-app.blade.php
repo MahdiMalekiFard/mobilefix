@@ -229,8 +229,8 @@
                             @php
                                 $isMine   = $m->sender_id === auth()->id();
                                 $media    = $m->getMedia('attachments');
-                                $images   = $media->filter(fn($m) => str_starts_with($m->mime_type, 'image/'));
-                                $files    = $media->reject(fn($m) => str_starts_with($m->mime_type, 'image/'));
+                                $images   = $media->filter(fn($media_item) => str_starts_with($media_item->mime_type, 'image/'));
+                                $files    = $media->reject(fn($media_item) => str_starts_with($media_item->mime_type, 'image/'));
                                 $hasBody  = trim($m->body) !== '';
                             @endphp
                             <div class="flex {{ $isMine ? 'justify-start' : 'justify-end' }} mb-10" wire:key="m-{{ $m->id }}">
@@ -610,21 +610,28 @@
                     x-ref="composer"
                     wire:model.defer="messageText"
                     wire:keydown.enter="send"
+                    autocomplete="off"
                     x-data="{
                         typingTimer: null,
                         startTyping() {
                             const isActive = $wire.get('selectedId') !== null;
-                            if (isActive) {
+                            const hasText = $el.value && $el.value.trim() !== '';
+                            if (isActive && hasText) {
                                 $wire.startTyping();
                                 clearTimeout(this.typingTimer);
                                 this.typingTimer = setTimeout(() => {
                                     $wire.stopTyping();
                                 }, 2000);
+                            } else if (isActive && !hasText) {
+                                // Stop typing if input becomes empty
+                                clearTimeout(this.typingTimer);
+                                $wire.stopTyping();
                             }
                         }
                     }"
                     @input="startTyping()"
                     @blur="$wire.stopTyping()"
+                    @message-sent.window="setTimeout(() => { $el.value = ''; }, 100)"
                     class="flex-1 rounded-full border
                            border-neutral-200 dark:border-neutral-800
                            bg-white dark:bg-neutral-800
@@ -801,6 +808,8 @@
                         <textarea
                             wire:model.defer="messageText"
                             rows="2"
+                            autocomplete="off"
+                            @message-sent.window="setTimeout(() => { $el.value = ''; }, 100)"
                             class="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                             placeholder="Add a comment…"></textarea>
                     </div>
@@ -939,15 +948,38 @@
                 if (this.sid) this.subscribe(this.sid);
                 // watch for conversation changes from Livewire
                 this.$watch('sid', (id) => this.subscribe(id));
+                
+                // Cleanup on page navigation
+                document.addEventListener('livewire:navigating', () => {
+                    this.cleanup();
+                });
+            },
+
+            cleanup() {
+                if (this.current) {
+                    try {
+                        window.Echo.leave(`private-conversation.${this.current}`);
+                        console.log('🧹 admin cleanup: left conversation', this.current);
+                    } catch (_) {}
+                    this.current = null;
+                }
             },
 
             subscribe(id) {
-                if (!id) return;
-
-                // leave previous channel
-                if (this.current && this.current !== id) {
-                    try { window.Echo.leave(`private-conversation.${this.current}`); } catch (_) {}
+                // leave previous channel if exists
+                if (this.current) {
+                    try { 
+                        window.Echo.leave(`private-conversation.${this.current}`);
+                        console.log('🚪 admin left conversation', this.current);
+                    } catch (_) {}
                 }
+                
+                // If no id provided, just clear current and don't subscribe to anything
+                if (!id) {
+                    this.current = null;
+                    return;
+                }
+                
                 this.current = id;
 
                 // (re)subscribe
@@ -956,10 +988,26 @@
 
                 // avoid duplicate handlers on reconnects
                 ch.stopListening('MessageSent')
-                    .listen('MessageSent',  () => this.$wire.messageReceived());
+                    .listen('MessageSent', () => {
+                        try {
+                            if (this.$wire && typeof this.$wire.messageReceived === 'function') {
+                                this.$wire.messageReceived();
+                            }
+                        } catch (error) {
+                            console.error('Error calling messageReceived:', error);
+                        }
+                    });
 
                 ch.stopListening('UserTyping')
-                    .listen('UserTyping', (e) => this.$wire.userTypingReceived(e));
+                    .listen('UserTyping', (e) => {
+                        try {
+                            if (this.$wire && typeof this.$wire.userTypingReceived === 'function') {
+                                this.$wire.userTypingReceived(e);
+                            }
+                        } catch (error) {
+                            console.error('Error calling userTypingReceived:', error);
+                        }
+                    });
             }
         }
     }

@@ -35,10 +35,10 @@
                     <h2 class="text-xl font-bold text-neutral-800 dark:text-neutral-100">Support Chat</h2>
                     <p class="text-sm text-neutral-600 dark:text-neutral-300">Get help from our support team</p>
                 </div>
-                <div class="flex items-center gap-2">
+                <!-- <div class="flex items-center gap-2">
                     <div class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span class="text-sm text-neutral-600 dark:text-neutral-400">Online</span>
-                </div>
+                </div> -->
             </div>
         </div>
 

@@ -63,6 +63,18 @@ class RouteServiceProvider extends BaseRouteProvider
             return (bool) ($conversation && $conversation->user_id == $user->id);
         });
 
+        // Register global admin channel for real-time conversation list updates
+        Broadcast::channel('admin-chat', function ($user) {
+            // Only allow admin users
+            return $user->id == 1 || $user->hasRole('admin') || $user->hasRole('super_admin');
+        });
+
+        // Register user chat channel for live badge updates
+        Broadcast::channel('user-chat.{userId}', function ($user, $userId) {
+            // Only allow the specific user to listen to their chat notifications
+            return (int) $user->id === (int) $userId;
+        });
+
         // Register user channels
         Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
             return (int) $user->id === (int) $id;

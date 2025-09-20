@@ -53,5 +53,8 @@
 
 @livewireScripts
 
+{{-- Global admin chat listener for real-time notifications --}}
+@include('admin.layouts.partials.global-chat-listener')
+
 </body>
 </html>

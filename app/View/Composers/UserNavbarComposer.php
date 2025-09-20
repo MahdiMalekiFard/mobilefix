@@ -41,14 +41,10 @@ class UserNavbarComposer
                 'exact'      => true,
             ],
             [
-                'icon'          => 's-chat-bubble-left-right',
-                'title'         => 'Support Chat',
+                'type'          => 'custom_component',
+                'component'     => 'user.components.support-chat-menu-item',
                 'route_name'    => 'user.chat.index',
                 'access'        => true,
-                'params'        => [],
-                'exact'         => true,
-                'badge'         => $unreadCount > 0 ? $unreadCount : null,
-                'badge_classes' => 'bg-red-500 text-white text-xs px-2 py-1 rounded-full',
             ],
         ]);
     }

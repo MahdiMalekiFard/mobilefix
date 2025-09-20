@@ -26,13 +26,27 @@
                     @endif
                 @else
                     @if(Arr::get($menu,'access',true))
-                        <x-menu-item
-                            :exact="Arr::get($menu,'exact',false)"
-                            :title="Arr::get($menu,'title')"
-                            :icon="Arr::get($menu,'icon')"
-                            :badge="Arr::get($menu,'badge')"
-                            :badge-classes="Arr::get($menu,'badge_classes','float-left')"
-                            :link="route(Arr::get($menu,'route_name'),Arr::get($menu,'params',[]))"/>
+                        @if(Arr::get($menu, 'type') === 'custom_component')
+                            @livewire(Arr::get($menu, 'component'))
+                        @elseif(Arr::has($menu, 'livewire_badge'))
+                            <x-menu-item
+                                :exact="Arr::get($menu,'exact',false)"
+                                :title="Arr::get($menu,'title')"
+                                :icon="Arr::get($menu,'icon')"
+                                :link="route(Arr::get($menu,'route_name'),Arr::get($menu,'params',[]))">
+                                <x-slot:badge>
+                                    @livewire(Arr::get($menu, 'livewire_badge'))
+                                </x-slot:badge>
+                            </x-menu-item>
+                        @else
+                            <x-menu-item
+                                :exact="Arr::get($menu,'exact',false)"
+                                :title="Arr::get($menu,'title')"
+                                :icon="Arr::get($menu,'icon')"
+                                :badge="Arr::get($menu,'badge')"
+                                :badge-classes="Arr::get($menu,'badge_classes','float-left')"
+                                :link="route(Arr::get($menu,'route_name'),Arr::get($menu,'params',[]))"/>
+                        @endif
                     @endif
                 @endif
             @endforeach

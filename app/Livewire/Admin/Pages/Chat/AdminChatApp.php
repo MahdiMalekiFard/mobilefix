@@ -182,8 +182,21 @@ class AdminChatApp extends BaseAdminComponent
             ->where('is_read', false)
             ->update(['is_read' => true, 'read_at' => now()]);
 
+        // Dispatch event to update all badge counts after marking messages as read
+        $this->dispatch('messages-marked-as-read');
+
         $this->dispatch('scroll-bottom');
         $this->dispatch('focus-composer');
+    }
+
+    /** Close current conversation */
+    public function closeConversation(): void
+    {
+        $this->selectedId = null;
+        $this->cursor     = null;
+        $this->nextCursor = null;
+        $this->uploads    = [];
+        $this->userIsTyping = false;
     }
 
     /** Load older chunk (adds older items at the top on next render) */
@@ -214,11 +227,39 @@ class AdminChatApp extends BaseAdminComponent
 
     public function userTypingReceived($event): void
     {
-        // Only show typing indicator for other users (user in this case)
-        if ($event['user_type'] === 'user' && $event['user_id'] !== auth()->id()) {
-            $this->userIsTyping = $event['is_typing'];
-            $this->dispatch('scroll-bottom');
+        try {
+            // Only show typing indicator for other users (user in this case) and if we have an active conversation
+            if ($this->selectedId && $event['user_type'] === 'user' && $event['user_id'] !== auth()->id()) {
+                $this->userIsTyping = $event['is_typing'];
+                $this->dispatch('scroll-bottom');
+            }
+        } catch (\Exception $e) {
+            // Gracefully handle any errors to prevent DOM tree issues
+            logger('AdminChatApp userTypingReceived error: ' . $e->getMessage());
         }
+    }
+
+    #[On('global-message-received')]
+    public function globalMessageReceived(): void
+    {
+        // Refresh the conversations list to update unread counts and last messages
+        // This is called when any new message is sent to any conversation
+        
+        // If a conversation is currently open, immediately mark any new messages 
+        // from that conversation as read to prevent flicker effect
+        if ($this->selectedId) {
+            $updatedCount = Message::where('conversation_id', $this->selectedId)
+                ->where('sender_id', '!=', Auth::id())
+                ->where('is_read', false)
+                ->update(['is_read' => true, 'read_at' => now()]);
+            
+            // If we marked any messages as read, update all badges
+            if ($updatedCount > 0) {
+                $this->dispatch('messages-marked-as-read');
+            }
+        }
+        
+        $this->skipRender = false;
     }
 
     /**
