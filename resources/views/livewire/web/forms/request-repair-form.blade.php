@@ -46,26 +46,26 @@
                 @endif
 
                 <form wire:submit.prevent="submit" enctype="multipart/form-data">
-                    <div class="row">
+                    <div class="row" wire:loading.class="opacity-50" wire:target="submit">
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Namen eingeben" wire:model="name" required>
+                                <input type="text" class="form-control" placeholder="Namen eingeben" wire:model="name" required wire:loading.attr="disabled" wire:target="submit">
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="email" class="form-control" placeholder="E-Mail eingeben" wire:model="email" required>
+                                <input type="email" class="form-control" placeholder="E-Mail eingeben" wire:model="email" required wire:loading.attr="disabled" wire:target="submit">
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Telefon eingeben" wire:model="phone" required>
+                                <input type="text" class="form-control" placeholder="Telefon eingeben" wire:model="phone" required wire:loading.attr="disabled" wire:target="submit">
                             </div>
                         </div>
                         <!-- Brand select from database -->
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <select class="form-select" name="brand" id="brand-select" wire:model="brand" required onchange="filterModelsByBrand()">
+                                <select class="form-select" name="brand" id="brand-select" wire:model="brand" required onchange="filterModelsByBrand()" wire:loading.attr="disabled" wire:target="submit">
                                     <option value="">Marke wählen</option>
                                     @foreach($brands as $brand)
                                         <option value="{{ $brand->id }}">{{ $brand->title }}</option>
@@ -76,7 +76,7 @@
                         <!-- Device/Model select, dynamically filtered by brand -->
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <select class="form-select" name="model" id="model-select" wire:model="model" required>
+                                <select class="form-select" name="model" id="model-select" wire:model="model" required wire:loading.attr="disabled" wire:target="submit">
                                     <option value="">Gerät auswählen</option>
                                     @foreach($brands as $brand)
                                         @foreach($brand->devices as $device)
@@ -97,7 +97,9 @@
                                             data-bs-toggle="dropdown"
                                             data-bs-auto-close="outside"
                                             aria-expanded="false"
-                                            style="background: white; border-color: #ced4da;">
+                                            style="background: white; border-color: #ced4da;"
+                                            wire:loading.attr="disabled"
+                                            wire:target="submit">
                                         <span
                                             x-text="
                                             selectedProblems.length === 0
@@ -142,7 +144,9 @@
                                            wire:model="videos"
                                            multiple
                                            accept="video/*"
-                                           @change="count = $event.target.files?.length || 0"/>
+                                           @change="count = $event.target.files?.length || 0"
+                                           wire:loading.attr="disabled"
+                                           wire:target="submit"/>
 
                                     <label for="videos" class="file-upload-label">
                                         <i class="fas fa-file"></i>
@@ -181,7 +185,9 @@
                                            wire:model="images"
                                            multiple
                                            accept="image/*"
-                                           @change="count = $event.target.files?.length || 0"/>
+                                           @change="count = $event.target.files?.length || 0"
+                                           wire:loading.attr="disabled"
+                                           wire:target="submit"/>
 
                                     <label for="images" class="file-upload-label">
                                         <i class="fas fa-file"></i>
@@ -247,16 +253,23 @@
                                         :title="uploading ? 'Bitte warten – Upload läuft' : ''"
                                         :style="(desc && desc.trim().length)
                                                     ? 'background:#28a745;border-color:#28a745;color:#fff'
-                                                    : ''">
+                                                    : ''"
+                                        wire:loading.attr="disabled"
+                                        wire:target="submit">
                                     <template x-if="uploading">
                                         <span><i class="fas fa-spinner fa-spin"></i> Upload läuft …</span>
                                     </template>
                                     <template x-if="!uploading">
                                           <span>
-                                                <i :class="(desc && desc.trim().length) ? 'fas fa-check' : 'fas fa-edit'"></i>
-                                                <span x-text="(desc && desc.trim().length)
-                                                                ? 'Beschreibung hinzugefügt'
-                                                                : 'Beschreibung hinzufügen'">
+                                                <span wire:loading.remove wire:target="submit">
+                                                    <i :class="(desc && desc.trim().length) ? 'fas fa-check' : 'fas fa-edit'"></i>
+                                                    <span x-text="(desc && desc.trim().length)
+                                                                    ? 'Beschreibung hinzugefügt'
+                                                                    : 'Beschreibung hinzufügen'">
+                                                    </span>
+                                                </span>
+                                                <span wire:loading wire:target="submit">
+                                                    <i class="fas fa-spinner fa-spin"></i> Wird übermittelt …
                                                 </span>
                                           </span>
                                     </template>
@@ -270,12 +283,21 @@
                                         class="theme-btn theme-btn2 w-100"
                                         :disabled="uploading"
                                         :class="{ 'opacity-50 cursor-not-allowed': uploading }"
+                                        wire:loading.attr="disabled"
+                                        wire:target="submit"
                                 >
                                     <template x-if="uploading">
                                         <span><i class="fas fa-spinner fa-spin me-1"></i> Upload läuft …</span>
                                     </template>
                                     <template x-if="!uploading">
-                                        <span><i class="fas fa-tools"></i> Reparatur anfordern</span>
+                                        <span>
+                                            <span wire:loading.remove wire:target="submit">
+                                                <i class="fas fa-tools"></i> Reparatur anfordern
+                                            </span>
+                                            <span wire:loading wire:target="submit">
+                                                <i class="fas fa-spinner fa-spin me-1"></i> Wird übermittelt …
+                                            </span>
+                                        </span>
                                     </template>
                                 </button>
                             </div>

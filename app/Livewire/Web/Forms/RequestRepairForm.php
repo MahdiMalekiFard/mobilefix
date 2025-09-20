@@ -72,10 +72,10 @@ class RequestRepairForm extends Component
 
     public function submit()
     {
-        // Validate the form data
-        $data = $this->validate();
-
         try {
+            // Validate the form data
+            $data = $this->validate();
+
             // Create the order with pending status
             $order = app(StoreOrderAction::class)->handle($data);
 

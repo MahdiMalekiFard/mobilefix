@@ -20,6 +20,7 @@ class UserChatPage extends Component
 
     public ?Conversation $conversation = null;
     public string $messageText         = '';
+    public string $modalCommentText    = '';
     public Collection $chatMessages;
     public bool $didInitialScroll = false;
 
@@ -40,11 +41,12 @@ class UserChatPage extends Component
     {
         return [
             'messageText'    => ['nullable', 'string', 'max:5000'],
+            'modalCommentText' => ['nullable', 'string', 'max:5000'],
             'uploads'        => ['array', 'max:5'], // allow up to 5 files per message
-            'uploads.*'      => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+            'uploads.*'      => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,bmp,svg,pdf,txt,csv,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,mp3,wav,ogg,mp4,avi,mov,wmv,webm,json,xml'],
 
             'newUploads'     => ['sometimes', 'array'],
-            'newUploads.*'   => ['sometimes', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+            'newUploads.*'   => ['sometimes', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,bmp,svg,pdf,txt,csv,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,mp3,wav,ogg,mp4,avi,mov,wmv,webm,json,xml'],
 
             'groupItems'     => ['boolean'],
             'compressImages' => ['boolean'],
@@ -91,7 +93,17 @@ class UserChatPage extends Component
         $this->isSending = true;
 
         try {
+            // Temporarily use modal comment text for sending
+            $originalMessageText = $this->messageText;
+            $this->messageText = $this->modalCommentText;
+            
             $this->send();
+            
+            // Clear modal comment after sending
+            $this->modalCommentText = '';
+            
+            // Restore original message text (should be empty anyway after send)
+            $this->messageText = $originalMessageText;
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             Log::error($e->getMessage());
         } finally {

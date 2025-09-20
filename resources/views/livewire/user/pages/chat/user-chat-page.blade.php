@@ -1,4 +1,24 @@
-<div class="@container h-full min-h-0 flex flex-col">
+<div class="@container h-full min-h-0 flex flex-col" 
+     x-data="{
+         globalDragOver: false,
+         handleGlobalDragOver(event) {
+             event.preventDefault();
+             this.globalDragOver = true;
+         },
+         handleGlobalDragLeave(event) {
+             event.preventDefault();
+             if (!event.currentTarget.contains(event.relatedTarget)) {
+                 this.globalDragOver = false;
+             }
+         },
+         handleGlobalDrop(event) {
+             event.preventDefault();
+             this.globalDragOver = false;
+         }
+     }"
+     @dragover="handleGlobalDragOver($event)"
+     @dragleave="handleGlobalDragLeave($event)"
+     @drop="handleGlobalDrop($event)">
     <style>
         @layer utilities {
             .message-bubble {
@@ -45,7 +65,29 @@
         <!-- Messages Area (also acts as a drop target) -->
         <div
             id="messages-container"
-            x-data="{ atBottom: true }"
+            x-data="{
+                atBottom: true,
+                dragOver: false,
+                handleDragOver(event) {
+                    event.preventDefault();
+                    this.dragOver = true;
+                },
+                handleDragLeave(event) {
+                    event.preventDefault();
+                    // Only set dragOver to false if we're leaving the container itself
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                        this.dragOver = false;
+                    }
+                },
+                handleDrop(event) {
+                    event.preventDefault();
+                    this.dragOver = false;
+                    const files = event.dataTransfer?.files;
+                    if (files?.length) {
+                        $dispatch('chat-files-dropped', { files });
+                    }
+                }
+            }"
             x-ref="messagesBox"
             x-init="$nextTick(() => {
                 $refs.messagesBox.scrollTo({ top: $refs.messagesBox.scrollHeight, behavior: 'smooth' });
@@ -54,13 +96,13 @@
                   $refs.messagesBox.scrollTo({ top: $refs.messagesBox.scrollHeight, behavior: 'smooth' });
             })"
             @scroll.passive="atBottom = ($el.scrollTop + $el.clientHeight) >= ($el.scrollHeight - 50)"
-            @dragover.prevent
-            @drop.prevent="
-                const files = $event.dataTransfer?.files;
-                if (files?.length) $dispatch('chat-files-dropped', { files });
-            "
+            @dragover="handleDragOver($event)"
+            @dragleave="handleDragLeave($event)"
+            @drop="handleDrop($event)"
             class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 @lg:px-6 py-4 @lg:py-6
-                   bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900 dark:to-neutral-900">
+                   bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900 dark:to-neutral-900
+                   transition-colors duration-200 relative"
+            :class="dragOver ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''">
 
             {{-- Load older --}}
             @if($this->nextCursor)
@@ -264,17 +306,17 @@
                                                     <div class="absolute inset-0 bg-black/40" @click="showSaveModal=false"></div>
                                                     <div class="relative w-[90vw] max-w-sm rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
                                                         <div class="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 font-semibold">
-                                                            Save File
+                                                            Datei speichern
                                                         </div>
                                                         <div class="p-4 text-sm text-neutral-700 dark:text-neutral-300">
-                                                            Do you want to save <span class="font-medium" x-text="filename"></span>?
+                                                            Möchten Sie <span class="font-medium" x-text="filename"></span> speichern?
                                                         </div>
                                                         <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
                                                             <button class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:cursor-pointer"
-                                                                    @click="showSaveModal=false">Cancel
+                                                                    @click="showSaveModal=false">Abbrechen
                                                             </button>
                                                             <button class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow hover:cursor-pointer"
-                                                                    @click="confirmSave">Save
+                                                                    @click="confirmSave">Speichern
                                                             </button>
                                                         </div>
                                                     </div>
@@ -314,6 +356,7 @@
                 </div>
             @endforelse
 
+
             @if($adminIsTyping)
                 <div class="flex justify-end mb-4">
                     <div class="relative max-w-[85%] @lg:max-w-[70%]">
@@ -350,51 +393,154 @@
         <!-- Composer with drag & drop -->
         <footer
             x-data="{
-                over:false,
-                accept:['image/jpeg','image/png','image/webp','image/gif','application/pdf','text/plain','application/zip','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
-                maxFiles:5,
-                addFiles(files){
-                    const filtered = Array.from(files).filter(f => this.accept.length ? (this.accept.includes(f.type) || (this.accept.some(t=>t.startsWith('image/')) && f.type.startsWith('image/'))) : true);
-                    const dt = new DataTransfer();
-                    if (this.$refs.file.files?.length) Array.from(this.$refs.file.files).forEach(f => dt.items.add(f));
-                    filtered.slice(0, this.maxFiles - dt.files.length).forEach(f => dt.items.add(f));
-                    this.$refs.file.files = dt.files;
-                    this.$refs.file.dispatchEvent(new Event('change', { bubbles:true }));
+                dragOver: false,
+                accept: [
+                    // Images
+                    'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/svg+xml',
+                    // Documents
+                    'application/pdf', 'text/plain', 'text/csv',
+                    // Office Documents
+                    'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    // Archives
+                    'application/zip', 'application/x-rar-compressed', 'application/x-7z-compressed',
+                    // Audio
+                    'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3',
+                    // Video
+                    'video/mp4', 'video/avi', 'video/mov', 'video/wmv', 'video/webm',
+                    // Other common types
+                    'application/json', 'application/xml', 'text/xml'
+                ],
+                maxFiles: 5,
+                
+                handleDragOver(event) {
+                    event.preventDefault();
+                    this.dragOver = true;
+                },
+                
+                handleDragLeave(event) {
+                    event.preventDefault();
+                    // Only set dragOver to false if we're leaving the container itself
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                        this.dragOver = false;
+                    }
+                },
+                
+                handleDrop(event) {
+                    event.preventDefault();
+                    this.dragOver = false;
+                    const files = event.dataTransfer?.files;
+                    if (files?.length) {
+                        this.addFiles(files);
+                    }
+                },
+                
+                addFiles(files) {
+                    const filtered = Array.from(files).filter(f => {
+                        if (!this.accept.length) return true;
+                        
+                        // Check exact MIME type match
+                        if (this.accept.includes(f.type)) return true;
+                        
+                        // Check for image types (more permissive)
+                        if (f.type.startsWith('image/')) return true;
+                        
+                        // Check for audio types
+                        if (f.type.startsWith('audio/')) return true;
+                        
+                        // Check for video types
+                        if (f.type.startsWith('video/')) return true;
+                        
+                        // Check for text types
+                        if (f.type.startsWith('text/')) return true;
+                        
+                        // Check for application types that might be documents
+                        if (f.type.startsWith('application/') && 
+                            (f.type.includes('pdf') || 
+                             f.type.includes('word') || 
+                             f.type.includes('excel') || 
+                             f.type.includes('powerpoint') || 
+                             f.type.includes('zip') || 
+                             f.type.includes('rar') ||
+                             f.type.includes('json') ||
+                             f.type.includes('xml'))) {
+                            return true;
+                        }
+                        
+                        // If no MIME type or unknown type, check file extension
+                        const fileName = f.name.toLowerCase();
+                        const allowedExtensions = [
+                            '.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg',
+                            '.pdf', '.txt', '.csv',
+                            '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
+                            '.zip', '.rar', '.7z',
+                            '.mp3', '.wav', '.ogg',
+                            '.mp4', '.avi', '.mov', '.wmv', '.webm',
+                            '.json', '.xml'
+                        ];
+                        
+                        return allowedExtensions.some(ext => fileName.endsWith(ext));
+                    });
+                    
+                    // Check if we should replace existing files or add to them
+                    // If there are existing files and we're dropping new ones, replace them
+                    const shouldReplace = this.$refs.file.files?.length > 0;
+                    
+                    if (shouldReplace) {
+                        // Replace existing files
+                        const dt = new DataTransfer();
+                        filtered.slice(0, this.maxFiles).forEach(f => dt.items.add(f));
+                        this.$refs.file.files = dt.files;
+                    } else {
+                        // Add to existing files (if any)
+                        const currentFileCount = this.$refs.file.files?.length || 0;
+                        const availableSlots = this.maxFiles - currentFileCount;
+                        
+                        if (availableSlots <= 0) {
+                            this.showFileLimitMessage();
+                            return;
+                        }
+                        
+                        const filesToAdd = filtered.slice(0, availableSlots);
+                        
+                        if (filesToAdd.length < filtered.length) {
+                            this.showFileLimitMessage();
+                        }
+                        
+                        const dt = new DataTransfer();
+                        if (this.$refs.file.files?.length) {
+                            Array.from(this.$refs.file.files).forEach(f => dt.items.add(f));
+                        }
+                        
+                        filesToAdd.forEach(f => dt.items.add(f));
+                        this.$refs.file.files = dt.files;
+                    }
+                    
+                    this.$refs.file.dispatchEvent(new Event('change', { bubbles: true }));
+                },
+                
+                showFileLimitMessage() {
+                    // You could implement a toast notification here
+                    console.log(`Maximum ${this.maxFiles} files allowed`);
+                },
+                
+                clearFileInput() {
+                    // Clear the file input
+                    if (this.$refs.file) {
+                        this.$refs.file.value = '';
+                        this.$refs.file.files = new DataTransfer().files;
+                    }
                 }
             }"
-            @dragover.prevent="over=true"
-            @dragleave.prevent="over=false"
-            @drop.prevent="over=false; if ($event.dataTransfer?.files?.length) addFiles($event.dataTransfer.files)"
+            @dragover="handleDragOver($event)"
+            @dragleave="handleDragLeave($event)"
+            @drop="handleDrop($event)"
             @chat-files-dropped.window="if ($event.detail?.files) addFiles($event.detail.files)"
-            class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 px-3 @lg:px-4 py-3 shrink-0 transition"
-            :class="over ? 'ring-2 ring-blue-400/40' : ''"
+            class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 px-3 @lg:px-4 py-3 shrink-0 transition-all duration-200"
+            :class="dragOver ? 'ring-2 ring-blue-400/40 bg-blue-50/50 dark:bg-blue-900/20' : ''"
         >
-            {{-- selected files preview --}}
-            @if(count($uploads ?? []))
-                <div class="mb-3 flex flex-wrap gap-2">
-                    @foreach($uploads as $file)
-                        @php
-                            $isImg = str_starts_with($file->getMimeType(), 'image/');
-                            $tempName = $file->getFilename();
-                        @endphp
-                        <div class="relative group" wire:key="upload-{{ $tempName }}">
-                            @if($isImg)
-                                <img src="{{ $file->temporaryUrl() }}" class="h-16 w-16 object-cover rounded-lg border border-neutral-200 dark:border-neutral-700"/>
-                            @else
-                                <div class="h-16 w-44 flex items-center gap-2 px-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70">
-                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M14.59 2.59L21 9l-7 7-6.41-6.41L14.59 2.59zM3 13l4 4H3v-4z"/>
-                                    </svg>
-                                    <span class="truncate text-xs">{{ $file->getClientOriginalName() }}</span>
-                                </div>
-                            @endif
-                            <button type="button" class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 text-white text-xs hidden group-hover:flex items-center justify-center"
-                                    wire:click="removeUploadByName(@js($tempName))" title="Remove">×
-                            </button>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+            {{-- File previews removed - files are now only shown in the modal --}}
 
             {{-- upload progress --}}
             <div x-data="{p:0, up:false}" x-on:livewire-upload-start="up=true" x-on:livewire-upload-finish="up=false; p=0" x-on:livewire-upload-error="up=false; p=0" x-on:livewire-upload-progress="p=$event.detail.progress">
@@ -421,7 +567,7 @@
                     class="hidden"
                     x-ref="file"
                     wire:model="newUploads"
-                    accept=".jpg,.jpeg,.png,.webp,.gif,.pdf,.txt,.zip,.doc,.docx,image/*"
+                    accept=".jpg,.jpeg,.png,.webp,.gif,.bmp,.svg,.pdf,.txt,.csv,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.7z,.mp3,.wav,.ogg,.mp4,.avi,.mov,.wmv,.webm,.json,.xml,image/*,audio/*,video/*"
                 />
 
                 {{-- improved attach button --}}
@@ -503,8 +649,18 @@
                         } else if (uploads && uploads.length === 0 && this.open) {
                             // Close modal when uploads are cleared after sending
                             this.open = false;
+                            this.clearFileInput();
                         }
                     });
+                },
+                
+                clearFileInput() {
+                    // Clear the file input
+                    const fileInput = document.getElementById('chat-file-input');
+                    if (fileInput) {
+                        fileInput.value = '';
+                        fileInput.files = new DataTransfer().files;
+                    }
                 }
             }"
             x-show="open"
@@ -518,20 +674,65 @@
             <!-- Dialog with drag-drop support -->
             <div
                 x-data="{
-                    over:false,
-                    addFiles(files){
+                    dragOver: false,
+                    
+                    handleDragOver(event) {
+                        event.preventDefault();
+                        this.dragOver = true;
+                    },
+                    
+                    handleDragLeave(event) {
+                        event.preventDefault();
+                        // Only set dragOver to false if we're leaving the container itself
+                        if (!event.currentTarget.contains(event.relatedTarget)) {
+                            this.dragOver = false;
+                        }
+                    },
+                    
+                    handleDrop(event) {
+                        event.preventDefault();
+                        this.dragOver = false;
+                        const files = event.dataTransfer?.files;
+                        if (files?.length) {
+                            this.addFiles(files);
+                        }
+                    },
+                    
+                    addFiles(files) {
+                        // Check if we should replace existing files or add to them
+                        const shouldReplace = $refs.file.files?.length > 0;
+                        
+                        if (shouldReplace) {
+                            // Replace existing files
                             const dt = new DataTransfer();
-                            if ($refs.file.files?.length) Array.from($refs.file.files).forEach(f => dt.items.add(f));
                             Array.from(files).forEach(f => dt.items.add(f));
                             $refs.file.files = dt.files;
-                            $refs.file.dispatchEvent(new Event('change', { bubbles:true }));
+                        } else {
+                            // Add to existing files (if any)
+                            const dt = new DataTransfer();
+                            if ($refs.file.files?.length) {
+                                Array.from($refs.file.files).forEach(f => dt.items.add(f));
+                            }
+                            Array.from(files).forEach(f => dt.items.add(f));
+                            $refs.file.files = dt.files;
+                        }
+                        
+                        $refs.file.dispatchEvent(new Event('change', { bubbles: true }));
+                    },
+                    
+                    clearFileInput() {
+                        // Clear the file input
+                        if ($refs.file) {
+                            $refs.file.value = '';
+                            $refs.file.files = new DataTransfer().files;
+                        }
                     }
                 }"
-                @dragover.prevent="over=true"
-                @dragleave.prevent="over=false"
-                @drop.prevent="over=false; if ($event.dataTransfer?.files?.length) addFiles($event.dataTransfer.files)"
-                :class="over ? 'ring-2 ring-blue-400/50' : ''"
-                class="relative w-[92vw] max-w-xl rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden"
+                @dragover="handleDragOver($event)"
+                @dragleave="handleDragLeave($event)"
+                @drop="handleDrop($event)"
+                :class="dragOver ? 'ring-2 ring-blue-400/50' : ''"
+                class="relative w-[92vw] max-w-xl rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden transition-all duration-200"
                 x-trap.noscroll="open"
             >
                 <!-- Header -->
@@ -541,7 +742,7 @@
                     </div>
                     <button
                         class="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                        @click="open=false; $wire.cancelUploads()"
+                        @click="open=false; $wire.cancelUploads(); clearFileInput()"
                         wire:loading.attr="disabled"
                         wire:target="confirmSendFromModal"
                         aria-label="Close"
@@ -629,7 +830,7 @@
                     <div>
                         <label class="block text-xs mb-1 text-neutral-500 dark:text-neutral-400">Kommentar</label>
                         <textarea
-                            wire:model.defer="messageText"
+                            wire:model.defer="modalCommentText"
                             rows="2"
                             class="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                             placeholder="Einen Kommentar hinzufügen…"></textarea>
@@ -648,7 +849,7 @@
 
                     <button
                         class="px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                        @click="open=false; $wire.cancelUploads()"
+                        @click="open=false; $wire.cancelUploads(); clearFileInput()"
                         wire:loading.attr="disabled"
                         wire:target="confirmSendFromModal"
                     >Stornieren
@@ -669,6 +870,26 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Global Drag Overlay -->
+    <div x-show="globalDragOver" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 bg-blue-500/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+        <div class="bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-2xl border-2 border-dashed border-blue-400 text-center">
+            <div class="h-16 w-16 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="h-8 w-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-2">Dateien hier ablegen</h3>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400">Loslassen zum Hochladen der Dateien in den Chat</p>
         </div>
     </div>
 </div>
