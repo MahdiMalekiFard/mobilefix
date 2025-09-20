@@ -4,8 +4,40 @@
 @endphp
 
 <div
-    x-data="{ ...adminEcho(@entangle('selectedId').live), drawer:false }"
+    x-data="{ 
+        ...adminEcho(@entangle('selectedId').live), 
+        drawer: false,
+        globalDragOver: false,
+        handleGlobalDragOver(event) {
+            // Only show global overlay if a conversation is selected and not over footer
+            if (this.sid && !event.target.closest('footer')) {
+                event.preventDefault();
+                this.globalDragOver = true;
+            }
+        },
+        handleGlobalDragLeave(event) {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+                this.globalDragOver = false;
+            }
+        },
+        handleGlobalDrop(event) {
+            this.globalDragOver = false;
+            const files = event.dataTransfer?.files;
+            if (files?.length && this.sid) {
+                // Check if the drop happened on the footer - if so, let it handle it
+                const footer = event.target.closest('footer');
+                if (!footer) {
+                    event.preventDefault();
+                    // Only dispatch if not dropped on footer
+                    $dispatch('chat-files-dropped', { files });
+                }
+            }
+        }
+    }"
     x-init="boot()"
+    @dragover="handleGlobalDragOver($event)"
+    @dragleave="handleGlobalDragLeave($event)"
+    @drop="handleGlobalDrop($event)"
     class="h-[calc(100dvh-64px)] w-full overflow-hidden
            bg-white dark:bg-neutral-900
            grid grid-cols-1 lg:[grid-template-columns:clamp(320px,28vw,420px)_minmax(0,1fr)]">
@@ -192,17 +224,37 @@
 
         <!-- Messages (also a drop target) -->
         <div id="messages-box"
-             x-data="{ atBottom: true }"
+             x-data="{ 
+                atBottom: true,
+                dragOver: false,
+                handleDragOver(event) {
+                    event.preventDefault();
+                    this.dragOver = true;
+                },
+                handleDragLeave(event) {
+                    event.preventDefault();
+                    // Only set dragOver to false if we're leaving the container itself
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                        this.dragOver = false;
+                    }
+                },
+                handleDrop(event) {
+                    event.preventDefault();
+                    this.dragOver = false;
+                    const files = event.dataTransfer?.files;
+                    if (files?.length) $dispatch('chat-files-dropped', { files });
+                }
+             }"
              x-ref="box"
              @scroll-bottom.window="$nextTick(() => { $refs.box.scrollTo({ top: $refs.box.scrollHeight, behavior: 'smooth' }); })"
              @scroll.passive="atBottom = ($el.scrollTop + $el.clientHeight) >= ($el.scrollHeight - 50)"
-             @dragover.prevent
-             @drop.prevent="
-                const files = $event.dataTransfer?.files;
-                if (files?.length) $dispatch('chat-files-dropped', { files });
-             "
+             @dragover="handleDragOver($event)"
+             @dragleave="handleDragLeave($event)"
+             @drop="handleDrop($event)"
              class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 @lg:px-6 py-4 @lg:py-6
-                        bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900 dark:to-neutral-900">
+                        bg-gradient-to-b from-neutral-50/50 to-white dark:from-neutral-900 dark:to-neutral-900
+                        transition-colors duration-200 relative"
+             :class="dragOver ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''">
 
             @if(!$active)
                 <div class="text-center text-neutral-400 dark:text-neutral-500 mt-20">
@@ -491,21 +543,139 @@
         <footer
             x-data="{
                 enabled: {{ $active ? 'true' : 'false' }},
-                over:false,
-                accept:['image/jpeg','image/png','image/webp','image/gif','application/pdf','text/plain','application/zip','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
-                maxFiles:5,
-                addFiles(files){
-                    const filtered = Array.from(files).filter(f => this.accept.length ? (this.accept.includes(f.type) || (this.accept.some(t=>t.startsWith('image/')) && f.type.startsWith('image/'))) : true);
-                    const dt = new DataTransfer();
-                    if (this.$refs.file.files?.length) Array.from(this.$refs.file.files).forEach(f => dt.items.add(f));
-                    filtered.slice(0, this.maxFiles - dt.files.length).forEach(f => dt.items.add(f));
-                    this.$refs.file.files = dt.files;
-                    this.$refs.file.dispatchEvent(new Event('change', { bubbles:true }));
+                dragOver: false,
+                accept: [
+                    // Images
+                    'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/svg+xml',
+                    // Documents
+                    'application/pdf', 'text/plain', 'text/csv',
+                    // Office Documents
+                    'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    // Archives
+                    'application/zip', 'application/x-rar-compressed', 'application/x-7z-compressed',
+                    // Audio
+                    'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3',
+                    // Video
+                    'video/mp4', 'video/avi', 'video/mov', 'video/wmv', 'video/webm',
+                    // Other common types
+                    'application/json', 'application/xml', 'text/xml'
+                ],
+                maxFiles: 5,
+                
+                handleDragOver(event) {
+                    event.preventDefault();
+                    if (this.enabled) this.dragOver = true;
+                },
+                
+                handleDragLeave(event) {
+                    event.preventDefault();
+                    // Only set dragOver to false if we're leaving the container itself
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                        this.dragOver = false;
+                    }
+                },
+                
+                handleDrop(event) {
+                    event.preventDefault();
+                    this.dragOver = false;
+                    if (this.enabled && event.dataTransfer?.files?.length) {
+                        this.addFiles(event.dataTransfer.files);
+                    }
+                },
+                
+                addFiles(files) {
+                    const filtered = Array.from(files).filter(f => {
+                        if (!this.accept.length) return true;
+                        
+                        // Check exact MIME type match
+                        if (this.accept.includes(f.type)) return true;
+                        
+                        // Check for image types (more permissive)
+                        if (f.type.startsWith('image/')) return true;
+                        
+                        // Check for audio types
+                        if (f.type.startsWith('audio/')) return true;
+                        
+                        // Check for video types
+                        if (f.type.startsWith('video/')) return true;
+                        
+                        // Check for text types
+                        if (f.type.startsWith('text/')) return true;
+                        
+                        // Check for application types that might be documents
+                        if (f.type.startsWith('application/') && 
+                            (f.type.includes('pdf') || 
+                             f.type.includes('word') || 
+                             f.type.includes('excel') || 
+                             f.type.includes('powerpoint') || 
+                             f.type.includes('zip') || 
+                             f.type.includes('rar') ||
+                             f.type.includes('json') ||
+                             f.type.includes('xml'))) {
+                            return true;
+                        }
+                        
+                        // If no MIME type or unknown type, check file extension
+                        const fileName = f.name.toLowerCase();
+                        const allowedExtensions = [
+                            '.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg',
+                            '.pdf', '.txt', '.csv',
+                            '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
+                            '.zip', '.rar', '.7z',
+                            '.mp3', '.wav', '.ogg',
+                            '.mp4', '.avi', '.mov', '.wmv', '.webm',
+                            '.json', '.xml'
+                        ];
+                        
+                        return allowedExtensions.some(ext => fileName.endsWith(ext));
+                    });
+                    
+                    // Check if we should replace existing files or add to them
+                    const shouldReplace = this.$refs.file.files?.length > 0;
+                    
+                    if (shouldReplace) {
+                        // Replace existing files
+                        const dt = new DataTransfer();
+                        filtered.slice(0, this.maxFiles).forEach(f => dt.items.add(f));
+                        this.$refs.file.files = dt.files;
+                    } else {
+                        // Add to existing files (if any)
+                        const currentFileCount = this.$refs.file.files?.length || 0;
+                        const availableSlots = this.maxFiles - currentFileCount;
+                        
+                        if (availableSlots <= 0) {
+                            this.showFileLimitMessage();
+                            return;
+                        }
+                        
+                        const filesToAdd = filtered.slice(0, availableSlots);
+                        
+                        if (filesToAdd.length < filtered.length) {
+                            this.showFileLimitMessage();
+                        }
+                        
+                        const dt = new DataTransfer();
+                        if (this.$refs.file.files?.length) {
+                            Array.from(this.$refs.file.files).forEach(f => dt.items.add(f));
+                        }
+                        
+                        filesToAdd.forEach(f => dt.items.add(f));
+                        this.$refs.file.files = dt.files;
+                    }
+                    
+                    this.$refs.file.dispatchEvent(new Event('change', { bubbles: true }));
+                },
+                
+                showFileLimitMessage() {
+                    // You could implement a toast notification here
+                    console.log(`Maximum ${this.maxFiles} files allowed`);
                 }
             }"
-            @dragover.prevent="if (enabled) over=true"
-            @dragleave.prevent="if (enabled) over=false"
-            @drop.prevent="if (enabled) { over=false; if ($event.dataTransfer?.files?.length) addFiles($event.dataTransfer.files) }"
+            @dragover="handleDragOver($event)"
+            @dragleave="handleDragLeave($event)"
+            @drop="handleDrop($event)"
             @chat-files-dropped.window="if (enabled && $event.detail?.files) addFiles($event.detail.files)"
             @focus-composer.window="$nextTick(() => {
                 const i = $refs.composer;
@@ -513,11 +683,11 @@
                 i.focus();
                 // place caret at end (or use 0,0 if you prefer start)
                 try { i.setSelectionRange(i.value.length, i.value.length); } catch(_) {}
-                // ensure it’s visible if the page scrolled
+                // ensure it's visible if the page scrolled
                 i.scrollIntoView({ block: 'nearest', inline: 'nearest' });
             })"
-            class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 px-3 lg:px-4 py-3 shrink-0 transition"
-            :class="enabled && over ? 'ring-2 ring-blue-400/40' : ''"
+            class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 px-3 lg:px-4 py-3 shrink-0 transition-all duration-200"
+            :class="enabled && dragOver ? 'ring-2 ring-blue-400/40 bg-blue-50/50 dark:bg-blue-900/20' : ''"
         >
 
             {{-- selected files preview --}}
@@ -579,7 +749,7 @@
                     class="hidden"
                     x-ref="file"
                     wire:model="newUploads"
-                    accept=".jpg,.jpeg,.png,.webp,.gif,.pdf,.txt,.zip,.doc,.docx,image/*"
+                    accept=".jpg,.jpeg,.png,.webp,.gif,.bmp,.svg,.pdf,.txt,.csv,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.7z,.mp3,.wav,.ogg,.mp4,.avi,.mov,.wmv,.webm,.json,.xml,image/*,audio/*,video/*"
                 />
 
                 {{-- improved attach button --}}
@@ -695,20 +865,57 @@
             <!-- Dialog with drag-drop support -->
             <div
                 x-data="{
-                    over:false,
-                    addFiles(files){
+                    dragOver: false,
+                    
+                    handleDragOver(event) {
+                        event.preventDefault();
+                        this.dragOver = true;
+                    },
+                    
+                    handleDragLeave(event) {
+                        event.preventDefault();
+                        // Only set dragOver to false if we're leaving the container itself
+                        if (!event.currentTarget.contains(event.relatedTarget)) {
+                            this.dragOver = false;
+                        }
+                    },
+                    
+                    handleDrop(event) {
+                        event.preventDefault();
+                        this.dragOver = false;
+                        const files = event.dataTransfer?.files;
+                        if (files?.length) {
+                            this.addFiles(files);
+                        }
+                    },
+                    
+                    addFiles(files) {
+                        // Check if we should replace existing files or add to them
+                        const shouldReplace = $refs.file.files?.length > 0;
+                        
+                        if (shouldReplace) {
+                            // Replace existing files
                             const dt = new DataTransfer();
-                            if ($refs.file.files?.length) Array.from($refs.file.files).forEach(f => dt.items.add(f));
                             Array.from(files).forEach(f => dt.items.add(f));
                             $refs.file.files = dt.files;
-                            $refs.file.dispatchEvent(new Event('change', { bubbles:true }));
+                        } else {
+                            // Add to existing files (if any)
+                            const dt = new DataTransfer();
+                            if ($refs.file.files?.length) {
+                                Array.from($refs.file.files).forEach(f => dt.items.add(f));
+                            }
+                            Array.from(files).forEach(f => dt.items.add(f));
+                            $refs.file.files = dt.files;
+                        }
+                        
+                        $refs.file.dispatchEvent(new Event('change', { bubbles: true }));
                     }
                 }"
-                @dragover.prevent="over=true"
-                @dragleave.prevent="over=false"
-                @drop.prevent="over=false; if ($event.dataTransfer?.files?.length) addFiles($event.dataTransfer.files)"
-                :class="over ? 'ring-2 ring-blue-400/50' : ''"
-                class="relative w-[92vw] max-w-xl rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden"
+                @dragover="handleDragOver($event)"
+                @dragleave="handleDragLeave($event)"
+                @drop="handleDrop($event)"
+                :class="dragOver ? 'ring-2 ring-blue-400/50' : ''"
+                class="relative w-[92vw] max-w-xl rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden transition-all duration-200"
                 x-trap.noscroll="open"
             >
                 <!-- Header -->
@@ -849,6 +1056,26 @@
         </div>
 
     </section>
+
+    <!-- Global Drag Overlay -->
+    <div x-show="globalDragOver" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 bg-blue-500/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+        <div class="bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-2xl border-2 border-dashed border-blue-400 text-center">
+            <div class="h-16 w-16 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="h-8 w-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-2">Drop files here</h3>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400">Release to upload files to the chat</p>
+        </div>
+    </div>
 </div>
 
 <script>

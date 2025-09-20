@@ -42,10 +42,10 @@ class AdminChatApp extends BaseAdminComponent
         return [
             'messageText'    => ['nullable', 'string', 'max:5000'],
             'uploads'        => ['array', 'max:5'],
-            'uploads.*'      => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+            'uploads.*'      => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,bmp,svg,pdf,txt,csv,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,mp3,wav,ogg,mp4,avi,mov,wmv,webm,json,xml'],
 
             'newUploads'     => ['sometimes', 'array'],
-            'newUploads.*'   => ['sometimes', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,pdf,txt,zip,doc,docx'],
+            'newUploads.*'   => ['sometimes', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,bmp,svg,pdf,txt,csv,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,mp3,wav,ogg,mp4,avi,mov,wmv,webm,json,xml'],
 
             'groupItems'     => ['boolean'],
             'compressImages' => ['boolean'],
