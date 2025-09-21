@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Laravel Reverb Systemd Services Setup Script
-# Usage: ./setup-reverb-services.sh /path/to/your/laravel/project
+# Laravel Reverb Systemd Services Setup Script (No Redis Version)
+# Usage: ./setup-reverb-services-no-redis.sh /path/to/your/laravel/project
 
 set -e
 
@@ -48,7 +48,7 @@ if [ ! -f "$PROJECT_PATH/artisan" ]; then
     exit 1
 fi
 
-print_status "Setting up Laravel Reverb systemd services..."
+print_status "Setting up Laravel Reverb systemd services (Database Queue Version)..."
 print_status "Project path: $PROJECT_PATH"
 
 # Check if systemd is available
@@ -88,8 +88,8 @@ VITE_REVERB_HOST="localhost"
 VITE_REVERB_PORT="6001"
 VITE_REVERB_SCHEME="http"
 
-# Queue Configuration
-QUEUE_CONNECTION=redis
+# Queue Configuration (Database)
+QUEUE_CONNECTION=database
 EOF
     
     print_success "Generated and added Reverb credentials to .env file"
@@ -140,19 +140,19 @@ Environment=APP_DEBUG=false
 WantedBy=multi-user.target
 EOF
 
-# Create Laravel Queue service
+# Create Laravel Queue service (Database version)
 sudo tee /etc/systemd/system/laravel-queue.service > /dev/null <<EOF
 [Unit]
-Description=Laravel Queue Worker for Broadcasting
-After=network.target redis.service
-Wants=network.target redis.service
+Description=Laravel Queue Worker for Broadcasting (Database)
+After=network.target
+Wants=network.target
 
 [Service]
 Type=simple
 User=www-data
 Group=www-data
 WorkingDirectory=$PROJECT_PATH
-ExecStart=/usr/bin/php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=60
+ExecStart=/usr/bin/php artisan queue:work database --sleep=3 --tries=3 --max-time=3600 --timeout=60
 ExecReload=/bin/kill -HUP \$MAINPID
 Restart=always
 RestartSec=5
@@ -196,19 +196,14 @@ print_status "Enabling services to start on boot..."
 sudo systemctl enable laravel-reverb.service
 sudo systemctl enable laravel-queue.service
 
-# Check if Redis is available
-if command -v redis-cli &> /dev/null; then
-    if redis-cli ping &> /dev/null; then
-        print_success "Redis is running"
-    else
-        print_warning "Redis is installed but not running. Please start Redis:"
-        echo "  sudo systemctl start redis"
-        echo "  sudo systemctl enable redis"
-    fi
+# Check if database queue tables exist
+print_status "Checking database queue configuration..."
+if ! php "$PROJECT_PATH/artisan" migrate:status | grep -q "jobs"; then
+    print_warning "Queue jobs table not found. Running migrations..."
+    php "$PROJECT_PATH/artisan" migrate
+    print_success "Database migrations completed"
 else
-    print_warning "Redis is not installed. Please install Redis:"
-    echo "  sudo apt install redis-server  # Ubuntu/Debian"
-    echo "  sudo yum install redis         # CentOS/RHEL"
+    print_success "Database queue tables are ready"
 fi
 
 print_success "Systemd services setup completed!"
@@ -232,6 +227,6 @@ echo "4. View service logs:"
 echo "   sudo journalctl -u laravel-reverb -f"
 echo "   sudo journalctl -u laravel-queue -f"
 echo ""
-echo "5. Configure your web server (Nginx/Apache) to proxy WebSocket connections"
+echo "5. Configure your Apache server to proxy WebSocket connections"
 echo ""
 print_success "Laravel Reverb systemd services are ready!"
