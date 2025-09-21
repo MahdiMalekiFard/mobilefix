@@ -2,7 +2,7 @@
     <!-- Left: Conversations Sidebar -->
     <div class="lg:col-span-3">
         <div class="bg-white dark:bg-zinc-900/60 border border-zinc-200/70 dark:border-zinc-800 rounded-2xl overflow-hidden">
-            @livewire(\App\Livewire\Admin\Pages\Chat\AdminChatList::class, ['asSidebar' => true, 'currentConversationId' => $conversation->id], key('admin-chat-leftbar-'.$conversation->id))
+            @livewire(\App\Livewire\Admin\Pages\Chat\AdminChatApp::class, ['conversationId' => $conversation->id], key('admin-chat-leftbar-'.$conversation->id))
         </div>
     </div>
 
