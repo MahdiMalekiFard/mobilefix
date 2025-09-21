@@ -19,6 +19,14 @@ class BroadcastHelper
                 return false;
             }
             
+            // For Pusher, check if the required environment variables are set
+            if ($driver === 'pusher') {
+                return !empty(env('PUSHER_APP_KEY')) && 
+                       !empty(env('PUSHER_APP_SECRET')) && 
+                       !empty(env('PUSHER_APP_ID')) &&
+                       !empty(env('PUSHER_APP_CLUSTER'));
+            }
+            
             // For Reverb, check if the required environment variables are set
             if ($driver === 'reverb') {
                 return !empty(env('REVERB_APP_KEY')) && 

@@ -406,6 +406,21 @@ class AdminChatApp extends BaseAdminComponent
         }
     }
 
+    public function getListeners(): array
+    {
+        $cid = $this->selectedId;
+
+        if (!$cid) {
+            return [];
+        }
+
+        // Always return Echo listeners - they will be handled gracefully if Echo is not available
+        return [
+            "echo-private:conversation.{$cid},MessageSent" => 'messageReceived',
+            "echo-private:conversation.{$cid},UserTyping"  => 'userTypingReceived',
+        ];
+    }
+
     public function render()
     {
         return view('livewire.admin.pages.chat.admin-chat-app', [

@@ -11,13 +11,10 @@ use Illuminate\Support\Facades\Broadcast;
 | application supports. The given channel authorization callbacks are
 | used to check if an authenticated user can listen to the channel.
 |
+| Note: Channel authorization is now handled in RouteServiceProvider.php
+| for better organization and Laravel 12 compatibility.
+|
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
-});
-
-// Private channel for conversations - Laravel 12 compatible - TEMPORARY: Allow all users
-Broadcast::channel('conversation.{conversationId}', function ($user, $conversationId) {
-    return true;
-});
+// This file is kept for compatibility but channel authorization 
+// is now handled in app/Providers/RouteServiceProvider.php
