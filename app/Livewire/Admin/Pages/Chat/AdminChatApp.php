@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Pages\Chat;
 
 use App\Events\MessageSent;
 use App\Events\UserTyping;
+use App\Helpers\BroadcastHelper;
 use App\Livewire\Admin\BaseAdminComponent;
 use App\Models\Conversation;
 use App\Models\Message;
@@ -311,8 +312,8 @@ class AdminChatApp extends BaseAdminComponent
 
             $lastMessageId = $msg->id;
 
-            // Broadcast the message
-            broadcast(new MessageSent($msg));
+            // Broadcast the message safely
+            BroadcastHelper::safeBroadcast(new MessageSent($msg));
         }
 
         // ========== CASE 2: Separate messages ==========
@@ -330,8 +331,8 @@ class AdminChatApp extends BaseAdminComponent
                 ]);
                 $lastMessageId = $textMsg->id;
 
-                // Broadcast the text message
-                broadcast(new MessageSent($textMsg));
+                // Broadcast the text message safely
+                BroadcastHelper::safeBroadcast(new MessageSent($textMsg));
             }
 
             // 2. Send each file as its own message
@@ -354,8 +355,8 @@ class AdminChatApp extends BaseAdminComponent
                 $adder->toMediaCollection('attachments');
                 $lastMessageId = $fileMsg->id;
 
-                // Broadcast the file message
-                broadcast(new MessageSent($fileMsg));
+                // Broadcast the file message safely
+                BroadcastHelper::safeBroadcast(new MessageSent($fileMsg));
             }
         }
 
@@ -382,7 +383,7 @@ class AdminChatApp extends BaseAdminComponent
     public function startTyping(): void
     {
         if ($this->selectedId) {
-            broadcast(new UserTyping(
+            BroadcastHelper::safeBroadcast(new UserTyping(
                 $this->selectedId,
                 auth()->id(),
                 'admin',
@@ -395,7 +396,7 @@ class AdminChatApp extends BaseAdminComponent
     public function stopTyping(): void
     {
         if ($this->selectedId) {
-            broadcast(new UserTyping(
+            BroadcastHelper::safeBroadcast(new UserTyping(
                 $this->selectedId,
                 auth()->id(),
                 'admin',

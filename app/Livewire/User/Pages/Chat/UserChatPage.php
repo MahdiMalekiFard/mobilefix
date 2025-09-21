@@ -4,6 +4,7 @@ namespace App\Livewire\User\Pages\Chat;
 
 use App\Events\MessageSent;
 use App\Events\UserTyping;
+use App\Helpers\BroadcastHelper;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Collection;
@@ -222,8 +223,8 @@ class UserChatPage extends Component
 
             $lastMessageId = $msg->id;
 
-            // Broadcast the message
-            broadcast(new MessageSent($msg));
+            // Broadcast the message safely
+            BroadcastHelper::safeBroadcast(new MessageSent($msg));
         }
 
         // ========== CASE 2: Separate messages ==========
@@ -241,8 +242,8 @@ class UserChatPage extends Component
                 ]);
                 $lastMessageId = $textMsg->id;
 
-                // Broadcast the text message
-                broadcast(new MessageSent($textMsg));
+                // Broadcast the text message safely
+                BroadcastHelper::safeBroadcast(new MessageSent($textMsg));
             }
 
             // 2. Send each file as its own message
@@ -265,8 +266,8 @@ class UserChatPage extends Component
                 $adder->toMediaCollection('attachments');
                 $lastMessageId = $fileMsg->id;
 
-                // Broadcast the file message
-                broadcast(new MessageSent($fileMsg));
+                // Broadcast the file message safely
+                BroadcastHelper::safeBroadcast(new MessageSent($fileMsg));
             }
         }
 
@@ -317,6 +318,7 @@ class UserChatPage extends Component
             return [];
         }
 
+        // Always return Echo listeners - they will be handled gracefully if Echo is not available
         return [
             "echo-private:conversation.{$cid},MessageSent" => 'messageReceived',
             "echo-private:conversation.{$cid},UserTyping"  => 'userTypingReceived',
@@ -347,7 +349,7 @@ class UserChatPage extends Component
     public function startTyping(): void
     {
         if ($this->conversation) {
-            broadcast(new UserTyping(
+            BroadcastHelper::safeBroadcast(new UserTyping(
                 $this->conversation->id,
                 auth()->id(),
                 'user',
@@ -360,7 +362,7 @@ class UserChatPage extends Component
     public function stopTyping(): void
     {
         if ($this->conversation) {
-            broadcast(new UserTyping(
+            BroadcastHelper::safeBroadcast(new UserTyping(
                 $this->conversation->id,
                 auth()->id(),
                 'user',

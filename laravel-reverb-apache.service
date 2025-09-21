@@ -1,0 +1,35 @@
+[Unit]
+Description=Laravel Reverb WebSocket Server
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/your-project
+ExecStart=/usr/bin/php artisan reverb:start --host=0.0.0.0 --port=6001
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=laravel-reverb
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/your-project/storage
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Environment variables
+Environment=APP_ENV=production
+Environment=APP_DEBUG=false
+
+[Install]
+WantedBy=multi-user.target
