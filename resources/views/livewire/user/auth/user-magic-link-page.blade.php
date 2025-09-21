@@ -8,12 +8,12 @@
                             <h2 class="auth-title">
                                 @if($isValid && !$isExpired)
                                     @if($user)
-                                        Welcome Back!
+                                        Willkommen zurück!
                                     @else
-                                        Create Your Account
+                                        Konto erstellen
                                     @endif
                                 @else
-                                    Invalid or Expired Link
+                                    Ungültiger oder abgelaufener Link
                                 @endif
                             </h2>
                         </div>
@@ -24,11 +24,11 @@
                                 <div class="text-center">
                                     <div class="alert alert-success">
                                         <i class="fas fa-check-circle me-2"></i>
-                                        Logging you in automatically...
+                                        Sie werden automatisch angemeldet...
                                     </div>
-                                    <p class="text-muted">You will be redirected to your dashboard shortly.</p>
+                                    <p class="text-muted">Sie werden in Kürze zu Ihrem Dashboard weitergeleitet.</p>
                                     <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
+                                        <span class="visually-hidden">Lädt...</span>
                                     </div>
                                 </div>
                             @else
@@ -36,14 +36,14 @@
                                 <div class="text-center mb-4">
                                     <div class="alert alert-info">
                                         <i class="fas fa-info-circle me-2"></i>
-                                        No account found for <strong>{{ $email }}</strong>
+                                        Kein Konto für <strong>{{ $email }}</strong> gefunden
                                     </div>
-                                    <p class="text-muted">Would you like to create an account to track your repair orders?</p>
+                                    <p class="text-muted">Möchten Sie ein Konto erstellen, um Ihre Reparaturaufträge zu verfolgen?</p>
                                     
                                     @if($existingOrdersCount > 0)
                                         <div class="alert alert-success">
                                             <i class="fas fa-link me-2"></i>
-                                            <strong>{{ $existingOrdersCount }}</strong> repair request(s) will be automatically linked to your new account!
+                                            <strong>{{ $existingOrdersCount }}</strong> Reparaturanfrage(n) werden automatisch mit Ihrem neuen Konto verknüpft!
                                         </div>
                                     @endif
                                 </div>
@@ -52,18 +52,18 @@
                                     <div class="card-body">
                                         <h6 class="card-title">
                                             <i class="fas fa-user me-2"></i>
-                                            Account Details
+                                            Kontodetails
                                         </h6>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <strong>Name:</strong> {{ $orderInfo['name'] ?? 'User' }}
+                                                <strong>Name:</strong> {{ $orderInfo['name'] ?? 'Benutzer' }}
                                             </div>
                                             <div class="col-md-6">
                                                 <strong>Email:</strong> {{ $email }}
                                             </div>
                                             @if($orderInfo['mobile'] ?? null)
                                             <div class="col-md-6">
-                                                <strong>Phone:</strong> {{ $orderInfo['mobile'] }}
+                                                <strong>Telefon:</strong> {{ $orderInfo['mobile'] }}
                                             </div>
                                             @endif
                                         </div>
@@ -73,12 +73,12 @@
                                 <div class="d-grid gap-3">
                                     <button wire:click="createAccount" class="btn btn-primary btn-lg">
                                         <i class="fas fa-user-plus me-2"></i>
-                                        Create Account & Continue
+                                        Konto erstellen & fortfahren
                                     </button>
                                     
                                     <a href="{{ route('user.auth.login') }}" class="btn btn-outline-secondary">
                                         <i class="fas fa-sign-in-alt me-2"></i>
-                                        Login with Different Account
+                                        Mit anderem Konto anmelden
                                     </a>
                                 </div>
 
@@ -87,14 +87,14 @@
                                         <div class="card-body">
                                             <h6 class="card-title">
                                                 <i class="fas fa-shield-alt me-2"></i>
-                                                What happens when you create an account?
+                                                Was passiert, wenn Sie ein Konto erstellen?
                                             </h6>
                                             <ul class="list-unstyled mb-0">
-                                                <li><i class="fas fa-check text-success me-2"></i>Access to your repair orders</li>
-                                                <li><i class="fas fa-check text-success me-2"></i>Track repair progress online</li>
-                                                <li><i class="fas fa-check text-success me-2"></i>Receive status updates</li>
-                                                <li><i class="fas fa-check text-success me-2"></i>Manage your profile</li>
-                                                <li><i class="fas fa-check text-success me-2"></i>Your existing repair requests will be automatically linked</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Zugang zu Ihren Reparaturaufträgen</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Reparaturfortschritt online verfolgen</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Status-Updates erhalten</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Ihr Profil verwalten</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Ihre bestehenden Reparaturanfragen werden automatisch verknüpft</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -105,27 +105,27 @@
                             <div class="text-center">
                                 <div class="alert alert-danger">
                                     <i class="fas fa-exclamation-triangle me-2"></i>
-                                    This link is invalid or has expired
+                                    Dieser Link ist ungültig oder abgelaufen
                                 </div>
                                 <p class="text-muted mb-4">
-                                    The magic link you used is no longer valid. This could be because:
+                                    Der verwendete Magic-Link ist nicht mehr gültig. Das könnte folgende Gründe haben:
                                 </p>
                                 <ul class="text-start text-muted">
-                                    <li>The link has expired (links expire after 24 hours)</li>
-                                    <li>The link has already been used</li>
-                                    <li>The link is invalid</li>
+                                    <li>Der Link ist abgelaufen (Links laufen nach 24 Stunden ab)</li>
+                                    <li>Der Link wurde bereits verwendet</li>
+                                    <li>Der Link ist ungültig</li>
                                 </ul>
                                 
                                 <div class="mt-4">
                                     <a href="{{ route('user.auth.login') }}" class="btn btn-primary">
                                         <i class="fas fa-sign-in-alt me-2"></i>
-                                        Login to Your Account
+                                        Bei Ihrem Konto anmelden
                                     </a>
                                 </div>
                                 
                                 <div class="mt-3">
                                     <p class="text-muted">
-                                        Need help? Contact our support team with your tracking code.
+                                        Hilfe benötigt? Kontaktieren Sie unser Support-Team mit Ihrem Tracking-Code.
                                     </p>
                                 </div>
                             </div>
