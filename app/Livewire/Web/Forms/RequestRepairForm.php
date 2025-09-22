@@ -65,8 +65,8 @@ class RequestRepairForm extends Component
             'problems'    => 'required|array|min:1',
             'problems.*'  => 'required|exists:problems,id',
             'description' => 'nullable|string|max:1000',
-            'videos.*'    => 'nullable|mimes:mp4,avi,mov,wmv|max:50000', // 50MB max per video
-            'images.*'    => 'nullable|image|max:5000', // 5MB max per image
+            'videos.*'    => 'nullable|mimes:mp4,avi,mov,wmv|max:15360', // 15MB max per video
+            'images.*'    => 'nullable|image|max:5120', // 5MB max per image
         ];
     }
 

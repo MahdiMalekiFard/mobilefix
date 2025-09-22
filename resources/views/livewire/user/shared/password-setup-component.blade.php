@@ -129,7 +129,7 @@
                         </p>
                         <div class="bg-red-100 dark:bg-red-800/30 border border-red-200 dark:border-red-600 rounded p-2">
                             <p class="text-xs text-red-800 dark:text-red-200 font-medium">
-                                🔒 This action is obligatory and cannot be skipped
+                                🔒 {{ trans('auth.this_action_is_obligatory_and_cannot_be_skipped') }}
                             </p>
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                                     :label="trans('auth.password')"
                                     type="password"
                                     wire:model="password"
-                                    placeholder="Enter your password"
+                                    placeholder="{{ trans('auth.enter_your_password') }}"
                                     :required="true"
                                     :error="$errors->first('password')"
                                 />
@@ -155,7 +155,7 @@
                                     :label="trans('auth.password_confirmation')"
                                     type="password"
                                     wire:model="password_confirmation"
-                                    placeholder="Confirm your password"
+                                    placeholder="{{ trans('auth.confirm_your_password') }}"
                                     :required="true"
                                     :error="$errors->first('password_confirmation')"
                                 />

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 return [
     'failed'                                           => 'These credentials do not match our records.',
     'throttle'                                         => 'Too many login attempts. Please try again in :seconds seconds.',
@@ -11,6 +9,9 @@ return [
     'password'                                         => 'Password',
     'password_confirmation'                            => 'Confirm Password',
     'set_password_for_your_account'                    => 'Set a password for your account',
+    'this_action_is_obligatory_and_cannot_be_skipped'  => 'This action is obligatory and cannot be skipped',
+    'enter_your_password'                              => 'Enter your password',
+    'confirm_your_password'                            => 'Confirm your password',
     'remember_me'                                      => 'Remember me',
     'login'                                            => 'Login',
     'confirm'                                          => 'Confirm',

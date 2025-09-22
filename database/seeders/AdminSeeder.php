@@ -16,12 +16,14 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $admin = User::updateOrCreate([
-            'email' => 'developer@gmail.com',
+            'email' => 'info@Fix-mobil.de',
         ], [
-            'name'     => 'super admin',
-            'mobile'   => '9100000000',
-            'password' => Hash::make('password'),
+            'name'     => 'Nasim shadab',
+            'mobile'   => '4976489939',
+            'password' => Hash::make('fixmobil9939'),
+            'password_set_at' => now(),
         ]);
+        
         $admin->assignRole(Role::where('name', RoleEnum::ADMIN->value)->first());
     }
 }

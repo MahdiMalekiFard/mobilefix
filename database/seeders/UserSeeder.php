@@ -8,45 +8,19 @@ use App\Enums\RoleEnum;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
     /** Run the database seeds. */
     public function run(): void
     {
-        User::factory(50)->create();
-
-        $adminRole = Role::where('name', RoleEnum::ADMIN->value)->first();
-
-        $admin1 = User::find(2);
-        $admin1->update([
-            'password' => Hash::make('password'),
-            'password_set_at' => now(),
-            'email'    => 'admin1@example.com',
-            'mobile'   => '9100000001',
-            'name'     => 'admin1',
-        ]);
-        $admin1->assignRole($adminRole);
-
-
-        $admin2 = User::find(3);
-        $admin2->update([
-            'password' => Hash::make('password'),
-            'password_set_at' => now(),
-            'email'    => 'admin2@example.com',
-            'mobile'   => '9100000002',
-            'name'     => 'admin2',
-        ]);
-        $admin2->assignRole($adminRole);
-
-        $user = User::find(4);
-        $user->update([
-            'password' => Hash::make('secret'),
-            'password_set_at' => now(),
-            'email'    => 'mahdi@gmail.com',
+        $admin = User::updateOrCreate([
+            'email' => 'test@gmail.com',
+        ], [
+            'name'     => 'Test User',
             'mobile'   => '09151234567',
-            'name'     => 'Mahdi',
+            'password' => Hash::make('test1234'),
+            'password_set_at' => now(),
         ]);
     }
 }

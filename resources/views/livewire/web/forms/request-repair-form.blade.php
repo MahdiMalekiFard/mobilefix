@@ -45,7 +45,7 @@
                     </div>
                 @endif
 
-                <form wire:submit.prevent="submit" enctype="multipart/form-data">
+                <form wire:submit.prevent="submit" enctype="multipart/form-data" id="repair-form">
                     <div class="row" wire:loading.class="opacity-50" wire:target="submit">
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
@@ -134,17 +134,15 @@
                         <div class="col-lg-3 col-md-6" wire:key="req-videos">
                             <div class="form-group">
                                 <div class="file-upload-wrapper"
-                                     x-data="{ count: 0 }"
-                                     x-effect="count = Array.isArray($wire.videos) ? $wire.videos.length : 0">
+                                     x-data="{ count: 0 }">
                                     <input type="file"
                                            class="form-control"
                                            name="videos[]"
                                            id="videos"
                                            x-ref="videosInput"
-                                           wire:model="videos"
                                            multiple
                                            accept="video/*"
-                                           @change="count = $event.target.files?.length || 0"
+                                           @change="validateVideoFiles($event)"
                                            wire:loading.attr="disabled"
                                            wire:target="submit"/>
 
@@ -160,7 +158,10 @@
                                         <i class="fas fa-spinner fa-spin me-1"></i> Videos werden hochgeladen …
                                     </div>
 
-                                    <!-- Validation -->
+                                    <!-- Client-side validation error -->
+                                    <div id="video-error" class="text-danger small mt-1" style="display: none;"></div>
+
+                                    <!-- Server-side validation -->
                                     @error('videos.*')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
@@ -175,17 +176,15 @@
                         <div class="col-lg-3 col-md-6" wire:key="req-images">
                             <div class="form-group">
                                 <div class="file-upload-wrapper"
-                                     x-data="{ count: 0 }"
-                                     x-effect="count = Array.isArray($wire.images) ? $wire.images.length : 0">
+                                     x-data="{ count: 0 }">
                                     <input type="file"
                                            class="form-control"
                                            name="images[]"
                                            id="images"
                                            x-ref="imagesInput"
-                                           wire:model="images"
                                            multiple
                                            accept="image/*"
-                                           @change="count = $event.target.files?.length || 0"
+                                           @change="validateImageFiles($event)"
                                            wire:loading.attr="disabled"
                                            wire:target="submit"/>
 
@@ -201,7 +200,10 @@
                                         <i class="fas fa-spinner fa-spin me-1"></i> Bilder werden hochgeladen …
                                     </div>
 
-                                    <!-- Validation -->
+                                    <!-- Client-side validation error -->
+                                    <div id="image-error" class="text-danger small mt-1" style="display: none;"></div>
+
+                                    <!-- Server-side validation -->
                                     @error('images.*')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
@@ -212,35 +214,276 @@
                             </div>
                         </div>
 
-                        <script>
-                            function filterModelsByBrand() {
-                                var brandSelect = document.getElementById('brand-select');
-                                var modelSelect = document.getElementById('model-select');
-                                var selectedBrand = brandSelect.value;
+        <script>
+            function filterModelsByBrand() {
+                var brandSelect = document.getElementById('brand-select');
+                var modelSelect = document.getElementById('model-select');
+                var selectedBrand = brandSelect.value;
 
-                                // Hide all model options except the placeholder
-                                for (var i = 0; i < modelSelect.options.length; i++) {
-                                    var option = modelSelect.options[i];
-                                    if (option.value === '') {
-                                        option.style.display = '';
-                                        option.selected = true;
-                                    } else if (option.getAttribute('data-brand') === selectedBrand) {
-                                        option.style.display = '';
-                                    } else {
-                                        option.style.display = 'none';
-                                    }
-                                }
-                                // Reset model select to placeholder
-                                modelSelect.value = '';
-                            }
-                        </script>
+                // Hide all model options except the placeholder
+                for (var i = 0; i < modelSelect.options.length; i++) {
+                    var option = modelSelect.options[i];
+                    if (option.value === '') {
+                        option.style.display = '';
+                        option.selected = true;
+                    } else if (option.getAttribute('data-brand') === selectedBrand) {
+                        option.style.display = '';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                }
+                // Reset model select to placeholder
+                modelSelect.value = '';
+            }
+
+            // Global variables to track upload status
+            // Alpine.js handles upload tracking via custom events
+            
+            // File validation functions
+            function validateVideoFiles(event) {
+                const files = event.target.files;
+                const maxSize = 15 * 1024 * 1024; // 15MB in bytes
+                const errorDiv = document.getElementById('video-error');
+                const videoInput = document.getElementById('videos');
+                
+                // Clear previous errors
+                errorDiv.style.display = 'none';
+                errorDiv.textContent = '';
+                
+                if (files.length === 0) {
+                    updateVideoCount(0);
+                    return;
+                }
+                
+                let hasErrors = false;
+                let errorMessages = [];
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    // Check file size
+                    if (file.size > maxSize) {
+                        hasErrors = true;
+                        const sizeInMB = (file.size / (1024 * 1024)).toFixed(1);
+                        errorMessages.push(`"${file.name}" ist zu groß (${sizeInMB} MB). Maximal: 15 MB.`);
+                    }
+                }
+                
+                if (hasErrors) {
+                    // Clear the input completely
+                    videoInput.value = '';
+                    updateVideoCount(0);
+                    
+                    // Clear Livewire videos
+                    if (window.Livewire) {
+                        const component = window.Livewire.find(videoInput.closest('[wire\\:id]').getAttribute('wire:id'));
+                        if (component) component.set('videos', []);
+                    }
+                    
+                    // Show error messages
+                    errorDiv.innerHTML = errorMessages.join('<br>');
+                    errorDiv.style.display = 'block';
+                    
+                    // Show alert
+                    alert('Fehler beim Hochladen der Videos:\n\n' + errorMessages.join('\n'));
+                } else {
+                    // Update count immediately to show final number
+                    updateVideoCount(files.length);
+                    
+                    // Upload valid files to Livewire
+                    if (window.Livewire) {
+                        const component = window.Livewire.find(videoInput.closest('[wire\\:id]').getAttribute('wire:id'));
+                        if (component) {
+                            // Clear existing videos first to replace them
+                            component.set('videos', []);
+                            
+                            // Dispatch initial upload progress
+                            window.dispatchEvent(new CustomEvent('upload-progress', {
+                                detail: { videoUploads: files.length }
+                            }));
+                            
+                            const totalFiles = files.length;
+                            let completedUploads = 0;
+                            // Convert FileList to Array and upload each file
+                            const fileArray = Array.from(files);
+                            fileArray.forEach((file, index) => {
+                                component.upload('videos', file, (uploadedFilename) => {
+                                    console.log(`Video ${index + 1} uploaded:`, uploadedFilename);
+                                    completedUploads++;
+                                    const remainingUploads = totalFiles - completedUploads;
+                                    
+                                    // Dispatch upload progress update
+                                    window.dispatchEvent(new CustomEvent('upload-progress', {
+                                        detail: { videoUploads: remainingUploads }
+                                    }));
+                                });
+                            });
+                        }
+                    }
+                }
+            }
+            
+            function validateImageFiles(event) {
+                const files = event.target.files;
+                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                const errorDiv = document.getElementById('image-error');
+                const imageInput = document.getElementById('images');
+                
+                // Clear previous errors
+                errorDiv.style.display = 'none';
+                errorDiv.textContent = '';
+                
+                if (files.length === 0) {
+                    updateImageCount(0);
+                    return;
+                }
+                
+                let hasErrors = false;
+                let errorMessages = [];
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    // Check file size
+                    if (file.size > maxSize) {
+                        hasErrors = true;
+                        const sizeInMB = (file.size / (1024 * 1024)).toFixed(1);
+                        errorMessages.push(`"${file.name}" ist zu groß (${sizeInMB} MB). Maximal: 5 MB.`);
+                    }
+                }
+                
+                if (hasErrors) {
+                    // Clear the input completely
+                    imageInput.value = '';
+                    updateImageCount(0);
+                    
+                    // Clear Livewire images
+                    if (window.Livewire) {
+                        const component = window.Livewire.find(imageInput.closest('[wire\\:id]').getAttribute('wire:id'));
+                        if (component) component.set('images', []);
+                    }
+                    
+                    // Show error messages
+                    errorDiv.innerHTML = errorMessages.join('<br>');
+                    errorDiv.style.display = 'block';
+                    
+                    // Show alert
+                    alert('Fehler beim Hochladen der Bilder:\n\n' + errorMessages.join('\n'));
+                } else {
+                    // Update count immediately to show final number
+                    updateImageCount(files.length);
+                    
+                    // Upload valid files to Livewire
+                    if (window.Livewire) {
+                        const component = window.Livewire.find(imageInput.closest('[wire\\:id]').getAttribute('wire:id'));
+                        if (component) {
+                            // Clear existing images first to replace them
+                            component.set('images', []);
+                            
+                            // Dispatch initial upload progress
+                            window.dispatchEvent(new CustomEvent('upload-progress', {
+                                detail: { imageUploads: files.length }
+                            }));
+                            
+                            const totalFiles = files.length;
+                            let completedUploads = 0;
+                            // Convert FileList to Array and upload each file
+                            const fileArray = Array.from(files);
+                            fileArray.forEach((file, index) => {
+                                component.upload('images', file, (uploadedFilename) => {
+                                    console.log(`Image ${index + 1} uploaded:`, uploadedFilename);
+                                    completedUploads++;
+                                    const remainingUploads = totalFiles - completedUploads;
+                                    
+                                    // Dispatch upload progress update
+                                    window.dispatchEvent(new CustomEvent('upload-progress', {
+                                        detail: { imageUploads: remainingUploads }
+                                    }));
+                                });
+                            });
+                        }
+                    }
+                }
+            }
+            
+            function updateVideoCount(count) {
+                const label = document.querySelector('label[for="videos"] span');
+                if (label) {
+                    label.textContent = count ? `Videos hochladen (${count} ausgewählt)` : 'Videos hochladen';
+                }
+                
+                // Update Alpine.js count
+                const videoWrapper = document.querySelector('#videos').closest('.file-upload-wrapper');
+                if (videoWrapper && videoWrapper._x_dataStack) {
+                    videoWrapper._x_dataStack[0].count = count;
+                }
+            }
+            
+            function updateImageCount(count) {
+                const label = document.querySelector('label[for="images"] span');
+                if (label) {
+                    label.textContent = count ? `Bilder hochladen (${count} ausgewählt)` : 'Bilder hochladen';
+                }
+                
+                // Update Alpine.js count
+                const imageWrapper = document.querySelector('#images').closest('.file-upload-wrapper');
+                if (imageWrapper && imageWrapper._x_dataStack) {
+                    imageWrapper._x_dataStack[0].count = count;
+                }
+            }
+            
+            // Alpine.js handles button state management
+            
+            function resetFileCounts() {
+                // Reset video count
+                updateVideoCount(0);
+                
+                // Reset image count
+                updateImageCount(0);
+                
+                // Reset Alpine.js upload tracking
+                window.dispatchEvent(new CustomEvent('upload-progress', {
+                    detail: { videoUploads: 0, imageUploads: 0 }
+                }));
+                
+                // Clear file inputs
+                const videoInput = document.getElementById('videos');
+                const imageInput = document.getElementById('images');
+                if (videoInput) videoInput.value = '';
+                if (imageInput) imageInput.value = '';
+                
+                // Clear error messages
+                const videoError = document.getElementById('video-error');
+                const imageError = document.getElementById('image-error');
+                if (videoError) {
+                    videoError.style.display = 'none';
+                    videoError.textContent = '';
+                }
+                if (imageError) {
+                    imageError.style.display = 'none';
+                    imageError.textContent = '';
+                }
+            }
+        </script>
                     </div>
 
                     <div class="row mt-3"
-                         x-data="{ uploading:false, desc:@entangle('description') }"
+                         x-data="{ 
+                             uploading: false, 
+                             desc: @entangle('description'),
+                             videoUploads: 0,
+                             imageUploads: 0,
+                             get totalUploads() { return this.videoUploads + this.imageUploads; },
+                             get isUploading() { return this.totalUploads > 0; }
+                         }"
                          x-on:livewire-upload-start.window="uploading = true"
                          x-on:livewire-upload-finish.window="uploading = false"
-                         x-on:livewire-upload-error.window="uploading = false">
+                         x-on:livewire-upload-error.window="uploading = false"
+                         x-on:upload-progress.window="
+                             if ($event.detail.videoUploads !== undefined) videoUploads = $event.detail.videoUploads;
+                             if ($event.detail.imageUploads !== undefined) imageUploads = $event.detail.imageUploads;
+                         "
+                         x-effect="uploading = isUploading;">
 
                         <div class="col-lg-6">
                             <div class="form-group">
@@ -285,9 +528,10 @@
                                         :class="{ 'opacity-50 cursor-not-allowed': uploading }"
                                         wire:loading.attr="disabled"
                                         wire:target="submit"
+                                        id="submit-button"
                                 >
                                     <template x-if="uploading">
-                                        <span><i class="fas fa-spinner fa-spin me-1"></i> Upload läuft …</span>
+                                        <span><i class="fas fa-spinner fa-spin me-1"></i> Warten auf Upload (<span x-text="totalUploads"></span>)</span>
                                     </template>
                                     <template x-if="!uploading">
                                         <span>
@@ -892,6 +1136,11 @@
         // Listen for Livewire events to show success modal
         window.addEventListener('show-success-modal', event => {
             showSuccessModal(event.detail.trackingCode);
+            // Reset file counts when form is successfully submitted
+            resetFileCounts();
         });
+        
+        // Add loading state to file upload buttons
+        // Alpine.js handles file upload button states
     </script>
 </div>
