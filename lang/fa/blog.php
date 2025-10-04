@@ -16,7 +16,7 @@ return [
     'page'          => [
     ],
     'help'          => [
-        'published_at_explanation' => 'تاریخ و زمان آینده‌ای را تنظیم کنید که این وبلاگ باید منتشر شود.',
-        'will_publish_immediately' => 'این وبلاگ بلافاصله پس از ذخیره منتشر خواهد شد.',
+        'published_at_explanation' => 'تاریخ و زمان آینده‌ای را تنظیم کنید که این :model باید منتشر شود.',
+        'will_publish_immediately' => 'این :model بلافاصله پس از ذخیره منتشر خواهد شد.',
     ],
 ];

@@ -42,7 +42,7 @@
                 </x-card>
                 <x-card :title="trans('general.page_sections.publish_config')" shadow separator
                         progress-indicator="submit" class="mt-5">
-                    <x-admin.shared.published-config/>
+                    <x-admin.shared.published-config :model="basename($model::class)"/>
                 </x-card>
                 <x-card :title="trans('setting.model')" shadow separator
                         progress-indicator="submit" class="mt-5">

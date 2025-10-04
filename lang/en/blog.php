@@ -16,7 +16,7 @@ return [
     'page'          => [
     ],
     'help'          => [
-        'published_at_explanation' => 'Set a future date and time when this blog should be published.',
-        'will_publish_immediately' => 'This blog will be published immediately when saved.',
+        'published_at_explanation' => 'Set a future date and time when this :model should be published.',
+        'will_publish_immediately' => 'This :model will be published immediately when saved.',
     ],
 ];
