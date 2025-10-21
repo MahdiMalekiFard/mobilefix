@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Web\Pages;
 
+use App\Enums\YesNoEnum;
 use App\Models\Team;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,7 +16,7 @@ class TeamPage extends Component
 
     public function render()
     {
-        $teams = Team::paginate(8);
+        $teams = Team::query()->where('special', YesNoEnum::YES)->paginate(8);
 
         return view('livewire.web.pages.team-page', [
             'teams' => $teams,
