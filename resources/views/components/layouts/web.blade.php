@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    @stack('head')
     @livewireStyles
 
 </head>
