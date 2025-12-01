@@ -15,27 +15,27 @@
     <!-- service-area -->
     <div class="service-area2 bg py-120">
         <div class="container">
-            <div class="row">
+            <div class="row g-5">
                 @foreach($services as $service)
-                    <div class="col-md-6 col-lg-4">
-                        <div class="service-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                    <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                        <div class="service-item h-100 d-flex flex-column wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="service-img">
-                                <img src="{{ $service?->getFirstMediaUrl('image') }}" alt="">
+                                <img src="{{ $service?->getFirstMediaUrl('image', '854x480') }}" alt="{{ $service?->title }}" class="img-fluid w-100">
                             </div>
 
-                            <div class="service-item-wrap">
+                            <div class="service-item-wrap flex-grow-1 d-flex flex-column">
                                 <div class="service-icon">
                                     <img src="{{ $service?->getIconUrlAttribute() ?? asset('assets/images/icon/tab.svg') }}" alt="">
                                 </div>
-                                <div class="service-content">
+                                <div class="service-content flex-grow-1 d-flex flex-column">
                                     <h3 class="service-title">
                                         <a href="{{ route('service-single-page', ['slug' => $service?->slug]) }}">{{ $service?->title }}</a>
                                     </h3>
-                                    <p class="service-text">
-                                        {{ \Illuminate\Support\Str::limit($service?->description, 80) }}
+                                    <p class="service-text flex-grow-1">
+                                        {{ \Illuminate\Support\Str::limit($service?->description, 100) }}
                                     </p>
-                                    <div class="service-arrow">
-                                        <a href="{{ route('service-single-page', ['slug' => $service?->slug]) }}" class="theme-btn"> Mehr lesen<i class="fas fa-arrow-right"></i></a>
+                                    <div class="service-arrow mt-auto">
+                                        <a href="{{ route('service-single-page', ['slug' => $service?->slug]) }}" class="theme-btn">Mehr Lesen<i class="fas fa-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
