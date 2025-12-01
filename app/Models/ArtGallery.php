@@ -48,9 +48,26 @@ class ArtGallery extends Model implements HasMedia
         $this->addMediaCollection('images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
             ->registerMediaConversions(function () {
-                $this->addMediaConversion(Constants::RESOLUTION_100_SQUARE)->fit(Fit::Crop, 100, 100);
-                $this->addMediaConversion(Constants::RESOLUTION_854_480)->fit(Fit::Crop, 854, 480);
-                $this->addMediaConversion(Constants::RESOLUTION_1280_720)->fit(Fit::Crop, 1280, 720);
+                $this->addMediaConversion(Constants::RESOLUTION_100_SQUARE)
+                    ->fit(Fit::Crop, 100, 100)
+                    ->format('webp')
+                    ->quality(85);
+                
+                $this->addMediaConversion(Constants::RESOLUTION_854_480)
+                    ->fit(Fit::Crop, 854, 480)
+                    ->format('webp')
+                    ->quality(85);
+                
+                $this->addMediaConversion(Constants::RESOLUTION_1280_720)
+                    ->fit(Fit::Crop, 1280, 720)
+                    ->format('webp')
+                    ->quality(85);
+                
+                // Thumbnail for gallery
+                $this->addMediaConversion('thumb')
+                    ->fit(Fit::Crop, 400, 300)
+                    ->format('webp')
+                    ->quality(85);
             });
 
         $this->addMediaCollection('videos')

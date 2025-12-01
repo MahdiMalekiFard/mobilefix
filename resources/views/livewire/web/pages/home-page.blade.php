@@ -5,7 +5,7 @@
     
     // Get first slider for preload
     $firstSlider = $sliders->first();
-    $firstSliderImage = $firstSlider?->getFirstMediaUrl('image', Constants::RESOLUTION_1280_720);
+    $firstSliderImage = $firstSlider?->getFirstMediaUrl('image', Constants::RESOLUTION_1920_800);
 @endphp
 
 @push('head')
@@ -15,19 +15,101 @@
     <style>
         /* Prevent CLS - Reserve space for hero slider */
         .hero-section {
-            min-height: 600px;
             position: relative;
+            background: transparent;
+        }
+        .hero-slider.owl-carousel {
+            margin: 0;
+            padding: 0;
         }
         .hero-single {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            background: transparent;
+            padding: 0 !important;
+        }
+        .hero-single::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: linear-gradient(135deg, rgba(23, 64, 109, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .hero-single picture {
+            display: block;
+            width: 100%;
+            line-height: 0;
+        }
+        .hero-single picture img.hero-bg-image {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 2.4 / 1; /* 1920/800 = 2.4 */
+            object-fit: cover;
+            display: block;
             min-height: 600px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            max-height: 800px;
+            vertical-align: middle;
+        }
+        .hero-single .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            z-index: 10;
+            max-width: 1200px;
+            padding: 0 15px;
+        }
+        .hero-single .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+        .hero-single .hero-content .hero-title {
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .hero-single .hero-content p {
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+        }
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .hero-single picture img.hero-bg-image {
+                min-height: 400px;
+            }
+        }
+        @media (max-width: 768px) {
+            .hero-single picture img.hero-bg-image {
+                aspect-ratio: 16 / 9;
+                min-height: 350px;
+            }
+        }
+        @media (max-width: 576px) {
+            .hero-single picture img.hero-bg-image {
+                min-height: 300px;
+            }
         }
         /* Prevent CLS for images */
         img {
             max-width: 100%;
             height: auto;
+        }
+        /* Brand logos sizing */
+        .partner-wrapper picture {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+        }
+        .partner-wrapper img.brand-logo {
+            max-width: 150px;
+            max-height: 80px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
         }
         /* Aspect ratio containers for gallery images */
         .gallery-img img,
@@ -76,9 +158,27 @@
         <div class="hero-slider owl-carousel owl-theme">
             @foreach($sliders as $index => $slider)
                 @php
-                    $sliderImage = $slider?->getFirstMediaUrl('image', Constants::RESOLUTION_1280_720);
+                    $sliderImage = $slider?->getFirstMediaUrl('image', Constants::RESOLUTION_1920_800);
                 @endphp
-                <div class="hero-single" style="background: url({{ $sliderImage }})">
+                <div class="hero-single">
+                    <picture>
+                        <source 
+                            srcset="{{ $sliderImage }}" 
+                            type="image/webp"
+                        >
+                        <img 
+                            src="{{ $sliderImage }}" 
+                            alt="{{ $slider?->title }}"
+                            width="1920"
+                            height="800"
+                            class="hero-bg-image"
+                            @if($index === 0)
+                                fetchpriority="high"
+                            @else
+                                loading="lazy"
+                            @endif
+                        >
+                    </picture>
                     <div class="container">
                         <div class="row align-items-center">
                             <div class="col-md-7 col-lg-7">
@@ -162,10 +262,16 @@
                     <div class="about-left wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="about-img">
                             <div class="about-img-1">
-                                <img src="{{ $aboutUsPage?->getFirstMediaUrl('images') }}" alt="" width="400" height="500" loading="lazy">
+                                <picture>
+                                    <source srcset="{{ $aboutUsPage?->getFirstMediaUrl('images', Constants::RESOLUTION_854_480) }}" type="image/webp">
+                                    <img src="{{ $aboutUsPage?->getFirstMediaUrl('images', Constants::RESOLUTION_854_480) }}" alt="About us" width="854" height="480" loading="lazy">
+                                </picture>
                             </div>
                             <div class="about-img-2">
-                                <img src="{{ $aboutUsPage?->getLastMediaUrl('images') }}" alt="" width="300" height="400" loading="lazy">
+                                <picture>
+                                    <source srcset="{{ $aboutUsPage?->getLastMediaUrl('images', Constants::RESOLUTION_854_480) }}" type="image/webp">
+                                    <img src="{{ $aboutUsPage?->getLastMediaUrl('images', Constants::RESOLUTION_854_480) }}" alt="About us" width="854" height="480" loading="lazy">
+                                </picture>
                             </div>
                         </div>
                         <div class="about-shape"><img src="{{ asset('assets/images/shape/01.png') }}" alt="" width="200" height="200" loading="lazy"></div>
@@ -503,12 +609,18 @@
                             <div class="col-md-4 filter-item cat-{{ $slug }}">
                                 <div class="gallery-item">
                                     <div class="gallery-img">
-                                        <img
-                                            src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}"
-                                            alt="{{ $gallery->title }}"
-                                            width="400"
-                                            height="300"
-                                            loading="lazy">
+                                        <picture>
+                                            <source 
+                                                srcset="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}" 
+                                                type="image/webp"
+                                            >
+                                            <img
+                                                src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}"
+                                                alt="{{ $gallery->title }}"
+                                                width="400"
+                                                height="300"
+                                                loading="lazy">
+                                        </picture>
                                     </div>
                                     <div class="gallery-content">
                                         <a class="popup-img gallery-link" href="{{ $media->getUrl() }}">
@@ -537,7 +649,10 @@
                                        data-type="video"
                                        data-title="{{ $gallery->title }}"
                                     >
-                                        <img src="{{ $posterUrl }}" alt="{{ $gallery->title }} video" width="400" height="300" loading="lazy">
+                                        <picture>
+                                            <source srcset="{{ $posterUrl }}" type="image/webp">
+                                            <img src="{{ $posterUrl }}" alt="{{ $gallery->title }} video" width="400" height="300" loading="lazy">
+                                        </picture>
 
                                         <div class="video-icon">
                                             <i class="fa-solid fa-play"></i>
@@ -591,7 +706,10 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="team-img">
-                                <img src="{{ $team?->getFirstMediaUrl('image') }}" alt="thumb" width="300" height="300" loading="lazy">
+                                <picture>
+                                    <source srcset="{{ $team?->getFirstMediaUrl('image', Constants::RESOLUTION_720_SQUARE) }}" type="image/webp">
+                                    <img src="{{ $team?->getFirstMediaUrl('image', Constants::RESOLUTION_720_SQUARE) }}" alt="{{ $team?->name }}" width="720" height="720" loading="lazy">
+                                </picture>
                             </div>
                             <div class="team-content">
                                 <div class="team-bio">
@@ -679,7 +797,10 @@
                     <div class="testimonial-single">
                         <div class="testimonial-content">
                             <div class="testimonial-author-img">
-                                <img src="{{ $opinion?->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}" alt="" width="100" height="100" loading="lazy">
+                                <picture>
+                                    <source srcset="{{ $opinion?->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}" type="image/webp">
+                                    <img src="{{ $opinion?->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}" alt="" width="100" height="100" loading="lazy">
+                                </picture>
                             </div>
                             <div class="testimonial-author-info">
                                 <h4>{{ $opinion?->user_name }}</h4>
@@ -727,7 +848,10 @@
                         <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <span class="blog-date"><i class="far fa-calendar-alt"></i> {{ $blog?->updated_at->format('M d, Y') }}</span>
                             <div class="blog-item-img">
-                                <img src="{{ $blog?->getFirstMediaUrl('image', Constants::RESOLUTION_854_480) }}" alt="Thumb" width="854" height="480" loading="lazy">
+                                <picture>
+                                    <source srcset="{{ $blog?->getFirstMediaUrl('image', Constants::RESOLUTION_854_480) }}" type="image/webp">
+                                    <img src="{{ $blog?->getFirstMediaUrl('image', Constants::RESOLUTION_854_480) }}" alt="Thumb" width="854" height="480" loading="lazy">
+                                </picture>
                             </div>
                             <div class="blog-item-info">
                                 <h4 class="blog-title">
@@ -757,7 +881,10 @@
         <div class="container">
             <div class="partner-wrapper partner-slider owl-carousel owl-theme">
                 @foreach($brands as $brand)
-                    <img src="{{ $brand?->getFirstMediaUrl('image') }}" alt="thumb" width="150" height="80" loading="lazy">
+                    <picture>
+                        <source srcset="{{ $brand?->getFirstMediaUrl('image', 'logo-small') }}" type="image/webp">
+                        <img src="{{ $brand?->getFirstMediaUrl('image', 'logo-small') }}" alt="{{ $brand?->title }}" class="brand-logo" loading="lazy">
+                    </picture>
                 @endforeach
             </div>
         </div>

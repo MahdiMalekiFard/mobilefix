@@ -71,9 +71,20 @@ class Blog extends Model implements HasMedia
             ->singleFile()
             ->useFallbackUrl('/assets/images/default/user-avatar.png')
             ->registerMediaConversions(function () {
-                $this->addMediaConversion(Constants::RESOLUTION_100_SQUARE)->fit(Fit::Crop, 100, 100);
-                $this->addMediaConversion(Constants::RESOLUTION_854_480)->fit(Fit::Crop, 854, 480);
-                $this->addMediaConversion(Constants::RESOLUTION_1280_720)->fit(Fit::Crop, 1280, 720);
+                $this->addMediaConversion(Constants::RESOLUTION_100_SQUARE)
+                    ->fit(Fit::Crop, 100, 100)
+                    ->format('webp')
+                    ->quality(85);
+                
+                $this->addMediaConversion(Constants::RESOLUTION_854_480)
+                    ->fit(Fit::Crop, 854, 480)
+                    ->format('webp')
+                    ->quality(85);
+                
+                $this->addMediaConversion(Constants::RESOLUTION_1280_720)
+                    ->fit(Fit::Crop, 1280, 720)
+                    ->format('webp')
+                    ->quality(85);
             });
     }
 

@@ -38,8 +38,15 @@ class Team extends Model implements HasMedia
             ->singleFile()
             ->useFallbackUrl('/assets/images/default/user-avatar.png')
             ->registerMediaConversions(function () {
-                $this->addMediaConversion(Constants::RESOLUTION_100_SQUARE)->fit(Fit::Crop, 100, 100);
-                $this->addMediaConversion(Constants::RESOLUTION_720_SQUARE)->fit(Fit::Crop, 720, 720);
+                $this->addMediaConversion(Constants::RESOLUTION_100_SQUARE)
+                    ->fit(Fit::Crop, 100, 100)
+                    ->format('webp')
+                    ->quality(85);
+                
+                $this->addMediaConversion(Constants::RESOLUTION_720_SQUARE)
+                    ->fit(Fit::Crop, 720, 720)
+                    ->format('webp')
+                    ->quality(85);
             });
     }
 

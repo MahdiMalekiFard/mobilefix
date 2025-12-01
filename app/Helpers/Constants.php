@@ -35,4 +35,5 @@ class Constants
     public const RESOLUTION_1920_1080  = '1920x1080';
 
     public const RESOLUTION_1280_400   = '1280x400'; // for full width slider
+    public const RESOLUTION_1920_800   = '1920x800'; // for hero slider
 }

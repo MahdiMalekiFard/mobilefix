@@ -1,7 +1,7 @@
 @php
     use App\Enums\BooleanEnum;
     use App\Helpers\Constants;
-    @endphp
+@endphp
 <form wire:submit="submit">
     <x-admin.shared.bread-crumbs :breadcrumbs="$breadcrumbs" :breadcrumbs-actions="$breadcrumbsActions"/>
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">

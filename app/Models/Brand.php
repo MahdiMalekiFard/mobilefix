@@ -61,8 +61,19 @@ class Brand extends Model implements HasMedia
             ->useFallbackUrl('/assets/images/default/user-avatar.png')
             ->registerMediaConversions(
                 function () {
+                    // Small logo for website display
+                    $this->addMediaConversion('logo-small')
+                        ->width(300)
+                        ->height(150)
+                        ->fit(Fit::Contain, 300, 150)
+                        ->format('webp')
+                        ->quality(90);
+                    
+                    // Square version for admin panel
                     $this->addMediaConversion(Constants::RESOLUTION_720_SQUARE)
-                        ->fit(Fit::Crop, 720, 720);
+                        ->fit(Fit::Crop, 720, 720)
+                        ->format('webp')
+                        ->quality(85);
                 }
             );
     }
