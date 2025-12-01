@@ -116,7 +116,7 @@ return [
     'transactions'                       => 'Transactions',
     'activities'                         => 'Activities',
     'views'                              => 'Views',
-    'currency'                           => 'USD',
+    'currency'                           => 'EUR',
     'not_set'                            => 'Not Set',
     'price_from'                         => 'From',
     'price_up_to'                        => 'Up to',
