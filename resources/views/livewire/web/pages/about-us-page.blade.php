@@ -2,6 +2,20 @@
     use App\Helpers\Constants;
     use Illuminate\Support\Str;
 @endphp
+
+@push('head')
+    <style>
+        /* Aspect ratio for about images */
+        .about-img-1 img {
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+        }
+        .about-img-2 img {
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+        }
+    </style>
+@endpush
 <div>
     <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url(assets/images/breadcrumb/01.jpg)">
@@ -24,13 +38,19 @@
                     <div class="about-left wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="about-img">
                             <div class="about-img-1">
-                                <img src="{{ $page?->getFirstMediaUrl('images') }}" alt="">
+                                <picture>
+                                    <source srcset="{{ $page?->getFirstMediaUrl('images', Constants::RESOLUTION_854_480) }}" type="image/webp">
+                                    <img src="{{ $page?->getFirstMediaUrl('images', Constants::RESOLUTION_854_480) }}" alt="About us" width="854" height="480" loading="lazy">
+                                </picture>
                             </div>
                             <div class="about-img-2">
-                                <img src="{{ $page?->getLastMediaUrl('images') }}" alt="">
+                                <picture>
+                                    <source srcset="{{ $page?->getLastMediaUrl('images', Constants::RESOLUTION_854_480) }}" type="image/webp">
+                                    <img src="{{ $page?->getLastMediaUrl('images', Constants::RESOLUTION_854_480) }}" alt="About us" width="854" height="480" loading="lazy">
+                                </picture>
                             </div>
                         </div>
-                        <div class="about-shape"><img src="{{ asset('assets/images/shape/01.png') }}" alt=""></div>
+                        <div class="about-shape"><img src="{{ asset('assets/images/shape/01.png') }}" alt="" width="200" height="200" loading="lazy"></div>
                         <div class="about-experience">
                             <h1>25+</h1>
                             <div class="about-experience-text">
@@ -54,7 +74,7 @@
                             <ul class="about-list list-unstyled">
                                 <li>
                                     <div class="icon">
-                                        <img src="{{ asset('assets/images/icon/money.svg') }}" alt="">
+                                        <img src="{{ asset('assets/images/icon/money.svg') }}" alt="" width="50" height="50" loading="lazy">
                                     </div>
                                     <div class="content">
                                         <h4>Unser günstiger Preis</h4>
@@ -64,7 +84,7 @@
                                 </li>
                                 <li>
                                     <div class="icon">
-                                        <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="">
+                                        <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="" width="50" height="50" loading="lazy">
                                     </div>
                                     <div class="content">
                                         <h4>Vertrauenswürdiger Reparaturservice</h4>
@@ -90,7 +110,7 @@
                     <div class="col-lg-3 col-sm-6">
                         <div class="counter-box">
                             <div class="icon">
-                                <img src="{{ asset('assets/images/icon/repair-2.svg') }}" alt="">
+                                <img src="{{ asset('assets/images/icon/repair-2.svg') }}" alt="" width="50" height="50" loading="lazy">
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="1200" data-speed="3000">1200</span>
@@ -101,7 +121,7 @@
                     <div class="col-lg-3 col-sm-6">
                         <div class="counter-box">
                             <div class="icon">
-                                <img src="{{ asset('assets/images/icon/happy.svg') }}" alt="">
+                                <img src="{{ asset('assets/images/icon/happy.svg') }}" alt="" width="50" height="50" loading="lazy">
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="1500" data-speed="3000">1500</span>
@@ -112,7 +132,7 @@
                     <div class="col-lg-3 col-sm-6">
                         <div class="counter-box">
                             <div class="icon">
-                                <img src="{{ asset('assets/images/icon/team-2.svg') }}" alt="">
+                                <img src="{{ asset('assets/images/icon/team-2.svg') }}" alt="" width="50" height="50" loading="lazy">
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="400" data-speed="3000">400</span>
@@ -123,7 +143,7 @@
                     <div class="col-lg-3 col-sm-6">
                         <div class="counter-box">
                             <div class="icon">
-                                <img src="{{ asset('assets/images/icon/award.svg') }}" alt="">
+                                <img src="{{ asset('assets/images/icon/award.svg') }}" alt="" width="50" height="50" loading="lazy">
                             </div>
                             <div>
                                 <span class="counter" data-count="+" data-to="80" data-speed="3000" data-suffix="%">80</span>
@@ -157,7 +177,7 @@
                         <div class="choose-wrapper mt-4">
                             <div class="choose-item">
                                 <div class="choose-icon">
-                                    <img src="{{ asset('assets/images/icon/team-2.svg') }}" alt="">
+                                    <img src="{{ asset('assets/images/icon/team-2.svg') }}" alt="" width="50" height="50" loading="lazy">
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Qualifizierte Techniker</h4>
@@ -167,7 +187,7 @@
                             </div>
                             <div class="choose-item active">
                                 <div class="choose-icon">
-                                    <img src="{{ asset('assets/images/icon/quality.svg') }}" alt="">
+                                    <img src="{{ asset('assets/images/icon/quality.svg') }}" alt="" width="50" height="50" loading="lazy">
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Qualitätsgarantie</h4>
@@ -177,7 +197,7 @@
                             </div>
                             <div class="choose-item">
                                 <div class="choose-icon">
-                                    <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="">
+                                    <img src="{{ asset('assets/images/icon/trusted.svg') }}" alt="" width="50" height="50" loading="lazy">
                                 </div>
                                 <div class="choose-item-content">
                                     <h4>Ihr zuverlässiger Partner</h4>
@@ -192,10 +212,10 @@
                     <div class="choose-img wow fadeInRight" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="row g-4">
                             <div class="col-6">
-                                <img class="img-1" src="{{ asset('assets/images/choose/01.jpg') }}" alt="">
+                                <img class="img-1" src="{{ asset('assets/images/choose/01.jpg') }}" alt="" width="400" height="500" loading="lazy">
                             </div>
                             <div class="col-6">
-                                <img class="img-2" src="{{ asset('assets/images/choose/02.jpg') }}" alt="">
+                                <img class="img-2" src="{{ asset('assets/images/choose/02.jpg') }}" alt="" width="400" height="500" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -223,7 +243,10 @@
                     <div class="testimonial-single">
                         <div class="testimonial-content">
                             <div class="testimonial-author-img">
-                                <img src="{{ $opinion?->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}" alt="">
+                                <picture>
+                                    <source srcset="{{ $opinion?->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}" type="image/webp">
+                                    <img src="{{ $opinion?->getFirstMediaUrl('image', Constants::RESOLUTION_100_SQUARE) }}" alt="" width="100" height="100" loading="lazy">
+                                </picture>
                             </div>
                             <div class="testimonial-author-info">
                                 <h4>{{ $opinion?->user_name }}</h4>
@@ -235,7 +258,7 @@
                                 {{ $opinion?->comment }}
                             </p>
                             <div class="testimonial-quote-icon">
-                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="">
+                                <img src="{{ asset('assets/images/icon/quote.svg') }}" alt="" width="50" height="50" loading="lazy">
                             </div>
                         </div>
                         <div class="testimonial-rate">
@@ -270,7 +293,10 @@
                     <div class="col-md-6 col-lg-3">
                         <div class="team-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="team-img">
-                                <img src="{{ $team?->getFirstMediaUrl('image') }}" alt="thumb">
+                                <picture>
+                                    <source srcset="{{ $team?->getFirstMediaUrl('image', Constants::RESOLUTION_720_SQUARE) }}" type="image/webp">
+                                    <img src="{{ $team?->getFirstMediaUrl('image', Constants::RESOLUTION_720_SQUARE) }}" alt="{{ $team?->name }}" width="720" height="720" loading="lazy">
+                                </picture>
                             </div>
                             <div class="team-content">
                                 <div class="team-bio">
@@ -297,13 +323,12 @@
     <div class="partner-area pt-50 pb-50">
         <div class="container">
             <div class="partner-wrapper partner-slider owl-carousel owl-theme">
-                <img src="{{ asset('assets/images/partner/samsung.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/nokia.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/huawei.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/xiaomi.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/iphone.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/oppo.png') }}" alt="thumb">
-                <img src="{{ asset('assets/images/partner/vivo.png') }}" alt="thumb">
+                @foreach($brands as $brand)
+                    <picture>
+                        <source srcset="{{ $brand?->getFirstMediaUrl('image', 'logo-small') }}" type="image/webp">
+                        <img src="{{ $brand?->getFirstMediaUrl('image', 'logo-small') }}" alt="{{ $brand?->title }}" class="brand-logo" loading="lazy">
+                    </picture>
+                @endforeach
             </div>
         </div>
     </div>

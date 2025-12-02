@@ -77,9 +77,12 @@
                             <div class="col-md-4 filter-item cat-{{ $slug }}">
                                 <div class="gallery-item">
                                     <div class="gallery-img">
-                                        <img
-                                            src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}"
-                                            alt="{{ $gallery->title }}">
+                                        <picture>
+                                            <source srcset="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}" type="image/webp">
+                                            <img
+                                                src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(Constants::RESOLUTION_1280_720) }}"
+                                                alt="{{ $gallery->title }}">
+                                        </picture>
                                     </div>
                                     <div class="gallery-content">
                                         <a class="popup-img gallery-link" href="{{ $media->getUrl() }}">
@@ -108,7 +111,10 @@
                                        data-type="video"
                                        data-title="{{ $gallery->title }}"
                                     >
-                                        <img src="{{ $posterUrl }}" alt="{{ $gallery->title }} video">
+                                        <picture>
+                                            <source srcset="{{ $posterUrl }}" type="image/webp">
+                                            <img src="{{ $posterUrl }}" alt="{{ $gallery->title }} video">
+                                        </picture>
 
                                         <div class="video-icon">
                                             <i class="fa-solid fa-play"></i>
