@@ -116,7 +116,17 @@ class UserOrderPay extends Component
     // (methods)
     public function loadOrder($orderId)
     {
-        $this->order = Order::with(['user', 'address', 'paymentMethod', 'device', 'brand', 'problems'])
+        $this->order = Order::with([
+            'user',
+            'address',
+            'paymentMethod',
+            'device',
+            'device.translations',
+            'brand',
+            'brand.translations',
+            'problems',
+            'problems.translations',
+        ])
             ->where('id', $orderId)
             ->when(auth()->check(), function ($query) {
                 return $query->where('user_id', auth()->id());

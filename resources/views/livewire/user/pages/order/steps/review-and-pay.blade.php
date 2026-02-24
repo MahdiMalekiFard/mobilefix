@@ -52,30 +52,52 @@
             <!-- Order Details -->
             <div class="p-6 md:p-8 space-y-6">
                 <!-- Device Information -->
-                @if($order->device && $order->brand)
+                @if($order->device || $order->brand)
                 <div class="flex items-start gap-4 md:gap-6 p-4 md:p-6 bg-slate-50 dark:bg-slate-700/50 rounded-2xl">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/50 dark:to-blue-800/50 rounded-xl flex items-center justify-center flex-shrink-0">
                         <i class="fas fa-mobile-alt text-blue-600 dark:text-blue-400 text-lg md:text-2xl"></i>
                     </div>
                     <div class="flex-1">
-                        <h5 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-1">{{ $order->brand->name }} {{ $order->device->name }}</h5>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base mb-3">Gerätemodell</p>
+                        <h5 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                            {{ $order->device?->title ?? 'Unknown model' }}
+                        </h5>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium">
+                                <i class="fas fa-industry text-xs"></i>
+                                Marke: {{ $order->brand?->title ?? '-' }}
+                            </span>
+                            <span class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-medium">
+                                <i class="fas fa-mobile-screen-button text-xs"></i>
+                                Modell: {{ $order->device?->title ?? '-' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <!-- Problems List -->
+                <div class="flex items-start gap-4 md:gap-6 p-4 md:p-6 bg-slate-50 dark:bg-slate-700/50 rounded-2xl">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-red-100 to-rose-200 dark:from-red-900/50 dark:to-rose-800/50 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-screwdriver-wrench text-red-600 dark:text-red-400 text-lg md:text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h5 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-1">Gemeldete Geräteschäden</h5>
                         @if($order->problems && $order->problems->count() > 0)
-                            <div class="space-y-2">
-                                <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Zu behebende Probleme:</p>
-                                <div class="flex flex-wrap gap-2">
-                                    @foreach($order->problems as $problem)
-                                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 rounded-full text-xs font-medium">
-                                            <i class="fas fa-exclamation-circle text-xs"></i>
-                                            {{ $problem->name }}
-                                        </span>
-                                    @endforeach
-                                </div>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($order->problems as $problem)
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 rounded-full text-xs font-medium">
+                                        <i class="fas fa-exclamation-circle text-xs"></i>
+                                        {{ $problem->title }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Kein Problem für diese Bestellung registriert.
                             </div>
                         @endif
                     </div>
                 </div>
-                @endif
 
                 <!-- Delivery Address -->
                 @if($selectedAddress)
