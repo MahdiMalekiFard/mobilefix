@@ -86,4 +86,67 @@
             </div>
         </div>
     @endif
+
+    <!-- Latest User Orders -->
+    <div class="rounded-2xl border border-zinc-200/80 bg-white/80 dark:bg-zinc-900/60 dark:border-zinc-800 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-zinc-200/70 dark:border-zinc-800 flex items-center justify-between gap-3">
+            <h5 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">Latest User Orders</h5>
+            <a href="{{ route('admin.order.index') }}" class="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                View all
+            </a>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead class="bg-zinc-50 dark:bg-zinc-800/70">
+                <tr class="text-zinc-500 dark:text-zinc-400">
+                    <th class="px-5 py-3 text-left font-medium">Order</th>
+                    <th class="px-5 py-3 text-left font-medium">User</th>
+                    <th class="px-5 py-3 text-left font-medium">Status</th>
+                    <th class="px-5 py-3 text-left font-medium">Total</th>
+                    <th class="px-5 py-3 text-left font-medium">Updated</th>
+                    <th class="px-5 py-3 text-left font-medium">Action</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-zinc-200/70 dark:divide-zinc-800">
+                @forelse($latestOrders as $order)
+                    @php($statusEnum = \App\Enums\OrderStatusEnum::from($order->status))
+                    @php($colorClass = match ($statusEnum->color()) {
+                        'warning' => 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                        'info' => 'bg-blue-100 text-blue-800 border-blue-200',
+                        'danger' => 'bg-red-100 text-red-800 border-red-200',
+                        'success' => 'bg-green-100 text-green-800 border-green-200',
+                        default => 'bg-gray-100 text-gray-800 border-gray-200'
+                    })
+                    <tr class="text-zinc-800 dark:text-zinc-200">
+                        <td class="px-5 py-3 font-medium whitespace-nowrap">#{{ $order->order_number }}</td>
+                        <td class="px-5 py-3 whitespace-nowrap">{{ $order->user?->name ?? 'Unknown user' }}</td>
+                        <td class="px-5 py-3 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                {{ $statusEnum->title() }}
+                            </span>
+                        </td>
+                        <td class="px-5 py-3 whitespace-nowrap">{{ number_format((float) $order->total, 0) }}</td>
+                        <td class="px-5 py-3 whitespace-nowrap">{{ $order->updated_at?->diffForHumans() }}</td>
+                        <td class="px-5 py-3 whitespace-nowrap">
+                            <a
+                                href="{{ route('admin.order.show', ['order' => $order->id]) }}"
+                                class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                            >
+                                <i class="fas fa-eye text-xs"></i>
+                                <span>Show</span>
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-5 py-6 text-center text-zinc-500 dark:text-zinc-400">
+                            No orders yet.
+                        </td>
+                    </tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
