@@ -394,6 +394,7 @@
         <footer
             x-data="{
                 dragOver: false,
+                preparingUpload: false,
                 accept: [
                     // Images
                     'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/svg+xml',
@@ -516,7 +517,13 @@
                         filesToAdd.forEach(f => dt.items.add(f));
                         this.$refs.file.files = dt.files;
                     }
-                    
+
+                    if (!this.$refs.file.files?.length) {
+                        this.preparingUpload = false;
+                        return;
+                    }
+
+                    this.preparingUpload = true;
                     this.$refs.file.dispatchEvent(new Event('change', { bubbles: true }));
                 },
                 
@@ -538,11 +545,15 @@
             @drop="handleDrop($event)"
             @chat-files-dropped.window="if ($event.detail?.files) addFiles($event.detail.files)"
             @chat-upload-reset-input.window="
+                preparingUpload = false;
                 if ($refs.file) {
                     $refs.file.value = '';
                     $refs.file.files = new DataTransfer().files;
                 }
             "
+            x-on:livewire-upload-start="preparingUpload = true"
+            x-on:livewire-upload-finish="preparingUpload = false"
+            x-on:livewire-upload-error="preparingUpload = false"
             class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 px-3 @lg:px-4 py-3 shrink-0 transition-all duration-200"
             :class="dragOver ? 'ring-2 ring-blue-400/40 bg-blue-50/50 dark:bg-blue-900/20' : ''"
         >
@@ -551,6 +562,14 @@
                     {{ $errors->first('newUploads') ?: $errors->first('newUploads.*') ?: $errors->first('uploads') ?: $errors->first('uploads.*') }}
                 </div>
             @endif
+
+            <div x-cloak x-show="preparingUpload" class="mb-2 flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+                <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Preparing upload...</span>
+            </div>
 
             {{-- File previews removed - files are now only shown in the modal --}}
 
