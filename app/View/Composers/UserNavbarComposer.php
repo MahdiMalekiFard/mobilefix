@@ -41,6 +41,14 @@ class UserNavbarComposer
                 'exact'      => true,
             ],
             [
+                'icon'       => 's-user',
+                'title'      => trans('_menu.profile'),
+                'route_name' => 'user.setting',
+                'access'     => true,
+                'params'     => [],
+                'exact'      => true,
+            ],
+            [
                 'type'       => 'custom_component',
                 'component'  => 'user.components.support-chat-menu-item',
                 'route_name' => 'user.chat.index',

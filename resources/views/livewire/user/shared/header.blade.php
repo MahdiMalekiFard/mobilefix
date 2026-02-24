@@ -67,10 +67,20 @@
                     <x-button class="btn-circle"><img class="rounded-full" src="{{ auth()->user()?->getFirstMediaUrl('avatar') ?? asset('assets/images/default/user-avatar.png') }}" alt=""></x-button>
                 </x-slot:trigger>
 
-                <form method="POST" action="{{ route('user.auth.logout') }}" x-data>
-                    @csrf
-                    <x-button type="submit">Ausloggen</x-button>
-                </form>
+                <div class="flex flex-col gap-2 min-w-[180px]">
+                    <a href="{{ route('user.setting') }}" class="btn btn-ghost btn-sm justify-start">
+                        <i class="fa-regular fa-user"></i>
+                        <span>Profil</span>
+                    </a>
+
+                    <form method="POST" action="{{ route('user.auth.logout') }}" x-data>
+                        @csrf
+                        <x-button type="submit" class="btn-ghost btn-sm justify-start w-full">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Ausloggen</span>
+                        </x-button>
+                    </form>
+                </div>
 
             </x-dropdown>
         </div>
