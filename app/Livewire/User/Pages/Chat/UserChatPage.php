@@ -10,6 +10,7 @@ use App\Models\Message;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -18,6 +19,9 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 class UserChatPage extends Component
 {
     use WithFileUploads;
+
+    private const MAX_UPLOAD_KB = 20480;
+    private const ALLOWED_UPLOAD_EXTENSIONS = 'jpg,jpeg,png,webp,gif,bmp,svg,pdf,txt,csv,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,mp3,wav,ogg,mp4,avi,mov,wmv,webm,json,xml';
 
     public ?Conversation $conversation = null;
     public string $messageText         = '';
@@ -44,10 +48,10 @@ class UserChatPage extends Component
             'messageText'    => ['nullable', 'string', 'max:5000'],
             'modalCommentText' => ['nullable', 'string', 'max:5000'],
             'uploads'        => ['array', 'max:5'], // allow up to 5 files per message
-            'uploads.*'      => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,bmp,svg,pdf,txt,csv,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,mp3,wav,ogg,mp4,avi,mov,wmv,webm,json,xml'],
+            'uploads.*'      => ['file', 'max:' . self::MAX_UPLOAD_KB, 'mimes:' . self::ALLOWED_UPLOAD_EXTENSIONS],
 
             'newUploads'     => ['sometimes', 'array'],
-            'newUploads.*'   => ['sometimes', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif,bmp,svg,pdf,txt,csv,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,mp3,wav,ogg,mp4,avi,mov,wmv,webm,json,xml'],
+            'newUploads.*'   => ['sometimes', 'file', 'max:' . self::MAX_UPLOAD_KB, 'mimes:' . self::ALLOWED_UPLOAD_EXTENSIONS],
 
             'groupItems'     => ['boolean'],
             'compressImages' => ['boolean'],
@@ -65,9 +69,27 @@ class UserChatPage extends Component
     /** When user picks/drops a new batch, append to main list and clear the staging input */
     public function updatedNewUploads(): void
     {
-        // validate just this batch (optional but recommended for fast feedback)
-        $this->validateOnly('newUploads');
-        $this->validateOnly('newUploads.*');
+        try {
+            // validate just this batch (optional but recommended for fast feedback)
+            $this->validateOnly('newUploads');
+            $this->validateOnly('newUploads.*');
+        } catch (ValidationException $e) {
+            $this->reset('newUploads');
+            $this->dispatch('chat-upload-reset-input');
+            $firstError = $e->validator->errors()->first('newUploads.*')
+                ?: $e->validator->errors()->first('newUploads')
+                ?: __('The selected file is not valid or is too large.');
+            $this->addError('newUploads', $firstError);
+
+            return;
+        } catch (\Throwable $e) {
+            Log::warning('User chat upload pre-validation failed: ' . $e->getMessage());
+            $this->reset('newUploads');
+            $this->dispatch('chat-upload-reset-input');
+            $this->addError('newUploads', __('The selected file is not valid or is too large.'));
+
+            return;
+        }
 
         // merge old + new, enforce uniqueness by tmp filename, cap at 5
         $merged = collect($this->uploads)

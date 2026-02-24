@@ -32,11 +32,28 @@ class Message extends Model implements HasMedia
     {
         $this->addMediaCollection('attachments')
             ->acceptsMimeTypes([
-                'image/jpeg', 'image/png', 'image/webp', 'image/gif',
-                'application/pdf', 'text/plain',
+                // Images
+                'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/svg+xml',
+                // Documents / text
+                'application/pdf', 'text/plain', 'text/csv', 'application/json', 'application/xml', 'text/xml',
+                // Archives
                 'application/zip',
+                'application/x-zip-compressed',
+                'application/x-rar',
+                'application/x-rar-compressed',
+                'application/vnd.rar',
+                'application/x-7z-compressed',
+                // Office
                 'application/msword',
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                // Audio
+                'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg',
+                // Video
+                'video/mp4', 'video/avi', 'video/mov', 'video/wmv', 'video/webm',
             ])
             ->withResponsiveImages();
     }

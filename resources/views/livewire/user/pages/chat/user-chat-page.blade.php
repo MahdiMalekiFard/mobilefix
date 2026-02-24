@@ -537,9 +537,21 @@
             @dragleave="handleDragLeave($event)"
             @drop="handleDrop($event)"
             @chat-files-dropped.window="if ($event.detail?.files) addFiles($event.detail.files)"
+            @chat-upload-reset-input.window="
+                if ($refs.file) {
+                    $refs.file.value = '';
+                    $refs.file.files = new DataTransfer().files;
+                }
+            "
             class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 px-3 @lg:px-4 py-3 shrink-0 transition-all duration-200"
             :class="dragOver ? 'ring-2 ring-blue-400/40 bg-blue-50/50 dark:bg-blue-900/20' : ''"
         >
+            @if($errors->has('newUploads') || $errors->has('newUploads.*') || $errors->has('uploads') || $errors->has('uploads.*'))
+                <div class="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800/60 dark:bg-red-900/20 dark:text-red-300">
+                    {{ $errors->first('newUploads') ?: $errors->first('newUploads.*') ?: $errors->first('uploads') ?: $errors->first('uploads.*') }}
+                </div>
+            @endif
+
             {{-- File previews removed - files are now only shown in the modal --}}
 
             {{-- upload progress --}}
