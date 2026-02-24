@@ -701,7 +701,6 @@
                         return;
                     }
 
-                    this.preparingUpload = true;
                     this.$refs.file.dispatchEvent(new Event('change', { bubbles: true }));
                 },
                 
@@ -721,9 +720,10 @@
                     $refs.file.files = new DataTransfer().files;
                 }
             "
-            x-on:livewire-upload-start="preparingUpload = true"
-            x-on:livewire-upload-finish="preparingUpload = false"
-            x-on:livewire-upload-error="preparingUpload = false"
+            x-on:livewire-upload-start.window="preparingUpload = true"
+            x-on:livewire-upload-finish.window="preparingUpload = false"
+            x-on:livewire-upload-error.window="preparingUpload = false"
+            x-on:livewire-upload-cancel.window="preparingUpload = false"
             @focus-composer.window="$nextTick(() => {
                 const i = $refs.composer;
                 if (!i) return;

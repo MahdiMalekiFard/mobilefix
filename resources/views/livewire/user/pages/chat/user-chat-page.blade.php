@@ -523,7 +523,6 @@
                         return;
                     }
 
-                    this.preparingUpload = true;
                     this.$refs.file.dispatchEvent(new Event('change', { bubbles: true }));
                 },
                 
@@ -551,9 +550,10 @@
                     $refs.file.files = new DataTransfer().files;
                 }
             "
-            x-on:livewire-upload-start="preparingUpload = true"
-            x-on:livewire-upload-finish="preparingUpload = false"
-            x-on:livewire-upload-error="preparingUpload = false"
+            x-on:livewire-upload-start.window="preparingUpload = true"
+            x-on:livewire-upload-finish.window="preparingUpload = false"
+            x-on:livewire-upload-error.window="preparingUpload = false"
+            x-on:livewire-upload-cancel.window="preparingUpload = false"
             class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 px-3 @lg:px-4 py-3 shrink-0 transition-all duration-200"
             :class="dragOver ? 'ring-2 ring-blue-400/40 bg-blue-50/50 dark:bg-blue-900/20' : ''"
         >
